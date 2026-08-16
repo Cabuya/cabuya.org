@@ -1,363 +1,135 @@
 # Product Specification — cabuya.org
 
-## Overview
-
-**Corag** is *el ecosistema de impacto social* — a platform that connects
-foundations, governments, companies, social entrepreneurs and individuals with
-real, verifiable opportunities to help.
-
-This repository is **`cabuya.org`**, Corag's institutional site. Its job is to
-make someone understand Corag, believe in it, and cross over to the product.
-
-**`ayuda.cabuya.org`** is a separate deployment: **Corag Ayuda Directa**, the
-flagship product where the actual coordination happens.
-
-```
-Corag — el ecosistema de impacto social          ← this site, cabuya.org
-   └── Ayuda Directa — producto insignia         → ayuda.cabuya.org
-          └── Emergencia activa
-```
-
-Getting that split wrong is the most common way to write incorrect copy or code
-here. **If it stores something about a real person's need, it belongs in the
-application.** This site holds no aid data and has no write API.
+> The product definition for this repository: what cabuya.org is, who it
+> serves, what it ships, and how success is measured. Derived from the
+> founding record (`docs/context/` — especially `DECISIONS.md`,
+> `PROTOCOL_DESIGN.md`, `PRODUCTS_BLUEPRINT.md`); where this document and the
+> founding record disagree, the decision log
+> ([`docs/DECISIONS.md`](./DECISIONS.md)) explains why.
 
 ---
 
-## Brand Positioning
+## 1. Vision and mission
 
-**Primary identity:** the social-impact ecosystem — a community of professionals,
-organizations and volunteers who make help visible and accountable.
+**Vision.** Aid applications — built by anyone, anywhere — publish and consume
+the same data, so that in an emergency no volunteer team ever rebuilds a list
+another team already maintains, and no citizen has to check five apps to find
+one open collection point.
 
-> **Tenemos coraje para servir y transformar vidas.**
+**Mission.** Publish and steward the **Cabuya Protocol**: an open, CC0
+specification with a published validator, a reviewed registry, and an
+installable agent skill, designed so a small team can reach conformance **in
+an afternoon** without asking anyone for permission.
 
-The name comes from **coraje**. The heart replacing the `o` in the wordmark
-carries **amor**. The official brand manual states the mark transmits *coraje,
-innovación y amor*.
+**The long horizon** — stated as ambition, never as achievement (Rule-0): an
+emergency data network for Colombia's August 2026 response → a lasting
+interoperability standard for aid apps → a seed for a regional technology
+ecosystem. Any city, any country, should be able to adopt the protocol and the
+method that produced it.
 
-Corag exists because of a specific, ordinary failure:
+**The founding principle:** «Crecemos juntos: no competimos, nos alimentamos.»
+Each app is a thread; the protocol is the rope.
 
-> Many people want to donate or get involved, but cannot find a way to do it that
-> is **confiable, cercana y significativa**.
+## 2. What Cabuya is — and is not
 
-Not a shortage of generosity — a shortage of connection. Aid fragments across
-WhatsApp threads, one-off forms, spreadsheets and phone calls, and the people who
-could help never meet the people who need it.
-
-**Values:** Colaboración · Empatía · Confianza · Amor · Innovación social ·
-Transparencia.
-
-Full positioning, the six-beat argument and the approved lexicon:
-[`MESSAGING.md`](./MESSAGING.md).
-
-### Value propositions, by audience
-
-| Audience | What Corag offers them |
+| Cabuya IS | Cabuya is NOT |
 |---|---|
-| Someone who needs help | A way to publish a real need and have it seen by people who can act on it |
-| Someone who wants to help | A concrete, verifiable place to put time, goods or money — and proof of where it went |
-| A contributor of money | Direct transfer to a named, verified responsable, with published evidence of use |
-| A leader / coordinator | Tools to organize a front, register deliveries and account for what was received |
-| An organization or foundation | A shared coordination layer instead of another isolated internal system |
-| A government or municipality | Territorial visibility of needs and offers, without building a platform |
-| A developer | A public API, an OpenAPI spec and an MCP server — build a client, not another silo |
-| An AI agent | A machine-readable surface, and a clear boundary about where writes belong |
-
----
-
-## Vision
-
-> Convertirse en la plataforma global líder en innovación social, donde donar,
-> servir y transformar vidas sea una experiencia divertida, confiable y
-> profundamente humana.
-
-### Mission
-
-> Conectar a fundaciones, gobiernos, emprendedores y personas a través de una
-> plataforma digital transparente y creativa, que incentive la solidaridad
-> mediante experiencias dinámicas, accesibles y con impacto real en las
-> comunidades.
-
-### What this site is for
-
-1. **Explain** what Corag is and how the model works.
-2. **Earn trust** by showing the mechanism, not by claiming trustworthiness.
-3. **Hand over** to `ayuda.cabuya.org` for every action.
-4. **Recruit** — developers, organizations, volunteers, leaders.
-5. **Stay legible to machines**, because Corag's thesis is interoperability.
-
----
-
-## Target Audience
-
-**Primary** — people affected by an emergency, people who want to help, and the
-leaders who coordinate between them.
-
-**Secondary** — foundations, NGOs, companies and municipalities evaluating
-whether to join the network.
-
-**Tertiary** — developers, and the AI agents acting on someone's behalf.
-
-Corag operates from Colombia, in Spanish, with an English surface so the model is
-legible to organizations and contributors outside the country.
-
----
-
-## Information Architecture
-
-Spanish is served at the root; English lives under `/en`.
-
-| Route | Purpose |
-|---|---|
-| `/` | The full argument: problem, bridge, evidence, product, invitation |
-| `/como-funciona` | The lifecycle end to end, plus the three flows (necesidad, ofrecimiento, aporte) |
-| `/transparencia` | Recibido vs. utilizado con evidencia · moderation · transferencia directa |
-| `/emergencias` | What an emergency is in Corag, frentes operativos, the live one |
-| `/lideres` | What a leader is, how they are validated, what they are accountable for |
-| `/desarrolladores` | REST API, OpenAPI 3.1, MCP, idempotency, rate limits |
-| `/aliados` | Organizations, foundations, companies, municipalities |
-| `/colaboradores` | The team building Corag, by area, with a recruiting CTA |
-| `/sobre-corag` | Mission, model, governance, the origin of the name |
-| `/contacto` | Institutional contact — **not** a channel for requesting aid |
-| `/blog` | Editorial: the model, the field, the technology |
-| `/privacidad` · `/conducta` · `/gobernanza` · `/contribuir` | Legal and community |
-
-Every route is registered in `src/middleware.ts`. A route missing from that
-allowlist works in dev and 404s in production.
-
----
-
-## Key Features
-
-### 1. Home
-
-Runs the full six-beat argument from `MESSAGING.md`. Leads with the coraje
-statement, names the problem, presents the bridge, shows the evidence mechanism,
-introduces Ayuda Directa, and invites. Every action routes to the application.
-
-### 2. How it works
-
-The lifecycle — necesidad → publicación → geolocalización → matching →
-coordinación → entrega → evidencia → verificación → trazabilidad — plus the
-request/offer model with its urgency levels and categories.
-
-### 3. Transparency
-
-The differentiator, given its own page. **Money received** and **money used with
-evidence** are two separate public figures. Evidence is moderated before
-publication. Contributions go by direct transfer to verified leader accounts
-rather than a central treasury, which reduces custodial risk and makes every
-contribution attributable.
-
-### 4. Emergencies
-
-An emergency is the top-level entity, and the platform is built for many — not
-only the current one. Large emergencies split into **frentes operativos**, each
-with its own needs, responsables, conversations, priorities and evidence.
-
-### 5. Leaders
-
-What a leader is, how they are validated and approved, and what they are
-accountable for. This is the system's critical trust dependency and the page says
-so plainly.
-
-### 6. Developers
-
-The most strategically important page. Documents `POST /api/public/v1/help`, the
-OpenAPI 3.1 spec, the MCP server and its tools, `source` + `externalId`
-idempotency, rate limiting and geographic validation.
-
-> **Muchas interfaces, una sola red de datos.** During an emergency, several
-> teams build parallel applications, each with its own database of needs — which
-> produces more fragmentation, not less. The API exists so a new client becomes a
-> client *of one network* rather than a new silo.
-
-**Everything on this page is verified against the live OpenAPI spec.** Nothing is
-documented that the spec does not confirm.
-
-### 7. Allies and contributors
-
-`/aliados` for organizations; `/colaboradores` for the people building Corag,
-grouped by area, with a recruiting call to action. Neither page ever lists an
-invented organization or person.
-
-### 8. Blog
-
-Editorial on the model, the field and the technology. Tags, series, authors,
-search, RSS, pagination and per-post agent-Markdown twins.
-
-### 9. Contact
-
-Institutional intakes only, relayed through Cloudflare Pages Functions to
-Dailybot Forms. Every form page states prominently, **above** the form, that
-requesting or offering aid happens in the application — a form here that quietly
-swallowed an emergency need would be a real harm, not a UX flaw.
-
-### 10. Agent-readable surface
-
-Every public page has a **complete** Markdown twin at its path plus `.md`, served
-from the original source Markdown rather than converted from rendered HTML. Plus
-`llms.txt`, `llms-full.txt` and `.well-known` descriptors.
-
-Because Corag's thesis is interoperability, these files carry one instruction
-above all: **this host has no write API — publishing a need or a contribution
-happens at `ayuda.cabuya.org`.** An agent that POSTs a humanitarian need here
-reaches nobody.
-
-### 11. Language support
-
-Spanish is the primary language and is served at the root. English is served
-under `/en`. Both carry the same content — the same sources, the same structure —
-not merely correct content in each, and `pnpm run parity:check` enforces it.
-
-Spanish is also the **source** language: copy is written in Spanish and
-translated to English, never the reverse. Diacritics are mandatory.
-
----
-
-## Design Principles
-
-### Visual
-
-- The official palette: wine `#78020E`, rosa `#FFC7D5`, rosa claro `#FFE2E9`,
-  and the decorative 50% wine `#BC727C`.
-- **Outfit** for display, **Poppins** for body — both self-hosted, no external
-  font request.
-- Warm rather than clinical. The rosa family is what keeps the brand from reading
-  severe.
-- Radius 12 / 18 / 28px; wine-tinted elevation, never neutral grey.
-- Dark mode flips the brand from wine to rosa, because wine on a dark ground
-  measures 1.52:1. Both are official colors.
-
-Full contract: [`DESIGN.md`](./DESIGN.md). Identity: [`BRAND_GUIDE.md`](./BRAND_GUIDE.md).
-
-### Messaging
-
-Five principles from the official manual: **cálido y humano · inspirador y
-movilizador · claro y sencillo · juvenil y fresco · esperanzador**.
-
-Two registers: this site is warm and hopeful; the application during a live
-emergency is operationally direct. Never mix them.
-
-**The coraje is ours, never aimed at the people receiving aid.**
-
-### Imagery
-
-Warm natural light, tight human crops (often hands), real and diverse people —
-**the moment of connection, never the moment of suffering**. No disaster imagery,
-no misery as leverage.
-
----
-
-## Technical Requirements
-
-### Performance
-
-- Static generation. `.astro` by default; Svelte islands only where genuinely
-  interactive, with the laziest viable hydration.
-- Every image carries `width` and `height`. No layout shift.
-- Self-hosted fonts with `font-display: swap`.
-- Lighthouse: 100 across categories is the target, enforced by `pnpm run lighthouse`.
-
-### SEO & AEO
-
-- `NGO`/`Organization` JSON-LD, `BlogPosting`, `BreadcrumbList`.
-- Reciprocal hreflang across `es` / `en` / `x-default`.
-- Meta descriptions 130–160 characters, enforced by `pnpm run seo:check`.
-- GSC verification is **DNS-only** — never add a `google-site-verification` tag.
-
-### Accessibility
-
-- WCAG AA: 4.5:1 body, 3:1 large text and meaningful UI boundaries.
-- Every token's contrast is measured, not estimated.
-- Keyboard operable throughout, with visible focus.
-- `prefers-reduced-motion` honored by every non-essential animation.
-
-### Privacy
-
-This site collects only what a contact form submission carries. No accounts, no
-personal records, no aid data. Corag's audience may include people in vulnerable
-situations, so no PII reaches logs.
-
----
-
-## User Flows
-
-### Someone who needs help
-
-1. Arrives at `/` — usually from a share, not a search.
-2. The primary action is unmistakable and points at the application.
-3. → `ayuda.cabuya.org`, where the need is published, geolocated and matched.
-
-> This site never collects a need. Every path leads to the application.
-
-### Someone who wants to contribute
-
-1. `/` → `/transparencia` — how do I know it arrives?
-2. Sees the mechanism: two numbers, named responsables, moderated evidence.
-3. → `ayuda.cabuya.org/aportar`.
-
-### An organization evaluating Corag
-
-1. `/sobre-corag` → `/como-funciona` → `/transparencia`.
-2. `/aliados` for how to join.
-3. `/contacto` for an institutional conversation.
-
-### A developer
-
-1. `/desarrolladores` — the problem, the API, the quickstart.
-2. Fetches the OpenAPI spec from the application host.
-3. Builds a client that syncs with Corag instead of starting a new database.
-
-### An AI agent
-
-1. Reads `/llms.txt` — learns immediately that this host has no write API.
-2. Follows the pointer to the application's API and MCP server.
-3. Reads any page's `.md` twin for complete content.
-
----
-
-## Content Strategy
-
-### Editorial standards
-
-- Spanish first, English as a real translation.
-- Every claim must be one the site can stand behind. "Verificado" and "con
-  evidencia" mean specific things.
-- Never publish a live figure this static site cannot verify — link to the
-  application instead.
-- No placeholder content, ever.
-
-### Tag taxonomy
-
-Three tiers (primary / secondary / subtopic), max five tags per post, at least
-one primary. Tags are never created without approval — propose with
-`/audit-taxonomy`.
-
----
-
-## Success Metrics
-
-These measure **the website**, not the aid. This repo cannot measure whether help
-arrived; the application does that, and conflating the two would be exactly the
-overclaiming the brand guide forbids.
-
-| Metric | Why it matters |
-|---|---|
-| Handoff rate to `ayuda.cabuya.org` | The site's actual job |
-| `/desarrolladores` → integrations started | The interoperability thesis working |
-| `/colaboradores` → contributors joined | Recruiting |
-| Institutional contacts from `/aliados` | Organizations entering the network |
-| Lighthouse 100 across categories | The site loads for people on bad connections |
-| `md:check`, `lang:check`, `seo:check`, `parity:check` all clean | The agent and language surfaces stay honest |
-| Zero placeholder content in production | Basic integrity |
-
----
-
-## Future Enhancements
-
-- A true vector logo master, replacing the raster-wrapped `favicon.svg`.
-- Live figures pulled from the application's public API at runtime, degrading
-  gracefully when it is unreachable — never baked into the build.
-- Case studies once there are completed emergencies with published evidence.
-- An integrations directory listing the clients built on the API.
+| A **protocol**: one `place` schema, four transports (static feed ≡ read API ≡ write API ≡ MCP) | An aid application — publishing needs, offering help, tracking cases all happen in the member apps |
+| A **validator** that measures conformance (`@cabuya/validator`) | A certification authority — nothing is "certified", things are *measured* |
+| A **registry** of publishers with measured, falsifiable badges | A directory of "trustworthy organizations" — *inclusion is not endorsement*; a directory lists, a registry measures |
+| An **agent skill** that teaches any coding agent the whole protocol offline | A hosted data platform — this project never stores anyone's aid records |
+| Open source, CC0 spec, Apache-2.0 code, PR-governed | Owned by any single app or company — governance pre-commits to a multi-party council |
+
+**The line that never moves:** this repository and everything it serves holds
+**no person-level data** — no cases, names, personal phone numbers, or
+personal media. The protocol excludes person-level data by a **join
+prohibition**, not a field omission; people-domain needs converge to the
+official channels (Cruz Roja RCF for missing persons, Registro Único de
+Damnificados/UNGRD for affected people).
+
+## 3. Audiences — who lands here and what they need first
+
+| Audience | First visit needs | Primary surface |
+|---|---|---|
+| **Implementer developers (and their coding agents)** — the primary audience | "How do I publish a feed?" answered in one screen; copy-paste that works; a validator that tells them exactly what to fix | `/developers/quickstart` → `/developers/validator` |
+| **App maintainers deciding whether to adopt** | What it costs (an afternoon), what it never demands (no id rewrite, no central permission), what happens if they shut down (orderly wind-down), the licence answer | `/developers/faq`, the ladder on the landing |
+| **Institutional readers** (alcaldías, UNGRD, Cruz Roja context, mesa técnica) | That a verified registry of legitimate points exists and counters fraud; that people-domain data routes to official channels; who governs this | `/`, `/registry`, `/governance` |
+| **International adopters** evaluating the method for their own city/country | The spec in English at stable URLs; the governance and adoption method documented well enough to fork | `/developers/spec`, `/governance`, `docs/context/` |
+| **Contributors** (volunteer devs with two free hours) | A pre-specified first issue; gates they can run locally; a review, not a redesign | `/join`, `CONTRIBUTING.md` |
+
+## 4. The product surface
+
+| Surface | Job | Success looks like |
+|---|---|---|
+| **Landing** (`/`, `/es`) | Tell the story in the honest register; route to publish/verify | A stranger understands *what this is* in one screen and knows their next click |
+| **`/developers` portal** | The narrow path from "never heard of this" to "my feed is green" | Quickstart → green validator run with no maintainer contact |
+| **Spec reader** (`/developers/spec/{v}`) | Normative text at permanent URLs with stable anchors | Validator messages deep-link into it; versions never mutate |
+| **Schema reference** | Field-by-field truth generated from the JSON Schemas | Zero drift possible — generated, not written |
+| **Live validator** | Paste a URL or JSON → the same report the CLI gives | The most common real defect (missing CORS) is diagnosed correctly |
+| **Registry** (`/registry`) | Who publishes what, with *measured* state | A badge click lands on the measurement behind it |
+| **Skill page** (`/developers/skill`) | Install blocks per agent | An agent installs it and passes the offline knowledge test |
+| **Governance surface** | The rules of the commons: RFC process, trademark/badge policy, wind-down, suspension | A team can predict every consequence before joining |
+
+## 5. The protocol's product model — the ladder, not a gate
+
+Membership is a five-level conformance ladder (L0 listed → L1 linked → L2
+publishes → L3 serves & consumes → L4 federates), **measured by the
+validator, never self-declared**, with two *respected* non-publishing classes
+(directory-only; link-out-only for people-domain apps). The floor for
+"publishes data" is deliberately an afternoon of work.
+
+**Adoption-ease is a golden rule:** whenever good architecture and easy
+implementation tension, the tie-break is the adopter's afternoon. Complexity
+lives on our side of the line (validator, probes, crosswalks, converter); the
+adopter's diff stays small (a manifest, a serializer, a config one-liner).
+Zero-coordination onboarding: ids need no central minting, the registry PR is
+self-service, the badge is measured automatically.
+
+## 6. Success metrics — all **targets**, none claimed
+
+Per Rule-0, every number below is a goal we will measure publicly, not a
+result we assert. Measurement source in parentheses.
+
+| Metric | Target | Why it matters |
+|---|---|---|
+| Machine-readable sources in the ecosystem | from 2 → **10** (registry entries with measured L2+) | The mesa técnica's own adoption goal (M2) |
+| Time from quickstart to green badge, no maintainer contact | ≤ **45 minutes** for the copy-paste path | The "done means" bar of the whole product |
+| Implementation effort for a small app | ≤ **one afternoon**, exactly **one** human decision (the PII gate) | The walkthrough-proven adoption budget |
+| Skill acceptance test | **10/10 + 3/3 offline, on two agent harnesses**, every release | "Install it and the agent knows the protocol" stays a test, not a slogan |
+| Registry integrity | 100% of badges backed by a validator run ≤ 6h old (cron) | A falsifiable badge is the only kind worth wearing |
+| First-response to contributions | ≤ **48 hours**, stated publicly | Volunteer contributors don't wait in silence |
+
+## 7. Golden rules (product-level)
+
+1. **Rule-0 — never publish a claim we cannot back.** No invented figures
+   (citable emergency figures live in `docs/context/DECISIONS.md` M7), no
+   endorsements we cannot maintain, no CTA to a channel we do not run, no
+   conformance claim the validator has not measured. State the limit instead.
+2. **Security.** The one dynamic surface (`/api/validate`) is treated as the
+   attack surface it is (full SSRF control set, zero retention); no secrets in
+   the repo; PII deny-patterns run over our own fixtures in CI.
+3. **Scalability.** Static-first; one schema, four transports; registry as
+   git-reviewed data + KV for measured state; no database, no custody problem.
+4. **Performance.** Documentation ships 0 KB JS; landing ≤ 40 KB; budgets are
+   CI gates (Lighthouse ≥ 95/100/100/95), not aspirations.
+5. **Accessibility.** WCAG AA measured (the token system re-computes its own
+   contrast); severity never color-alone; the badge speaks to screen readers.
+6. **Bilingual parity.** EN canonical at `/`, ES first-class at `/es`, both
+   written natively; parity is a build gate. The protocol's **feed-string
+   baseline stays `es`** regardless of site topology.
+
+## 8. Deliberately out of scope (v0.1)
+
+The MCP server implementation (needs ≥2 live conforming feeds first) · L3/L4
+validator checks beyond their documented catalogue entries · the Extended
+profile · portal search · announcements/blog · feed sharding tooling ·
+`ci-gate`/`mcp-bridge` skill addons. Each has a phase in the founding
+execution plan; the site says "not yet" plainly wherever one is referenced.
+
+## 9. Companion products
+
+| Product | Repo | Relation |
+|---|---|---|
+| **Cabuya Skill** | `Cabuya/cabuya-skill` | Vendors this repo's `spec/` (checksummed); its acceptance test is the adoption thesis made falsifiable |
+| **`@cabuya/validator`** | this repo, `packages/validator/` | One engine, four harnesses — CLI, CI, the portal's live checker, the registry cron |
+| **Reference MCP server** | this repo, `packages/mcp-server/` (deferred) | Network-level read surface; never a proxy over member apps |

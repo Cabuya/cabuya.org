@@ -1,200 +1,107 @@
-# Corag — Messaging Platform
+# Messaging — the Cabuya narrative and where each beat belongs
 
-> **What Corag says, in what order, and in whose words.**
->
-> Every surface that states the value proposition — home, about, how it works,
-> transparency, developers, the team page, blog intros, meta descriptions —
-> writes from this document. It exists so the site makes **one** argument
-> instead of eight slightly different ones.
->
-> - **[`BRAND_GUIDE.md`](./BRAND_GUIDE.md)** owns *how we sound*.
-> - **This file** owns *what we say and in what order*.
-> - **[`WRITING_VOICE_GUIDE.md`](./WRITING_VOICE_GUIDE.md)** owns *craft*.
+> The narrative map for every writer (human or agent) producing cabuya.org
+> copy. Voice rules live in [`WRITING_VOICE_GUIDE.md`](./WRITING_VOICE_GUIDE.md);
+> this document says **what** we say and **where**. Rule-0 constraints are per
+> section and non-negotiable.
 
 ---
 
-## 1. The positioning, in one sentence
+## 1. The elevator pitch (verbatim — do not paraphrase on first use)
 
-> ## Tenemos coraje para servir y transformar vidas.
+**Español**
+> Cabuya es un formato abierto para que las apps de ayuda publiquen y lean los
+> mismos datos: puntos de acopio, necesidades, capacidades y entregas.
+> Cualquier equipo puede implementarlo en una tarde, y nadie tiene que pedirle
+> permiso a nadie.
 
-The name **Corag** comes from **coraje**. That is not a slogan invented for the
-website; it is what the brand manual says the mark means:
+**English**
+> Cabuya is an open format that lets aid apps publish and read the same data:
+> collection points, needs, capacities and deliveries. Any team can implement
+> it in an afternoon, and nobody has to ask anyone for permission.
 
-> *"El logo de CORAG está diseñado para transmitir **coraje, innovación y
-> amor**, tres pilares fundamentales en la relación con entidades y grupos
-> sociales."* — Manual de Identidad Visual, p. 10
+## 2. The founding story (the one-breath version)
 
-The heart that replaces the `o` carries **amor**. The name carries **coraje**.
+*La cabuya es la fibra con la que se amarra lo que nadie puede cargar solo.
+Muchos hilos que por separado no aguantan nada, pero juntos cargan lo que sea.
+Cada app es un hilo y el protocolo es la cuerda.*
 
-### What coraje actually means here
+English rendition: *Cabuya is the fibre you use to tie down what nobody can
+carry alone. Many threads that hold nothing on their own — twisted together,
+they carry anything. Each app is a thread; the protocol is the rope.*
 
-Coraje is **not** bravado, heroism, or a call for people to be strong in
-adversity. Used that way it is empty, and pointed at the wrong person it is
-cruel.
+Supporting facts the story may carry (each checkable, per Rule-0):
 
-Coraje in Corag is three concrete things:
+- The word is Colombian and common property; it names the fibre of the fique
+  plant; it does not expire when an emergency ends and belongs to no app.
+- Colombia is among the world's largest fique producers (cite when used).
+- The origin: Colombia's August 2026 seismic emergency produced 20+
+  independently built response platforms that could not read each other's
+  data. (Citable specifics: `docs/context/DECISIONS.md` M7 and the mesa
+  técnica report — always with the named source.)
 
-1. **El coraje de aparecer.** Showing up when it is inconvenient — a Saturday, a
-   long drive, someone else's neighbourhood.
-2. **El coraje de poner tu nombre.** A leader takes responsibility for a delivery
-   with their own name and their own account. That is exposure, not a formality.
-3. **El coraje de mostrar la cuenta.** Publishing what happened with the money —
-   including when the number is small, or when something did not go as planned.
+**Placement rule for origin-story vocabulary:** *terremoto, sismo, emergencia,
+Pereira, Eje Cafetero, Colombia* belong in the **history/origin** sections,
+where they are true and age well — never in taglines, product names, or the
+brand's self-description. The protocol is from Colombia; it is not "the
+Colombian standard" (nobody appointed us).
 
-**That third one is the bridge from the brand idea to the product.** Ayuda
-Directa's entire architecture — responsables, transferencia directa, evidencia
-moderada, *recibido* vs. *utilizado con evidencia* — is coraje made operational.
-It is easy to say you are transparent. It takes coraje to publish the receipt.
+## 3. The narrative beats and their owners
 
-**Say coraje, then immediately show the receipt.** Coraje without the evidence
-model is a slogan. The evidence model without coraje is a spreadsheet. The
-argument only works with both.
+Each claim has exactly one owning surface. Other pages may reference it, but
+the full argument lives in one place — that is how the site stays consistent.
 
----
-
-## 2. The argument, in order
-
-Every value-proposition surface follows this sequence. A page may **skip** steps
-that its audience does not need, but the **order never inverts**.
-
-| # | Beat | The idea | Reference phrasing |
+| Beat | The claim | Owner | Rule-0 constraint |
 |---|---|---|---|
-| 1 | **La intención existe** | Most people already want to help. Generosity is not the scarce resource. | *Muchas personas quieren ayudar.* |
-| 2 | **La conexión falla** | They cannot find a way that is trustworthy, close and meaningful. Aid fragments across WhatsApp, forms, spreadsheets and calls. | *…pero no encuentran cómo hacerlo de manera confiable, cercana y significativa.* |
-| 3 | **Corag es el puente** | A single place that connects governments, organizations, foundations, companies and people. | *El ecosistema de impacto social.* |
-| 4 | **El puente se sostiene con evidencia** | Not a promise of transparency — a mechanism. Two public numbers, moderated evidence, named responsables. | *Transparente, medible y constante.* |
-| 5 | **Ayuda Directa es cómo se ve hoy** | The flagship product, live, with a real emergency running. | *Ayuda directa. Destino visible.* |
-| 6 | **Únete al movimiento** | One clear next step, into the app. | *Únete al movimiento. / Quiero ayudar.* |
+| The pitch | What Cabuya is, in two sentences | Landing hero | No adoption count until the registry proves it per-app with a timestamp |
+| «Crecemos juntos» | Many weak feeds, twisted together, carry a load none carries alone — and the apps *feed each other* | Landing thesis section | Stated as intent, never as achieved outcome |
+| How it works | Manifest → feed → validator → registry | Landing four-boxes | Links to the ladder, not a marketing funnel |
+| The ladder | Five measured levels; two respected non-publishing classes | Landing ladder section + `/developers/spec/0.1/1-architecture` | Directory-only and link-out-only shown as **membership classes**, not failures |
+| The network | Who publishes what, with measured status | `/registry` (landing renders a teaser) | Only publishers with a registry entry appear; `proposed` rendered as proposed |
+| Who is in | Working-group participants who opted in | Landing signatories section | **Absent, not empty**, until a written opt-in exists; nobody is named without one |
+| The afternoon | Implementation ≈ one afternoon, one human decision | `/developers/quickstart` | "Five minutes" is only the copy-paste static path; the real mapping is an afternoon — say both |
+| Measured, never declared | Conformance = passing the published validator | `/developers/validator` + the trademark page | Never the word *certificado/certified* |
+| The exclusions | Person-level data never federates; contact never travels | `/developers/spec/0.1/7-normative-exclusions` (FAQ summarizes) | Official channels (Cruz Roja RCF, Registro Único/UNGRD) are the link-out, named exactly |
+| Fraud countermeasure | A verified registry of legitimate points serves the public | `/registry` + institutional copy | Framed as utility, citing the mesa técnica report — never as an accusation of any app |
+| The long horizon | Emergency network → standard → regional ecosystem | Landing horizon section | Explicitly labelled as ambition |
+| Governance | Council model, RFC process, escape hatches, wind-down | `/governance` | Never implies an unseated body exists |
+| The skill | Install it and your agent knows the protocol | `/developers/skill` | The claim is backed by the published acceptance test — link it |
 
-### Which surfaces skip which beats
+## 4. Message discipline by audience
 
-| Surface | Beats | Note |
+- **To developers:** lead with the artifact (a file, a command, a green
+  check), never with the mission statement. The mission is one link away.
+- **To institutions:** lead with the verified-registry utility and the
+  official-channels convergence; the vocabulary is *registro verificado,
+  puntos legítimos, canales oficiales* — measured, concrete, zero heroics.
+- **To adopters abroad:** lead with the method's portability — the spec is
+  CC0, the governance is documented, the origin is Colombian and the design
+  is not Colombia-locked (event-scoped registry, `es` baseline + localized
+  strings).
+
+## 5. Approved phrasings (use these; don't improvise new ones)
+
+| Concept | ES | EN |
 |---|---|---|
-| Home | 1 → 6, all of them | The only page that runs the full argument |
-| `/sobre-corag` | 1, 2, 3, **plus the origin of the name** | The one page where coraje is explained, not just used |
-| `/como-funciona` | 4, 5 | The mechanism in detail; the problem is assumed |
-| `/transparencia` | 4 | Beat 4 expanded into a whole page. This is the proof surface |
-| `/emergencias` | 3, 5 | The model, then the live instance |
-| `/lideres` | **2 (recast)**, 4, 6 | The gap here is coordination capacity, not intent |
-| `/desarrolladores` | **2 (recast as fragmentation)**, 3, 6 | A developer needs the problem, not the sentiment |
-| `/colaboradores` | 6 | Recruiting. Beat 1 is already true of the reader |
-| `/aliados` | 3, 4, 6 | Organizations buy the mechanism, not the feeling |
+| The badge | «Compatible con Cabuya 1.0» | "Cabuya 1.0 compatible" |
+| Measured conformance | «La conformidad se mide, nunca se declara.» | "Conformance is measured, never declared." |
+| Registry disclaimer | «Aparecer en el registro no es un aval.» | "Inclusion is not endorsement." |
+| The exclusion | «Los datos de personas no viajan por el protocolo. Nunca.» | "Person-level data never travels through the protocol. Ever." |
+| The floor | «Una tarde de trabajo. Una sola decisión humana.» | "An afternoon of work. Exactly one human decision." |
+| Feed possessive | «un feed Cabuya» (never «el feed de Cabuya») | "a Cabuya feed" |
 
----
+## 6. Banned vocabulary (enforced — see WRITING_VOICE_GUIDE for the full lists)
 
-## 3. The approved lexicon
+Hype register (*revolucionario, disruptivo, líder, definitivo, empoderar,
+seamless, game-changer…*) · savior register (*salvamos vidas, héroes,
+beneficiarios, los más vulnerables as a label, manos que ayudan…*) ·
+unbacked claims (*"las 20 apps usan Cabuya", "el estándar de ayuda de
+Colombia", certificado…*) · AI-slop scaffolding (*"En un mundo donde…", "No
+es solo X, es Y", "imagina un futuro donde"…*).
 
-Reuse these. Do not paraphrase a **fixed** phrase — it is the same sentence
-everywhere so it becomes recognizable.
+## 7. Quoting people
 
-| Phrase (ES) | English | Status | Where |
-|---|---|---|---|
-| **El ecosistema de impacto social** | The social impact ecosystem | **fixed** | The positioning line. Home H1, meta, OG. |
-| **Tenemos coraje para servir y transformar vidas** | We have the courage to serve and transform lives | **fixed** | The coraje statement. Home, about. |
-| **Conectamos a quienes quieren ayudar con quienes más lo necesitan** | We connect people who want to help with those who need it most | **fixed** | The lead. Home, meta, OG, footer. |
-| **Transparente, medible y constante** | Transparent, measurable and consistent | **fixed** | The proof triad. Transparency, allies. |
-| **Únete al movimiento** | Join the movement | **fixed** | The primary CTA into the app. |
-| **Ayuda directa. Destino visible.** | Direct aid. Visible destination. | **fixed** | Ayuda Directa's own tagline — belongs to the **product**, not the ecosystem. Never use it as Corag's tagline. |
-| **Este es el parche que nos une** | This is what brings us together | flexible | Community surfaces: colaboradores, blog. Warm, Colombian, unpretentious — keep the register even if the wording changes. |
-| Ayuda donde más se necesita | Help where it is needed most | flexible | Emergency contexts, borrowed from the app. |
-| Coraje · Innovación · Amor | Courage · Innovation · Love | **fixed** | The three pillars of the mark. About, brand contexts. |
-| Colaboración · Empatía · Confianza · Amor · Innovación social · Transparencia | | **fixed** | The six official values. Verbatim, in this order. |
-
-### Naming
-
-- **Corag** — the ecosystem. Capitalized in running text; the wordmark is lowercase.
-- **Ayuda Directa** — the flagship product, title case. It lives at `ayuda.cabuya.org`.
-- Never use them interchangeably. Corag ⊃ Ayuda Directa ⊃ a given emergencia.
-- People who build Corag: **colaboradores**. People who coordinate aid:
-  **líderes**. Organizations: **aliados**. People who contribute: **aportantes**.
-
----
-
-## 4. Coraje — where it belongs and where it does not
-
-| Surface | Coraje | Why |
-|---|---|---|
-| Home hero | **Leads** | It is the positioning. |
-| `/sobre-corag` | **Leads, and is explained** | The only place the name's origin is told. |
-| `/transparencia` | **One line, tied to evidence** | *"Publicar la cuenta también requiere coraje."* Then the numbers. |
-| `/lideres` | **One line** | Being a responsable is the most literal coraje on the platform. |
-| `/colaboradores` | **A passing line** | The page is about people, not the brand. |
-| `/desarrolladores` | **A passing line at most** | Developers came for the API. Sentiment here reads as noise. |
-| `/como-funciona` | **No** | This page is mechanism. Let the mechanism speak. |
-| `/aliados` | **No** | Organizations evaluate the model, not the feeling. |
-| Forms, errors, empty states, labels | **Never** | A person mid-task needs clarity. |
-| Legal pages | **Never** | — |
-
-### Concrete rewrites
-
-| ❌ | ✅ | Why |
-|---|---|---|
-| "Ten coraje, vamos a superar esto juntos." | "Tenemos coraje para servir y transformar vidas." | **Never aim coraje at someone receiving aid.** The coraje is ours. |
-| "Con coraje, revolucionamos la ayuda humanitaria." | "Publicamos cuánto se recibió y cuánto se usó con evidencia." | Coraje is not a substitute for a mechanism. |
-| "Coraje. Innovación. Amor. Bienvenido a Corag." | "Corag nace de la palabra coraje. El corazón en la o es el amor." | Explain the idea instead of chanting it. |
-| "Únete al movimiento que está cambiando el mundo." | "Únete al movimiento." | The CTA is the claim. Do not inflate it. |
-| "Miles de héroes anónimos." | "Cada aporte queda registrado, con su destino y su evidencia." | No hero framing; a verifiable fact instead. |
-
----
-
-## 5. Proof points
-
-The argument leans on these. Each is marked by whether **this static site** can
-state it directly, or must link to the application.
-
-| Proof point | Statable here? |
-|---|---|
-| Money **received** and money **used with evidence** are reported as two separate public figures | ✅ Describe the model. ❌ Never bake in a figure — link to the app for live numbers. |
-| Contributions go by **direct transfer to verified leader accounts**, not a central treasury | ✅ Yes — it is a design decision, not a metric. |
-| Evidence is **moderated before publication**, within a limited window | ✅ Yes. Describe the flow; do not promise a specific SLA this site cannot verify. |
-| A large emergency is split into **frentes operativos** with named responsables | ✅ Yes. |
-| Contributors may appear as **"Persona solidaria"**; publishing contact details is **opt-in** | ✅ Yes — a privacy commitment, and it belongs on `/privacidad` too. |
-| A **public REST API, an OpenAPI 3.1 spec and an MCP server** let other systems join instead of forking | ✅ Yes, with links. ❌ Never document a field the live spec does not confirm. |
-| Requests/offers are **idempotent** via `source` + `externalId` | ✅ Yes, on `/desarrolladores`. |
-| Number of emergencies, contributions, people helped | ❌ **Link to the app.** A stale humanitarian figure damages trust more than no figure. |
-| Named allies, partner organizations, team members | ❌ Only real, confirmed ones. **Never invent one.** |
-
----
-
-## 6. Anti-patterns
-
-Beyond the blocklist in [`BRAND_GUIDE.md`](./BRAND_GUIDE.md) §5:
-
-- **Coraje aimed at people receiving aid.** The single worst failure available
-  here. The coraje is ours.
-- **Coraje as a headline on every page.** Repetition turns the idea into
-  wallpaper. It leads on two pages. Elsewhere it is a line, or nothing.
-- **"Movimiento" inflated into a claim about scale.** *Únete al movimiento* is an
-  invitation. It is not "thousands have already joined" unless we can name the
-  number and it is true.
-- **"Transformar vidas" left standing alone.** It only earns its place next to
-  something concrete — a delivery, a receipt, a number.
-- **Coraje used to excuse vagueness.** If a sentence would be stronger with the
-  mechanism instead of the sentiment, use the mechanism.
-- **Hero framing.** People who receive aid are neighbours, not the backdrop for
-  someone else's virtue. People who give are doing a normal human thing well.
-- **Calling Corag "bilingual."** The site is available in Spanish and English;
-  that is a capability, not an identity. Corag is a community of professionals,
-  organizations and volunteers. Describing it as "the bilingual community"
-  promotes a language accident into the positioning and displaces the actual
-  claim. State the language support as a plain fact where it is useful, never as
-  an adjective for who Corag is.
-- **Borrowing the app's emergency register for marketing copy.** *"Necesito
-  ayuda"* is right in the app during an emergency and wrong on a landing page.
-
----
-
-## 7. Meta descriptions and OG
-
-The Open Graph cards (`public/images/og-default{,-en}.jpg`, derived from
-curated masters in `assets/brand/og-default-{es,en}.jpg` via
-`scripts/build-brand-assets.mjs`) already carry:
-
-- **ES** — *La comunidad también salva vidas.* / *Conectamos a quienes quieren
-  ayudar con quienes más lo necesitan.*
-- **EN** — *Community also saves lives.* / *We connect people who want to help
-  with those who need it most.*
-
-Meta descriptions must be **130–160 characters** (enforced by
-`pnpm run seo:check`) and should draw from beats 3 and 4 — the bridge and the
-evidence — rather than from beat 1, which is too generic to differentiate.
+Team members' and adopters' words (e.g. an app creator's message about
+integration) may be quoted **only with their explicit permission**, attributed
+the way they ask. Without permission: paraphrase the idea without attribution.
+This applies to the founder's own team messages too — ask before quoting.
