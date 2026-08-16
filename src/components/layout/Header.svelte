@@ -74,18 +74,18 @@ function closeAllDropdowns() {
 <svelte:window on:click={closeAllDropdowns} />
 
 <header
-  class="border-b transition-colors duration-300 bg-corag-bg-elevated/95 text-corag border-corag-border shadow-sm shadow-corag-primary/5 backdrop-blur-md dark:bg-corag-bg-dark/95 dark:text-white dark:border-white/10 dark:shadow-black/30"
+  class="border-b transition-colors duration-300 bg-cabuya-bg-elevated/95 text-cabuya border-cabuya-border shadow-sm shadow-cabuya-primary/5 backdrop-blur-md dark:bg-cabuya-bg-dark/95 dark:text-white dark:border-white/10 dark:shadow-black/30"
   style="padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
 >
   <nav class="main-container flex items-center justify-between">
     <a
       href={prefix || '/'}
-      class="flex items-center select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary"
+      class="flex items-center select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
       aria-label="Corag"
     >
       <img
         class="h-8 w-auto md:h-9 dark:hidden"
-        src="/images/brand/corag-wordmark.webp"
+        src="/images/brand/cabuya-lockup.webp"
         alt=""
         width={342}
         height={100}
@@ -94,7 +94,7 @@ function closeAllDropdowns() {
       />
       <img
         class="hidden h-8 w-auto md:h-9 dark:block"
-        src="/images/brand/corag-wordmark-light.webp"
+        src="/images/brand/cabuya-lockup-dark.webp"
         alt=""
         width={342}
         height={100}
@@ -141,16 +141,16 @@ function closeAllDropdowns() {
           ></div>
           <div
             id="how-dropdown"
-            class="absolute left-1/2 -translate-x-1/2 top-full w-64 bg-corag-bg-elevated text-corag rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
+            class="absolute left-1/2 -translate-x-1/2 top-full w-64 bg-cabuya-bg-elevated text-cabuya rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
             style="pointer-events: auto; opacity: 1; transform: translateY(12px);"
           >
-            <a href="{prefix}/how-it-works" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'how-it-works' })}>{t.nav.howItWorks}</a>
-            <a href="{prefix}/transparency" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'transparency' })}>{t.nav.transparency}</a>
-            <a href="{prefix}/emergencies" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'emergencies' })}>{t.nav.emergencies}</a>
-            <a href="{prefix}/leaders" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'leaders' })}>{t.nav.leaders}</a>
-            <a href="{prefix}/partners" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'partners' })}>{t.nav.partners}</a>
-            <a href="{prefix}/ecosystem" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'ecosystem' })}>{t.nav.ecosystem}</a>
-            <a href="{prefix}/developers" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'developers' })}>{t.nav.developers}</a>
+            <a href="{prefix}/how-it-works" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'how-it-works' })}>{t.nav.howItWorks}</a>
+            <a href="{prefix}/transparency" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'transparency' })}>{t.nav.transparency}</a>
+            <a href="{prefix}/emergencies" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'emergencies' })}>{t.nav.emergencies}</a>
+            <a href="{prefix}/leaders" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'leaders' })}>{t.nav.leaders}</a>
+            <a href="{prefix}/partners" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'partners' })}>{t.nav.partners}</a>
+            <a href="{prefix}/ecosystem" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'ecosystem' })}>{t.nav.ecosystem}</a>
+            <a href="{prefix}/developers" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'developers' })}>{t.nav.developers}</a>
           </div>
         {/if}
       </div>
@@ -192,16 +192,16 @@ function closeAllDropdowns() {
           ></div>
           <div
             id="community-dropdown"
-            class="absolute left-1/2 -translate-x-1/2 top-full w-64 bg-corag-bg-elevated text-corag rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
+            class="absolute left-1/2 -translate-x-1/2 top-full w-64 bg-cabuya-bg-elevated text-cabuya rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
             style="pointer-events: auto; opacity: 1; transform: translateY(12px);"
           >
-            <a href="{prefix}/about" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'about' })}>{t.nav.about}</a>
-            <a href="{prefix}/movement" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'movement' })}>{t.nav.movement}</a>
-            <a href="{prefix}/channels" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'channels' })}>{t.nav.channels}</a>
-            <a href="{prefix}/contributing" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'contributing' })}>{t.nav.contributing}</a>
-            <a href="{prefix}/governance" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'governance' })}>{t.nav.governance}</a>
-            <a href="{prefix}/conduct" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'conduct' })}>{t.nav.conduct}</a>
-            <a href="{prefix}/privacy" class="block px-4 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'privacy' })}>{t.nav.privacy}</a>
+            <a href="{prefix}/about" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'about' })}>{t.nav.about}</a>
+            <a href="{prefix}/movement" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'movement' })}>{t.nav.movement}</a>
+            <a href="{prefix}/channels" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'channels' })}>{t.nav.channels}</a>
+            <a href="{prefix}/contributing" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'contributing' })}>{t.nav.contributing}</a>
+            <a href="{prefix}/governance" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'governance' })}>{t.nav.governance}</a>
+            <a href="{prefix}/conduct" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'conduct' })}>{t.nav.conduct}</a>
+            <a href="{prefix}/privacy" class="block px-4 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => trackEvent(EVENTS.NAV_CLICK, { item: 'privacy' })}>{t.nav.privacy}</a>
           </div>
         {/if}
       </div>
@@ -213,7 +213,7 @@ function closeAllDropdowns() {
            the primary action in the chrome. -->
       <a
         href={appUrl(APP_PATHS.home)}
-        class="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-corag-fill px-5 py-2 font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary"
+        class="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-cabuya-fill px-5 py-2 font-semibold text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
         data-umami-event="app_cta_click"
         data-umami-event-surface="header-desktop"
       >
@@ -262,11 +262,11 @@ function closeAllDropdowns() {
           ></div>
           <div
             id="language-dropdown"
-            class="absolute left-1/2 -translate-x-1/2 top-full w-20 bg-corag-bg-elevated text-corag rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
+            class="absolute left-1/2 -translate-x-1/2 top-full w-20 bg-cabuya-bg-elevated text-cabuya rounded shadow-lg z-50 overflow-hidden transition-all duration-200"
             style="pointer-events: auto; opacity: 1; transform: translateY(12px);"
           >
             {#each alternateLanguageUrls as alt}
-              <a href={alt.url} class="block w-full text-center px-3 py-2 hover:bg-corag-primary-soft text-corag-secondary transition" on:click={() => {
+              <a href={alt.url} class="block w-full text-center px-3 py-2 hover:bg-cabuya-primary-soft text-cabuya-secondary transition" on:click={() => {
                 rememberLanguage(alt.lang);
                 trackEvent(EVENTS.LANGUAGE_SWITCH, { from: lang, to: alt.lang });
               }}>
@@ -290,7 +290,7 @@ function closeAllDropdowns() {
     <div class="flex items-center gap-1 lg:hidden {open ? 'pointer-events-none invisible' : ''}">
       <a
         href={appUrl(APP_PATHS.home)}
-        class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-corag-fill px-3.5 py-2 text-sm font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary sm:px-4"
+        class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-cabuya-fill px-3.5 py-2 text-sm font-semibold text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary sm:px-4"
         aria-label={t.appCta.shortAria}
         data-umami-event="app_cta_click"
         data-umami-event-surface="header-mobile"

@@ -82,7 +82,7 @@ function getVisiblePages() {
           <button
             on:click={() => handlePageChange(currentPage - 1)}
             aria-label={t.previous}
-            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-corag-secondary bg-corag-bg-elevated border border-corag-border rounded-md hover:bg-corag-primary-soft"
+            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border rounded-md hover:bg-cabuya-primary-soft"
           >
             {t.previous}
           </button>
@@ -91,7 +91,7 @@ function getVisiblePages() {
             href={getPageUrl(currentPage - 1)}
             on:click={() => trackEvent(EVENTS.PAGINATION_CLICK, { page: currentPage - 1 })}
             aria-label={t.previous}
-            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-corag-secondary bg-corag-bg-elevated border border-corag-border rounded-md hover:bg-corag-primary-soft"
+            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border rounded-md hover:bg-cabuya-primary-soft"
           >
             {t.previous}
           </a>
@@ -100,7 +100,7 @@ function getVisiblePages() {
 
       {#each visiblePages as page}
         {#if typeof page === 'string'}
-          <span class="px-2 text-corag-secondary" aria-hidden="true">...</span>
+          <span class="px-2 text-cabuya-secondary" aria-hidden="true">...</span>
         {:else if isSearchMode}
           <button
             on:click={() => handlePageChange(page)}
@@ -108,8 +108,8 @@ function getVisiblePages() {
             aria-current={page === currentPage ? 'page' : undefined}
             class={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium rounded-md ${
               page === currentPage
-                ? 'bg-corag-fill text-corag-on-fill'
-                : 'text-corag-secondary bg-corag-bg-elevated border border-corag-border hover:bg-corag-primary-soft'
+                ? 'bg-cabuya-fill text-cabuya-on-fill'
+                : 'text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border hover:bg-cabuya-primary-soft'
             }`}
           >
             {page}
@@ -122,8 +122,8 @@ function getVisiblePages() {
             aria-current={page === currentPage ? 'page' : undefined}
             class={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium rounded-md ${
               page === currentPage
-                ? 'bg-corag-fill text-corag-on-fill'
-                : 'text-corag-secondary bg-corag-bg-elevated border border-corag-border hover:bg-corag-primary-soft'
+                ? 'bg-cabuya-fill text-cabuya-on-fill'
+                : 'text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border hover:bg-cabuya-primary-soft'
             }`}
           >
             {page}
@@ -136,7 +136,7 @@ function getVisiblePages() {
           <button
             on:click={() => handlePageChange(currentPage + 1)}
             aria-label={t.next}
-            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-corag-secondary bg-corag-bg-elevated border border-corag-border rounded-md hover:bg-corag-primary-soft"
+            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border rounded-md hover:bg-cabuya-primary-soft"
           >
             {t.next}
           </button>
@@ -145,7 +145,7 @@ function getVisiblePages() {
             href={getPageUrl(currentPage + 1)}
             on:click={() => trackEvent(EVENTS.PAGINATION_CLICK, { page: currentPage + 1 })}
             aria-label={t.next}
-            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-corag-secondary bg-corag-bg-elevated border border-corag-border rounded-md hover:bg-corag-primary-soft"
+            class="px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium text-cabuya-secondary bg-cabuya-bg-elevated border border-cabuya-border rounded-md hover:bg-cabuya-primary-soft"
           >
             {t.next}
           </a>

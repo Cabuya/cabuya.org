@@ -108,11 +108,11 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
   </head>
   <body
     class:list={[
-      'flex flex-col min-h-screen text-corag bg-corag-bg',
+      'flex flex-col min-h-screen text-cabuya bg-cabuya-bg',
       activeNotifications.length > 0 && 'has-top-notification',
     ]}
   >
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-corag-bg-elevated focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-corag-primary">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-cabuya-bg-elevated focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-cabuya-primary">
       Skip to content
     </a>
     {/*
@@ -122,7 +122,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       PTD edition pages use a dedicated minimal header (legacy photocopy).
     */}
     <div
-      data-corag-chrome
+      data-cabuya-chrome
       class:list={[
         'sticky top-0 z-50',
         /* Light PTD: keep chrome transparent so the hero illustration
@@ -141,7 +141,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       <Header client:load lang={lang} />
     </div>
     {/*
-      Keep --corag-chrome-height in sync with sticky chrome (header ±
+      Keep --cabuya-chrome-height in sync with sticky chrome (header ±
       notification bar). Hero uses it for 100dvh fill; ResizeObserver
       covers bar collapse/expand and header reflow without layout jump
       below the hero (chrome shrink and hero grow cancel).
@@ -150,13 +150,13 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
     */}
     <script is:inline>
       (function () {
-        var el = document.querySelector('[data-corag-chrome]');
+        var el = document.querySelector('[data-cabuya-chrome]');
         if (!el) return;
         var root = document.documentElement;
         var raf = 0;
         var sync = function () {
           root.style.setProperty(
-            '--corag-chrome-height',
+            '--cabuya-chrome-height',
             el.getBoundingClientRect().height + 'px'
           );
         };
@@ -191,7 +191,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
           var target = document.getElementById('main-after-hero');
           if (!target) return;
           event.preventDefault();
-          var chrome = document.querySelector('[data-corag-chrome]');
+          var chrome = document.querySelector('[data-cabuya-chrome]');
           var offset = chrome ? chrome.getBoundingClientRect().height : 68;
           var top =
             target.getBoundingClientRect().top + window.scrollY - offset;
@@ -211,7 +211,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
     <main
       id="main-content"
       class:list={[
-        'flex-1 bg-corag-bg',
+        'flex-1 bg-cabuya-bg',
       ]}
     >
       <slot />

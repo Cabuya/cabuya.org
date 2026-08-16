@@ -38,7 +38,7 @@ const shareLinks = [
 ---
 
 <div class="flex flex-wrap items-center gap-2">
-  <span class="mr-1 text-sm font-medium text-corag-secondary">
+  <span class="mr-1 text-sm font-medium text-cabuya-secondary">
     {t.engagement.shareTitle}:
   </span>
   {shareLinks.map((link) => (
@@ -46,7 +46,7 @@ const shareLinks = [
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex items-center gap-1.5 rounded-lg border border-corag-border px-3 py-2 text-sm font-medium text-corag-secondary transition-colors hover:bg-corag-primary-soft hover:text-corag"
+      class="inline-flex items-center gap-1.5 rounded-lg border border-cabuya-border px-3 py-2 text-sm font-medium text-cabuya-secondary transition-colors hover:bg-cabuya-primary-soft hover:text-cabuya"
       aria-label={link.label}
       data-umami-event="share_click"
       data-umami-event-platform={link.platform}

@@ -25,14 +25,14 @@ async function copyLink() {
 
 <button
   onclick={copyLink}
-  class="inline-flex items-center gap-1.5 rounded-lg border border-corag-border px-3 py-2 text-sm font-medium text-corag-secondary transition-colors hover:bg-corag-primary-soft hover:text-corag"
+  class="inline-flex items-center gap-1.5 rounded-lg border border-cabuya-border px-3 py-2 text-sm font-medium text-cabuya-secondary transition-colors hover:bg-cabuya-primary-soft hover:text-cabuya"
   aria-label={label}
 >
   {#if copied}
-    <svg class="h-4 w-4 text-corag-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <svg class="h-4 w-4 text-cabuya-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
     </svg>
-    <span class="text-corag-success">{copiedLabel}</span>
+    <span class="text-cabuya-success">{copiedLabel}</span>
   {:else}
     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />

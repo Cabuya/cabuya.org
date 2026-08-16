@@ -56,7 +56,7 @@ const lastUpdatedPrefix = lang === 'es' ? 'Actualizado el' : 'Last updated';
 ---
 
 <MainLayout lang={lang} title={title} description={description}>
-  <div class="bg-corag-bg">
+  <div class="bg-cabuya-bg">
     <div
       class="main-container pt-12 sm:pt-16 pb-4"
     >
@@ -65,16 +65,16 @@ const lastUpdatedPrefix = lang === 'es' ? 'Actualizado el' : 'Last updated';
     <div class="main-container pt-6 pb-10">
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h1
-        class="mt-3 text-4xl sm:text-5xl font-bold tracking-tight text-corag"
+        class="mt-3 text-4xl sm:text-5xl font-bold tracking-tight text-cabuya"
       >
         {title}
       </h1>
-      <p class="mt-4 max-w-3xl text-lg text-corag-secondary">
+      <p class="mt-4 max-w-3xl text-lg text-cabuya-secondary">
         {description}
       </p>
       {
         lastUpdatedLabel && (
-          <p class="mt-3 text-sm text-corag-secondary">
+          <p class="mt-3 text-sm text-cabuya-secondary">
             {lastUpdatedPrefix} <time datetime={lastUpdatedDatetime}>{lastUpdatedLabel}</time>
           </p>
         )
@@ -82,20 +82,20 @@ const lastUpdatedPrefix = lang === 'es' ? 'Actualizado el' : 'Last updated';
     </div>
   </div>
 
-  <article class="bg-corag-bg pb-16 sm:pb-24">
+  <article class="bg-cabuya-bg pb-16 sm:pb-24">
     <div class="main-container">
       <div
         class="prose prose-lg dark:prose-invert max-w-4xl
-        prose-headings:scroll-mt-24 prose-headings:text-corag prose-headings:font-bold
+        prose-headings:scroll-mt-24 prose-headings:text-cabuya prose-headings:font-bold
         prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-3xl
         prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-xl
-        prose-p:text-corag-secondary prose-p:leading-relaxed
-        prose-a:text-corag-primary prose-a:font-medium dark:prose-a:text-corag-primary-light
-        prose-strong:text-corag prose-strong:font-semibold
-        prose-ul:my-5 prose-ol:my-5 prose-li:text-corag-secondary prose-li:leading-relaxed prose-li:my-1.5
-        prose-hr:my-10 prose-hr:border-corag-border
-        prose-table:text-sm prose-table:my-6 prose-th:text-corag prose-th:font-semibold prose-td:text-corag-secondary
-        prose-code:text-corag prose-code:before:content-none prose-code:after:content-none"
+        prose-p:text-cabuya-secondary prose-p:leading-relaxed
+        prose-a:text-cabuya-primary prose-a:font-medium dark:prose-a:text-cabuya-primary-light
+        prose-strong:text-cabuya prose-strong:font-semibold
+        prose-ul:my-5 prose-ol:my-5 prose-li:text-cabuya-secondary prose-li:leading-relaxed prose-li:my-1.5
+        prose-hr:my-10 prose-hr:border-cabuya-border
+        prose-table:text-sm prose-table:my-6 prose-th:text-cabuya prose-th:font-semibold prose-td:text-cabuya-secondary
+        prose-code:text-cabuya prose-code:before:content-none prose-code:after:content-none"
       >
         <Content />
       </div>

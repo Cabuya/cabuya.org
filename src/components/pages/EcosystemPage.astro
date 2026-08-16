@@ -74,20 +74,20 @@ const explorerLabels = {
 <MainLayout lang={lang} title={p.title} description={p.description}>
   <!-- HERO -->
   <section
-    class="relative overflow-hidden border-b border-corag-border bg-corag-bg"
+    class="relative overflow-hidden border-b border-cabuya-border bg-cabuya-bg"
   >
     <div
-      class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--color-corag-primary-soft)_0%,transparent_55%),radial-gradient(ellipse_at_bottom_left,var(--color-corag-rosa-soft)_0%,transparent_50%)] opacity-90 dark:opacity-40"
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--color-cabuya-primary-soft)_0%,transparent_55%),radial-gradient(ellipse_at_bottom_left,var(--color-cabuya-seedling-soft)_0%,transparent_50%)] opacity-90 dark:opacity-40"
       aria-hidden="true"
     >
     </div>
     <div
-      class="pointer-events-none absolute -right-16 top-10 h-64 w-64 rounded-full border border-corag-primary/20 sm:h-96 sm:w-96"
+      class="pointer-events-none absolute -right-16 top-10 h-64 w-64 rounded-full border border-cabuya-primary/20 sm:h-96 sm:w-96"
       aria-hidden="true"
     >
     </div>
     <div
-      class="pointer-events-none absolute -right-4 top-28 h-40 w-40 rounded-full border border-corag-accent/30 sm:h-56 sm:w-56"
+      class="pointer-events-none absolute -right-4 top-28 h-40 w-40 rounded-full border border-cabuya-accent/30 sm:h-56 sm:w-56"
       aria-hidden="true"
     >
     </div>
@@ -99,19 +99,19 @@ const explorerLabels = {
     <div class="main-container relative pb-16 pt-6 sm:pb-24 sm:pt-10">
       <Eyebrow>{p.eyebrow}</Eyebrow>
       <h1
-        class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-corag sm:text-5xl lg:text-6xl"
+        class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-cabuya sm:text-5xl lg:text-6xl"
       >
         {p.headline}
       </h1>
       <p
-        class="mt-5 max-w-2xl text-lg leading-relaxed text-corag-secondary sm:text-xl"
+        class="mt-5 max-w-2xl text-lg leading-relaxed text-cabuya-secondary sm:text-xl"
       >
         {p.lead}
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
           href={APP_URL}
-          class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-corag-fill px-7 text-base font-semibold text-corag-on-fill transition hover:bg-corag-fill-strong"
+          class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-cabuya-fill px-7 text-base font-semibold text-cabuya-on-fill transition hover:bg-cabuya-fill-strong"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -119,7 +119,7 @@ const explorerLabels = {
         </a>
         <a
           href="#ecosystem-directory"
-          class="inline-flex min-h-[48px] items-center justify-center rounded-full border border-corag-border bg-corag-bg/80 px-7 text-base font-semibold text-corag transition hover:border-corag-primary hover:bg-corag-primary-soft"
+          class="inline-flex min-h-[48px] items-center justify-center rounded-full border border-cabuya-border bg-cabuya-bg/80 px-7 text-base font-semibold text-cabuya transition hover:border-cabuya-primary hover:bg-cabuya-primary-soft"
         >
           {p.ctaDirectory}
         </a>
@@ -139,18 +139,18 @@ const explorerLabels = {
   <!-- JOIN -->
   <section
     id="ecosystem-join"
-    class="scroll-mt-24 bg-corag-primary-soft/35 dark:bg-corag-primary-soft/20"
+    class="scroll-mt-24 bg-cabuya-primary-soft/35 dark:bg-cabuya-primary-soft/20"
   >
     <div class="main-container py-14 sm:py-20">
       <div class="mx-auto max-w-3xl">
         <Eyebrow>{p.joinEyebrow}</Eyebrow>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight text-corag sm:text-4xl">
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-cabuya sm:text-4xl">
           {p.joinTitle}
         </h2>
-        <p class="mt-4 text-base leading-relaxed text-corag-secondary">
+        <p class="mt-4 text-base leading-relaxed text-cabuya-secondary">
           {p.joinLead}
         </p>
-        <div class="mt-8 rounded-3xl border border-corag-border bg-corag-bg p-5 shadow-sm sm:p-8">
+        <div class="mt-8 rounded-3xl border border-cabuya-border bg-cabuya-bg p-5 shadow-sm sm:p-8">
           <EcosystemJoinForm client:visible lang={lang} />
         </div>
       </div>

@@ -31,7 +31,7 @@ const organizationData = {
   name: 'Corag',
   alternateName: 'Corag Ayuda Directa',
   url: Astro.site?.href,
-  logo: new URL('/images/brand/corag-wordmark.png', Astro.site).href,
+  logo: new URL('/images/brand/cabuya-lockup.png', Astro.site).href,
   description:
     'Corag connects people who need help with people who can give it, and publishes the evidence of every delivery. Requests, contributions and proof live in one place.',
   foundingLocation: {
@@ -106,7 +106,7 @@ const breadcrumbs = [
     <JsonLd data={breadcrumbSchema} />
   </Fragment>
 
-  <div class="bg-gradient-to-br from-corag-bg-dark to-corag-bg-dark/90 text-white">
+  <div class="bg-gradient-to-br from-cabuya-bg-dark to-cabuya-bg-dark/90 text-white">
     <div class="main-container pt-12 sm:pt-16 pb-4">
       <Breadcrumbs items={breadcrumbs} onDark />
     </div>
@@ -145,7 +145,7 @@ const breadcrumbs = [
   <Section title={t.aboutPage.bioTitle}>
     <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
       <div
-        class="prose prose-lg dark:prose-invert prose-p:text-corag-secondary lg:col-span-6"
+        class="prose prose-lg dark:prose-invert prose-p:text-cabuya-secondary lg:col-span-6"
         set:html={t.aboutPage.bioText}
       />
       <figure class="lg:col-span-6">
@@ -180,15 +180,15 @@ const breadcrumbs = [
   <Section title={t.aboutPage.quickFactsTitle}>
     <ul class="space-y-3 max-w-2xl list-none">
       {t.aboutPage.quickFacts.map((fact) => (
-        <li class="flex items-start gap-3 text-corag-secondary">
-          <span class="text-corag-primary dark:text-corag-primary-light mt-0.5 shrink-0" aria-hidden="true">✓</span>
+        <li class="flex items-start gap-3 text-cabuya-secondary">
+          <span class="text-cabuya-primary dark:text-cabuya-primary-light mt-0.5 shrink-0" aria-hidden="true">✓</span>
           <span>{fact}</span>
         </li>
       ))}
     </ul>
   </Section>
 
-  <div class="bg-corag-bg-dark text-white py-16">
+  <div class="bg-cabuya-bg-dark text-white py-16">
     <div class="main-container text-center">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">
         {t.aboutPage.ctaTitle}
@@ -197,7 +197,7 @@ const breadcrumbs = [
       <div class="mt-6 flex flex-wrap justify-center gap-4">
         <a
           href={APP_URL}
-          class="inline-flex min-h-[44px] items-center rounded-full bg-corag-rosa px-6 py-3 font-semibold text-corag-bg-dark transition-colors hover:bg-corag-rosa-soft"
+          class="inline-flex min-h-[44px] items-center rounded-full bg-cabuya-seedling px-6 py-3 font-semibold text-cabuya-bg-dark transition-colors hover:bg-cabuya-seedling-soft"
         >
           {t.aboutPage.ctaApp}
         </a>

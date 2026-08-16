@@ -223,7 +223,7 @@ const validationCommands = [
         <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold">{w.file}</h3>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-corag-fill/10 text-corag-primary font-medium">{w.notes}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium">{w.notes}</span>
           </div>
           <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
             <code class="text-xs whitespace-pre-wrap">{w.code}</code>
@@ -252,7 +252,7 @@ const validationCommands = [
                 <td class="py-3 px-4 font-medium">{r.rule}</td>
                 <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{r.description}</td>
                 <td class="py-3 px-4">
-                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${r.severity === 'Mandatory' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-corag-fill/10 text-corag-primary'}`}>{r.severity}</span>
+                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${r.severity === 'Mandatory' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-cabuya-fill/10 text-cabuya-primary'}`}>{r.severity}</span>
                 </td>
               </tr>
             ))}

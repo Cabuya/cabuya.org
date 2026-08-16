@@ -80,9 +80,10 @@ const FRAGMENT_KINDS = [
  * (OpenAPI 3.1 at /api/public/openapi.json) — obviously-example values only,
  * never plausible personal data or amounts (rule 0 in code form).
  */
-const key = (name: string) => `<span class="text-corag-rosa">"${name}"</span>`;
+const key = (name: string) =>
+  `<span class="text-cabuya-seedling">"${name}"</span>`;
 const str = (value: string) =>
-  `<span class="text-corag-on-fill">"${value}"</span>`;
+  `<span class="text-cabuya-on-fill">"${value}"</span>`;
 const devCodeSample = [
   '{',
   `  ${key('source')}: ${str('mi-app')},`,
@@ -93,7 +94,7 @@ const devCodeSample = [
   `  ${key('emergencySlug')}: ${str('eje-cafetero')},`,
   `  ${key('contactName')}: ${str('Nombre de ejemplo')},`,
   `  ${key('contactWhatsapp')}: ${str('+57 300 000 0000')},`,
-  `  ${key('publishContact')}: <span class="text-corag-on-fill">true</span>`,
+  `  ${key('publishContact')}: <span class="text-cabuya-on-fill">true</span>`,
   '}',
 ].join('\n');
 
@@ -109,13 +110,13 @@ const channelLinks = SOCIAL_LINKS.map((social) => ({
 })).filter((social) => social.iconPath);
 
 const btnPrimary =
-  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-corag-fill px-7 py-3 font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary';
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-cabuya-fill px-7 py-3 font-semibold text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary';
 const btnOnDark =
-  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-corag-rosa px-7 py-3 font-semibold text-corag-bg-dark transition-colors hover:bg-corag-rosa-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa';
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-cabuya-seedling px-7 py-3 font-semibold text-cabuya-bg-dark transition-colors hover:bg-cabuya-seedling-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-seedling';
 const btnGhostOnDark =
-  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-corag-rosa/50 px-7 py-3 font-semibold text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa';
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-cabuya-seedling/50 px-7 py-3 font-semibold text-cabuya-seedling transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-seedling';
 const btnSecondary =
-  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-corag-primary px-7 py-3 font-semibold text-corag-primary transition-colors hover:bg-corag-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary';
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-cabuya-primary px-7 py-3 font-semibold text-cabuya-primary transition-colors hover:bg-cabuya-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary';
 ---
 
 <MainLayout
@@ -127,10 +128,10 @@ const btnSecondary =
   lcpImageHref="/images/home/hero-caritas-45-648.webp"
 >
   {/* ── Beat 3 + the coraje statement ─────────────────────────────────── */}
-  <section class="relative overflow-hidden bg-corag-bg-dark">
+  <section class="relative overflow-hidden bg-cabuya-bg-dark">
     {/* Brand heart motif — decorative, clipped on the right edge */}
     <svg
-      class="pointer-events-none absolute -right-48 top-1/2 h-[42rem] w-[42rem] -translate-y-1/2 text-corag-rosa opacity-[0.06]"
+      class="pointer-events-none absolute -right-48 top-1/2 h-[42rem] w-[42rem] -translate-y-1/2 text-cabuya-seedling opacity-[0.06]"
       viewBox="0 0 512 512"
       fill="none"
       aria-hidden="true"
@@ -163,27 +164,27 @@ const btnSecondary =
         class="h-full w-full object-cover object-top opacity-40"
       />
       <div
-        class="absolute inset-0 bg-gradient-to-b from-corag-bg-dark/80 via-corag-bg-dark/60 to-corag-bg-dark"
+        class="absolute inset-0 bg-gradient-to-b from-cabuya-bg-dark/80 via-cabuya-bg-dark/60 to-cabuya-bg-dark"
       >
       </div>
     </div>
     <div
-      class="hero-shell main-container relative flex min-h-[calc(100dvh-var(--corag-chrome-height))] items-center py-8 sm:py-12 lg:py-10"
+      class="hero-shell main-container relative flex min-h-[calc(100dvh-var(--cabuya-chrome-height))] items-center py-8 sm:py-12 lg:py-10"
     >
       <div class="grid w-full items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-6">
           <p
-            class="hero-eyebrow text-xs font-semibold uppercase tracking-[0.2em] text-corag-rosa sm:text-sm"
+            class="hero-eyebrow text-xs font-semibold uppercase tracking-[0.2em] text-cabuya-seedling sm:text-sm"
           >
             {h.eyebrow}
           </p>
           <h1
-            class="hero-title mt-3 font-display text-4xl font-bold leading-[1.02] tracking-tight text-corag-on-fill sm:mt-4 sm:text-5xl lg:text-6xl xl:text-7xl"
+            class="hero-title mt-3 font-display text-4xl font-bold leading-[1.02] tracking-tight text-cabuya-on-fill sm:mt-4 sm:text-5xl lg:text-6xl xl:text-7xl"
           >
             {h.title}
           </h1>
           <p
-            class="hero-lead mt-4 max-w-xl text-base leading-relaxed text-corag-rosa sm:mt-5 sm:text-lg lg:text-xl"
+            class="hero-lead mt-4 max-w-xl text-base leading-relaxed text-cabuya-seedling sm:mt-5 sm:text-lg lg:text-xl"
           >
             {h.lead}
           </p>
@@ -202,7 +203,7 @@ const btnSecondary =
           >
             {
               h.heroChips.map((chip) => (
-                <li class="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-corag-rosa sm:px-4 sm:py-1.5 sm:text-sm">
+                <li class="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-cabuya-seedling sm:px-4 sm:py-1.5 sm:text-sm">
                   {chip}
                 </li>
               ))
@@ -223,11 +224,11 @@ const btnSecondary =
               loading="eager"
               fetchpriority="high"
               decoding="async"
-              class="hero-photo h-auto max-h-[calc(100dvh-var(--corag-chrome-height)-11rem)] max-w-md rounded-[28px] object-cover shadow-corag-lg xl:max-w-lg"
+              class="hero-photo h-auto max-h-[calc(100dvh-var(--cabuya-chrome-height)-11rem)] max-w-md rounded-[28px] object-cover shadow-cabuya-lg xl:max-w-lg"
             />
             {/* Mini app card — the product, present from the first viewport */}
             <div
-              class="absolute -bottom-8 -left-6 w-56 overflow-hidden rounded-[18px] border border-white/10 bg-corag-bg-dark shadow-corag-lg xl:w-64"
+              class="absolute -bottom-8 -left-6 w-56 overflow-hidden rounded-[18px] border border-white/10 bg-cabuya-bg-dark shadow-cabuya-lg xl:w-64"
             >
               <div class="aspect-[3/4]">
                 <img
@@ -248,7 +249,7 @@ const btnSecondary =
       </div>
     </div>
     <div
-      class="hero-scroll-cue pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-corag-rosa sm:block"
+      class="hero-scroll-cue pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-cabuya-seedling sm:block"
       aria-hidden="true"
     >
       <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
@@ -265,22 +266,22 @@ const btnSecondary =
   <div id="main-after-hero"></div>
 
   {/* ── Beats 1 + 2 — the intent exists, the connection fails ─────────── */}
-  <section class="bg-corag-bg">
+  <section class="bg-cabuya-bg">
     <div class="main-container py-20 sm:py-24 lg:py-32">
       <div class="grid gap-12 lg:grid-cols-12 lg:gap-8">
         <div class="lg:col-span-5">
           <div class="lg:sticky lg:top-24">
             <p
-              class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+              class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-primary"
             >
               {h.problemEyebrow}
             </p>
             <h2
-              class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+              class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-cabuya sm:text-4xl lg:text-5xl"
             >
               {h.problemTitle}
             </h2>
-            <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+            <p class="mt-5 text-lg leading-relaxed text-cabuya-secondary">
               {h.problemBody}
             </p>
           </div>
@@ -295,16 +296,16 @@ const btnSecondary =
               const kind = FRAGMENT_KINDS[index] ?? 'note';
               return (
                 <li
-                  class={`problem-note problem-note--${kind} w-fit rounded-[18px] border bg-corag-bg-elevated px-6 py-4 shadow-corag-sm ${
+                  class={`problem-note problem-note--${kind} w-fit rounded-[18px] border bg-cabuya-bg-elevated px-6 py-4 shadow-cabuya-sm ${
                     kind === 'chat'
-                      ? 'rounded-bl-[4px] border-corag-border'
-                      : 'border-dashed border-corag-border'
+                      ? 'rounded-bl-[4px] border-cabuya-border'
+                      : 'border-dashed border-cabuya-border'
                   }`}
                   data-reveal
                   style={`--reveal-delay: ${index * 70}ms`}
                 >
                   <span
-                    class={`block font-display text-xl font-semibold text-corag-text-muted lg:text-2xl ${
+                    class={`block font-display text-xl font-semibold text-cabuya-text-muted lg:text-2xl ${
                       kind === 'post' ? 'problem-fade' : ''
                     }`}
                   >
@@ -315,8 +316,8 @@ const btnSecondary =
                       class="mt-2 flex items-center justify-end gap-1.5"
                       aria-hidden="true"
                     >
-                      <span class="h-1.5 w-8 rounded-full bg-corag-border" />
-                      <svg class="h-4 w-6 text-corag-accent" viewBox="0 0 24 16" fill="none">
+                      <span class="h-1.5 w-8 rounded-full bg-cabuya-border" />
+                      <svg class="h-4 w-6 text-cabuya-accent" viewBox="0 0 24 16" fill="none">
                         <path
                           d="M1 8.5l4 4L13 4M9 10.5l2 2L19 4"
                           stroke="currentColor"
@@ -329,25 +330,25 @@ const btnSecondary =
                   )}
                   {kind === 'form' && (
                     <span class="mt-3 flex flex-col gap-1.5" aria-hidden="true">
-                      <span class="h-2 w-36 rounded-full bg-corag-border" />
-                      <span class="h-2 w-24 rounded-full bg-corag-border/70" />
-                      <span class="h-2 w-28 rounded-full bg-corag-border/40" />
+                      <span class="h-2 w-36 rounded-full bg-cabuya-border" />
+                      <span class="h-2 w-24 rounded-full bg-cabuya-border/70" />
+                      <span class="h-2 w-28 rounded-full bg-cabuya-border/40" />
                     </span>
                   )}
                   {kind === 'sheet' && (
                     <span
-                      class="mt-3 grid w-44 grid-cols-3 gap-px overflow-hidden rounded-[6px] border border-corag-border bg-corag-border"
+                      class="mt-3 grid w-44 grid-cols-3 gap-px overflow-hidden rounded-[6px] border border-cabuya-border bg-cabuya-border"
                       aria-hidden="true"
                     >
                       {Array.from({ length: 6 }).map(() => (
-                        <span class="h-4 bg-corag-bg-elevated" />
+                        <span class="h-4 bg-cabuya-bg-elevated" />
                       ))}
                     </span>
                   )}
                   {kind === 'call' && (
                     <span class="mt-2 flex items-center gap-2" aria-hidden="true">
                       <svg
-                        class="h-4 w-4 text-corag-primary"
+                        class="h-4 w-4 text-cabuya-primary"
                         viewBox="0 0 24 24"
                         fill="none"
                       >
@@ -358,19 +359,19 @@ const btnSecondary =
                           stroke-linejoin="round"
                         />
                       </svg>
-                      <span class="h-1.5 w-16 rounded-full bg-corag-border" />
-                      <span class="h-1.5 w-6 rounded-full bg-corag-border/60" />
+                      <span class="h-1.5 w-16 rounded-full bg-cabuya-border" />
+                      <span class="h-1.5 w-6 rounded-full bg-cabuya-border/60" />
                     </span>
                   )}
                   {kind === 'list' && (
                     <span class="mt-3 flex flex-col gap-1.5" aria-hidden="true">
                       <span class="flex items-center gap-2">
-                        <span class="h-3 w-3 rounded-[4px] border border-corag-border bg-corag-primary-soft" />
-                        <span class="problem-strike h-1.5 w-28 rounded-full bg-corag-border" />
+                        <span class="h-3 w-3 rounded-[4px] border border-cabuya-border bg-cabuya-primary-soft" />
+                        <span class="problem-strike h-1.5 w-28 rounded-full bg-cabuya-border" />
                       </span>
                       <span class="flex items-center gap-2">
-                        <span class="h-3 w-3 rounded-[4px] border border-corag-border" />
-                        <span class="h-1.5 w-20 rounded-full bg-corag-border/60" />
+                        <span class="h-3 w-3 rounded-[4px] border border-cabuya-border" />
+                        <span class="h-1.5 w-20 rounded-full bg-cabuya-border/60" />
                       </span>
                     </span>
                   )}
@@ -384,20 +385,20 @@ const btnSecondary =
   </section>
 
   {/* ── Beat 3 expanded — the bridge ──────────────────────────────────── */}
-  <section class="bg-corag-bg-brand">
+  <section class="bg-cabuya-bg-brand">
     <div class="main-container py-20 sm:py-24 lg:py-32">
       <div class="max-w-3xl">
         <p
-          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-primary"
         >
           {h.howEyebrow}
         </p>
         <h2
-          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-cabuya sm:text-4xl lg:text-5xl"
         >
           {h.howTitle}
         </h2>
-        <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+        <p class="mt-5 text-lg leading-relaxed text-cabuya-secondary">
           {h.howBody}
         </p>
       </div>
@@ -411,13 +412,13 @@ const btnSecondary =
             const isEvidence = index === h.howSteps.length - 1;
             return (
               <li
-                class="pipeline-step relative rounded-[18px] border border-corag-border bg-corag-bg-elevated p-6 shadow-corag-sm transition-shadow hover:shadow-corag-lg"
+                class="pipeline-step relative rounded-[18px] border border-cabuya-border bg-cabuya-bg-elevated p-6 shadow-cabuya-sm transition-shadow hover:shadow-cabuya-lg"
                 data-reveal
                 style={`--reveal-delay: ${index * 80}ms`}
               >
                 {isEvidence ? (
                   <span
-                    class="flex h-14 w-14 items-center justify-center rounded-full bg-corag-fill text-corag-on-fill"
+                    class="flex h-14 w-14 items-center justify-center rounded-full bg-cabuya-fill text-cabuya-on-fill"
                     aria-hidden="true"
                   >
                     <svg class="h-7 w-7" viewBox="0 0 512 512">
@@ -430,16 +431,16 @@ const btnSecondary =
                   </span>
                 ) : (
                   <span
-                    class="font-display text-6xl font-bold leading-none text-corag-primary opacity-50"
+                    class="font-display text-6xl font-bold leading-none text-cabuya-primary opacity-50"
                     aria-hidden="true"
                   >
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 )}
-                <h3 class="mt-4 font-display text-lg font-semibold text-corag">
+                <h3 class="mt-4 font-display text-lg font-semibold text-cabuya">
                   {step.title}
                 </h3>
-                <p class="mt-2 text-corag-secondary">{step.body}</p>
+                <p class="mt-2 text-cabuya-secondary">{step.body}</p>
               </li>
             );
           })
@@ -452,20 +453,20 @@ const btnSecondary =
   </section>
 
   {/* ── Beat 4 — the bridge holds because of evidence ─────────────────── */}
-  <section class="bg-corag-bg">
+  <section class="bg-cabuya-bg">
     <div class="main-container py-20 sm:py-24 lg:py-32">
       <div class="mx-auto max-w-3xl text-center">
         <p
-          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-primary"
         >
           {h.trustEyebrow}
         </p>
         <h2
-          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-cabuya sm:text-4xl lg:text-5xl"
         >
           {h.trustTitle}
         </h2>
-        <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+        <p class="mt-5 text-lg leading-relaxed text-cabuya-secondary">
           {h.trustBody}
         </p>
       </div>
@@ -479,21 +480,21 @@ const btnSecondary =
   </section>
 
   {/* ── Beat 5 — Ayuda Directa, the product shown ─────────────────────── */}
-  <section class="overflow-hidden bg-corag-bg-brand-strong">
+  <section class="overflow-hidden bg-cabuya-bg-brand-strong">
     <div class="main-container py-20 sm:py-24 lg:py-32">
       <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
         <div class="lg:col-span-4">
           <p
-            class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+            class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-primary"
           >
             {h.productEyebrow}
           </p>
           <h2
-            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-cabuya sm:text-4xl lg:text-5xl"
           >
             {h.productTitle}
           </h2>
-          <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+          <p class="mt-5 text-lg leading-relaxed text-cabuya-secondary">
             {h.productBody}
           </p>
           <div class="mt-8">
@@ -509,17 +510,17 @@ const btnSecondary =
           <div class="relative" data-reveal>
             {/* CSS browser frame — the application, shown */}
             <figure
-              class="overflow-hidden rounded-[28px] border border-corag-border bg-corag-bg-elevated shadow-corag-lg"
+              class="overflow-hidden rounded-[28px] border border-cabuya-border bg-cabuya-bg-elevated shadow-cabuya-lg"
             >
               <div
-                class="flex items-center gap-1.5 border-b border-corag-border bg-corag-bg px-5 py-3"
+                class="flex items-center gap-1.5 border-b border-cabuya-border bg-cabuya-bg px-5 py-3"
                 aria-hidden="true"
               >
-                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/40"
+                <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/40"
                 ></span>
-                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/25"
+                <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/25"
                 ></span>
-                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/10"
+                <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/10"
                 ></span>
               </div>
               <img
@@ -536,7 +537,7 @@ const btnSecondary =
             </figure>
             {/* CSS phone frame overlapping the corner */}
             <div
-              class="absolute -bottom-10 -right-2 hidden w-44 overflow-hidden rounded-[1.9rem] border-[6px] border-corag-bg-dark bg-corag-bg-dark shadow-corag-lg sm:block lg:-right-6 lg:w-52"
+              class="absolute -bottom-10 -right-2 hidden w-44 overflow-hidden rounded-[1.9rem] border-[6px] border-cabuya-bg-dark bg-cabuya-bg-dark shadow-cabuya-lg sm:block lg:-right-6 lg:w-52"
             >
               <img
                 src={`${appAportarMobileBase}-390.webp`}
@@ -551,7 +552,7 @@ const btnSecondary =
               />
             </div>
           </div>
-          <p class="mt-14 text-sm leading-relaxed text-corag-secondary sm:mt-16">
+          <p class="mt-14 text-sm leading-relaxed text-cabuya-secondary sm:mt-16">
             {h.productUiCaption}
           </p>
         </div>
@@ -560,21 +561,21 @@ const btnSecondary =
   </section>
 
   {/* ── Interoperability — the developer thesis, code shown ───────────── */}
-  <section class="bg-corag-bg">
+  <section class="bg-cabuya-bg">
     <div class="main-container py-20 sm:py-24 lg:py-32">
       <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
         <div class="min-w-0 lg:col-span-5">
           <p
-            class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+            class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-primary"
           >
             {h.devEyebrow}
           </p>
           <h2
-            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-cabuya sm:text-4xl lg:text-5xl"
           >
             {h.devTitle}
           </h2>
-          <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+          <p class="mt-5 text-lg leading-relaxed text-cabuya-secondary">
             {h.devBody}
           </p>
           <div class="mt-8">
@@ -583,30 +584,30 @@ const btnSecondary =
         </div>
         <div class="min-w-0 lg:col-span-7">
           <figure
-            class="overflow-hidden rounded-[28px] bg-corag-fill shadow-corag-lg"
+            class="overflow-hidden rounded-[28px] bg-cabuya-fill shadow-cabuya-lg"
             data-reveal
           >
             <figcaption
               class="flex items-center justify-between border-b border-white/10 px-6 py-3"
             >
-              <span class="font-mono text-sm text-corag-on-fill/80"
+              <span class="font-mono text-sm text-cabuya-on-fill/80"
                 >{h.devCodeTitle}</span
               >
               <span class="flex gap-1.5" aria-hidden="true">
-                <span class="h-2.5 w-2.5 rounded-full bg-corag-rosa/40"></span>
-                <span class="h-2.5 w-2.5 rounded-full bg-corag-rosa/20"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-cabuya-seedling/40"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-cabuya-seedling/20"></span>
               </span>
             </figcaption>
             <pre
-              class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-corag-on-fill/80"><code set:html={devCodeSample} /></pre>
+              class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-cabuya-on-fill/80"><code set:html={devCodeSample} /></pre>
           </figure>
-          <p class="mt-6 text-sm font-semibold text-corag-secondary">
+          <p class="mt-6 text-sm font-semibold text-cabuya-secondary">
             {h.devCategoriesLabel}
           </p>
           <ul class="mt-3 flex flex-wrap gap-2" role="list">
             {
               HELP_CATEGORIES.map((category) => (
-                <li class="rounded-full border border-corag-border bg-corag-bg-elevated px-3 py-1 font-mono text-xs text-corag-secondary">
+                <li class="rounded-full border border-cabuya-border bg-cabuya-bg-elevated px-3 py-1 font-mono text-xs text-cabuya-secondary">
                   {category}
                 </li>
               ))
@@ -620,9 +621,9 @@ const btnSecondary =
   <BlogPreviewSection lang={lang} />
 
   {/* ── Beat 6 — the invitation, full-bleed brand moment ──────────────── */}
-  <section class="relative overflow-hidden bg-corag-bg-dark">
+  <section class="relative overflow-hidden bg-cabuya-bg-dark">
     <svg
-      class="pointer-events-none absolute -bottom-56 -right-40 h-[38rem] w-[38rem] text-corag-rosa opacity-[0.07]"
+      class="pointer-events-none absolute -bottom-56 -right-40 h-[38rem] w-[38rem] text-cabuya-seedling opacity-[0.07]"
       viewBox="0 0 512 512"
       fill="none"
       aria-hidden="true"
@@ -640,11 +641,11 @@ const btnSecondary =
       data-reveal
     >
       <h2
-        class="font-display text-4xl font-bold tracking-tight text-corag-on-fill sm:text-5xl lg:text-6xl"
+        class="font-display text-4xl font-bold tracking-tight text-cabuya-on-fill sm:text-5xl lg:text-6xl"
       >
         {h.closingTitle}
       </h2>
-      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-corag-rosa">
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-cabuya-seedling">
         {h.closingBody}
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
@@ -659,7 +660,7 @@ const btnSecondary =
       {/* The channels that exist — nothing else (rule 0) */}
       <div class="mt-14 border-t border-white/10 pt-8 sm:mt-16">
         <p
-          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-rosa"
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-cabuya-seedling"
         >
           {h.closingChannelsTitle}
         </p>
@@ -670,7 +671,7 @@ const btnSecondary =
           <li>
             <a
               href={APP_URL}
-              class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-corag-rosa/60 px-5 py-2 font-semibold text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa"
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cabuya-seedling/60 px-5 py-2 font-semibold text-cabuya-seedling transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-seedling"
               data-umami-event="app_cta_click"
               data-umami-event-surface="channels"
             >
@@ -694,7 +695,7 @@ const btnSecondary =
                   data-umami-event="social_click"
                   data-umami-event-platform={channel.icon}
                   data-umami-event-source="home-channels"
-                  class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa"
+                  class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-cabuya-seedling transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-seedling"
                 >
                   <svg
                     class="h-5 w-5"
@@ -744,7 +745,7 @@ const btnSecondary =
   .hero-glow {
     background: radial-gradient(
       closest-side,
-      var(--color-corag-rosa),
+      var(--color-cabuya-seedling),
       transparent 70%
     );
     opacity: 0.1;
@@ -846,7 +847,7 @@ const btnSecondary =
     right: -2px;
     top: 50%;
     height: 1.5px;
-    background: var(--color-corag-text-muted);
+    background: var(--color-cabuya-text-muted);
     opacity: 0.7;
   }
 
@@ -901,7 +902,7 @@ const btnSecondary =
     top: -2.5rem; /* the vertical grid gap */
     width: 2px;
     height: 2.5rem;
-    background: var(--color-corag-primary);
+    background: var(--color-cabuya-primary);
     opacity: 0.25;
   }
   @media (min-width: 1024px) {

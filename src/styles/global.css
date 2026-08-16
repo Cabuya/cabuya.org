@@ -115,30 +115,41 @@
 }
 
 /*
- * Corag design tokens — the single source of truth for the site's palette.
+ * Cabuya design tokens — the single source of truth for the site's palette.
  *
- * Authority: docs/BRAND_GUIDE.md, itself derived from the official
- * `Manual de Identidad Visual` (assets/brand/). Every value below that is NOT
- * one of the manual's four official colors was derived and verified in
- * analysis_results/CONTRAST_AUDIT.md — nothing here is a guess.
+ * Authority: docs/BRAND_GUIDE.md, derived from the founding brand delivery
+ * (docs/context/brand/PALETTE.md — measured WCAG contrast, not guesses).
+ * Every non-canonical value below was derived and verified by computation;
+ * the ratios quoted in comments are measured, and
+ * tests/unit/lib/design-tokens.test.ts re-computes the critical ones so they
+ * can never silently drift.
  *
- * Tailwind 4 generates a utility class for every --color-corag-* token:
- *   bg-corag-primary, text-corag-secondary, border-corag-border, ...
+ * Tailwind 4 generates a utility class for every --color-cabuya-* token:
+ *   bg-cabuya-primary, text-cabuya-secondary, border-cabuya-border, ...
  *
- * ── Official brand colors (Manual, p. 13) ────────────────────────────────
- *   #78020E  vino        primary            AAA on every light ground
- *   #BC727C  vino 50%    DECORATIVE ONLY    fails AA on all light grounds
- *   #FFC7D5  rosa        brand color, not a tint
- *   #FFE2E9  rosa 50%    rosa claro
+ * ── Canonical brand colors (PALETTE.md) ──────────────────────────────────
+ *   #0B3D32  Cabuya Forest   primary          11.54:1 on Warm White — AAA
+ *   #C79A4A  Fique Fiber     DECORATIVE ONLY  2.45:1 on light — never text
+ *   #082A24  Cabuya Night    dark ground      14.59:1 under Warm White text
+ *   #F6F3ED  Natural Ivory   soft light ground / text-on-dark
+ *   #FAF9F6  Warm White      page ground
+ *
+ * ── Derived accent for text: fique-strong ────────────────────────────────
+ *   #8A672C  measured 4.92:1 on Warm White, 4.67:1 on Ivory — the ONLY way
+ *   the fique hue may carry text on a light ground. Exposed as
+ *   `accent-strong`; raw `accent` (#C79A4A) is icons/large-display only.
  *
  * ── The dark-mode inversion ──────────────────────────────────────────────
- * In light mode the brand color is WINE; in dark mode it is ROSA. Wine on a
- * dark ground measures 1.52:1 and is unusable, while rosa measures 10.67:1.
- * Both are official colors, so dark mode stays on-brand without inventing
- * anything. Do not "fix" this by forcing wine into dark mode.
+ * In light mode the brand color is FOREST; in dark mode it is FIQUE
+ * (#C79A4A measures 5.96:1 on Night — passes AA; forest on Night measures
+ * ~1.9:1 and is unusable). The fill pair does NOT flip: a filled brand
+ * surface stays forest-with-ivory in both themes. Do not "fix" either fact.
  */
 @theme {
-  /* Official typography (Manual, p. 17). @font-face declarations are above. */
+  /* Typography. Poppins (body) + Outfit (display) carry over from the
+   * baseline: both are geometric sans faces consistent with the Cabuya
+   * wordmark's geometry, already subset and self-hosted (zero new bytes).
+   * Recorded as the interim type decision in docs/BRAND_GUIDE.md. */
   --font-sans:
     "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -147,98 +158,83 @@
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* ── Brand ─────────────────────────────────────────────────────────── */
-  --color-corag-primary: #78020e;
-  --color-corag-primary-strong: #5a0109;
-  --color-corag-primary-soft: #ffe2e9;
-  /* The dark-mode primary, exposed as a utility in both modes so a component
+  --color-cabuya-primary: #0b3d32; /* Forest — 11.54:1 white, 10.97:1 ivory */
+  --color-cabuya-primary-strong: #082a24; /* Night as hover/pressed forest */
+  --color-cabuya-primary-soft: #e7efea; /* pale forest chip ground — forest text on it: 10.38:1 */
+
+  /* The dark-mode-legible brand tone, exposed in both modes so a component
    * sitting on an intentionally dark canvas in light mode can opt into it. */
-  --color-corag-primary-light: #ffc7d5;
-  /*
-   * ── Solid brand fill — the pair that does NOT flip ─────────────────
-   *
-   * `--color-corag-primary` flips wine -> rosa in dark mode, which is right
-   * for FOREGROUND use (text, links, icons, focus rings) but wrong for a
-   * SOLID FILL: white or rosa-claro text on a rosa button measures ~1.5:1.
-   *
-   * So a filled brand surface uses this pair instead, identical in both
-   * themes: wine ground, rosa-claro label, 9.54:1. A primary button needs no
-   * dark variant at all.
-   *
-   *   ✅ bg-corag-fill text-corag-on-fill   hover:bg-corag-fill-strong
-   *   ❌ bg-corag-primary text-white        (breaks in dark mode)
-   */
-  --color-corag-fill: #78020e;
-  --color-corag-fill-strong: #5a0109;
-  --color-corag-on-fill: #ffe2e9;
+  --color-cabuya-primary-light: #cfe3d9; /* seedling — 11.44:1 on Night */
 
-  --color-corag-rosa: #ffc7d5;
-  --color-corag-rosa-soft: #ffe2e9;
   /*
-   * ⚠️ DECORATIVE ONLY — the manual's official 50% wine. It fails WCAG AA on
-   * every light ground (2.46–3.60). Permitted: large text >=24px or >=19px
-   * bold, hairlines, decorative shapes, icon fills with an accessible label.
-   * NEVER body text. See CONTRAST_AUDIT.md §3.
+   * ── The fill pair — THE rule this system exists for ─────────────────
+   * `--color-cabuya-primary` flips forest -> fique in dark mode, which is
+   * right for text but would break filled surfaces. Fill + on-fill are a
+   * fixed, measured pair (ivory on forest: 10.97:1) in BOTH modes:
+   *   ✅ bg-cabuya-fill text-cabuya-on-fill   hover:bg-cabuya-fill-strong
+   *   ❌ bg-cabuya-primary text-white         (breaks in dark mode)
    */
-  --color-corag-accent: #bc727c;
-  /*
-   * The accessible sibling of `accent` — 5.19:1 on the page ground, 4.53:1 on
-   * rosa claro. Use this when the rose accent must carry readable text; use
-   * `accent` only for decoration and large display type.
-   */
-  --color-corag-accent-strong: #a34f5a;
+  --color-cabuya-fill: #0b3d32;
+  --color-cabuya-fill-strong: #082a24;
+  --color-cabuya-on-fill: #f6f3ed;
 
-  /* ── Surfaces ──────────────────────────────────────────────────────── */
-  --color-corag-bg: #fbf8f5;
-  --color-corag-bg-elevated: #ffffff;
-  --color-corag-bg-brand: #ffe2e9;
-  --color-corag-bg-brand-strong: #ffc7d5;
+  --color-cabuya-seedling: #cfe3d9; /* pale green — display text on dark canvases */
+  --color-cabuya-seedling-soft: #e7efea;
+
+  /* Fique Fiber — the golden strand. DECORATIVE ONLY on light grounds:
+   * 2.45:1 on white FAILS AA and even large-text 3:1. Icons, strands,
+   * large display type and the logo. Never body or link text on light. */
+  --color-cabuya-accent: #c79a4a;
+  /* The derived text-safe fique. 4.92:1 white / 4.67:1 ivory — measured. */
+  --color-cabuya-accent-strong: #8a672c;
+
+  /* ── Grounds ───────────────────────────────────────────────────────── */
+  --color-cabuya-bg: #faf9f6; /* Warm White — the page */
+  --color-cabuya-bg-elevated: #ffffff;
+  --color-cabuya-bg-brand: #e7efea; /* soft brand ground */
+  --color-cabuya-bg-brand-strong: #dce7e1; /* forest text on it: 9.58:1 */
+
   /* Always-dark canvas — identical in both modes, so hero sections can keep
-   * the wine-black identity above the fold regardless of theme. */
-  --color-corag-bg-dark: #231518;
+   * a Night ground in light mode. Pair with ivory/seedling text. */
+  --color-cabuya-bg-dark: #082a24;
 
-  /* ── Borders ───────────────────────────────────────────────────────── */
-  /* `border` and `border-strong` are decorative hairlines (WCAG 1.4.11 exempt).
-   * Inputs, selects and control edges MUST use `border-interactive`, which is
-   * the only one that clears the 3:1 non-text requirement. */
-  --color-corag-border: #e8e0dc;
-  --color-corag-border-strong: #c9b9b5;
-  --color-corag-border-interactive: #968f8d;
+  /* ── Hairlines & borders ───────────────────────────────────────────── */
+  --color-cabuya-border: #e3e0d6;
+  --color-cabuya-border-strong: #c7c1b0;
+  --color-cabuya-border-interactive: #7a7568; /* 4.36:1 on white — ≥3:1 UI */
 
   /* ── Text ──────────────────────────────────────────────────────────── */
-  --color-corag-text: #251f20;
-  --color-corag-text-secondary: #574f51;
-  --color-corag-text-muted: #635b5d;
-  /* Short aliases: `text-corag` / `text-corag-secondary`. They re-export via
-   * var() so they inherit the light/dark flip with no extra .dark rule. */
-  --color-corag: var(--color-corag-text);
-  --color-corag-secondary: var(--color-corag-text-secondary);
+  --color-cabuya-text: #233029; /* 13.07:1 white — AAA */
+  --color-cabuya-text-secondary: #44534c; /* 7.71:1 white — AAA */
+  --color-cabuya-text-muted: #57655e; /* 5.82:1 white, 5.53:1 ivory — AA+ */
+  /* Short aliases: `text-cabuya` / `text-cabuya-secondary`. They re-export
+   * via var() so they inherit the light/dark flip with no extra .dark rule. */
+  --color-cabuya: var(--color-cabuya-text);
+  --color-cabuya-secondary: var(--color-cabuya-text-secondary);
 
-  /* ── Semantic status ───────────────────────────────────────────────── */
-  /* Not in the manual — derived. Verified against the page grounds and their
-   * own soft chip background. They are NOT verified against the rosa brand
-   * surfaces, because status chips never sit on brand surfaces. */
-  --color-corag-success: #24735d; /* entregado, con evidencia */
-  --color-corag-success-soft: #e7f3ee;
-  --color-corag-warning: #995d30; /* en organizacion */
-  --color-corag-warning-soft: #f6ecdf;
-  --color-corag-info: #3c6176;
-  --color-corag-info-soft: #eaf1f4;
-  --color-corag-danger: #a43536; /* urgente */
-  --color-corag-danger-soft: #fdecec;
+  /* ── Status — all measured ≥4.5:1 on Warm White AND Ivory ──────────── */
+  --color-cabuya-success: #24735d; /* 5.41:1 white */
+  --color-cabuya-success-soft: #e7f3ee; /* success text on it: 4.94:1 */
+  --color-cabuya-warning: #995d30; /* 5.03:1 white */
+  --color-cabuya-warning-soft: #f6ecdf; /* warning text on it: 4.54:1 */
+  --color-cabuya-info: #3c6176; /* 6.30:1 white */
+  --color-cabuya-info-soft: #eaf1f4; /* info text on it: 5.81:1 */
+  --color-cabuya-danger: #a43536; /* 6.35:1 white */
+  --color-cabuya-danger-soft: #fdecec; /* danger text on it: 5.85:1 */
 
   /* ── Radius ────────────────────────────────────────────────────────── */
-  --radius-corag-sm: 12px;
-  --radius-corag-md: 18px;
-  --radius-corag-lg: 28px;
+  --radius-cabuya-sm: 12px;
+  --radius-cabuya-md: 18px;
+  --radius-cabuya-lg: 28px;
 
-  /* ── Elevation — wine-tinted on purpose, not neutral grey ──────────── */
-  --shadow-corag-sm: 0 8px 24px rgb(60 2 12 / 0.08);
-  --shadow-corag-lg: 0 28px 70px rgb(60 2 12 / 0.14);
+  /* ── Elevation — forest-tinted on purpose, not neutral grey ────────── */
+  --shadow-cabuya-sm: 0 8px 24px rgb(8 42 36 / 0.08);
+  --shadow-cabuya-lg: 0 28px 70px rgb(8 42 36 / 0.14);
 
   /*
-   * Legacy Tailwind default override inherited from the previous site. 148
-   * usages of `gray-50` depend on it, so removing it is a visual change, not a
-   * rename. Task 5 decides whether those usages move to corag neutrals.
+   * Legacy Tailwind default override inherited from the baseline. Usages of
+   * `gray-50` depend on it; Task 7's decommission removes most consumers and
+   * the site shell (Task 18) retires the rest to cabuya neutrals.
    */
   --color-gray-50: #f1f5f9;
 }
@@ -246,45 +242,48 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Dark mode. Ground is #231518 — wine-tinted, not neutral grey, so dark mode
- * still reads as Corag. Every value verified in CONTRAST_AUDIT.md §6 against
- * all three dark surfaces (bg, elevated, brand).
+ * Dark mode. Ground is #082A24 (Cabuya Night) — forest-tinted, not neutral
+ * grey, so dark mode still reads as Cabuya. Every value measured against
+ * both dark surfaces (bg #082A24, elevated #0E352C); the elevated surface is
+ * the lighter — and therefore binding — ground for text contrast.
  */
 .dark {
-  /* The brand flips wine -> rosa. See the note at the top of this file. */
-  --color-corag-primary: #ffc7d5;
-  --color-corag-primary-strong: #ffe2e9;
-  --color-corag-primary-soft: #3a1a20;
+  /* The brand flips forest -> fique. See the note at the top of this file. */
+  --color-cabuya-primary: #c79a4a; /* 5.96:1 on Night — AA */
+  --color-cabuya-primary-strong: #d9b36c; /* 7.77:1 on Night */
+  --color-cabuya-primary-soft: #10382e; /* fique text on it: 5.01:1 */
 
-  --color-corag-bg: #231518;
-  --color-corag-bg-elevated: #2e1b1f;
-  --color-corag-bg-brand: #3a1a20;
-  --color-corag-bg-brand-strong: #4a2128;
+  --color-cabuya-bg: #082a24;
+  --color-cabuya-bg-elevated: #0e352c;
+  --color-cabuya-bg-brand: #10382e;
+  --color-cabuya-bg-brand-strong: #164439;
 
-  --color-corag-border: #3e2a2e;
-  --color-corag-border-strong: #5c4247;
-  --color-corag-border-interactive: #7f6c6f;
+  --color-cabuya-border: #1e453b;
+  --color-cabuya-border-strong: #2f5a4d;
+  --color-cabuya-border-interactive: #69857a; /* 3.83:1 on Night — ≥3:1 UI */
 
-  /* In dark mode `accent` clears AA (4.51), unlike in light — but it stays
-   * documented as decorative so a component does not silently become
-   * inaccessible when the theme flips back. */
-  --color-corag-accent-strong: #d8a3aa;
+  /* In dark mode the fique accent itself clears AA (5.96:1) — but it stays
+   * documented as decorative-on-light so a component does not silently
+   * become inaccessible when the theme flips back. Text use goes through
+   * accent-strong in both modes. */
+  --color-cabuya-accent-strong: #d9b36c; /* 6.79:1 on elevated */
 
-  --color-corag-text: #f0e3e4;
-  --color-corag-text-secondary: #d6c4c7;
-  --color-corag-text-muted: #92888a;
+  --color-cabuya-text: #f6f3ed; /* Ivory — 13.87:1 Night, 12.12:1 elevated */
+  --color-cabuya-text-secondary: #cbd8d0; /* 9.12:1 elevated */
+  --color-cabuya-text-muted: #9db0a6; /* 5.88:1 elevated — AA+ */
 
-  --color-corag-success: #559381;
-  --color-corag-success-soft: #16302a;
-  --color-corag-warning: #b37b4f;
-  --color-corag-warning-soft: #33240f;
-  --color-corag-info: #6e8b9b;
-  --color-corag-info-soft: #17262e;
-  --color-corag-danger: #c37073;
-  --color-corag-danger-soft: #331416;
+  /* Status, re-tuned for the Night grounds: ≥4.5:1 on the elevated surface. */
+  --color-cabuya-success: #6ba895; /* 4.90:1 elevated */
+  --color-cabuya-success-soft: #123328;
+  --color-cabuya-warning: #c79263; /* 4.94:1 elevated */
+  --color-cabuya-warning-soft: #2e2413;
+  --color-cabuya-info: #86a3b3; /* 5.05:1 elevated */
+  --color-cabuya-info-soft: #14262c;
+  --color-cabuya-danger: #d48a8d; /* 5.00:1 elevated */
+  --color-cabuya-danger-soft: #331a1c;
 
-  --shadow-corag-sm: 0 8px 24px rgb(0 0 0 / 0.35);
-  --shadow-corag-lg: 0 28px 70px rgb(0 0 0 / 0.5);
+  --shadow-cabuya-sm: 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-cabuya-lg: 0 28px 70px rgb(0 0 0 / 0.5);
 }
 
 @layer components {
@@ -295,7 +294,7 @@
 
   /* Theme-aware nav links (header + mobile). Inherit header canvas. */
   .nav-link {
-    @apply text-corag-secondary hover:text-corag-primary transition-colors duration-200;
+    @apply text-cabuya-secondary hover:text-cabuya-primary transition-colors duration-200;
   }
   .dark .nav-link {
     @apply text-white/85 hover:text-white;
@@ -349,18 +348,18 @@
   /* 77px = the measured sticky-header height at every breakpoint. Matching
    * the JS-synced value here keeps the 100dvh hero from shifting (CLS) when
    * the ResizeObserver sync lands after first paint. */
-  --corag-chrome-height: 77px;
+  --cabuya-chrome-height: 77px;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     /*
-     * Sticky chrome ([data-corag-chrome]) covers the top of the viewport.
+     * Sticky chrome ([data-cabuya-chrome]) covers the top of the viewport.
      * Offset in-page anchors (#main-after-hero, year jumps, etc.) so the
      * target sits just below the measured header (± notification bar).
      */
-    scroll-padding-top: var(--corag-chrome-height);
+    scroll-padding-top: var(--cabuya-chrome-height);
   }
 
   body {
@@ -403,7 +402,7 @@
   select,
   textarea,
   [role="button"] {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corag-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cabuya-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900;
   }
 }
 

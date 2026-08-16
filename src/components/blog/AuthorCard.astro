@@ -53,23 +53,23 @@ const socialLinks = [
 ].filter((link) => link.url);
 ---
 
-<div class="rounded-2xl border border-corag-border bg-corag-bg-elevated p-6">
+<div class="rounded-2xl border border-cabuya-border bg-cabuya-bg-elevated p-6">
   <div class="flex flex-col items-center gap-5 sm:flex-row sm:items-start" data-lightbox-ignore>
     <img decoding="async"
       src={author.avatar}
       alt={author.name}
       width="80"
       height="80"
-      class="shrink-0 rounded-full border border-corag-border"
+      class="shrink-0 rounded-full border border-cabuya-border"
       loading="lazy" />
     <div class="flex-1 text-center sm:text-left">
-      <h3 class="text-lg font-bold text-corag">
+      <h3 class="text-lg font-bold text-cabuya">
         {author.name}
       </h3>
-      <p class="text-sm text-corag-secondary">
+      <p class="text-sm text-cabuya-secondary">
         {authorRole}
       </p>
-      <p class="mt-2 text-sm leading-relaxed text-corag-secondary">
+      <p class="mt-2 text-sm leading-relaxed text-cabuya-secondary">
         {authorBio}
       </p>
       {socialLinks.length > 0 && (
@@ -79,7 +79,7 @@ const socialLinks = [
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-corag-secondary transition-colors hover:text-corag"
+              class="text-cabuya-secondary transition-colors hover:text-cabuya"
               aria-label={link.label}
             >
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

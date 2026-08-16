@@ -44,12 +44,12 @@ const postsWithGroupedTags = await Promise.all(
 
 {
   posts.length > 0 && (
-    <aside class="mt-16 border-t border-corag-border pt-10">
+    <aside class="mt-16 border-t border-cabuya-border pt-10">
       <div class="mb-6">
-        <h2 class="mb-2 text-xl sm:text-2xl font-bold text-corag">
+        <h2 class="mb-2 text-xl sm:text-2xl font-bold text-cabuya">
           {t.relatedArticles}
         </h2>
-        <p class="text-sm text-corag-secondary">
+        <p class="text-sm text-cabuya-secondary">
           {t.relatedArticlesDescription}
         </p>
       </div>
@@ -58,7 +58,7 @@ const postsWithGroupedTags = await Promise.all(
           const postSlug = getPostSlug(post.id);
           const href = `${blogPrefix}/${postSlug}/`;
           return (
-            <article class="overflow-hidden rounded-xl border border-corag-border bg-corag-bg-elevated shadow-sm transition-shadow hover:shadow-md">
+            <article class="overflow-hidden rounded-xl border border-cabuya-border bg-cabuya-bg-elevated shadow-sm transition-shadow hover:shadow-md">
               {post.data.heroImage ? (
                 <a href={href} class="block">
                   <BlogHeroImage
@@ -72,21 +72,21 @@ const postsWithGroupedTags = await Promise.all(
               ) : (
                 <a
                   href={href}
-                  class="flex h-40 items-center justify-center bg-corag-primary-soft text-sm text-corag-secondary"
+                  class="flex h-40 items-center justify-center bg-cabuya-primary-soft text-sm text-cabuya-secondary"
                 >
                   {post.data.title}
                 </a>
               )}
               <div class="p-4">
-                <h3 class="mb-2 line-clamp-2 text-base sm:text-lg font-semibold text-corag">
-                  <a href={href} class="transition-colors hover:text-corag-primary">
+                <h3 class="mb-2 line-clamp-2 text-base sm:text-lg font-semibold text-cabuya">
+                  <a href={href} class="transition-colors hover:text-cabuya-primary">
                     {post.data.title}
                   </a>
                 </h3>
-                <p class="mb-3 line-clamp-2 text-sm text-corag-secondary">
+                <p class="mb-3 line-clamp-2 text-sm text-cabuya-secondary">
                   {post.data.description}
                 </p>
-                <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-corag-secondary">
+                <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-cabuya-secondary">
                   <FormattedDate date={post.data.pubDate} lang={lang} />
                   {isScheduled && (
                     <span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
@@ -104,7 +104,7 @@ const postsWithGroupedTags = await Promise.all(
                     {primaryTags.slice(0, 3).map((tag) => (
                       <a
                         href={`${blogPrefix}/tag/${tag}/`}
-                        class="rounded bg-corag-primary-soft px-2 py-0.5 text-xs text-corag-primary transition-colors hover:bg-corag-primary/15"
+                        class="rounded bg-cabuya-primary-soft px-2 py-0.5 text-xs text-cabuya-primary transition-colors hover:bg-cabuya-primary/15"
                       >
                         #{t.tagNames[tag] || tag}
                       </a>
@@ -112,7 +112,7 @@ const postsWithGroupedTags = await Promise.all(
                     {secondaryTags.slice(0, 2).map((topic) => (
                       <a
                         href={`${blogPrefix}/tag/${topic}/`}
-                        class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+                        class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
                       >
                         {t.tagNames[topic] || topic}
                       </a>
@@ -120,9 +120,9 @@ const postsWithGroupedTags = await Promise.all(
                     {subtopicTags.slice(0, 2).map((sub) => (
                       <a
                         href={`${blogPrefix}/tag/${sub}/`}
-                        class="inline-flex items-center rounded bg-corag-bg-elevated px-2 py-1 text-xs text-corag-secondary border border-dashed border-corag-border transition-colors hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag"
+                        class="inline-flex items-center rounded bg-cabuya-bg-elevated px-2 py-1 text-xs text-cabuya-secondary border border-dashed border-cabuya-border transition-colors hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya"
                       >
-                        <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-corag-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+                        <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-cabuya-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
                       </a>
                     ))}
                   </div>

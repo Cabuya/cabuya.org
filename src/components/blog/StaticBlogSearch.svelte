@@ -274,7 +274,7 @@ onMount(() => {
   {#if loadError}
     <!-- Error state -->
     <div
-      class="bg-corag-danger/10 border border-corag-danger/40 text-corag-danger px-4 py-3 rounded mb-4"
+      class="bg-cabuya-danger/10 border border-cabuya-danger/40 text-cabuya-danger px-4 py-3 rounded mb-4"
       role="alert"
     >
       <p>{t.loadError}</p>
@@ -289,20 +289,20 @@ onMount(() => {
     <!-- Skeleton loading state -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {#each Array(6) as _}
-        <div class="animate-pulse bg-corag-bg-elevated rounded-lg shadow-md overflow-hidden">
-          <div class="bg-corag-border h-48"></div>
+        <div class="animate-pulse bg-cabuya-bg-elevated rounded-lg shadow-md overflow-hidden">
+          <div class="bg-cabuya-border h-48"></div>
           <div class="p-6">
-            <div class="bg-corag-border h-6 rounded w-3/4 mb-3"></div>
-            <div class="bg-corag-border h-4 rounded w-full mb-2"></div>
-            <div class="bg-corag-border h-4 rounded w-2/3"></div>
+            <div class="bg-cabuya-border h-6 rounded w-3/4 mb-3"></div>
+            <div class="bg-cabuya-border h-4 rounded w-full mb-2"></div>
+            <div class="bg-cabuya-border h-4 rounded w-2/3"></div>
           </div>
         </div>
       {/each}
     </div>
   {:else if isLoading}
     <div class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-corag-primary"></div>
-      <p class="mt-2 text-corag-secondary">{t.searching}</p>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cabuya-primary"></div>
+      <p class="mt-2 text-cabuya-secondary">{t.searching}</p>
     </div>
   {:else if isSearching}
     <SearchResults filteredPosts={searchResults} {searchQuery} {lang} searchResultsWithMatches={searchResultsWithMatches} topicTagNames={topicTags} subtopicTagNames={subtopicTags} {subtopicAccentByName} />

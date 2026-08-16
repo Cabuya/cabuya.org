@@ -28,10 +28,10 @@ let submitError = '';
 let successRef;
 
 const inputClass =
-  'w-full min-h-[44px] text-base p-3 rounded-lg border border-corag-border bg-corag-bg-elevated text-corag focus:outline-none focus:ring-2 focus:ring-corag-primary/30 focus:border-corag-primary transition-colors';
-const labelClass = 'block text-sm font-medium text-corag-secondary mb-2';
+  'w-full min-h-[44px] text-base p-3 rounded-lg border border-cabuya-border bg-cabuya-bg-elevated text-cabuya focus:outline-none focus:ring-2 focus:ring-cabuya-primary/30 focus:border-cabuya-primary transition-colors';
+const labelClass = 'block text-sm font-medium text-cabuya-secondary mb-2';
 const errorClass = 'mt-1 text-sm text-red-600 dark:text-red-400';
-const hintClass = 'mt-1 text-sm text-corag-secondary';
+const hintClass = 'mt-1 text-sm text-cabuya-secondary';
 
 function onAnonymousChange() {
   if (anonymous) {
@@ -167,19 +167,19 @@ function resetForm() {
     aria-live="polite"
   >
     <div class="mb-4 text-5xl" aria-hidden="true">✓</div>
-    <h3 class="text-2xl font-bold text-corag mb-3">{f.successTitle}</h3>
-    <p class="text-corag-secondary mb-6">{f.successMessage}</p>
+    <h3 class="text-2xl font-bold text-cabuya mb-3">{f.successTitle}</h3>
+    <p class="text-cabuya-secondary mb-6">{f.successMessage}</p>
     <button
       type="button"
       on:click={resetForm}
-      class="inline-flex min-h-[44px] items-center px-6 py-2 rounded-full border border-corag-primary text-corag-primary font-semibold hover:bg-corag-fill hover:text-corag-on-fill transition-colors"
+      class="inline-flex min-h-[44px] items-center px-6 py-2 rounded-full border border-cabuya-primary text-cabuya-primary font-semibold hover:bg-cabuya-fill hover:text-cabuya-on-fill transition-colors"
     >
       {cp.sendAnotherButton}
     </button>
   </div>
 {:else}
   <form class="space-y-6" on:submit|preventDefault={handleSubmit} novalidate>
-    <p class="text-sm text-corag-secondary rounded-lg border border-corag-border bg-corag-bg-elevated p-4">
+    <p class="text-sm text-cabuya-secondary rounded-lg border border-cabuya-border bg-cabuya-bg-elevated p-4">
       {f.privacyNote}
     </p>
 
@@ -255,13 +255,13 @@ function resetForm() {
     <label class="flex items-start gap-3 min-h-[44px] cursor-pointer">
       <input
         type="checkbox"
-        class="mt-1 h-6 w-6 shrink-0 rounded border-corag-border"
+        class="mt-1 h-6 w-6 shrink-0 rounded border-cabuya-border"
         bind:checked={anonymous}
         on:change={onAnonymousChange}
         disabled={formState === 'submitting'}
       />
       <span>
-        <span class="block text-sm font-medium text-corag">{f.anonymousLabel}</span
+        <span class="block text-sm font-medium text-cabuya">{f.anonymousLabel}</span
         >
         <span class="block {hintClass}">{f.anonymousHint}</span>
       </span>
@@ -314,7 +314,7 @@ function resetForm() {
       <button
         type="submit"
         disabled={formState === 'submitting'}
-        class="inline-flex min-h-[44px] items-center px-8 py-3 bg-corag-fill text-corag-on-fill font-semibold rounded-full hover:bg-corag-fill-strong transition-colors disabled:opacity-60"
+        class="inline-flex min-h-[44px] items-center px-8 py-3 bg-cabuya-fill text-cabuya-on-fill font-semibold rounded-full hover:bg-cabuya-fill-strong transition-colors disabled:opacity-60"
       >
         {formState === 'submitting' ? cp.sendingButton : f.submitButton}
       </button>

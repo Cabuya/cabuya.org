@@ -43,11 +43,11 @@ onMount(() => {
 {#if visible}
   <button
     on:click={scrollToSeries}
-    class="series-indicator flex items-center gap-3 rounded-full bg-corag-bg-elevated/95 pl-1.5 pr-4 py-1.5 text-sm font-medium shadow-lg ring-1 ring-corag-primary/30 backdrop-blur-sm hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+    class="series-indicator flex items-center gap-3 rounded-full bg-cabuya-bg-elevated/95 pl-1.5 pr-4 py-1.5 text-sm font-medium shadow-lg ring-1 ring-cabuya-primary/30 backdrop-blur-sm hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
     aria-label="{buttonText} — {seriesTitle}"
   >
     <span
-      class="inline-flex shrink-0 items-center rounded-full border-2 border-corag-primary/40 bg-corag-primary-soft px-2 py-0.5 text-xs font-medium text-corag-primary"
+      class="inline-flex shrink-0 items-center rounded-full border-2 border-cabuya-primary/40 bg-cabuya-primary-soft px-2 py-0.5 text-xs font-medium text-cabuya-primary"
       aria-hidden="true"
       title={`${seriesTitle} · ${buttonText}`}
     >
@@ -55,8 +55,8 @@ onMount(() => {
     </span>
     <!-- Label -->
     <span class="flex flex-col items-start leading-tight">
-      <span class="text-xs text-corag">{buttonText}</span>
-      <span class="text-xs text-corag-secondary">{t.seriesToC} &darr;</span>
+      <span class="text-xs text-cabuya">{buttonText}</span>
+      <span class="text-xs text-cabuya-secondary">{t.seriesToC} &darr;</span>
     </span>
   </button>
 {/if}

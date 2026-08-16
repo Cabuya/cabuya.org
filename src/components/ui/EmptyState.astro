@@ -31,11 +31,11 @@ const Heading = headingLevel;
 ---
 
 <div
-  class={`flex flex-col items-center justify-center rounded-2xl border border-dashed border-corag-border bg-corag-bg-elevated/60 px-6 py-12 text-center ${className}`}
+  class={`flex flex-col items-center justify-center rounded-2xl border border-dashed border-cabuya-border bg-cabuya-bg-elevated/60 px-6 py-12 text-center ${className}`}
 >
   <svg
     aria-hidden="true"
-    class="h-12 w-12 text-corag-primary dark:text-corag-primary-light mb-4"
+    class="h-12 w-12 text-cabuya-primary dark:text-cabuya-primary-light mb-4"
     fill="none"
     viewBox="0 0 24 24"
     stroke-width="1.5"
@@ -47,12 +47,12 @@ const Heading = headingLevel;
       d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75z"
     ></path>
   </svg>
-  <Heading class="text-lg font-semibold text-corag">
+  <Heading class="text-lg font-semibold text-cabuya">
     {title}
   </Heading>
   {
     description && (
-      <p class="mt-2 max-w-md text-corag-secondary">
+      <p class="mt-2 max-w-md text-cabuya-secondary">
         {description}
       </p>
     )
@@ -61,7 +61,7 @@ const Heading = headingLevel;
     ctaLabel && ctaHref && (
       <a
         href={ctaHref}
-        class="mt-6 inline-flex items-center gap-2 rounded-full bg-corag-fill px-5 py-2.5 text-sm font-semibold text-corag-on-fill shadow-sm transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary"
+        class="mt-6 inline-flex items-center gap-2 rounded-full bg-cabuya-fill px-5 py-2.5 text-sm font-semibold text-cabuya-on-fill shadow-sm transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
       >
         {ctaLabel}
       </a>

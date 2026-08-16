@@ -34,19 +34,19 @@ $: showingText = t.showingArticles(currentPagePosts, totalPosts);
 $: availableText = t.articlesAvailable(totalPosts);
 </script>
 
-<h1 class="mb-2 text-3xl font-extrabold text-corag sm:text-4xl md:text-5xl">
+<h1 class="mb-2 text-3xl font-extrabold text-cabuya sm:text-4xl md:text-5xl">
   {headerTitle}
 </h1>
-<p class="mb-5 max-w-3xl text-base text-corag-secondary sm:text-lg">
+<p class="mb-5 max-w-3xl text-base text-cabuya-secondary sm:text-lg">
   {headerSubtitle}
 </p>
 
 <!-- Post counter -->
-<div class="mb-4 text-corag-secondary">
+<div class="mb-4 text-cabuya-secondary">
   {#if totalPages > 1}
     <p class="text-sm">
       {showingText}
-      <span class="text-corag-secondary">({t.pageOf(currentPage, totalPages)})</span>
+      <span class="text-cabuya-secondary">({t.pageOf(currentPage, totalPages)})</span>
     </p>
   {:else}
     <p class="text-sm">
@@ -62,8 +62,8 @@ $: availableText = t.articlesAvailable(totalPosts);
     href={`${basePrefix}/blog/`}
     class={`inline-flex items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
       !currentTag
-        ? "bg-corag-fill text-corag-on-fill shadow-sm"
-        : "bg-corag-primary-soft text-corag-primary hover:bg-corag-primary/15"
+        ? "bg-cabuya-fill text-cabuya-on-fill shadow-sm"
+        : "bg-cabuya-primary-soft text-cabuya-primary hover:bg-cabuya-primary/15"
     }`}
   >
     {t.allPosts}
@@ -75,8 +75,8 @@ $: availableText = t.articlesAvailable(totalPosts);
       href={`${basePrefix}/blog/tag/${tag}/`}
       class={`inline-flex items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
         currentTag === tag
-          ? "bg-corag-fill text-corag-on-fill shadow-sm"
-          : "bg-corag-primary-soft text-corag-primary hover:bg-corag-primary/15"
+          ? "bg-cabuya-fill text-cabuya-on-fill shadow-sm"
+          : "bg-cabuya-primary-soft text-cabuya-primary hover:bg-cabuya-primary/15"
       }`}
       on:click={() => trackEvent(EVENTS.TAG_FILTER, { tag })}
     >
@@ -93,8 +93,8 @@ $: availableText = t.articlesAvailable(totalPosts);
         href={`${basePrefix}/blog/tag/${topic}/`}
         class={`rounded px-2.5 py-0.5 text-xs transition-colors ${
           currentTag === topic
-            ? "border border-corag-text bg-corag-text text-corag-bg"
-            : "border border-corag-border bg-corag-bg-elevated text-corag-secondary hover:border-corag-border-strong hover:text-corag"
+            ? "border border-cabuya-text bg-cabuya-text text-cabuya-bg"
+            : "border border-cabuya-border bg-cabuya-bg-elevated text-cabuya-secondary hover:border-cabuya-border-strong hover:text-cabuya"
         }`}
         on:click={() => trackEvent(EVENTS.TAG_FILTER, { tag: topic })}
       >
@@ -112,12 +112,12 @@ $: availableText = t.articlesAvailable(totalPosts);
         href={`${basePrefix}/blog/tag/${sub}/`}
         class={`inline-flex items-center rounded px-2 py-0.5 text-xs transition-colors ${
           currentTag === sub
-            ? "border border-corag-text bg-corag-text text-corag-bg"
-            : "bg-corag-bg-elevated text-corag-secondary border border-dashed border-corag-border hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag"
+            ? "border border-cabuya-text bg-cabuya-text text-cabuya-bg"
+            : "bg-cabuya-bg-elevated text-cabuya-secondary border border-dashed border-cabuya-border hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya"
         }`}
         on:click={() => trackEvent(EVENTS.TAG_FILTER, { tag: sub })}
       >
-        <span class={`mr-1 ${currentTag === sub ? 'opacity-70' : (subtopicAccentByName[sub] || 'text-corag-secondary')}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+        <span class={`mr-1 ${currentTag === sub ? 'opacity-70' : (subtopicAccentByName[sub] || 'text-cabuya-secondary')}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
       </a>
     {/each}
   </div>

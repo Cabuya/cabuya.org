@@ -25,8 +25,8 @@ const escapeHtml = (value: string): string =>
 
 /** `code` gets `break-words` so long endpoint URLs wrap instead of overflowing. */
 const CODE_CLASS =
-  'rounded bg-corag-primary-soft px-1.5 py-0.5 font-mono text-[0.9em] break-words text-corag';
-const STRONG_CLASS = 'font-semibold text-corag';
+  'rounded bg-cabuya-primary-soft px-1.5 py-0.5 font-mono text-[0.9em] break-words text-cabuya';
+const STRONG_CLASS = 'font-semibold text-cabuya';
 
 export function renderInlineMarkdown(text: string): string {
   return escapeHtml(text)

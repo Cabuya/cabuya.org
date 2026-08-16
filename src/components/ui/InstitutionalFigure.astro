@@ -41,12 +41,12 @@ const srcset = widths.map((w) => `${srcBase}-${w}.webp ${w}w`).join(', ');
 
 const frameClass =
   frame === 'browser'
-    ? 'overflow-hidden rounded-[28px] border border-corag-border bg-corag-bg-elevated shadow-corag-lg'
+    ? 'overflow-hidden rounded-[28px] border border-cabuya-border bg-cabuya-bg-elevated shadow-cabuya-lg'
     : frame === 'phone'
-      ? 'overflow-hidden rounded-[2rem] border-[6px] border-corag-bg-dark bg-corag-bg-dark shadow-corag-lg'
+      ? 'overflow-hidden rounded-[2rem] border-[6px] border-cabuya-bg-dark bg-cabuya-bg-dark shadow-cabuya-lg'
       : frame === 'none'
         ? ''
-        : 'overflow-hidden rounded-[28px] border border-corag-border shadow-corag-sm';
+        : 'overflow-hidden rounded-[28px] border border-cabuya-border shadow-cabuya-sm';
 ---
 
 <figure class={className}>
@@ -54,12 +54,12 @@ const frameClass =
     {
       frame === 'browser' && (
         <div
-          class="flex items-center gap-1.5 border-b border-corag-border bg-corag-bg px-5 py-3"
+          class="flex items-center gap-1.5 border-b border-cabuya-border bg-cabuya-bg px-5 py-3"
           aria-hidden="true"
         >
-          <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/40" />
-          <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/25" />
-          <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/10" />
+          <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/40" />
+          <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/25" />
+          <span class="h-2.5 w-2.5 rounded-full bg-cabuya-primary/10" />
         </div>
       )
     }
@@ -77,7 +77,7 @@ const frameClass =
   </div>
   {
     caption && (
-      <figcaption class="mt-4 text-sm leading-relaxed text-corag-secondary">
+      <figcaption class="mt-4 text-sm leading-relaxed text-cabuya-secondary">
         {caption}
       </figcaption>
     )

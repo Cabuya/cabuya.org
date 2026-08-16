@@ -19,13 +19,13 @@ const {
 
 const bgClasses =
   background === 'gray'
-    ? 'bg-corag-primary-soft/40 dark:bg-corag-bg-elevated'
-    : 'bg-corag-bg';
+    ? 'bg-cabuya-primary-soft/40 dark:bg-cabuya-bg-elevated'
+    : 'bg-cabuya-bg';
 
 const headerClasses = center ? 'mb-8 md:mb-12 text-center' : 'mb-8 md:mb-12';
 const descClasses = center
-  ? 'mt-4 text-base sm:text-lg text-corag-secondary max-w-4xl leading-relaxed mx-auto'
-  : 'mt-4 text-base sm:text-lg text-corag-secondary max-w-4xl leading-relaxed';
+  ? 'mt-4 text-base sm:text-lg text-cabuya-secondary max-w-4xl leading-relaxed mx-auto'
+  : 'mt-4 text-base sm:text-lg text-cabuya-secondary max-w-4xl leading-relaxed';
 ---
 
 <section id={id} class={`py-16 md:py-20 ${bgClasses} transition-colors duration-300`}>
@@ -34,12 +34,12 @@ const descClasses = center
       <div class={headerClasses}>
         {title && (
           <h2
-            class="text-2xl sm:text-3xl md:text-4xl font-bold text-corag mb-3"
+            class="text-2xl sm:text-3xl md:text-4xl font-bold text-cabuya mb-3"
             set:html={title}
           />
         )}
         {subtitle && (
-          <p class="text-base sm:text-lg md:text-xl text-corag-secondary font-medium">{subtitle}</p>
+          <p class="text-base sm:text-lg md:text-xl text-cabuya-secondary font-medium">{subtitle}</p>
         )}
         {description && (
           <div class={descClasses} set:html={description} />

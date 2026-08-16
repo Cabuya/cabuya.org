@@ -55,11 +55,11 @@ const tagline = t.footer.tagline;
 ---
 
 <footer
-  class="relative border-t border-corag-border bg-corag-bg text-corag-secondary"
+  class="relative border-t border-cabuya-border bg-cabuya-bg text-cabuya-secondary"
   style="padding-bottom: max(2rem, env(safe-area-inset-bottom)); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
 >
   <div
-    class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-corag-primary via-corag-accent to-corag-primary"
+    class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cabuya-primary via-cabuya-accent to-cabuya-primary"
     aria-hidden="true"
   >
   </div>
@@ -73,7 +73,7 @@ const tagline = t.footer.tagline;
           aria-label="Corag"
         >
           <img
-            src="/images/brand/corag-wordmark.webp"
+            src="/images/brand/cabuya-lockup.webp"
             alt=""
             width={342}
             height={100}
@@ -82,7 +82,7 @@ const tagline = t.footer.tagline;
             decoding="async"
           />
           <img
-            src="/images/brand/corag-wordmark-light.webp"
+            src="/images/brand/cabuya-lockup-dark.webp"
             alt=""
             width={342}
             height={100}
@@ -94,7 +94,7 @@ const tagline = t.footer.tagline;
         <p
           class:list={[
             'mt-4 max-w-sm text-sm leading-relaxed',
-            'text-corag-secondary',
+            'text-cabuya-secondary',
           ]}
         >
           {tagline}
@@ -107,7 +107,7 @@ const tagline = t.footer.tagline;
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-corag-border text-corag-secondary transition-colors hover:border-corag-primary hover:text-corag"
+                  class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-cabuya-border text-cabuya-secondary transition-colors hover:border-cabuya-primary hover:text-cabuya"
                   aria-label={social.label}
                   data-umami-event="social_click"
                   data-umami-event-platform={social.icon}
@@ -144,7 +144,7 @@ const tagline = t.footer.tagline;
         <p
           class:list={[
             'text-xs uppercase tracking-widest',
-            'font-semibold text-corag-primary',
+            'font-semibold text-cabuya-primary',
           ]}
         >
           {howCoragWorksGroup?.title[language] ?? howCoragWorksGroup?.title.en}
@@ -157,7 +157,7 @@ const tagline = t.footer.tagline;
                   href={link.href}
                   class:list={[
                     'inline-flex min-h-[44px] items-center text-sm transition-colors',
-                    'text-corag-secondary hover:text-corag-primary',
+                    'text-cabuya-secondary hover:text-cabuya-primary',
                   ]}
                   data-umami-event="nav_click"
                   data-umami-event-item={link.href.split('/').filter(Boolean).pop() ?? 'home'}
@@ -178,7 +178,7 @@ const tagline = t.footer.tagline;
         <p
           class:list={[
             'text-xs uppercase tracking-widest',
-            'font-semibold text-corag-primary',
+            'font-semibold text-cabuya-primary',
           ]}
         >
           {communityGroup?.title[language] ?? communityGroup?.title.en}
@@ -191,7 +191,7 @@ const tagline = t.footer.tagline;
                   href={link.href}
                   class:list={[
                     'inline-flex min-h-[44px] items-center text-sm transition-colors',
-                    'text-corag-secondary hover:text-corag-primary',
+                    'text-cabuya-secondary hover:text-cabuya-primary',
                   ]}
                   data-umami-event="nav_click"
                   data-umami-event-item={link.href.split('/').filter(Boolean).pop() ?? 'home'}
@@ -209,13 +209,13 @@ const tagline = t.footer.tagline;
     <div
       class:list={[
         'mt-12 flex flex-col gap-5 border-t pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8',
-        'border-corag-border',
+        'border-cabuya-border',
       ]}
     >
       <p
         class:list={[
           'text-sm leading-relaxed',
-          'text-corag-secondary',
+          'text-cabuya-secondary',
         ]}
       >
         &copy; {year}{' '}
@@ -231,7 +231,7 @@ const tagline = t.footer.tagline;
               href={link.href}
               class:list={[
                 'inline-flex min-h-[44px] items-center text-sm font-bold tracking-wide hover:underline',
-                'text-corag-primary',
+                'text-cabuya-primary',
               ]}
               data-umami-event="nav_click"
               data-umami-event-item={link.href.includes('://')

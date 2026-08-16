@@ -1,11 +1,11 @@
 {
-  "name": "Corag — El ecosistema de impacto social",
-  "short_name": "Corag",
-  "description": "Conectamos a fundaciones, gobiernos, empresas y personas con oportunidades reales de ayudar, con transparencia y trazabilidad.",
+  "name": "Cabuya — the open aid interoperability protocol",
+  "short_name": "Cabuya",
+  "description": "Cabuya is an open protocol that lets emergency-aid applications publish and consume the same data. One schema, four transports; conformance measured, never declared.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFE2E9",
-  "theme_color": "#78020E",
+  "background_color": "#FAF9F6",
+  "theme_color": "#0B3D32",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

@@ -161,34 +161,34 @@ const metaDescription = buildMetaDescription({ lead: description, lang });
   <main class="main-container py-10 sm:py-12 lg:py-16">
     <article>
       <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-x-2 text-sm">
-        <a href={homeUrl} class="font-semibold text-corag-secondary transition-colors hover:text-corag-primary">{t.nav.home}</a>
-        <span class="font-semibold text-corag-secondary select-none" aria-hidden="true">/</span>
-        <a href={blogUrl} class="font-semibold text-corag-secondary transition-colors hover:text-corag-primary">{t.nav.blog}</a>
-        <span class="font-semibold text-corag-secondary select-none" aria-hidden="true">/</span>
-        <span class="truncate font-normal text-corag-secondary" aria-current="page">{title}</span>
+        <a href={homeUrl} class="font-semibold text-cabuya-secondary transition-colors hover:text-cabuya-primary">{t.nav.home}</a>
+        <span class="font-semibold text-cabuya-secondary select-none" aria-hidden="true">/</span>
+        <a href={blogUrl} class="font-semibold text-cabuya-secondary transition-colors hover:text-cabuya-primary">{t.nav.blog}</a>
+        <span class="font-semibold text-cabuya-secondary select-none" aria-hidden="true">/</span>
+        <span class="truncate font-normal text-cabuya-secondary" aria-current="page">{title}</span>
       </nav>
       {isDraft && (
-        <div class="mb-6 rounded-lg border border-corag-danger/40 bg-corag-danger/10 px-4 py-3 text-sm text-corag-danger">
+        <div class="mb-6 rounded-lg border border-cabuya-danger/40 bg-cabuya-danger/10 px-4 py-3 text-sm text-cabuya-danger">
           <strong>{t.draftBannerTitle}</strong> — {t.draftBannerMessage}
         </div>
       )}
       {isScheduled && (
-        <div class="mb-6 rounded-lg border border-corag-warning/40 bg-corag-warning/10 px-4 py-3 text-sm text-corag-warning">
+        <div class="mb-6 rounded-lg border border-cabuya-warning/40 bg-cabuya-warning/10 px-4 py-3 text-sm text-cabuya-warning">
           <strong>{t.scheduledBannerTitle}</strong> — {t.scheduledBannerMessage(formatCalendarDate(pubDate, lang))}
         </div>
       )}
       {seriesInfo && (
         <a
           href={`${prefix}/blog/series/${seriesInfo.name}/`}
-          class="mb-4 flex items-center gap-3 rounded-lg border border-corag-primary/25 bg-corag-primary-soft px-4 py-2.5 text-sm transition-colors hover:bg-corag-primary/15 hover:border-corag-primary/40"
+          class="mb-4 flex items-center gap-3 rounded-lg border border-cabuya-primary/25 bg-cabuya-primary-soft px-4 py-2.5 text-sm transition-colors hover:bg-cabuya-primary/15 hover:border-cabuya-primary/40"
         >
           <span
-            class="inline-flex shrink-0 items-center rounded-full border-2 border-corag-primary/40 bg-corag-bg-elevated px-2 py-0.5 text-xs font-semibold text-corag-primary"
+            class="inline-flex shrink-0 items-center rounded-full border-2 border-cabuya-primary/40 bg-cabuya-bg-elevated px-2 py-0.5 text-xs font-semibold text-cabuya-primary"
           >
             {seriesInfo.currentIndex + 1}/{seriesInfo.posts.length}
           </span>
-          <span class="text-corag-secondary">
-            <span class="font-medium text-corag">{t.seriesPartOf}:</span>{' '}
+          <span class="text-cabuya-secondary">
+            <span class="font-medium text-cabuya">{t.seriesPartOf}:</span>{' '}
             {t.seriesNames[seriesInfo.name] || seriesInfo.title}
           </span>
         </a>
@@ -205,7 +205,7 @@ const metaDescription = buildMetaDescription({ lead: description, lang });
         lang={lang}
         readingTimeMinutes={readingTimeMinutes}
       />
-      <div class="prose prose-lg prose-slate mx-auto max-w-4xl dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-corag-primary prose-img:block prose-img:mx-auto">
+      <div class="prose prose-lg prose-slate mx-auto max-w-4xl dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-cabuya-primary prose-img:block prose-img:mx-auto">
         <Content />
       </div>
       <div class="mt-12 space-y-8">
@@ -324,8 +324,8 @@ const metaDescription = buildMetaDescription({ lead: description, lang });
     height: 3px;
     background: linear-gradient(
       to right,
-      var(--color-corag-primary),
-      color-mix(in srgb, var(--color-corag-primary) 70%, var(--color-corag-accent))
+      var(--color-cabuya-primary),
+      color-mix(in srgb, var(--color-cabuya-primary) 70%, var(--color-cabuya-accent))
     );
     z-index: 60;
     pointer-events: none;

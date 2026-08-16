@@ -1,342 +1,154 @@
-# Corag — Brand Guide
+# Cabuya — Brand Guide
 
-> **Canonical brand reference for `cabuya.org`.** Read this before touching
-> anything that carries the identity: logo, color, type, voice, imagery.
->
-> - **This file** owns *identity and brand rules*.
-> - **[`DESIGN.md`](./DESIGN.md)** owns the *implementation contract* — exact
->   token names, generated utility classes, component patterns.
-> - **[`ACCESSIBILITY.md`](./ACCESSIBILITY.md)** owns *WCAG procedure*.
->
-> **Source of truth:** the official `Manual de Identidad Visual` (23 pp),
-> preserved at [`assets/brand/`](../assets/brand/). Where this guide and the
-> manual disagree, the manual wins — and this guide is wrong and must be fixed.
+> **Authority chain.** This guide is derived from the founding brand delivery
+> (`docs/context/brand/PALETTE.md` + the delivered logo assets) and the naming
+> analysis (`docs/context/BRAND_AND_NAMING.md`). The engineering contract that
+> implements it is [`docs/DESIGN.md`](./DESIGN.md); the tokens live once, in
+> `src/styles/global.css`; the rendered reference is the dev-only
+> [`/internal/brand`](http://localhost:7777/internal/brand).
 
 ---
 
-## 1. What Corag is
+## 1. The story
 
-**Corag is *el ecosistema de impacto social*.**
+**Cabuya** is the fibre — from the fique plant — with which you tie what no one
+can carry alone. Many thin threads that individually hold nothing, twisted
+together, carry anything. That is literally this network: **each app is a
+thread; the protocol is the rope.**
 
-> **Misión** — Conectar a fundaciones, gobiernos, emprendedores y personas a
-> través de una plataforma digital transparente y creativa, que incentive la
-> solidaridad mediante experiencias dinámicas, accesibles y con impacto real en
-> las comunidades.
-
-> **Visión** — Convertirse en la plataforma global líder en innovación social,
-> donde donar, servir y transformar vidas sea una experiencia divertida,
-> confiable y profundamente humana.
-
-Corag exists because of a specific, ordinary failure: **many people want to help
-and cannot find a trustworthy, close, meaningful way to do it.** Not a shortage
-of generosity — a shortage of connection.
-
-### The product hierarchy — get this right or the copy goes wrong
-
-```
-Corag — el ecosistema de impacto social          ← this website, cabuya.org
-   └── Ayuda Directa — producto insignia         → ayuda.cabuya.org
-          └── Emergencia activa: Eje Cafetero
-```
-
-`cabuya.org` is the **front door**: what Corag is, how the model works, why it can
-be trusted, how to integrate with it. Every transactional action — publishing a
-need, offering help, contributing, tracking a contribution, applying as a leader
-— happens in the **app**, and we hand people over to it.
-
-Writing about Corag as if it *were* Ayuda Directa is the most common mistake
-available here. Ayuda Directa is one thing Corag does.
-
-### Values
-
-**Colaboración · Empatía · Confianza · Amor · Innovación social · Transparencia**
-
----
+- The word is Colombian and common property: it belongs to no single app, and
+  it does not expire when an emergency ends.
+- Colombia is one of the world's largest producers of fique, the plant cabuya
+  fibre comes from — a real, checkable fact that grounds the name.
+- The founding principle, printed wherever the brand speaks:
+  **«Crecemos juntos: no competimos, nos alimentamos.»**
+  (*We grow together: we don't compete, we feed each other.*)
 
 ## 2. The mark
 
-The wordmark is lowercase **corag**, where the **`o` is a heart**.
+The logo is a **rope braided into a C** — the brand thesis made visual: many
+fibres, one cordage. Three strands: white, fique gold, and the forest outline
+that binds them.
 
-> *"El logo de CORAG está diseñado para transmitir **coraje, innovación y
-> amor**, tres pilares fundamentales en la relación con entidades y grupos
-> sociales."* — Manual, p. 10
-
-The name comes from **coraje**. The heart carries **amor**. Say this on
-`/sobre-corag` — it is the most human fact about the identity.
-
-### Files
-
-Masters live in [`assets/brand/`](../assets/brand/) (originals, never edited).
-Everything shipped is derived by `scripts/build-brand-assets.mjs`.
-
-| Asset | Path | Use |
+| Asset | File | Use |
 |---|---|---|
-| Wordmark, wine | `/images/brand/corag-wordmark.webp` | **Light backgrounds** |
-| Wordmark, blanco roto | `/images/brand/corag-wordmark-light.webp` | **Dark and wine backgrounds** |
-| Wordmark, rosa | `/images/brand/corag-wordmark-rosa.webp` | Wine grounds, accent contexts |
-| Monogram, wine | `/images/brand/corag-monogram.webp` | Small marks on light |
-| Monogram, blanco roto | `/images/brand/corag-monogram-light.webp` | Small marks on dark |
-| Square lockup | `/images/brand/corag-lockup.webp` | Social avatars, app icon |
+| Isologo (the braided C) | `public/images/brand/cabuya-isologo.webp` | Favicons, avatars, small squares, bullets |
+| Lockup, light grounds | `public/images/brand/cabuya-lockup.webp` (+`.png`) | Header, documents on White/Ivory |
+| Lockup, dark grounds | `public/images/brand/cabuya-lockup-dark.webp` (+`.png`) | Header in dark mode, Night canvases |
+| Source masters | `docs/context/brand/assets/` | Never served; regenerate derived assets from these |
 
-**Intrinsic aspect ratio is `526 : 154` (3.4156:1).** Every `<img>` of the
-wordmark declares `width={342} height={100}`. Getting this wrong distorts the
-mark or causes layout shift.
+Rules:
 
-### The monogram
+- **Clear space:** at least the height of the C's stroke on all sides.
+- **Never** recolor the strands, add effects, rotate, or place the light-ground
+  lockup on a dark ground (use the dark variant).
+- The isologo works single-asset on both light and dark grounds (it carries its
+  own forest outline) — that is why the favicon set derives from it.
+- Favicons and PWA icons are **generated** from the isologo (see Task 3 of the
+  migration plan; regeneration commands live in the commit that produced them).
 
-Below roughly 80px the wordmark stops being readable, so the small-size mark is
-the **`co` ligature** — the `c` plus the heart-`o`. It is the distinctive,
-legible part, and it keeps the heart. Used for the favicon, PWA icons and the
-apple-touch icon.
+## 3. Palette — measured, not asserted
 
-### Rules
+The five canonical colors (from `PALETTE.md`) plus one derived value. Every
+ratio below is **measured** (WCAG relative luminance), and
+`tests/unit/lib/design-tokens.test.ts` re-computes the critical ones on every
+test run.
 
-**Do**
-- Use the wine mark on light grounds and the blanco-roto mark on dark ones.
-- Keep clear space around the mark of **at least the height of the `o`** on every
-  side.
-- Scale proportionally.
-- Use the monogram when the wordmark would render below ~80px wide.
+| Color | Hex | Role | Key measurements |
+|---|---|---|---|
+| Cabuya Forest | `#0B3D32` | Primary brand; text on light; fills | 11.54:1 on White, 10.97:1 on Ivory — AAA |
+| Fique Fiber | `#C79A4A` | The golden strand — accent, **decorative only on light** | 2.45:1 on White — **fails AA**; 5.96:1 on Night — AA |
+| Cabuya Night | `#082A24` | Dark-mode ground; always-dark canvases | 14.59:1 under White text |
+| Natural Ivory | `#F6F3ED` | Soft light ground; text on dark; on-fill | 13.87:1 on Night |
+| Warm White | `#FAF9F6` | The page ground (light) | — |
+| **Fique Strong** (derived) | **`#8A672C`** | The ONLY text-safe fique on light | **4.92:1 on White, 4.67:1 on Ivory** — measured, chosen as the lightest hue-held darkening passing both |
 
-**Never**
-- Recolor the mark to anything outside the official palette.
-- Stretch, skew, rotate or add effects (shadow, outline, gradient, bevel).
-- Place the wine mark on a dark ground, or the light mark on a pale one.
-- Rebuild the wordmark by typing "corag" in Outfit — the heart-`o` is custom.
-- Crop the mark, or box it in a shape the brand does not define.
-- Use the app's `corag-logo.png` — it has a baked-in non-transparent background.
+### The two rules that follow from the measurements
 
-> ⚠️ **Open gap:** the supplied package has **no vector master**. `favicon.svg`
-> currently wraps a 512px raster. Request an SVG/AI master from the designer and
-> replace it. Do **not** autotrace the wordmark.
+1. **Fique never carries text on a light ground.** Icons, strands, large
+   display type and the logo only. Any *text* use of the fique hue on light
+   goes through `--color-cabuya-accent-strong` (`#8A672C`).
+2. **The brand color flips Forest → Fique in dark mode** (forest is unreadable
+   on Night at ~1.9:1; fique measures 5.96:1). **The fill pair does not flip:**
+   a filled brand surface is forest-with-ivory in both themes
+   (`bg-cabuya-fill` + `text-cabuya-on-fill`, 10.97:1). Pairing
+   `bg-cabuya-primary` with `text-white` is the bug this split exists to
+   prevent.
 
----
-
-## 3. Color
-
-### Official palette (Manual, p. 13)
-
-| Swatch | Hex | RGB | CMYK | Role |
-|---|---|---|---|---|
-| ██ | **`#78020E`** | R120 G2 B14 | C31 M100 Y93 K45 | **Vino — primary** |
-| ██ | `#BC727C` | R188 G114 B124 | C12 M50 Y24 K1 | Vino 50% — decorative |
-| ██ | **`#FFC7D5`** | R255 G199 B213 | C0 M31 Y6 K0 | **Rosa** |
-| ██ | `#FFE2E9` | R255 G226 B233 | — | Rosa 50% — rosa claro |
-
-**Rosa is a brand color, not a tint.** The manual uses it as a full background
-treatment. Treating it as a faint wash of the wine loses half the identity.
-
-`#F0E3E4` (blanco roto) appears as a ground in the official assets but is **not**
-on the palette page — treat it as an observed neutral, not an official color.
-
-### ⚠️ Hard accessibility rules
-
-Measured ratios and their derivations:
-[`CONTRAST_AUDIT.md`](../.dwp/plans/PLAN_corag_org_migration/analysis_results/CONTRAST_AUDIT.md).
-
-1. **`#78020E` is AAA on every light ground** (7.93 minimum, 10.94 on the page
-   background). Use it freely for text.
-2. **`#BC727C` is never body text.** It fails AA on all five light grounds
-   (2.46–3.60). Permitted: large text ≥24px or ≥19px bold, hairlines, decorative
-   shapes, icon fills with an accessible label.
-3. **Dark mode flips the brand from wine to rosa.** `#78020E` on a dark ground
-   measures **1.52** — unusable. `#FFC7D5` measures 10.67. Both are official
-   colors, so nothing is invented.
-4. **The primary button is theme-invariant**: wine fill, rosa-claro label (9.54).
-5. Never `text-gray-400`, `text-gray-500`, `dark:text-gray-400`,
-   `dark:text-gray-500`.
-
-### Colors the manual does not provide
-
-A logo package cannot supply a product UI palette. Neutrals and status colors
-were derived and verified in the contrast audit. They are **implementation
-tokens, not brand colors** — a designer may change them without touching the
-brand.
-
-| Role | Light | Dark |
-|---|---|---|
-| Page background | `#FBF8F5` | `#231518` |
-| Elevated surface | `#FFFFFF` | `#2E1B1F` |
-| Body text | `#251F20` | `#F0E3E4` |
-| Secondary text | `#574F51` | `#D6C4C7` |
-| Muted text | `#635B5D` | `#92888A` |
-| Success — *entregado, con evidencia* | `#24735D` | `#559381` |
-| Warning — *en organización* | `#995D30` | `#B37B4F` |
-| Info | `#3C6176` | `#6E8B9B` |
-| Danger — *urgente* | `#A43536` | `#C37073` |
-
-The dark ground `#231518` is **wine-tinted, not neutral grey** — dark mode still
-has to read as Corag.
-
-Full token names and utility classes: [`DESIGN.md`](./DESIGN.md).
-
----
+Supporting tints (seedling `#CFE3D9`, the soft grounds, borders, text greys,
+status colors) are all derived and measured — the full table with per-token
+ratios is in [`docs/DESIGN.md`](./DESIGN.md) and rendered live at
+`/internal/ui/colors`.
 
 ## 4. Typography
 
-| Role | Family | Notes |
-|---|---|---|
-| **Display / headings** | **Outfit** | Variable, weights 400–800 |
-| **Body** | **Poppins** | 400 / 500 / 600 / 700 |
-| Code | `ui-monospace` system stack | — |
+**Interim decision (recorded 2026-08-16, Task 3):** the baseline's self-hosted
+pair carries over —
 
-Both are **SIL OFL 1.1** and **self-hosted** from `/public/fonts` — no external
-font request, ever. Outfit ships as one variable file.
+- **Outfit** for display (geometric sans; consistent with the wordmark's
+  wide-tracked geometric letterforms),
+- **Poppins** for body (already subset to latin + latin-ext, `font-display:
+  swap`, zero new bytes).
 
-> The manual prints the body face as *"Popins"* (p. 17). That is a typo; the
-> family is **Poppins**.
-
-**Practice**
-- Headings in Outfit, 600–800. Corag headlines are short and human — they should
-  feel spoken, not announced.
-- Body in Poppins 400, generous line height (1.6–1.75). This is a site people
-  read when they are worried; give the text air.
-- Never fake a weight with `font-synthesis`. Use a real shipped weight.
-- Never set body copy below 16px.
-
----
+Rationale: both faces are geometric sans in the family of the wordmark, the
+loading is already optimized, and shipping a new webfont would spend
+performance budget on a marginal gain. Revisit only if a bespoke brand face is
+ever commissioned; record any change here and in the tokens
+(`--font-sans` / `--font-display`).
 
 ## 5. Voice and tone
 
-The manual defines five principles (p. 8). They are not suggestions.
+The register is a **serious technical standard that anyone can read**: calm,
+concrete, humble, precise. Model: the way deepworkplan.com explains a
+methodology; never the way a startup announces a launch.
 
-| Principle | What it means |
+- Spanish is written natively — with ñ, tildes and interrogative accents — and
+  is never machine-flavored. English is not a translation of the Spanish, nor
+  vice versa: both are first drafts in their own language.
+- Normative keywords (MUST/SHOULD/MAY) appear **only** inside `spec/`.
+- State the limit instead of writing around it: "The public specification is a
+  draft under review" is better copy than an evasion.
+- **Rule-0:** no invented figures, no endorsement we cannot maintain, no CTA to
+  a channel we do not run, no conformance claim the validator has not measured.
+
+### Banned vocabulary
+
+From the founding verbal-identity analysis (`BRAND_AND_NAMING.md` §7.3) — these
+words are how aid-tech marketing erodes trust, and they do not appear in Cabuya
+copy in any language:
+
+> revolucionario / revolutionary · disruptivo / disruptive · líder /
+> leading · el mejor / the best · único / unique-in-the-world · certificado /
+> certified · garantizado / guaranteed · "Powered by" · impacto exponencial ·
+> game-changer · cutting-edge · world-class (about ourselves) · seamless ·
+> innovador as filler
+
+The word **certificado/certified is doubly banned**: conformance is *measured*,
+and the validator's own output never says "certified" either.
+
+## 6. Badge language
+
+The conformance badge reads **«Compatible con Cabuya 1.0»** (EN: *"Cabuya 1.0
+compatible"*) — always version-scoped, always backed by a validator
+measurement, linking to the registry page where the measurement is visible.
+
+- ✅ `Compatible con Cabuya 1.0` — version-scoped, measured, falsifiable
+- ❌ `Powered by Cabuya` — implies a dependency relationship that doesn't exist
+- ❌ `Certificado Cabuya` — banned word; certification implies an authority
+  granting it, measurement is what actually happens
+- ❌ `Compatible con Cabuya` — unversioned claims rot silently
+
+Badge colors: forest-on-ivory or ivory-on-forest; the fique strand is the
+graphic element, never the type color on light grounds.
+
+## 7. Where the brand lives in the repo
+
+| Surface | Path |
 |---|---|
-| **Cálido y humano** | como un amigo que inspira a ayudar |
-| **Inspirador y movilizador** | invita a la acción y al cambio |
-| **Claro y sencillo** | sin tecnicismos, directo al corazón |
-| **Juvenil y fresco** | cercano a la gente, con energía positiva |
-| **Esperanzador** | siempre transmitiendo que sí se puede transformar vidas |
-
-### Two registers, one brand
-
-`cabuya.org` — this site — is **warm, human, hopeful**. It is where people decide
-whether to trust Corag.
-
-`ayuda.cabuya.org` during a live emergency is **operationally direct**. When someone
-needs help right now, clarity beats warmth. *"Necesito ayuda"*, *"Quiero
-ayudar"*, *"Seguir mi aporte"* — three words, no adjectives.
-
-Both are Corag. Do not import the app's clipped register into marketing copy, and
-do not import marketing warmth into an emergency flow.
-
-### The messaging platform
-
-**What we say, in what order, and in whose words** lives in
-[`MESSAGING.md`](./MESSAGING.md) — the coraje positioning, the six-beat
-argument, the approved lexicon, the proof points, and the rules for where coraje
-belongs and where it must never appear. Every page that states the value
-proposition writes from that document.
-
-The one rule worth repeating here: **the coraje is ours, never aimed at the
-people receiving aid.**
-
-### Never describe Corag as "bilingual"
-
-Corag is **a community of professionals, organizations and volunteers** — that is
-the identity. The site being available in Spanish and English is a *capability*,
-not a positioning claim, and calling Corag "a bilingual community" makes a
-language accident sound like the point.
-
-| ❌ | ✅ |
-|---|---|
-| "the bilingual community of…" | "a community of professionals and organizations" |
-| "our bilingual platform" | "available in Spanish and English" |
-| "intentionally bilingual" | *(drop it — say what the site does, not what label it wears)* |
-
-State the language support where it is useful — a technical doc, an i18n guide, a
-footer switcher — as the plain fact that Spanish is served at `/` and English at
-`/en`. Never as an adjective describing who Corag is.
-
-### Spanish is the source language
-
-Spanish is written first and English is a real translation of it — never the
-reverse, and never a machine echo. **Diacritics are mandatory**: ñ, á/é/í/ó/ú,
-¿…?, ¡…!, and interrogative accents (`cómo`, `qué`, `cuál`, `dónde`, `cuándo`).
-
-### What warmth does *not* license
-
-Corag handles real aid, real money and real people in bad situations.
-**Confianza** and **Transparencia** are official values, which means:
-
-- **Never promise what the platform does not guarantee.** "Verificado" and "con
-  evidencia" mean specific things. Do not blur them.
-- **Never sensationalize suffering.** No disaster imagery, no misery as leverage,
-  no urgency theatre.
-- **Never claim numbers this site cannot verify.** Live figures belong to the
-  app; link to them rather than baking them into a static build.
-- **Never write savior framing.** People receiving aid are neighbours, not
-  beneficiaries of our virtue.
-
-### Blocklist
-
-Avoid: *revolucionario · disruptivo · la mejor plataforma · líder indiscutible ·
-cambiamos el mundo · salvamos vidas · empoderar · sinergia · solución integral ·
-game changer · simplemente · obviamente · en resumen · sumérgete · desbloquea*.
-
-Also avoid AI-slop scaffolding: *"En un mundo donde…"*, *"No es solo X, es Y"*,
-*"Ya sea que… o…"*, *"la clave está en"*.
-
-### Good and bad, concretely
-
-| ❌ | ✅ |
-|---|---|
-| "Revolucionamos la ayuda humanitaria con tecnología de punta." | "Conectamos a quienes quieren ayudar con quienes más lo necesitan." |
-| "Nuestra plataforma garantiza que tu donación llegue." | "Puedes ver en qué se usó tu aporte y qué evidencia lo respalda." |
-| "Únete a la revolución solidaria." | "Ayuda donde más se necesita." |
-| "Empoderamos comunidades vulnerables." | "Las comunidades organizan su propia ayuda. Nosotros la hacemos visible." |
-| "Millones de vidas impactadas." | "Cada aporte queda registrado, con su destino y su evidencia." |
-
----
-
-## 6. Photography
-
-The manual's reference images (pp. 22–23) establish the style:
-
-- Warm natural light. No cold or clinical treatment.
-- **Tight human crops — often hands.** Connection, contact, exchange.
-- Real, visibly diverse people.
-- **The moment of connection, never the moment of suffering.**
-
-Concretely: a box of groceries passing between two people, yes. A photograph of a
-family's destroyed home, no. Corag's imagery is about what people do for each
-other.
-
-> ⚠️ The two reference photographs in `assets/brand/` are almost certainly
-> **licensed stock** included as guidance. They are **not** cleared for
-> publication and must not ship. Confirm licensing before using any photograph
-> on the site.
-
----
-
-## 7. Open gaps
-
-Tracked in
-[`OFFICIAL_BRAND_REVIEW.md`](../.dwp/plans/PLAN_corag_org_migration/analysis_results/OFFICIAL_BRAND_REVIEW.md) §8.
-
-| Gap | Status |
-|---|---|
-| No vector logo master | ⚠️ Request from the designer; `favicon.svg` wraps a raster meanwhile |
-| Clear-space / min-size figures | ⚠️ Stated qualitatively above; exact numbers not machine-readable from the manual |
-| Photography licensing | ⚠️ Unconfirmed — do not publish |
-| Icon set | Manual p. 19 is vector-only; the site uses its own icon approach |
-| Social accounts, legal name, contact email | ⚠️ **Unknown — must be supplied, never invented** (needed for JSON-LD, footer, privacy page) |
-
----
-
-## 8. Quick reference
-
-```
-Primary            #78020E   wine        AAA on every light ground
-Rosa               #FFC7D5   brand color, not a tint
-Rosa claro         #FFE2E9   primary-button label on wine
-Decorative         #BC727C   NEVER body text
-
-Display            Outfit    400–800, variable, self-hosted
-Body               Poppins   400/500/600/700, self-hosted
-
-Voice              cálido · inspirador · claro · juvenil · esperanzador
-Positioning        Corag = ecosistema de impacto social
-                   Ayuda Directa = producto insignia → ayuda.cabuya.org
-Mark               "corag", the o is a heart — coraje + innovación + amor
-```
+| Tokens (single declaration site) | `src/styles/global.css` `@theme` + `.dark` |
+| Engineering contract | `docs/DESIGN.md` |
+| Guard tests | `tests/unit/lib/design-tokens.test.ts` |
+| Rendered brand book (dev-only) | `/internal/brand` |
+| Live token table (dev-only) | `/internal/ui/colors` |
+| Assets | `public/images/brand/`, `public/icons/`, `public/favicon.*` |
+| Founding sources | `docs/context/brand/` |

@@ -155,7 +155,7 @@ $: displayDescription = searchQuery
   : postData.description;
 </script>
 
-<article class="article-card group relative bg-corag-bg-elevated rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+<article class="article-card group relative bg-cabuya-bg-elevated rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
   <!-- Full-card clickable link (background layer) -->
   <a
     href={`${prefix}/blog/${postSlug}/`}
@@ -164,7 +164,7 @@ $: displayDescription = searchQuery
     on:click={() => trackEvent(EVENTS.BLOG_CARD_CLICK, { slug: postSlug })}
   ></a>
   {#if postData.heroImage}
-    <div class="bg-corag-primary-soft">
+    <div class="bg-cabuya-primary-soft">
       <img decoding="async"
         src={postData.heroImage}
         alt=""
@@ -175,15 +175,15 @@ $: displayDescription = searchQuery
     </div>
   {/if}
   <div class="p-6">
-    <h2 class="text-lg sm:text-xl font-bold mb-2 text-corag group-hover:text-corag-primary transition-colors">
+    <h2 class="text-lg sm:text-xl font-bold mb-2 text-cabuya group-hover:text-cabuya-primary transition-colors">
       {@html displayTitle}
     </h2>
-    <p class="text-corag-secondary mb-4">
+    <p class="text-cabuya-secondary mb-4">
       {@html displayDescription}
     </p>
     <div class="relative z-10 flex flex-wrap justify-between items-center gap-2">
       <div class="flex flex-wrap items-center gap-2">
-        <time class="text-sm text-corag-secondary">
+        <time class="text-sm text-cabuya-secondary">
           {formatCalendarDateLocale(postData.pubDate, t.dateLocale)}
         </time>
         {#if isScheduled}
@@ -201,14 +201,14 @@ $: displayDescription = searchQuery
             {#if seriesSlug}
               <a
                 href={`${prefix}/blog/series/${seriesSlug}/`}
-                class="inline-flex items-center rounded-full border-2 border-corag-primary/30 bg-corag-primary-soft px-2.5 py-0.5 text-xs font-medium text-corag-primary transition-colors hover:bg-corag-primary/15 hover:border-corag-primary/50"
+                class="inline-flex items-center rounded-full border-2 border-cabuya-primary/30 bg-cabuya-primary-soft px-2.5 py-0.5 text-xs font-medium text-cabuya-primary transition-colors hover:bg-cabuya-primary/15 hover:border-cabuya-primary/50"
                 title={seriesBadgeLabel}
               >
                 {seriesCurrent}/{seriesTotal}
               </a>
             {:else}
               <span
-                class="inline-flex items-center rounded-full border-2 border-corag-primary/30 bg-corag-primary-soft px-2.5 py-0.5 text-xs font-medium text-corag-primary"
+                class="inline-flex items-center rounded-full border-2 border-cabuya-primary/30 bg-cabuya-primary-soft px-2.5 py-0.5 text-xs font-medium text-cabuya-primary"
                 title={seriesBadgeLabel}
               >
                 {seriesCurrent}/{seriesTotal}
@@ -216,7 +216,7 @@ $: displayDescription = searchQuery
             {/if}
             {#if seriesTitle}
               <span
-                class="pointer-events-none absolute top-full left-1/2 z-10 mt-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-corag-bg-dark px-2 py-1 text-xs font-medium text-white opacity-0 shadow-md transition-opacity duration-150 group-hover/series:opacity-100 group-focus-within/series:opacity-100"
+                class="pointer-events-none absolute top-full left-1/2 z-10 mt-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-cabuya-bg-dark px-2 py-1 text-xs font-medium text-white opacity-0 shadow-md transition-opacity duration-150 group-hover/series:opacity-100 group-focus-within/series:opacity-100"
                 role="tooltip"
               >
                 {seriesTitle}
@@ -230,7 +230,7 @@ $: displayDescription = searchQuery
           {#each postData.tags as tag}
             <a
               href={`${prefix}/blog/tag/${tag}/`}
-              class="text-xs px-2 py-1 rounded bg-corag-primary-soft text-corag-primary hover:bg-corag-primary/15 transition-colors"
+              class="text-xs px-2 py-1 rounded bg-cabuya-primary-soft text-cabuya-primary hover:bg-cabuya-primary/15 transition-colors"
             >
               #{t.tagNames[tag] || tag}
             </a>
@@ -238,7 +238,7 @@ $: displayDescription = searchQuery
           {#each postData.topics as topic}
             <a
               href={`${prefix}/blog/tag/${topic}/`}
-              class="text-xs px-2 py-1 rounded border border-corag-border bg-corag-bg-elevated text-corag-secondary hover:border-corag-border-strong hover:text-corag transition-colors"
+              class="text-xs px-2 py-1 rounded border border-cabuya-border bg-cabuya-bg-elevated text-cabuya-secondary hover:border-cabuya-border-strong hover:text-cabuya transition-colors"
             >
               {t.tagNames[topic] || topic}
             </a>
@@ -246,9 +246,9 @@ $: displayDescription = searchQuery
           {#each postData.subtopics as sub}
             <a
               href={`${prefix}/blog/tag/${sub}/`}
-              class="inline-flex items-center text-xs px-2 py-1 rounded bg-corag-bg-elevated text-corag-secondary border border-dashed border-corag-border hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag transition-colors"
+              class="inline-flex items-center text-xs px-2 py-1 rounded bg-cabuya-bg-elevated text-cabuya-secondary border border-dashed border-cabuya-border hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya transition-colors"
             >
-              <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-corag-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+              <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-cabuya-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
             </a>
           {/each}
         </div>

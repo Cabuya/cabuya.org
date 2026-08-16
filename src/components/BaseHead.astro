@@ -160,7 +160,7 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
 <!-- Header logo preload (prevents alt text flash on navigation).
      Skip on pages that preload a larger LCP image (e.g. home hero). -->
 {preloadHeaderLogo && (
-  <link rel="preload" href="/images/brand/corag-wordmark-light.webp" as="image" type="image/webp" />
+  <link rel="preload" href="/images/brand/cabuya-lockup-dark.webp" as="image" type="image/webp" />
 )}
 
 <!-- Early connection for Cloudflare Web Analytics (when injected) -->
@@ -243,7 +243,7 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
     name: 'Corag',
     alternateName: 'Corag Ayuda Directa',
     url: Astro.site?.href,
-    logo: new URL('/images/brand/corag-wordmark.png', Astro.site).href,
+    logo: new URL('/images/brand/cabuya-lockup.png', Astro.site).href,
     description:
       'Corag connects people who need help with people who can give it, and publishes the evidence of every delivery. Requests, contributions and proof live in one place.',
     /*

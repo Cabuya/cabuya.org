@@ -1,10 +1,10 @@
 /**
- * Guards the Corag design token system.
+ * Guards the Cabuya design token system.
  *
- * These exist because the palette silently drifted once already: the internal
- * colour pages hardcoded hex strings, and when the tokens changed the pages
- * kept printing the old teal/amber values while rendering the new ones. A
- * design system that can lie about itself is worse than no design system.
+ * These exist because a palette can silently drift: internal colour pages can
+ * hardcode hex strings, and when the tokens change the pages keep printing the
+ * old values while rendering the new ones. A design system that can lie about
+ * itself is worse than no design system.
  *
  * What is enforced:
  *   1. Every token is declared once, in `global.css`, for both themes.
@@ -12,6 +12,11 @@
  *   3. Neither page references a token that does not exist.
  *   4. Dark mode overrides every token that must flip, and none that must not.
  *   5. No component reintroduces a raw hex where a token exists.
+ *   6. The measured-contrast rules from docs/context/brand/PALETTE.md are
+ *      RE-COMPUTED here — the ratios are not trusted from comments:
+ *      body pairs ≥ 4.5:1, fique-strong ≥ 4.5:1 on both light grounds, and
+ *      raw fique (#C79A4A) is never used as a text utility outside
+ *      dark-scoped or dark-canvas contexts.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -32,31 +37,48 @@ const darkBlock = CSS.slice(
 
 const tokensIn = (block: string): Set<string> =>
   new Set(
-    [...block.matchAll(/--color-(corag[a-z0-9-]*)\s*:/g)].map((m) => m[1])
+    [...block.matchAll(/--color-(cabuya[a-z0-9-]*)\s*:/g)].map((m) => m[1])
   );
+
+const tokenValue = (block: string, token: string): string | undefined =>
+  block.match(new RegExp(`--color-${token}\\s*:\\s*(#[0-9a-fA-F]{6})`))?.[1];
 
 const DECLARED = tokensIn(themeBlock);
 const DARK = tokensIn(darkBlock);
+
+/** WCAG 2.x relative-luminance contrast ratio. */
+function contrast(hexA: string, hexB: string): number {
+  const lum = (hex: string): number => {
+    const h = hex.replace('#', '');
+    const chan = (i: number): number => {
+      const c = Number.parseInt(h.slice(i, i + 2), 16) / 255;
+      return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * chan(0) + 0.7152 * chan(2) + 0.0722 * chan(4);
+  };
+  const [a, b] = [lum(hexA), lum(hexB)];
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
 
 /**
  * Tokens that deliberately do NOT change between themes.
  *
  * `fill` / `on-fill` are the reason the whole split exists: a filled brand
- * surface must stay wine-with-rosa-claro in both themes, because `primary`
- * flips to rosa and white-on-rosa measures ~1.5:1.
+ * surface must stay forest-with-ivory in both themes, because `primary`
+ * flips to fique and fique-on-forest is a badge pairing, not a fill pairing.
  */
 const NO_FLIP = new Set([
-  'corag-fill',
-  'corag-fill-strong',
-  'corag-on-fill',
-  'corag-rosa',
-  'corag-rosa-soft',
-  'corag-primary-light',
-  'corag-bg-dark',
-  'corag-accent',
+  'cabuya-fill',
+  'cabuya-fill-strong',
+  'cabuya-on-fill',
+  'cabuya-seedling',
+  'cabuya-seedling-soft',
+  'cabuya-primary-light',
+  'cabuya-bg-dark',
+  'cabuya-accent',
   // Aliases re-export via var(), so they inherit the flip without a .dark rule.
-  'corag',
-  'corag-secondary',
+  'cabuya',
+  'cabuya-secondary',
 ]);
 
 describe('design tokens — declaration', () => {
@@ -64,16 +86,21 @@ describe('design tokens — declaration', () => {
     expect(DECLARED.size).toBeGreaterThanOrEqual(30);
   });
 
-  it('declares the official brand colours with the manual’s values', () => {
-    // Manual de Identidad Visual, p. 13. These four are not ours to change.
-    expect(themeBlock).toContain('#78020e'); // vino
-    expect(themeBlock).toContain('#bc727c'); // vino 50% — decorative
-    expect(themeBlock).toContain('#ffc7d5'); // rosa
-    expect(themeBlock).toContain('#ffe2e9'); // rosa claro
+  it('declares the canonical brand colours with the PALETTE.md values', () => {
+    // docs/context/brand/PALETTE.md — these five are not ours to change.
+    expect(themeBlock).toContain('#0b3d32'); // Cabuya Forest
+    expect(themeBlock).toContain('#c79a4a'); // Fique Fiber — decorative
+    expect(themeBlock).toContain('#082a24'); // Cabuya Night
+    expect(themeBlock).toContain('#f6f3ed'); // Natural Ivory
+    expect(themeBlock).toContain('#faf9f6'); // Warm White
   });
 
   it('keeps the fill pair identical in both themes', () => {
-    for (const token of ['corag-fill', 'corag-fill-strong', 'corag-on-fill']) {
+    for (const token of [
+      'cabuya-fill',
+      'cabuya-fill-strong',
+      'cabuya-on-fill',
+    ]) {
       expect(DARK.has(token)).toBe(false);
     }
   });
@@ -84,8 +111,125 @@ describe('design tokens — declaration', () => {
     expect(notFlipped).toEqual([]);
   });
 
-  it('ships no leftover ptt- token', () => {
-    expect(CSS).not.toMatch(/ptt-/);
+  it('ships no leftover corag- token', () => {
+    expect(CSS).not.toMatch(/corag-/);
+  });
+});
+
+describe('design tokens — measured contrast (re-computed, not trusted)', () => {
+  const WHITE = '#faf9f6';
+  const IVORY = '#f6f3ed';
+  const NIGHT = '#082a24';
+
+  it('fique-strong carries text on BOTH light grounds (≥ 4.5:1)', () => {
+    const strong = tokenValue(themeBlock, 'cabuya-accent-strong');
+    expect(strong).toBeDefined();
+    expect(contrast(strong as string, WHITE)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(strong as string, IVORY)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('raw fique fails AA on light — the reason accent is decorative-only', () => {
+    // If this ever passes, the palette changed and the rule needs review.
+    const accent = tokenValue(themeBlock, 'cabuya-accent');
+    expect(contrast(accent as string, WHITE)).toBeLessThan(3);
+  });
+
+  it('light-mode body pairs are AA or better on both light grounds', () => {
+    for (const token of [
+      'cabuya-primary',
+      'cabuya-text',
+      'cabuya-text-secondary',
+      'cabuya-text-muted',
+      'cabuya-success',
+      'cabuya-warning',
+      'cabuya-info',
+      'cabuya-danger',
+    ]) {
+      const v = tokenValue(themeBlock, token);
+      expect(v, token).toBeDefined();
+      expect(
+        contrast(v as string, WHITE),
+        `${token} on white`
+      ).toBeGreaterThanOrEqual(4.5);
+      expect(
+        contrast(v as string, IVORY),
+        `${token} on ivory`
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('dark-mode body pairs are AA or better on the ELEVATED surface', () => {
+    // Elevated is lighter than the page ground, so it is the binding check.
+    const elevated = tokenValue(darkBlock, 'cabuya-bg-elevated') as string;
+    expect(elevated).toBeDefined();
+    for (const token of [
+      'cabuya-primary',
+      'cabuya-text',
+      'cabuya-text-secondary',
+      'cabuya-text-muted',
+      'cabuya-accent-strong',
+      'cabuya-success',
+      'cabuya-warning',
+      'cabuya-info',
+      'cabuya-danger',
+    ]) {
+      const v = tokenValue(darkBlock, token);
+      expect(v, token).toBeDefined();
+      expect(
+        contrast(v as string, elevated),
+        `${token} on dark elevated`
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('the fixed fill pair measures AA+ (ivory on forest)', () => {
+    const fill = tokenValue(themeBlock, 'cabuya-fill') as string;
+    const onFill = tokenValue(themeBlock, 'cabuya-on-fill') as string;
+    expect(contrast(onFill, fill)).toBeGreaterThanOrEqual(7);
+  });
+
+  it('seedling display text is AAA on the always-dark canvas', () => {
+    const seedling = tokenValue(themeBlock, 'cabuya-seedling') as string;
+    expect(contrast(seedling, NIGHT)).toBeGreaterThanOrEqual(7);
+  });
+
+  it('interactive borders clear the 3:1 non-text minimum in both modes', () => {
+    const light = tokenValue(themeBlock, 'cabuya-border-interactive') as string;
+    const dark = tokenValue(darkBlock, 'cabuya-border-interactive') as string;
+    expect(contrast(light, WHITE)).toBeGreaterThanOrEqual(3);
+    expect(contrast(dark, NIGHT)).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('design tokens — fique is never light-ground text', () => {
+  it('no component uses text-cabuya-accent outside a dark-scoped context', () => {
+    // Practical static check, documented limits: flags `text-cabuya-accent`
+    // as a standalone utility unless the same class list carries `dark:` or
+    // the file opts in via a `cabuya-dark-canvas` marker comment (for
+    // components rendered exclusively on bg-cabuya-bg-dark).
+    const offenders: string[] = [];
+    const walk = (dir: string): void => {
+      for (const entry of readdirSyncSafe(dir)) {
+        const full = join(dir, entry);
+        if (isDir(full)) walk(full);
+        else if (/\.(astro|svelte)$/.test(entry)) {
+          const src = readFileSync(full, 'utf-8');
+          if (src.includes('cabuya-dark-canvas')) continue;
+          for (const m of src.matchAll(
+            /^.*\btext-cabuya-accent(?!-strong).*$/gm
+          )) {
+            // Icons are a documented legitimate use of raw fique (non-text,
+            // DESIGN.md): exempt lines that are clearly SVG/icon contexts.
+            const iconContext = /<svg|viewBox|-icon\b|aria-hidden/.test(m[0]);
+            if (!iconContext && !/dark:/.test(m[0]))
+              offenders.push(full.replace(ROOT, ''));
+          }
+        }
+      }
+    };
+    walk(join(ROOT, 'src', 'components'));
+    walk(join(ROOT, 'src', 'layouts'));
+    expect(offenders).toEqual([]);
   });
 });
 
@@ -98,7 +242,7 @@ describe('design tokens — the internal colour pages cannot go stale', () => {
   for (const page of PAGES) {
     const source = readFileSync(join(ROOT, page), 'utf-8');
     const referenced = new Set(
-      [...source.matchAll(/--color-(corag[a-z0-9-]*)/g)].map((m) => m[1])
+      [...source.matchAll(/--color-(cabuya[a-z0-9-]*)/g)].map((m) => m[1])
     );
 
     it(`${page} documents every declared token`, () => {
@@ -127,7 +271,7 @@ describe('design tokens — the internal colour pages cannot go stale', () => {
 
 describe('design tokens — no component bypasses the system', () => {
   it('banned low-contrast greys are absent from the component tree', () => {
-    // These fail WCAG AA on the Corag grounds. `docs/DESIGN.md` §2.6.
+    // These fail WCAG AA on the Cabuya grounds. `docs/DESIGN.md`.
     const banned = /\b(?:dark:)?text-gray-(?:400|500)\b/g;
     const offenders: string[] = [];
     const walk = (dir: string): void => {

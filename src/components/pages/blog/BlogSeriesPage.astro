@@ -62,11 +62,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <section class="py-10 sm:py-12 lg:py-16">
     <!-- Breadcrumb navigation -->
     <nav class="main-container mb-6 flex flex-wrap items-center gap-x-2 text-sm" aria-label="Breadcrumb">
-      <a href={`${prefix}/blog/`} class="font-semibold text-corag-secondary transition-colors hover:text-corag-primary">{t.nav.blog}</a>
-      <span class="font-semibold text-corag-secondary select-none" aria-hidden="true">/</span>
-      <a href={`${prefix}/blog/series/`} class="font-semibold text-corag-secondary transition-colors hover:text-corag-primary">{t.seriesPage.breadcrumb}</a>
-      <span class="font-semibold text-corag-secondary select-none" aria-hidden="true">/</span>
-      <span class="truncate font-normal text-corag-secondary" aria-current="page">{localizedTitle}</span>
+      <a href={`${prefix}/blog/`} class="font-semibold text-cabuya-secondary transition-colors hover:text-cabuya-primary">{t.nav.blog}</a>
+      <span class="font-semibold text-cabuya-secondary select-none" aria-hidden="true">/</span>
+      <a href={`${prefix}/blog/series/`} class="font-semibold text-cabuya-secondary transition-colors hover:text-cabuya-primary">{t.seriesPage.breadcrumb}</a>
+      <span class="font-semibold text-cabuya-secondary select-none" aria-hidden="true">/</span>
+      <span class="truncate font-normal text-cabuya-secondary" aria-current="page">{localizedTitle}</span>
     </nav>
 
     <div class="main-container">
@@ -92,7 +92,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <div class="main-container mt-8 flex gap-4">
       <a
         href={`${prefix}/blog/series/`}
-        class="inline-flex items-center gap-2 text-sm text-corag-secondary hover:text-corag-primary transition-colors"
+        class="inline-flex items-center gap-2 text-sm text-cabuya-secondary hover:text-cabuya-primary transition-colors"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -101,7 +101,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       </a>
       <a
         href={`${prefix}/blog/`}
-        class="inline-flex items-center gap-2 text-sm text-corag-secondary hover:text-corag-primary transition-colors"
+        class="inline-flex items-center gap-2 text-sm text-cabuya-secondary hover:text-cabuya-primary transition-colors"
       >
         {t.seriesPage.backToBlog}
       </a>

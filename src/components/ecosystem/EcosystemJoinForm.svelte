@@ -111,24 +111,24 @@ async function handleSubmit(event) {
 
 {#if formState === 'success'}
   <div
-    class="rounded-2xl border border-corag-border bg-corag-primary-soft/40 p-6 sm:p-8"
+    class="rounded-2xl border border-cabuya-border bg-cabuya-primary-soft/40 p-6 sm:p-8"
     role="status"
   >
-    <p class="text-lg font-semibold text-corag">{f.successTitle}</p>
-    <p class="mt-2 text-sm leading-relaxed text-corag-secondary">{f.successBody}</p>
+    <p class="text-lg font-semibold text-cabuya">{f.successTitle}</p>
+    <p class="mt-2 text-sm leading-relaxed text-cabuya-secondary">{f.successBody}</p>
   </div>
 {:else}
   <form class="relative space-y-5" on:submit={handleSubmit} novalidate>
-    <p class="text-sm text-corag-secondary">{f.disclaimer}</p>
+    <p class="text-sm text-cabuya-secondary">{f.disclaimer}</p>
 
     <div class="grid gap-5 sm:grid-cols-2">
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-app-name"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-app-name"
           >{f.appName}</label
         >
         <input
           id="eco-app-name"
-          class="w-full min-h-[44px] rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full min-h-[44px] rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.appName)}
           aria-invalid={errors.appName ? 'true' : undefined}
           bind:value={appName}
@@ -142,7 +142,7 @@ async function handleSubmit(event) {
       </div>
 
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-app-url"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-app-url"
           >{f.appUrl}</label
         >
         <input
@@ -150,7 +150,7 @@ async function handleSubmit(event) {
           type="url"
           inputmode="url"
           placeholder="https://"
-          class="w-full min-h-[44px] rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full min-h-[44px] rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.appUrl)}
           aria-invalid={errors.appUrl ? 'true' : undefined}
           bind:value={appUrl}
@@ -163,13 +163,13 @@ async function handleSubmit(event) {
       </div>
 
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-what"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-what"
           >{f.what}</label
         >
         <textarea
           id="eco-what"
           rows="3"
-          class="w-full rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.what)}
           aria-invalid={errors.what ? 'true' : undefined}
           bind:value={what}
@@ -182,13 +182,13 @@ async function handleSubmit(event) {
       </div>
 
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-how"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-how"
           >{f.how}</label
         >
         <textarea
           id="eco-how"
           rows="3"
-          class="w-full rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.how)}
           aria-invalid={errors.how ? 'true' : undefined}
           bind:value={how}
@@ -201,12 +201,12 @@ async function handleSubmit(event) {
       </div>
 
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-category"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-category"
           >{f.category}</label
         >
         <select
           id="eco-category"
-          class="w-full min-h-[44px] rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full min-h-[44px] rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.category)}
           aria-invalid={errors.category ? 'true' : undefined}
           bind:value={category}
@@ -224,12 +224,12 @@ async function handleSubmit(event) {
       </div>
 
       <div>
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-name"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-name"
           >{f.contactName}</label
         >
         <input
           id="eco-name"
-          class="w-full min-h-[44px] rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full min-h-[44px] rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.name)}
           aria-invalid={errors.name ? 'true' : undefined}
           bind:value={name}
@@ -243,13 +243,13 @@ async function handleSubmit(event) {
       </div>
 
       <div>
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-email"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-email"
           >{f.contactEmail}</label
         >
         <input
           id="eco-email"
           type="email"
-          class="w-full min-h-[44px] rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full min-h-[44px] rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           class:border-red-600={Boolean(errors.email)}
           aria-invalid={errors.email ? 'true' : undefined}
           bind:value={email}
@@ -263,13 +263,13 @@ async function handleSubmit(event) {
       </div>
 
       <div class="sm:col-span-2">
-        <label class="mb-2 block text-sm font-medium text-corag-secondary" for="eco-notes"
+        <label class="mb-2 block text-sm font-medium text-cabuya-secondary" for="eco-notes"
           >{f.notes}</label
         >
         <textarea
           id="eco-notes"
           rows="2"
-          class="w-full rounded-xl border border-corag-border bg-corag-bg-elevated px-4 py-3 text-base text-corag outline-none transition focus:border-corag-primary focus:ring-2 focus:ring-corag-primary/30"
+          class="w-full rounded-xl border border-cabuya-border bg-cabuya-bg-elevated px-4 py-3 text-base text-cabuya outline-none transition focus:border-cabuya-primary focus:ring-2 focus:ring-cabuya-primary/30"
           bind:value={notes}
         ></textarea>
       </div>
@@ -286,7 +286,7 @@ async function handleSubmit(event) {
 
     <button
       type="submit"
-      class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-corag-fill px-8 text-base font-semibold text-corag-on-fill transition hover:bg-corag-fill-strong disabled:opacity-60"
+      class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-cabuya-fill px-8 text-base font-semibold text-cabuya-on-fill transition hover:bg-cabuya-fill-strong disabled:opacity-60"
       disabled={formState === 'submitting'}
     >
       {formState === 'submitting' ? f.submitting : f.submit}

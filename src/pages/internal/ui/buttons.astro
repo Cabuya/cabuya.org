@@ -4,12 +4,12 @@ import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
 const variants = [
   {
     name: 'Primary',
-    classes: 'bg-corag-bg-dark text-white hover:bg-corag-bg-dark/80',
+    classes: 'bg-cabuya-bg-dark text-white hover:bg-cabuya-bg-dark/80',
     usage: 'Main actions, form submit',
   },
   {
     name: 'Secondary',
-    classes: 'bg-corag-fill text-white hover:bg-corag-fill/90',
+    classes: 'bg-cabuya-fill text-white hover:bg-cabuya-fill/90',
     usage: 'CTAs, accent actions',
   },
   {
@@ -37,7 +37,7 @@ const states = [
   { name: 'Disabled', extra: 'opacity-50 cursor-not-allowed' },
   {
     name: 'Focus',
-    extra: 'ring-2 ring-corag-primary ring-offset-2 dark:ring-offset-gray-900',
+    extra: 'ring-2 ring-cabuya-primary ring-offset-2 dark:ring-offset-gray-900',
   },
 ];
 ---
@@ -65,7 +65,7 @@ const states = [
     <div class="flex items-end gap-4 flex-wrap">
       {sizes.map((s) => (
         <div class="text-center">
-          <button type="button" class:list={['rounded-lg font-medium bg-corag-bg-dark text-white hover:bg-corag-bg-dark/80 transition-colors duration-200', s.classes]}>
+          <button type="button" class:list={['rounded-lg font-medium bg-cabuya-bg-dark text-white hover:bg-cabuya-bg-dark/80 transition-colors duration-200', s.classes]}>
             {s.name}
           </button>
           <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">{s.classes}</div>
@@ -83,7 +83,7 @@ const states = [
           <button
             type="button"
             disabled={s.name === 'Disabled'}
-            class:list={['rounded-lg font-medium px-4 py-2 text-sm bg-corag-bg-dark text-white transition-colors duration-200', s.extra]}
+            class:list={['rounded-lg font-medium px-4 py-2 text-sm bg-cabuya-bg-dark text-white transition-colors duration-200', s.extra]}
           >
             {s.name}
           </button>
@@ -99,10 +99,10 @@ const states = [
       Navigation actions use <code class="text-xs">&lt;a&gt;</code> styled as buttons.
     </p>
     <div class="flex gap-4 flex-wrap">
-      <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-corag-fill text-white text-sm font-medium hover:bg-corag-fill/90 transition-colors duration-200">
+      <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cabuya-fill text-white text-sm font-medium hover:bg-cabuya-fill/90 transition-colors duration-200">
         Link Button
       </a>
-      <a href="#" class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-corag-fill text-white font-semibold hover:bg-corag-fill/90 transition-colors shadow-lg hover:shadow-xl">
+      <a href="#" class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-cabuya-fill text-white font-semibold hover:bg-cabuya-fill/90 transition-colors shadow-lg hover:shadow-xl">
         CTA Pill Button
       </a>
     </div>
@@ -137,12 +137,12 @@ const states = [
         Show code
       </summary>
       <pre class="p-4 text-xs overflow-x-auto bg-gray-50 dark:bg-gray-800"><code>&lt;!-- Primary button --&gt;
-&lt;button class="rounded-lg font-medium px-4 py-2 text-sm bg-corag-bg-dark text-white hover:bg-corag-bg-dark/80 transition-colors"&gt;
+&lt;button class="rounded-lg font-medium px-4 py-2 text-sm bg-cabuya-bg-dark text-white hover:bg-cabuya-bg-dark/80 transition-colors"&gt;
   Save
 &lt;/button&gt;
 
 &lt;!-- CTA pill button (link) --&gt;
-&lt;a href="/contact" class="px-8 py-3 rounded-full bg-corag-fill text-white font-semibold hover:bg-corag-fill/90 shadow-lg hover:shadow-xl transition-colors"&gt;
+&lt;a href="/contact" class="px-8 py-3 rounded-full bg-cabuya-fill text-white font-semibold hover:bg-cabuya-fill/90 shadow-lg hover:shadow-xl transition-colors"&gt;
   Get in Touch
 &lt;/a&gt;
 

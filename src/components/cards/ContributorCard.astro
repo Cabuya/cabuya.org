@@ -52,12 +52,12 @@ const portraitAlt =
   class:list={[
     'group flex h-full flex-col items-center rounded-2xl p-6 text-center transition motion-reduce:transition-none',
     muted
-      ? 'bg-corag-bg-elevated/80 shadow-none ring-1 ring-corag-border/70 hover:ring-corag-border dark:bg-corag-bg-dark/40'
-      : 'bg-corag-bg-elevated shadow-sm ring-1 ring-corag-border hover:shadow-lg hover:ring-corag-primary/30',
+      ? 'bg-cabuya-bg-elevated/80 shadow-none ring-1 ring-cabuya-border/70 hover:ring-cabuya-border dark:bg-cabuya-bg-dark/40'
+      : 'bg-cabuya-bg-elevated shadow-sm ring-1 ring-cabuya-border hover:shadow-lg hover:ring-cabuya-primary/30',
   ]}
 >
   <div
-    class="relative h-24 w-24 overflow-hidden rounded-full bg-gradient-to-br from-corag-primary/20 to-corag-bg-dark/20 ring-2 ring-corag-bg-elevated shadow-sm"
+    class="relative h-24 w-24 overflow-hidden rounded-full bg-gradient-to-br from-cabuya-primary/20 to-cabuya-bg-dark/20 ring-2 ring-cabuya-bg-elevated shadow-sm"
   >
     <img
       decoding="async"
@@ -69,20 +69,20 @@ const portraitAlt =
       class="h-full w-full object-cover"
     />
   </div>
-  <h3 class="mt-4 text-base font-semibold text-corag">
+  <h3 class="mt-4 text-base font-semibold text-cabuya">
     {contributor.data.name}
   </h3>
-  <p class="mt-1 text-sm font-medium text-corag-primary dark:text-corag-primary-light">
+  <p class="mt-1 text-sm font-medium text-cabuya-primary dark:text-cabuya-primary-light">
     {role}
   </p>
-  <p class="mt-2 text-xs text-corag-secondary line-clamp-3">
+  <p class="mt-2 text-xs text-cabuya-secondary line-clamp-3">
     {bio}
   </p>
   {
     displayRoles.length > 1 && (
       <ul class="mt-3 flex flex-wrap justify-center gap-1.5">
         {displayRoles.map((r) => (
-          <li class="inline-flex items-center rounded-full bg-corag-primary-soft px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-corag-secondary">
+          <li class="inline-flex items-center rounded-full bg-cabuya-primary-soft px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-cabuya-secondary">
             {roleLabels[r]?.[lang] ?? r}
           </li>
         ))}
@@ -91,14 +91,14 @@ const portraitAlt =
   }
   {
     Object.keys(social).length > 0 && (
-      <ul class="mt-4 flex gap-3 text-corag-secondary">
+      <ul class="mt-4 flex gap-3 text-cabuya-secondary">
         {social.github && (
           <li>
             <a
               href={social.github}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-corag-primary dark:hover:text-corag-primary-light"
+              class="hover:text-cabuya-primary dark:hover:text-cabuya-primary-light"
               aria-label={`${contributor.data.name} · GitHub`}
             >
               <svg aria-hidden="true" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@ const portraitAlt =
               href={social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-corag-primary dark:hover:text-corag-primary-light"
+              class="hover:text-cabuya-primary dark:hover:text-cabuya-primary-light"
               aria-label={`${contributor.data.name} · LinkedIn`}
             >
               <svg aria-hidden="true" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -128,7 +128,7 @@ const portraitAlt =
               href={social.x}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-corag-primary dark:hover:text-corag-primary-light"
+              class="hover:text-cabuya-primary dark:hover:text-cabuya-primary-light"
               aria-label={`${contributor.data.name} · X`}
             >
               <svg aria-hidden="true" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ const portraitAlt =
               href={social.website}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-corag-primary dark:hover:text-corag-primary-light"
+              class="hover:text-cabuya-primary dark:hover:text-cabuya-primary-light"
               aria-label={
                 lang === 'es'
                   ? `Sitio web de ${contributor.data.name}`

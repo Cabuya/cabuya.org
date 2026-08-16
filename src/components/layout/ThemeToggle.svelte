@@ -37,17 +37,17 @@ function toggleTheme() {
 
 <button
   type="button"
-  class="theme-toggle group inline-flex cursor-pointer items-center justify-center transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary
+  class="theme-toggle group inline-flex cursor-pointer items-center justify-center transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary
     {placement === 'header'
-      ? 'relative h-6 w-6 shrink-0 p-0 text-corag hover:text-corag-primary dark:text-white dark:hover:text-white/85 after:absolute after:-inset-2.5 after:content-[\'\']'
-      : 'min-h-[44px] gap-2.5 rounded-full border border-corag-border px-4 py-2 text-base text-corag hover:border-corag-primary dark:border-white/20 dark:text-white'}"
+      ? 'relative h-6 w-6 shrink-0 p-0 text-cabuya hover:text-cabuya-primary dark:text-white dark:hover:text-white/85 after:absolute after:-inset-2.5 after:content-[\'\']'
+      : 'min-h-[44px] gap-2.5 rounded-full border border-cabuya-border px-4 py-2 text-base text-cabuya hover:border-cabuya-primary dark:border-white/20 dark:text-white'}"
   aria-label={ariaLabel}
   aria-pressed={isDark}
   on:click={toggleTheme}
 >
   {#if isDark}
     <svg
-      class="theme-toggle-icon h-5 w-5 text-corag-accent"
+      class="theme-toggle-icon h-5 w-5 text-cabuya-accent"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -62,7 +62,7 @@ function toggleTheme() {
     </svg>
   {:else}
     <svg
-      class="theme-toggle-icon h-5 w-5 text-corag-primary"
+      class="theme-toggle-icon h-5 w-5 text-cabuya-primary"
       viewBox="0 0 24 24"
       fill="currentColor"
       aria-hidden="true"

@@ -50,12 +50,12 @@ const gridPatterns = [
       The standard page structure uses a full-height flex column:
     </p>
     <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div class="bg-corag-bg-dark text-white p-3 text-sm text-center font-medium">Header (fixed)</div>
-      <div class="bg-corag-fill/10 p-2 text-center text-xs">
+      <div class="bg-cabuya-bg-dark text-white p-3 text-sm text-center font-medium">Header (fixed)</div>
+      <div class="bg-cabuya-fill/10 p-2 text-center text-xs">
         <code class="text-xs">flex flex-col min-h-screen</code>
       </div>
       <div class="p-6 border-t border-b border-gray-200 dark:border-gray-700">
-        <div class="border-2 border-dashed border-corag-primary/30 rounded-lg p-4 text-center">
+        <div class="border-2 border-dashed border-cabuya-primary/30 rounded-lg p-4 text-center">
           <div class="text-sm font-medium mb-1">Main Content</div>
           <code class="text-xs text-gray-600 dark:text-gray-300">flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8</code>
         </div>
@@ -75,7 +75,7 @@ const gridPatterns = [
             <span class="text-xs text-gray-600 dark:text-gray-300">{c.value}</span>
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-300">{c.usage}</p>
-          <div class="mt-3 bg-corag-fill/10 dark:bg-corag-fill/20 rounded h-4 border border-corag-primary/30" style={`max-width: ${c.value.split(' / ')[0]}`} />
+          <div class="mt-3 bg-cabuya-fill/10 dark:bg-cabuya-fill/20 rounded h-4 border border-cabuya-primary/30" style={`max-width: ${c.value.split(' / ')[0]}`} />
         </div>
       ))}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
@@ -100,7 +100,7 @@ const gridPatterns = [
           </div>
           <div class={g.classes}>
             {Array.from({ length: g.name === '4-Column' ? 4 : g.name === '3-Column' ? 3 : 2 }).map((_, i) => (
-              <div class="rounded-lg bg-corag-fill/10 dark:bg-corag-fill/20 border border-corag-primary/30 p-4 text-center text-sm text-gray-600 dark:text-gray-300">
+              <div class="rounded-lg bg-cabuya-fill/10 dark:bg-cabuya-fill/20 border border-cabuya-primary/30 p-4 text-center text-sm text-gray-600 dark:text-gray-300">
                 Cell {i + 1}
               </div>
             ))}
@@ -153,15 +153,15 @@ const gridPatterns = [
       <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-center text-sm">
         <code class="text-xs">mb-8 sm:mb-10</code> — Page header
       </div>
-      <div class="h-8 sm:h-10 border-l-2 border-dashed border-corag-primary/40 ml-6" />
+      <div class="h-8 sm:h-10 border-l-2 border-dashed border-cabuya-primary/40 ml-6" />
       <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-center text-sm">
         <code class="text-xs">mb-12</code> — Section 1
       </div>
-      <div class="h-12 border-l-2 border-dashed border-corag-primary/40 ml-6" />
+      <div class="h-12 border-l-2 border-dashed border-cabuya-primary/40 ml-6" />
       <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-center text-sm">
         <code class="text-xs">mb-12</code> — Section 2
       </div>
-      <div class="h-12 border-l-2 border-dashed border-corag-primary/40 ml-6" />
+      <div class="h-12 border-l-2 border-dashed border-cabuya-primary/40 ml-6" />
       <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-center text-sm">
         <code class="text-xs">mt-12 pt-6</code> — Footer separator
       </div>

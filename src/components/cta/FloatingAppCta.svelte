@@ -194,13 +194,13 @@ $: shown = visible && !dismissed && !suppressed;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: var(--color-corag-bg-elevated);
-    border: 1px solid var(--color-corag-border);
+    background: var(--color-cabuya-bg-elevated);
+    border: 1px solid var(--color-cabuya-border);
     box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.35);
   }
 
   .floating-cta__lead {
-    color: var(--color-corag-secondary);
+    color: var(--color-cabuya-secondary);
     font-size: 0.875rem;
     line-height: 1.35;
   }
@@ -213,20 +213,20 @@ $: shown = visible && !dismissed && !suppressed;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    background: var(--color-corag-fill);
-    color: var(--color-corag-on-fill);
+    background: var(--color-cabuya-fill);
+    color: var(--color-cabuya-on-fill);
     font-weight: 600;
     white-space: nowrap;
     transition: background-color 150ms ease;
   }
 
   .floating-cta__action:hover {
-    background: var(--color-corag-fill-strong);
+    background: var(--color-cabuya-fill-strong);
   }
 
   .floating-cta__action:focus-visible,
   .floating-cta__dismiss:focus-visible {
-    outline: 2px solid var(--color-corag-primary);
+    outline: 2px solid var(--color-cabuya-primary);
     outline-offset: 2px;
   }
 
@@ -244,12 +244,12 @@ $: shown = visible && !dismissed && !suppressed;
     width: 32px;
     height: 32px;
     border-radius: 9999px;
-    color: var(--color-corag-secondary);
+    color: var(--color-cabuya-secondary);
     cursor: pointer;
   }
 
   .floating-cta__dismiss:hover {
-    background: var(--color-corag-primary-soft);
+    background: var(--color-cabuya-primary-soft);
   }
 
   .floating-cta__dismiss svg {
@@ -269,8 +269,8 @@ $: shown = visible && !dismissed && !suppressed;
       bottom: 0;
       transform: translateY(0.5rem);
       padding-bottom: env(safe-area-inset-bottom);
-      background: var(--color-corag-bg-elevated);
-      border-top: 1px solid var(--color-corag-border);
+      background: var(--color-cabuya-bg-elevated);
+      border-top: 1px solid var(--color-cabuya-border);
     }
 
     .floating-cta.is-shown {

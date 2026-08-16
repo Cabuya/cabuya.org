@@ -67,18 +67,18 @@ const breadcrumbs = [
 ---
 
 <MainLayout lang={lang} title={t.title} description={t.description}>
-  <div class="bg-corag-bg">
+  <div class="bg-cabuya-bg">
     <div class="main-container pt-12 sm:pt-16 pb-4">
       <Breadcrumbs items={breadcrumbs} />
     </div>
     <div class="main-container pt-6 pb-12">
       <Eyebrow>{lang === 'es' ? 'Conecta' : 'Connect'}</Eyebrow>
       <h1
-        class="mt-3 text-4xl sm:text-5xl font-bold tracking-tight text-corag"
+        class="mt-3 text-4xl sm:text-5xl font-bold tracking-tight text-cabuya"
       >
         {t.title}
       </h1>
-      <p class="mt-4 max-w-3xl text-lg text-corag-secondary">
+      <p class="mt-4 max-w-3xl text-lg text-cabuya-secondary">
         {t.intro}
       </p>
     </div>
@@ -89,12 +89,12 @@ const breadcrumbs = [
       <Section title={t.primaryHeading}>
         <ul class="grid gap-6 sm:grid-cols-2 list-none">
           {primary.map((c) => (
-            <li class="flex h-full min-w-0 flex-col rounded-2xl bg-corag-bg-elevated ring-2 ring-corag-primary dark:ring-corag-primary-light p-4 sm:p-6 shadow-sm">
+            <li class="flex h-full min-w-0 flex-col rounded-2xl bg-cabuya-bg-elevated ring-2 ring-cabuya-primary dark:ring-cabuya-primary-light p-4 sm:p-6 shadow-sm">
               <div class="flex flex-wrap items-center justify-between gap-3">
-                <h3 class="flex items-center gap-3 text-xl font-bold text-corag">
+                <h3 class="flex items-center gap-3 text-xl font-bold text-cabuya">
                   {channelIconPath(c.data.platform) && (
                     <span
-                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-corag-primary-soft text-corag-primary dark:text-corag-primary-light"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cabuya-primary-soft text-cabuya-primary dark:text-cabuya-primary-light"
                       aria-hidden="true"
                     >
                       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -104,24 +104,24 @@ const breadcrumbs = [
                   )}
                   {c.data.name}
                 </h3>
-                <span class="inline-flex items-center rounded-full bg-corag-fill px-3 py-1 text-xs font-semibold uppercase tracking-wider text-corag-on-fill dark:bg-corag-primary-light dark:text-corag-bg-dark">
+                <span class="inline-flex items-center rounded-full bg-cabuya-fill px-3 py-1 text-xs font-semibold uppercase tracking-wider text-cabuya-on-fill dark:bg-cabuya-primary-light dark:text-cabuya-bg-dark">
                   {t.primaryBadge}
                 </span>
               </div>
-              <p class="mt-1 text-sm font-medium text-corag-primary dark:text-corag-primary-light">
+              <p class="mt-1 text-sm font-medium text-cabuya-primary dark:text-cabuya-primary-light">
                 {platformLabel[c.data.platform] ?? c.data.platform}
               </p>
-              <p class="mt-3 text-sm text-corag-secondary">
+              <p class="mt-3 text-sm text-cabuya-secondary">
                 {tr(c.data.description, lang)}
               </p>
-              <p class="mt-2 text-sm italic text-corag-secondary">
+              <p class="mt-2 text-sm italic text-cabuya-secondary">
                 {tr(c.data.audience, lang)}
               </p>
               <a
                 href={c.data.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="mt-4 inline-flex min-h-[24px] items-center gap-1.5 text-sm font-semibold text-corag-primary dark:text-corag-primary-light hover:underline"
+                class="mt-4 inline-flex min-h-[24px] items-center gap-1.5 text-sm font-semibold text-cabuya-primary dark:text-cabuya-primary-light hover:underline"
               >
                 {t.visitLabel}
                 <span aria-hidden="true">→</span>
@@ -138,11 +138,11 @@ const breadcrumbs = [
       <Section title={t.otherHeading} surface="alt">
         <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none">
           {secondary.map((c) => (
-            <li class="flex h-full min-w-0 flex-col rounded-2xl bg-corag-bg-elevated ring-1 ring-corag-border p-4 sm:p-6">
-              <h3 class="flex items-center gap-2.5 text-lg font-semibold text-corag">
+            <li class="flex h-full min-w-0 flex-col rounded-2xl bg-cabuya-bg-elevated ring-1 ring-cabuya-border p-4 sm:p-6">
+              <h3 class="flex items-center gap-2.5 text-lg font-semibold text-cabuya">
                 {channelIconPath(c.data.platform) && (
                   <span
-                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-corag-primary-soft text-corag-primary dark:text-corag-primary-light"
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cabuya-primary-soft text-cabuya-primary dark:text-cabuya-primary-light"
                     aria-hidden="true"
                   >
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -152,20 +152,20 @@ const breadcrumbs = [
                 )}
                 {c.data.name}
               </h3>
-              <p class="mt-1 text-sm font-semibold uppercase tracking-wider text-corag-primary dark:text-corag-primary-light">
+              <p class="mt-1 text-sm font-semibold uppercase tracking-wider text-cabuya-primary dark:text-cabuya-primary-light">
                 {platformLabel[c.data.platform] ?? c.data.platform}
               </p>
-              <p class="mt-3 text-sm text-corag-secondary">
+              <p class="mt-3 text-sm text-cabuya-secondary">
                 {tr(c.data.description, lang)}
               </p>
-              <p class="mt-2 text-sm italic text-corag-secondary">
+              <p class="mt-2 text-sm italic text-cabuya-secondary">
                 {tr(c.data.audience, lang)}
               </p>
               <a
                 href={c.data.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="mt-4 inline-flex min-h-[24px] items-center gap-1.5 text-sm font-semibold text-corag-primary dark:text-corag-primary-light hover:underline"
+                class="mt-4 inline-flex min-h-[24px] items-center gap-1.5 text-sm font-semibold text-cabuya-primary dark:text-cabuya-primary-light hover:underline"
               >
                 {t.visitLabel}
                 <span aria-hidden="true">→</span>

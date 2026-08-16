@@ -46,8 +46,8 @@ let submitError = '';
 let successRef;
 
 const inputClass =
-  'w-full min-h-[44px] text-base p-3 rounded-lg border border-corag-border bg-corag-bg-elevated text-corag focus:outline-none focus:ring-2 focus:ring-corag-primary/30 focus:border-corag-primary transition-colors';
-const labelClass = 'block text-sm font-medium text-corag-secondary mb-2';
+  'w-full min-h-[44px] text-base p-3 rounded-lg border border-cabuya-border bg-cabuya-bg-elevated text-cabuya focus:outline-none focus:ring-2 focus:ring-cabuya-primary/30 focus:border-cabuya-primary transition-colors';
+const labelClass = 'block text-sm font-medium text-cabuya-secondary mb-2';
 const errorClass = 'mt-1 text-sm text-red-600 dark:text-red-400';
 
 function getAllowedReasonValues() {
@@ -226,13 +226,13 @@ function resetForm() {
     aria-live="polite"
   >
     <div class="mb-4 text-5xl">✓</div>
-    <h3 class="text-2xl font-bold text-corag mb-3">
+    <h3 class="text-2xl font-bold text-cabuya mb-3">
       {t.contactPage.successTitle}
     </h3>
-    <p class="text-corag-secondary mb-2">
+    <p class="text-cabuya-secondary mb-2">
       {t.contactPage.successMessage}
     </p>
-    <p class="text-corag-secondary mb-6 text-sm">
+    <p class="text-cabuya-secondary mb-6 text-sm">
       {t.contactPage.successNextSteps[reason] ||
         t.contactPage.successNextSteps.general ||
         t.contactPage.formNote}
@@ -240,7 +240,7 @@ function resetForm() {
     <button
       type="button"
       on:click={resetForm}
-      class="px-6 py-2 rounded-full border border-corag-primary text-corag-primary font-semibold hover:bg-corag-fill hover:text-corag-on-fill transition-colors"
+      class="px-6 py-2 rounded-full border border-cabuya-primary text-cabuya-primary font-semibold hover:bg-cabuya-fill hover:text-cabuya-on-fill transition-colors"
     >
       {t.contactPage.sendAnotherButton}
     </button>
@@ -397,7 +397,7 @@ function resetForm() {
       <button
         type="submit"
         disabled={formState === 'submitting'}
-        class="px-8 py-3 bg-corag-fill text-corag-on-fill font-semibold rounded-full hover:bg-corag-fill-strong transition-colors shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
+        class="px-8 py-3 bg-cabuya-fill text-cabuya-on-fill font-semibold rounded-full hover:bg-cabuya-fill-strong transition-colors shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {#if formState === 'submitting'}
           {t.contactPage.sendingButton}
@@ -405,7 +405,7 @@ function resetForm() {
           {t.contactPage.sendButton}
         {/if}
       </button>
-      <p class="mt-3 text-sm text-corag-secondary">
+      <p class="mt-3 text-sm text-cabuya-secondary">
         {t.contactPage.formNote}
       </p>
     </div>

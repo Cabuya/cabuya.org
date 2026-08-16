@@ -23,15 +23,15 @@ $: basePrefix = getUrlPrefix(lang);
   </div>
 {:else}
   <div class="text-center py-12">
-    <p class="text-corag-secondary text-lg">
+    <p class="text-cabuya-secondary text-lg">
       {t.noResults(searchQuery)}
     </p>
-    <p class="mt-2 text-sm text-corag-secondary">
+    <p class="mt-2 text-sm text-cabuya-secondary">
       {t.noResultsSuggestion}
     </p>
     <a
       href={`${basePrefix}/blog/`}
-      class="mt-4 inline-flex rounded-full bg-corag-fill px-4 py-2 text-sm font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong"
+      class="mt-4 inline-flex rounded-full bg-cabuya-fill px-4 py-2 text-sm font-semibold text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong"
     >
       {t.allPosts}
     </a>

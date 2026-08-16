@@ -52,9 +52,9 @@ const subtopicAccentByName = await getSubtopicAccentMap();
         />
       </div>
     )}
-    <div class="mt-6 text-corag">
-      <div class="mb-6 border-b border-corag-border py-4 text-center">
-        <div class="mb-3 flex flex-wrap items-center justify-center gap-3 text-sm text-corag-secondary">
+    <div class="mt-6 text-cabuya">
+      <div class="mb-6 border-b border-cabuya-border py-4 text-center">
+        <div class="mb-3 flex flex-wrap items-center justify-center gap-3 text-sm text-cabuya-secondary">
           <FormattedDate date={pubDate} lang={lang} />
           <span aria-hidden="true">•</span>
           <span>{t.readingTime(readingTimeMinutes)}</span>
@@ -66,7 +66,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {tags.map((tag) => (
               <a
                 href={`${langPrefix}/blog/tag/${tag}/`}
-                class="rounded bg-corag-primary-soft px-3 py-1 text-sm text-corag-primary transition-colors hover:bg-corag-primary/15"
+                class="rounded bg-cabuya-primary-soft px-3 py-1 text-sm text-cabuya-primary transition-colors hover:bg-cabuya-primary/15"
               >
                 #{t.tagNames[tag] || tag}
               </a>
@@ -78,7 +78,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {topics.map((topic) => (
               <a
                 href={`${langPrefix}/blog/tag/${topic}/`}
-                class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+                class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
               >
                 {t.tagNames[topic] || topic}
               </a>
@@ -90,9 +90,9 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {subtopics.map((sub) => (
               <a
                 href={`${langPrefix}/blog/tag/${sub}/`}
-                class="inline-flex items-center rounded bg-corag-bg-elevated px-2 py-1 text-xs text-corag-secondary border border-dashed border-corag-border transition-colors hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag"
+                class="inline-flex items-center rounded bg-cabuya-bg-elevated px-2 py-1 text-xs text-cabuya-secondary border border-dashed border-cabuya-border transition-colors hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya"
               >
-                <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-corag-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+                <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-cabuya-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
               </a>
             ))}
           </div>
@@ -106,8 +106,8 @@ const subtopicAccentByName = await getSubtopicAccentMap();
 {heroLayout === 'side-by-side' && (
   <div>
     <div class="mb-6 grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-      <div class="text-corag">
-        <div class="mb-3 flex flex-wrap items-center gap-3 text-sm text-corag-secondary">
+      <div class="text-cabuya">
+        <div class="mb-3 flex flex-wrap items-center gap-3 text-sm text-cabuya-secondary">
           <FormattedDate date={pubDate} lang={lang} />
           <span aria-hidden="true">•</span>
           <span>{t.readingTime(readingTimeMinutes)}</span>
@@ -119,7 +119,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {tags.map((tag) => (
               <a
                 href={`${langPrefix}/blog/tag/${tag}/`}
-                class="rounded bg-corag-primary-soft px-3 py-1 text-sm text-corag-primary transition-colors hover:bg-corag-primary/15"
+                class="rounded bg-cabuya-primary-soft px-3 py-1 text-sm text-cabuya-primary transition-colors hover:bg-cabuya-primary/15"
               >
                 #{t.tagNames[tag] || tag}
               </a>
@@ -131,7 +131,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {topics.map((topic) => (
               <a
                 href={`${langPrefix}/blog/tag/${topic}/`}
-                class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+                class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
               >
                 {t.tagNames[topic] || topic}
               </a>
@@ -143,9 +143,9 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             {subtopics.map((sub) => (
               <a
                 href={`${langPrefix}/blog/tag/${sub}/`}
-                class="inline-flex items-center rounded bg-corag-bg-elevated px-2 py-1 text-xs text-corag-secondary border border-dashed border-corag-border transition-colors hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag"
+                class="inline-flex items-center rounded bg-cabuya-bg-elevated px-2 py-1 text-xs text-cabuya-secondary border border-dashed border-cabuya-border transition-colors hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya"
               >
-                <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-corag-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+                <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-cabuya-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
               </a>
             ))}
           </div>
@@ -164,14 +164,14 @@ const subtopicAccentByName = await getSubtopicAccentMap();
         </div>
       )}
     </div>
-    <div class="mb-6 border-b border-corag-border" />
+    <div class="mb-6 border-b border-cabuya-border" />
   </div>
 )}
 
 {/* Minimal layout: Small thumbnail with text-focused design */}
 {heroLayout === 'minimal' && (
   <div>
-    <div class="mb-6 border-b border-corag-border pb-6">
+    <div class="mb-6 border-b border-cabuya-border pb-6">
       <div class="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
         {heroImage && (
           <BlogHeroImage
@@ -183,8 +183,8 @@ const subtopicAccentByName = await getSubtopicAccentMap();
             loading="eager"
           />
         )}
-        <div class="text-corag">
-          <div class="mb-2 flex flex-wrap items-center gap-3 text-sm text-corag-secondary">
+        <div class="text-cabuya">
+          <div class="mb-2 flex flex-wrap items-center gap-3 text-sm text-cabuya-secondary">
             <FormattedDate date={pubDate} lang={lang} />
             <span aria-hidden="true">•</span>
             <span>{t.readingTime(readingTimeMinutes)}</span>
@@ -196,7 +196,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
               {tags.map((tag) => (
                 <a
                   href={`${langPrefix}/blog/tag/${tag}/`}
-                  class="rounded bg-corag-primary-soft px-3 py-1 text-sm text-corag-primary transition-colors hover:bg-corag-primary/15"
+                  class="rounded bg-cabuya-primary-soft px-3 py-1 text-sm text-cabuya-primary transition-colors hover:bg-cabuya-primary/15"
                 >
                   #{t.tagNames[tag] || tag}
                 </a>
@@ -208,7 +208,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
               {topics.map((topic) => (
                 <a
                   href={`${langPrefix}/blog/tag/${topic}/`}
-                  class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+                  class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
                 >
                   {t.tagNames[topic] || topic}
                 </a>
@@ -220,7 +220,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
               {subtopics.map((sub) => (
                 <a
                   href={`${langPrefix}/blog/tag/${sub}/`}
-                  class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+                  class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
                 >
                   {t.tagNames[sub] || sub}
                 </a>
@@ -235,9 +235,9 @@ const subtopicAccentByName = await getSubtopicAccentMap();
 
 {/* None layout: No hero image, just title and metadata */}
 {heroLayout === 'none' && (
-  <div class="text-corag">
-    <div class="mb-6 border-b border-corag-border py-4 text-center">
-      <div class="mb-3 flex flex-wrap items-center justify-center gap-3 text-sm text-corag-secondary">
+  <div class="text-cabuya">
+    <div class="mb-6 border-b border-cabuya-border py-4 text-center">
+      <div class="mb-3 flex flex-wrap items-center justify-center gap-3 text-sm text-cabuya-secondary">
         <FormattedDate date={pubDate} lang={lang} />
         <span aria-hidden="true">•</span>
         <span>{t.readingTime(readingTimeMinutes)}</span>
@@ -249,7 +249,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
           {tags.map((tag) => (
             <a
               href={`${langPrefix}/blog/tag/${tag}/`}
-              class="rounded bg-corag-primary-soft px-3 py-1 text-sm text-corag-primary transition-colors hover:bg-corag-primary/15"
+              class="rounded bg-cabuya-primary-soft px-3 py-1 text-sm text-cabuya-primary transition-colors hover:bg-cabuya-primary/15"
             >
               #{t.tagNames[tag] || tag}
             </a>
@@ -261,7 +261,7 @@ const subtopicAccentByName = await getSubtopicAccentMap();
           {topics.map((topic) => (
             <a
               href={`${langPrefix}/blog/tag/${topic}/`}
-              class="rounded border border-corag-border bg-corag-bg-elevated px-2 py-0.5 text-xs text-corag-secondary transition-colors hover:border-corag-border-strong hover:text-corag"
+              class="rounded border border-cabuya-border bg-cabuya-bg-elevated px-2 py-0.5 text-xs text-cabuya-secondary transition-colors hover:border-cabuya-border-strong hover:text-cabuya"
             >
               {t.tagNames[topic] || topic}
             </a>
@@ -273,9 +273,9 @@ const subtopicAccentByName = await getSubtopicAccentMap();
           {subtopics.map((sub) => (
             <a
               href={`${langPrefix}/blog/tag/${sub}/`}
-              class="inline-flex items-center rounded bg-corag-bg-elevated px-2 py-1 text-xs text-corag-secondary border border-dashed border-corag-border transition-colors hover:bg-corag-primary-soft hover:border-corag-border-strong hover:text-corag"
+              class="inline-flex items-center rounded bg-cabuya-bg-elevated px-2 py-1 text-xs text-cabuya-secondary border border-dashed border-cabuya-border transition-colors hover:bg-cabuya-primary-soft hover:border-cabuya-border-strong hover:text-cabuya"
             >
-              <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-corag-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
+              <span class={`mr-1 ${subtopicAccentByName[sub] || 'text-cabuya-secondary'}`} aria-hidden="true">›</span>{t.tagNames[sub] || sub}
             </a>
           ))}
         </div>

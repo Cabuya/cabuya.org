@@ -56,8 +56,8 @@ const lead = body ?? copy.body;
   class:list={[
     'not-prose',
     isBand
-      ? 'bg-corag-fill text-corag-on-fill'
-      : 'rounded-2xl border border-corag-border bg-corag-bg-elevated dark:border-white/10',
+      ? 'bg-cabuya-fill text-cabuya-on-fill'
+      : 'rounded-2xl border border-cabuya-border bg-cabuya-bg-elevated dark:border-white/10',
     className,
   ]}
 >
@@ -70,7 +70,7 @@ const lead = body ?? copy.body;
     <p
       class:list={[
         'text-xs font-semibold uppercase tracking-[0.2em]',
-        isBand ? 'text-corag-rosa' : 'text-corag-primary',
+        isBand ? 'text-cabuya-seedling' : 'text-cabuya-primary',
       ]}
     >
       {copy.eyebrow}
@@ -80,8 +80,8 @@ const lead = body ?? copy.body;
       class:list={[
         'mt-3 font-display font-bold tracking-tight',
         isBand
-          ? 'text-3xl text-corag-on-fill sm:text-4xl lg:text-5xl'
-          : 'text-2xl text-corag sm:text-3xl',
+          ? 'text-3xl text-cabuya-on-fill sm:text-4xl lg:text-5xl'
+          : 'text-2xl text-cabuya sm:text-3xl',
       ]}
     >
       {heading}
@@ -91,8 +91,8 @@ const lead = body ?? copy.body;
       class:list={[
         'mt-4 leading-relaxed',
         isBand
-          ? 'mx-auto max-w-2xl text-lg text-corag-rosa'
-          : 'text-base text-corag-secondary',
+          ? 'mx-auto max-w-2xl text-lg text-cabuya-seedling'
+          : 'text-base text-cabuya-secondary',
       ]}
     >
       {lead}
@@ -109,8 +109,8 @@ const lead = body ?? copy.body;
         class:list={[
           'inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
           isBand
-            ? 'bg-corag-on-fill text-corag-fill hover:bg-corag-rosa focus-visible:outline-corag-rosa'
-            : 'bg-corag-fill text-corag-on-fill hover:bg-corag-fill-strong focus-visible:outline-corag-primary',
+            ? 'bg-cabuya-on-fill text-cabuya-fill hover:bg-cabuya-seedling focus-visible:outline-cabuya-seedling'
+            : 'bg-cabuya-fill text-cabuya-on-fill hover:bg-cabuya-fill-strong focus-visible:outline-cabuya-primary',
         ]}
         data-umami-event="app_cta_click"
         data-umami-event-surface={surface}
@@ -136,8 +136,8 @@ const lead = body ?? copy.body;
         class:list={[
           'inline-flex min-h-[48px] items-center rounded-full border px-6 py-3 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
           isBand
-            ? 'border-corag-rosa/60 text-corag-rosa hover:bg-white/5 focus-visible:outline-corag-rosa'
-            : 'border-corag-border text-corag-secondary hover:bg-corag-primary-soft focus-visible:outline-corag-primary dark:border-white/20 dark:text-white/80',
+            ? 'border-cabuya-seedling/60 text-cabuya-seedling hover:bg-white/5 focus-visible:outline-cabuya-seedling'
+            : 'border-cabuya-border text-cabuya-secondary hover:bg-cabuya-primary-soft focus-visible:outline-cabuya-primary dark:border-white/20 dark:text-white/80',
         ]}
         data-umami-event="app_cta_click"
         data-umami-event-surface={`${surface}-need`}
@@ -146,14 +146,14 @@ const lead = body ?? copy.body;
       </a>
     </div>
 
-    <p class:list={['mt-6 text-sm', isBand ? 'text-corag-rosa' : 'text-corag-secondary']}>
+    <p class:list={['mt-6 text-sm', isBand ? 'text-cabuya-seedling' : 'text-cabuya-secondary']}>
       <a
         href={appUrl(APP_PATHS.evidence)}
         class:list={[
           // inline-flex + min-height so the target clears the WCAG 2.2 AA
           // floor: as a bare inline link it measured 20px tall.
           'inline-flex min-h-[44px] items-center underline underline-offset-4 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2',
-          isBand ? 'focus-visible:outline-corag-rosa' : 'focus-visible:outline-corag-primary',
+          isBand ? 'focus-visible:outline-cabuya-seedling' : 'focus-visible:outline-cabuya-primary',
         ]}
         data-umami-event="app_cta_click"
         data-umami-event-surface={`${surface}-evidence`}
