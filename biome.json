@@ -32,6 +32,8 @@
       "src/**",
       "scripts/**",
       "tests/**",
+      "packages/*/src/**",
+      "packages/*/tests/**",
       "!**/.astro",
       "!**/docs",
       "!**/dist",

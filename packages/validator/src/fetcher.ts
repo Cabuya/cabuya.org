@@ -152,8 +152,7 @@ export class HttpFetcher implements Fetcher {
         body: '',
         bytes: 0,
         elapsedMs: Date.now() - started,
-        transportError:
-          error instanceof Error ? error.message : String(error),
+        transportError: error instanceof Error ? error.message : String(error),
       };
     } finally {
       clearTimeout(timeout);

@@ -71,7 +71,11 @@ export function parseJson<T = unknown>(text: string): ParseResult<T> {
     return { ok: true, value: JSON.parse(text) as T };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    return { ok: false, error: message, location: locateParseError(text, message) };
+    return {
+      ok: false,
+      error: message,
+      location: locateParseError(text, message),
+    };
   }
 }
 

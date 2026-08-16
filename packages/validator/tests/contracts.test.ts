@@ -10,16 +10,16 @@ import {
   Engine,
   EXIT,
   exitCodeFor,
+  type Finding,
   getCheck,
   LEVELS,
   measurableLevels,
   OfflineFetcher,
+  type Pass,
   parseJson,
   pointer,
   sortFindings,
   summaryPhrase,
-  type Finding,
-  type Pass,
 } from '../src/index.js';
 
 const finding = (over: Partial<Finding> = {}): Finding => ({
@@ -68,7 +68,10 @@ describe('the check catalogue', () => {
   it('covers every family and every ladder level', () => {
     expect(new Set(CHECKS.map((c) => c.family)).size).toBeGreaterThanOrEqual(8);
     for (const level of ['L1', 'L2', 'L3', 'L4']) {
-      expect(CHECKS.some((c) => c.level === level), level).toBe(true);
+      expect(
+        CHECKS.some((c) => c.level === level),
+        level
+      ).toBe(true);
     }
   });
 
@@ -82,9 +85,19 @@ describe('deterministic ordering', () => {
   it('sorts by level, then severity, then pointer, then id', () => {
     const sorted = sortFindings([
       finding({ id: 'BEH002', level: 'L2', severity: 'error', pointer: '/z' }),
-      finding({ id: 'DSC003', level: 'L1', severity: 'warning', pointer: '/a' }),
+      finding({
+        id: 'DSC003',
+        level: 'L1',
+        severity: 'warning',
+        pointer: '/a',
+      }),
       finding({ id: 'ENV001', level: 'L2', severity: 'error', pointer: '/a' }),
-      finding({ id: 'ENV008', level: 'L2', severity: 'warning', pointer: '/a' }),
+      finding({
+        id: 'ENV008',
+        level: 'L2',
+        severity: 'warning',
+        pointer: '/a',
+      }),
     ]);
     expect(sorted.map((f) => f.id)).toEqual([
       'DSC003',
@@ -205,9 +218,9 @@ describe('degraded mode is honest by construction', () => {
   });
 
   it('the offline fetcher throws rather than reaching the network', async () => {
-    await expect(new OfflineFetcher().fetch('https://example.org')).rejects.toThrow(
-      /no-network/
-    );
+    await expect(
+      new OfflineFetcher().fetch('https://example.org')
+    ).rejects.toThrow(/no-network/);
   });
 });
 

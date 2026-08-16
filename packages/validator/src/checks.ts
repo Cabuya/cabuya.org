@@ -107,8 +107,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Manifest validates against manifest.schema.json',
     rule: 'The manifest MUST conform to its schema.',
     specAnchor: `${SPEC}/2-discovery#2-1`,
-    implemented: false,
-    plannedIn: 'Task 13 (schema pass)',
+    implemented: true,
   },
   {
     id: 'DSC006',
@@ -155,6 +154,19 @@ export const CHECKS: readonly CheckDefinition[] = [
     plannedIn: 'Task 13 (content side) + Task 15',
   },
 
+  // ── Schema (generic fallback) ───────────────────────────
+  {
+    id: 'SCH001',
+    family: 'envelope',
+    severity: 'error',
+    level: 'L2',
+    title: 'The document does not conform to its published JSON Schema',
+    rule: 'Every feed and manifest MUST validate against its versioned schema.',
+    specAnchor: `${SPEC}/3-the-feed#3-1`,
+    implemented: true,
+    plannedIn: undefined,
+  },
+
   // ── Envelope (L2) ───────────────────────────────────────
   {
     id: 'ENV001',
@@ -164,8 +176,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Envelope required fields present and well-typed',
     rule: 'last_updated, ttl, version, publisher_id and license are REQUIRED on every feed envelope.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV002',
@@ -175,8 +186,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'last_updated is RFC 3339 with a UTC offset',
     rule: 'The generation timestamp MUST be unambiguous.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV003',
@@ -186,8 +196,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'license present',
     rule: 'An unlicensed feed does not conform — absence blocks every consumer’s legal review.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV004',
@@ -197,8 +206,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'license is an SPDX id, or license_url accompanies it',
     rule: 'A machine-resolvable licence SHOULD be used.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV005',
@@ -208,8 +216,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'permitted_use present, values within the closed enum',
     rule: 'Consent-to-reuse travels in the envelope: display | aggregate | redistribute | ai_answer | ai_train.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV006',
@@ -219,8 +226,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'version is a supported spec version',
     rule: 'Supported versions span at most two MAJORs.',
     specAnchor: `${SPEC}/8-versioning-and-conformance#8-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV007',
@@ -241,8 +247,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'ttl is a positive, plausible integer (1–86400)',
     rule: 'ttl is the caching contract; implausible values break polling consumers.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV009',
@@ -252,8 +257,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Feed ≤ 5 MB and ≤ 10 000 records, or shards declared',
     rule: 'Beyond the size guidance, publishers SHOULD shard by municipality and declare shards in the manifest.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'ENV010',
@@ -276,8 +280,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'last_confirmed_at KEY present on every record (null is legal)',
     rule: 'The confirmation key is REQUIRED; null is the honest "never confirmed". Omission is not.',
     specAnchor: `${SPEC}/6-trust-and-verification#6-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC002',
@@ -287,8 +290,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'id matches the {publisher_id}:{local_id} shape',
     rule: 'Record identity is {publisher_id}:{local_id} — globally unique with zero coordination.',
     specAnchor: `${SPEC}/5-identifiers#5-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC003',
@@ -298,8 +300,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'No minting in another publisher’s namespace',
     rule: 'A publisher MUST NOT mint ids in another publisher’s namespace.',
     specAnchor: `${SPEC}/5-identifiers#5-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC004',
@@ -309,8 +310,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Locator rule: address_text OR lat+lon present',
     rule: 'A place you cannot locate directs no one.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC005',
@@ -320,8 +320,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Both locators present (RECOMMENDED)',
     rule: 'Address and coordinates together survive more consumer contexts than either alone.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC006',
@@ -331,8 +330,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'public_url present and absolute',
     rule: 'Link-out is the contact mechanism — contact values never travel.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-2`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC007',
@@ -342,8 +340,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'place_kind within the enum',
     rule: 'The shared vocabulary is what makes crosswalks possible; unknown kinds use other + a namespaced extension.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC008',
@@ -353,8 +350,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'municipality_code is a valid DIVIPOLA code',
     rule: 'Territorial coding is DIVIPOLA; publishers keep their raw string in municipality_text.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC009',
@@ -364,8 +360,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'source{} present with source_id',
     rule: 'Provenance is structured, never prose — attribution and chains depend on it.',
     specAnchor: `${SPEC}/4-api-surface#4-3`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC010',
@@ -375,8 +370,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'CR-2: name contains no operational-state token',
     rule: 'Names MUST NOT encode operational state — state belongs in lifecycle_status / service_status.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC011',
@@ -386,8 +380,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'name and status fields do not contradict each other',
     rule: 'A record that says two things about its own state is a record a consumer cannot render honestly.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC012',
@@ -397,8 +390,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'CR-1: updated_at is not a reused last_confirmed_at',
     rule: 'An edit is not a confirmation; the two timestamps do not interconvert.',
     specAnchor: `${SPEC}/6-trust-and-verification#6-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC013',
@@ -408,8 +400,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'expires_at set on inherently temporary place kinds',
     rule: 'Temporary places SHOULD declare when they stop being true.',
     specAnchor: `${SPEC}/6-trust-and-verification#6-2`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC014',
@@ -419,8 +410,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'same_as entries are fully-qualified and one-hop',
     rule: 'same_as is a one-hop, non-transitive claim — never a transitive chain.',
     specAnchor: `${SPEC}/5-identifiers#5-2`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC015',
@@ -430,8 +420,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Unknown members are preserved, never rejected',
     rule: 'Extensibility applies to the validator first: an unknown member MUST NOT fail validation.',
     specAnchor: `${SPEC}/8-versioning-and-conformance#8-4`,
-    implemented: false,
-    plannedIn: 'Task 13 (self-check)',
+    implemented: true,
   },
   {
     id: 'REC016',
@@ -441,8 +430,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'x_ extensions are namespaced x_{publisher}_{field}',
     rule: 'Namespaced extensions prevent two publishers colliding on one private field name.',
     specAnchor: `${SPEC}/8-versioning-and-conformance#8-4`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC017',
@@ -452,8 +440,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'es baseline present for localized strings',
     rule: 'es is the REQUIRED baseline for human-readable strings; en is RECOMMENDED.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'REC018',
@@ -463,8 +450,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'No duplicate id within one feed',
     rule: 'Two records with one id make every downstream dedupe wrong.',
     specAnchor: `${SPEC}/5-identifiers#5-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
 
   // ── PII (any level) ─────────────────────────────────────
@@ -552,7 +538,8 @@ export const CHECKS: readonly CheckDefinition[] = [
     family: 'behavior',
     severity: 'error',
     level: 'L2',
-    title: 'Always-now: last_updated advances with the probe clock on identical content',
+    title:
+      'Always-now: last_updated advances with the probe clock on identical content',
     rule: 'last_updated MUST be generated at build/publish time, never per request — a per-request timestamp is worse than no signal.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
     implemented: false,
@@ -609,7 +596,8 @@ export const CHECKS: readonly CheckDefinition[] = [
     family: 'api',
     severity: 'error',
     level: 'L3',
-    title: 'Static ≡ API: the same record is byte-compatible from both surfaces',
+    title:
+      'Static ≡ API: the same record is byte-compatible from both surfaces',
     rule: 'The equivalence rule is what lets one schema serve four transports.',
     specAnchor: `${SPEC}/3-the-feed#3-2`,
     implemented: false,
@@ -699,7 +687,8 @@ export const CHECKS: readonly CheckDefinition[] = [
     family: 'write',
     severity: 'error',
     level: 'L4',
-    title: 'In auth:none mode, a moderation state is echoed and rate limiting is observable',
+    title:
+      'In auth:none mode, a moderation state is echoed and rate limiting is observable',
     rule: 'Open writes REQUIRE mitigations: rate limiting, a moderation queue, and an echoed state.',
     specAnchor: `${SPEC}/4-api-surface#4-2`,
     implemented: false,
@@ -726,8 +715,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Declared licence is not share-alike',
     rule: 'Share-alike licences poison aggregation for downstream consumers.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
   {
     id: 'LIC002',
@@ -737,8 +725,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'attribution string present for aggregators to display',
     rule: 'Attribution is a consumption MUST; an explicit string makes it easy to honor.',
     specAnchor: `${SPEC}/4-api-surface#4-3`,
-    implemented: false,
-    plannedIn: 'Task 13',
+    implemented: true,
   },
 ] as const;
 

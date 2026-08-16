@@ -11,44 +11,55 @@
  */
 
 export {
+  CHECKS,
+  type CheckDefinition,
+  type CheckFamily,
+  checkIds,
+  checksByFamily,
+  docsUrl,
+  getCheck,
+  implementedChecks,
+} from './checks.js';
+export {
   blockersForNextLevel,
   computeMeasuredLevel,
   Engine,
-  measurableLevels,
   type EngineOptions,
+  measurableLevels,
   type Pass,
   type PassContext,
 } from './engine.js';
 export {
   EXIT,
   EXIT_MEANING,
-  exitCodeFor,
   type ExitCode,
+  exitCodeFor,
 } from './exit-codes.js';
 export {
-  CHECKS,
-  checkIds,
-  checksByFamily,
-  docsUrl,
-  getCheck,
-  implementedChecks,
-  type CheckDefinition,
-  type CheckFamily,
-} from './checks.js';
-export {
+  type Fetcher,
+  type FetchOptions,
+  type FetchResult,
   HttpFetcher,
   OfflineFetcher,
-  type FetchOptions,
-  type Fetcher,
-  type FetchResult,
 } from './fetcher.js';
 export { locatePointer, parseJson, pointer } from './locate.js';
 export {
-  LEVELS,
-  sortFindings,
-  summarize,
-  summaryPhrase,
+  authorMessage,
+  checkIdForSchemaError,
+  schemaNameFor,
+  schemaPass,
+} from './passes/schema.js';
+export {
+  envelopeChecks,
+  fold,
+  recordChecks,
+  STATE_TOKENS,
+  SUPPORTED_MAJOR,
+  semanticPass,
+} from './passes/semantic.js';
+export {
   type Finding,
+  LEVELS,
   type Level,
   type Probes,
   type Profile,
@@ -56,6 +67,9 @@ export {
   type ReportSummary,
   type Severity,
   type SuggestedPatch,
+  sortFindings,
+  summarize,
+  summaryPhrase,
 } from './report.js';
 
 /** The spec version this build validates against. */

@@ -26,8 +26,10 @@ export type ExitCode = (typeof EXIT)[keyof typeof EXIT];
 export const EXIT_MEANING: Record<ExitCode, string> = {
   [EXIT.OK]: 'conformant at the requested level (warnings may exist)',
   [EXIT.NON_CONFORMANT]: 'non-conformant — one or more errors in the content',
-  [EXIT.WARNINGS_STRICT]: 'conformant, but warnings exist and --strict was passed',
-  [EXIT.TRANSPORT]: 'transport failure — unreachable, TLS, timeout, or a non-JSON body',
+  [EXIT.WARNINGS_STRICT]:
+    'conformant, but warnings exist and --strict was passed',
+  [EXIT.TRANSPORT]:
+    'transport failure — unreachable, TLS, timeout, or a non-JSON body',
   [EXIT.USAGE]: 'usage error — bad flags, unreadable file, unknown profile',
   [EXIT.INTERNAL]: 'internal validator error — please report it',
 };

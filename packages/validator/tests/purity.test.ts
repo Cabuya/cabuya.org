@@ -11,7 +11,7 @@
  * loud message if `dist/` is absent so a fresh clone's `test` is not a
  * confusing failure.
  */
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
