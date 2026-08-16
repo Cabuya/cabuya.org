@@ -1,0 +1,37 @@
+name: RFC — propose a normative change
+description: Propose a change to the Cabuya Protocol spec, schemas or conformance rules
+title: "rfc: "
+labels: ["rfc"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Normative changes go through the RFC process (see /rfcs and spec/rfcs/0000-template.md). This issue is the on-ramp: describe the change and a maintainer will help you shape it into an RFC PR.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem in the field does this address?
+      description: Cite real behavior where possible — the spec was built from evidence, and changes should be too.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed normative change
+      description: What MUST/SHOULD/MAY would change, added or removed?
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Who does this affect?
+      description: Publishers at which levels? Consumers? The validator? Does it raise the "afternoon" adoption floor?
+    validations:
+      required: true
+  - type: checkboxes
+    id: pii
+    attributes:
+      label: PII gate
+      options:
+        - label: This change does NOT introduce any way for person-level data or contact values to travel in the protocol
+          required: true

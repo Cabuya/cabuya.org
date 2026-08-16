@@ -1,0 +1,107 @@
+name: CI
+
+# The main quality gate for cabuya.org.
+#
+# Gates appended by later migration tasks (keep this list current):
+#   - spec:check + spec:boundary   (Task 10 — schema/example integrity, B1–B7 boundary)
+#   - registry:check               (Task 11 — publisher-entry integrity)
+#   - validator workspace tests    (Task 12 — packages/validator)
+#   - checks:catalogue             (Task 16 — every check id documented)
+#   - perf:budgets                 (Task 34 — per-route JS budgets)
+#   - a11y:check                   (Task 35 — Playwright + axe route matrix)
+#   - E2E journeys                 (Task 47)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint · types · tests · build · content gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Node version
+        id: node
+        run: echo "version=$(cat .node-version)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome (lint + format)
+        run: pnpm run biome:check
+
+      - name: Astro check (types)
+        run: pnpm run astro:check
+
+      - name: Unit tests
+        run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Content gate — Markdown twins (strict)
+        run: pnpm run md:check:strict
+
+      - name: Content gate — language integrity (strict)
+        run: pnpm run lang:check:strict
+
+      - name: Content gate — SEO (strict)
+        run: pnpm run seo:check:strict
+
+      - name: Content gate — ES/EN parity (strict)
+        run: pnpm run parity:check:strict
+
+      - name: Content gate — redirects (strict)
+        run: pnpm run redirects:check:strict
+
+  dco:
+    name: DCO sign-off
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check every commit is signed off
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          missing=0
+          for sha in $(git rev-list "$BASE_SHA".."$HEAD_SHA"); do
+            if ! git log -1 --format=%B "$sha" | grep -q '^Signed-off-by: '; then
+              echo "::error::Commit $sha is missing a Signed-off-by line (use: git commit -s)"
+              missing=1
+            fi
+          done
+          exit $missing

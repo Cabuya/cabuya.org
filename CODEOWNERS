@@ -1,0 +1,15 @@
+# Cabuya code ownership.
+#
+# NOTE: @Cabuya/maintainers is the org-wide maintainer team. Individual
+# maintainer handles are intentionally NOT listed yet — the maintainer council
+# is being seated (see GOVERNANCE.md); we do not invent usernames. Replace the
+# team handle with named co-maintainers as they join (Model B → C).
+
+*                       @Cabuya/maintainers
+
+# The bounded, CC0 directories: normative text and public-interest data.
+# Changes here need explicit maintainer review (and, for normative changes,
+# an accepted RFC).
+/spec/                  @Cabuya/maintainers
+/registry/              @Cabuya/maintainers
+/packages/validator/    @Cabuya/maintainers

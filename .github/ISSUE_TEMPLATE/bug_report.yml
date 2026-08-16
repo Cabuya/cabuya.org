@@ -1,0 +1,42 @@
+name: Bug report
+description: Something on cabuya.org, in the validator, or in the build is broken
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Bugs about the **protocol text itself** belong in an RFC issue instead.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Website (pages, i18n, styles)
+        - Developers portal / docs content
+        - Validator (@cabuya/validator)
+        - Registry / badges
+        - Build / CI / tooling
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, what you got. Include the URL or command.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to …
+        2. Run …
+        3. See …
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: Browser / OS / Node version / validator version (cabuya-validator --version)

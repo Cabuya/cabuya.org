@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose an improvement to the site, portal, validator or registry tooling
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For changes to the **normative protocol** (schemas, requirements, conformance rules), use the **RFC** template instead — normative changes go through the RFC process.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation, not the solution, first.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

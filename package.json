@@ -1,12 +1,12 @@
 {
   "name": "cabuya.org",
-  "description": "Corag — el ecosistema de impacto social. Institutional website for Corag, connecting foundations, governments, organizations and people with real opportunities to help, transparently and traceably. The Ayuda Directa application lives at ayuda.cabuya.org.",
+  "description": "cabuya.org — the home of the Cabuya Protocol: an open interoperability standard that lets emergency-aid applications publish and consume the same data. Site, CC0 spec, publisher registry and the @cabuya/validator.",
   "author": "Corag",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "homepage": "https://cabuya.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asauliainc/CoragWeb"
+    "url": "git+https://github.com/Cabuya/cabuya.org.git"
   },
   "type": "module",
   "version": "3.0.11",
@@ -94,5 +94,8 @@
     "tsx": "^4.23.1",
     "vitest": "4.1.10",
     "yaml": "2.8.3"
+  },
+  "bugs": {
+    "url": "https://github.com/Cabuya/cabuya.org/issues"
   }
 }

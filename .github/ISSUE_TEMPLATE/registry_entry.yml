@@ -1,0 +1,48 @@
+name: Registry entry
+description: Add or correct a publisher entry in the Cabuya registry
+title: "registry: "
+labels: ["registry"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The registry records what a publisher **claims** and what a reviewer checks about **identity**. Conformance is measured by the validator, never written by hand. Inclusion is not endorsement.
+  - type: input
+    id: canonical_url
+    attributes:
+      label: Canonical URL
+      description: The app's canonical HTTPS origin. Entries are keyed by URL, never by name.
+      placeholder: https://example-app.org
+    validations:
+      required: true
+  - type: input
+    id: aliases
+    attributes:
+      label: Declared aliases (comma-separated)
+      placeholder: https://www.example-app.org, https://old-name.org
+  - type: input
+    id: manifest_url
+    attributes:
+      label: Manifest URL (if already published)
+      placeholder: https://example-app.org/.well-known/cabuya.json
+  - type: dropdown
+    id: entity_domains
+    attributes:
+      label: Entity domains published
+      multiple: true
+      options:
+        - place
+  - type: input
+    id: contact_org
+    attributes:
+      label: Organization-level contact (never a personal address)
+      placeholder: equipo@example-app.org
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmations
+      options:
+        - label: I represent this publisher, or I am correcting public facts about it
+          required: true
+        - label: The contact above is an organization-level address, not a person's
+          required: true
