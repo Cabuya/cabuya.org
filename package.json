@@ -59,7 +59,10 @@
     "spec:check:strict": "node scripts/check-spec.mjs --strict",
     "spec:boundary": "node scripts/check-spec-boundary.mjs",
     "registry:check": "node scripts/check-registry.mjs",
-    "registry:check:strict": "node scripts/check-registry.mjs --strict"
+    "registry:check:strict": "node scripts/check-registry.mjs --strict",
+    "validator:build": "pnpm --filter @cabuya/validator build",
+    "validator:test": "pnpm --filter @cabuya/validator test",
+    "validator:pack": "pnpm --filter @cabuya/validator exec npm pack --dry-run"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

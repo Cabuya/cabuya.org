@@ -1,5 +1,6 @@
 packages:
   - .
+  - packages/*
 
 # Supply-chain guard: only allow installing package versions that were
 # published to the registry at least 3 days ago (4320 minutes). Protects

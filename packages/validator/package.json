@@ -1,0 +1,35 @@
+{
+  "name": "@cabuya/validator",
+  "version": "0.1.0",
+  "description": "The Cabuya Protocol conformance validator — one engine, four harnesses (CLI, CI, live web, scheduled re-validation). Conformance is measured, never declared.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cabuya/cabuya.org.git",
+    "directory": "packages/validator"
+  },
+  "homepage": "https://cabuya.org/developers/validator",
+  "bugs": { "url": "https://github.com/Cabuya/cabuya.org/issues" },
+  "keywords": ["cabuya", "protocol", "validator", "conformance", "humanitarian", "interoperability"],
+  "engines": { "node": ">=24" },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./checks": { "types": "./dist/checks.d.ts", "import": "./dist/checks.js" }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  },
+  "publishConfig": { "access": "public", "provenance": true }
+}
