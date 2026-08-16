@@ -23,7 +23,7 @@ is the project's founding argument.
 | Artifact | Path | License |
 |---|---|---|
 | The website (`cabuya.org`) — landing + `/developers` portal, bilingual (EN at `/`, ES at `/es`) | `src/`, `functions/`, `public/` | Apache-2.0 |
-| The normative **spec** — versioned protocol text, JSON Schemas, worked examples, RFCs | `spec/` *(lands in migration Task 9)* | CC0-1.0 |
+| The normative **spec** — versioned protocol text, JSON Schemas, worked examples, RFCs | [`spec/`](spec/README.md) | CC0-1.0 |
 | The publisher **registry** — reviewed entries, measured badge states, validation history | `registry/` *(lands in migration Task 11)* | CC0-1.0 |
 | The conformance **validator** — one engine, four harnesses (CLI, CI, live web, cron) | `packages/validator/` *(lands in migration Tasks 12–16)* | Apache-2.0 |
 | The founding record — ratified decisions, protocol design, evidence base | [`docs/context/`](docs/context/README.md) | CC0-per-bundle terms |
