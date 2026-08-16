@@ -62,7 +62,9 @@
     "registry:check:strict": "node scripts/check-registry.mjs --strict",
     "validator:build": "pnpm --filter @cabuya/validator build",
     "validator:test": "pnpm --filter @cabuya/validator test",
-    "validator:pack": "pnpm --filter @cabuya/validator exec npm pack --dry-run"
+    "validator:pack": "pnpm --filter @cabuya/validator exec npm pack --dry-run",
+    "checks:catalogue": "node scripts/check-checks-catalogue.mjs",
+    "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

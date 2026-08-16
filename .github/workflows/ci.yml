@@ -78,6 +78,14 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # Runs AFTER the site build on purpose: the gate's last assertion
+      # cross-checks every check id against the anchors on the built
+      # /developers/validator/checks page. That page arrives in Task 26, and
+      # placing the step here means the assertion activates on its own —
+      # no second CI edit, no window where the page and the catalogue drift.
+      - name: Protocol gate — checks:catalogue (strict)
+        run: pnpm run checks:catalogue:strict
+
       - name: Content gate — Markdown twins (strict)
         run: pnpm run md:check:strict
 

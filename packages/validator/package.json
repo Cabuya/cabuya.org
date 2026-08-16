@@ -10,14 +10,40 @@
     "directory": "packages/validator"
   },
   "homepage": "https://cabuya.org/developers/validator",
-  "bugs": { "url": "https://github.com/Cabuya/cabuya.org/issues" },
-  "keywords": ["cabuya", "protocol", "validator", "conformance", "humanitarian", "interoperability"],
-  "engines": { "node": ">=24" },
-  "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
-    "./checks": { "types": "./dist/checks.d.ts", "import": "./dist/checks.js" }
+  "bugs": {
+    "url": "https://github.com/Cabuya/cabuya.org/issues"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "cabuya",
+    "protocol",
+    "validator",
+    "conformance",
+    "humanitarian",
+    "interoperability"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./checks": {
+      "types": "./dist/checks.d.ts",
+      "import": "./dist/checks.js"
+    },
+    "./cli": {
+      "types": "./dist/cli/index.d.ts",
+      "import": "./dist/cli/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
@@ -28,8 +54,15 @@
     "ajv-formats": "3.0.1"
   },
   "devDependencies": {
+    "@types/node": "^26.2.0",
     "typescript": "6.0.3",
     "vitest": "4.1.10"
   },
-  "publishConfig": { "access": "public", "provenance": true }
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "bin": {
+    "cabuya-validator": "./dist/cli/index.js"
+  }
 }

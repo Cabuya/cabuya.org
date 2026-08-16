@@ -14,7 +14,12 @@
     "noImplicitOverride": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "types": []
+    // Node types are for the CLI HARNESS only. Core purity is not enforced
+    // by withholding type definitions (that would only hide the problem at
+    // build time) — it is enforced behaviorally by tests/purity.test.ts,
+    // which greps the BUILD OUTPUT, and by the Workers-shaped parity
+    // sandbox, which executes it without a Node surface at all.
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["dist", "tests"]

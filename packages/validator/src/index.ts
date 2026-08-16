@@ -42,6 +42,12 @@ export {
   HttpFetcher,
   OfflineFetcher,
 } from './fetcher.js';
+export {
+  ES,
+  type OutputLanguage,
+  translateFinding,
+  untranslatedChecks,
+} from './i18n.js';
 export { locatePointer, parseJson, pointer } from './locate.js';
 export {
   DENY_KEYS,
@@ -78,6 +84,15 @@ export {
   summarize,
   summaryPhrase,
 } from './report.js';
+export {
+  type Format,
+  type RenderOptions,
+  render,
+  renderJson,
+  renderMarkdown,
+  renderSarif,
+  renderText,
+} from './reporters.js';
 
 /** The spec version this build validates against. */
 export const SPEC_VERSION = '0.1.0';

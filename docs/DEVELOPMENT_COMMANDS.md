@@ -34,7 +34,7 @@
 | `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass; invalid examples fail the schema OR declare their designed later-pass violation | ✅ live |
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
-| `pnpm run checks:catalogue` | Every check id ↔ documented, both directions | Task 16 |
+| `pnpm run checks:catalogue(:strict)` | Ids unique, well-formed and never reused; every check has a title, rule and a spec anchor that resolves to a file on disk; every **implemented** check has its Spanish rule and fix; every **catalogued-but-unimplemented** check says where it is planned. Once `/developers/validator/checks` exists (Task 26) the same run cross-checks ids ↔ page anchors in both directions — it needs `pnpm run validator:build` first, and CI therefore runs it after the site build | ✅ live |
 
 ## Quality gates
 
@@ -49,9 +49,16 @@
 
 | Command | What |
 |---|---|
-| `pnpm --filter @cabuya/validator build` / `test` | The package |
-| `node packages/validator/dist/cli/index.js …` | Local CLI (`validate`, `feed`, `manifest`, `probe`, `explain`, `registry check`, `init`) |
-| `pnpm run validator:pack` | `npm pack --dry-run` review |
+| `pnpm run validator:build` / `validator:test` | The package (aliases for `pnpm --filter @cabuya/validator …`) |
+| `pnpm run validator:pack` | `npm pack --dry-run` review — the tarball must be `dist/` + `schemas/` + README + LICENSE and nothing else |
+| `npx @cabuya/validator validate <path-or-url>` | Validate a feed or manifest. Exit codes: **0** clean · **1** content errors · **2** warnings under `--strict` · **3** transport failure · **4** usage · **5** internal |
+| `… validate --format json\|sarif\|markdown\|text` | `json` is the machine contract, `sarif` feeds code scanning, `markdown` is what you paste into an agent session |
+| `… validate --no-network` | Degraded run. Reports *"schema-valid; conformance unmeasured"* — never "conforming", because the transport checks did not run |
+| `… validate --lang es` | Translates message, rule and fix in **every** format. Ids, pointers and links never translate |
+| `… feed` / `manifest` / `probe <url>` | Narrow the run to one document kind, or exercise only the transport probes (`--probe-twice <seconds>`) |
+| `… explain <CHECK_ID>` | Offline: the rule, the fix, implementation status, and both links. Case-insensitive, and suggests neighbours for a typo |
+| `… checks` | The whole catalogue with implementation status |
+| `… init --publisher-id <id> [--framework nextjs\|…]` | Manifest + feed skeleton, including the honest `"last_confirmed_at": null` |
 
 ## Utilities
 
