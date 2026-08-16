@@ -31,8 +31,8 @@
 
 | Command | Asserts | Ships |
 |---|---|---|
-| `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass, invalid fail | Task 10 |
-| `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | Task 10 |
+| `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass; invalid examples fail the schema OR declare their designed later-pass violation | ✅ live |
+| `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate; ids/URLs unique; org-level contact; no HTML | Task 11 |
 | `pnpm run checks:catalogue` | Every check id ↔ documented, both directions | Task 16 |
 

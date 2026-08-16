@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/wrong.json",
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "type": "object",
+      "required": ["places"],
+      "properties": {
+        "places": {
+          "type": "array"
+        }
+      }
+    }
+  }
+}

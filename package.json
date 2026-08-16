@@ -54,7 +54,10 @@
     "test:responsive:update": "playwright test tests/e2e/responsive/ --update-snapshots",
     "release": "bash .github/scripts/prepare_release.sh",
     "responsive:audit": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777",
-    "responsive:audit:quick": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777 --quick"
+    "responsive:audit:quick": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777 --quick",
+    "spec:check": "node scripts/check-spec.mjs",
+    "spec:check:strict": "node scripts/check-spec.mjs --strict",
+    "spec:boundary": "node scripts/check-spec-boundary.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",
@@ -80,6 +83,8 @@
     "@testing-library/jest-dom": "7.0.0",
     "@testing-library/svelte": "5.4.2",
     "@vitest/coverage-v8": "4.1.10",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "happy-dom": "20.11.1",
     "npm-check-updates": "23.0.0",
     "sharp": "0.35.3",
