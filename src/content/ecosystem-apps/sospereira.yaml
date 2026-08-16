@@ -1,0 +1,51 @@
+name: SOS Pereira 2026
+url: https://sospereira.com/
+aliases: []
+category: people
+featured: false
+order: 20
+logo: /images/ecosystem/sospereira/logo.webp
+logoAuthorization: pending_contact
+monogram: SP
+tagline:
+  es: Portal ciudadano de Pereira
+  en: Pereira citizen portal
+what:
+  es: "Portal ciudadano de la Alcaldía de Pereira: personas desaparecidas, reporte de edificaciones, censo de empresarios afectados y listados públicos."
+  en: "Pereira’s municipal citizen portal: missing persons, building reports, a census of affected businesses and public lists."
+how:
+  es: Reportas una persona o una estructura, o consultas las listas públicas del portal.
+  en: Report a person or a structure, or browse the portal’s public lists.
+active: true
+overview:
+  es: "Portal ciudadano de la Alcaldía de Pereira: personas desaparecidas, reporte de edificaciones, censo de empresarios afectados y listados públicos, con acceso para operadores."
+  en: "Pereira’s municipal citizen portal: missing persons, building reports, a census of affected businesses, and public lists, with operator access."
+features:
+  - es: Reporte de personas desaparecidas
+    en: Missing-person reports
+  - es: Reporte de edificaciones
+    en: Building reports
+  - es: Censo de empresarios afectados
+    en: Census of affected businesses
+  - es: Listados públicos y acceso de equipo
+    en: Public lists and team access
+tools:
+  - es: Portal municipal SOS Pereira 2026
+    en: SOS Pereira 2026 municipal portal
+  - es: Flujos de reporte ciudadano y listas públicas
+    en: Citizen report flows and public lists
+audience:
+  es: Ciudadanía de Pereira y operadores municipales.
+  en: Pereira residents and municipal operators.
+coverage:
+  es: Municipio de Pereira (marca Alcaldía).
+  en: Municipality of Pereira (city branding).
+limits:
+  es: Canal municipal; no es operado por Corag. No reproduzcamos PII de listados aquí.
+  en: Municipal channel; not operated by Corag. We do not reproduce list PII here.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

@@ -1,0 +1,49 @@
+name: Encontrados.co
+url: https://encontrados.co/
+aliases: []
+category: people
+featured: false
+order: 10
+logo: /images/ecosystem/encontrados/logo.webp
+logoAuthorization: pending_contact
+monogram: EN
+tagline:
+  es: Reencuentros con foto
+  en: Reunions with a photo
+what:
+  es: "Para rescatistas y equipos de respuesta: subes una foto de alguien que tienes contigo; se compara con reportes de búsqueda y la foto se borra. Las familias también pueden reportar a una persona desaparecida."
+  en: "For rescuers and response teams: upload a photo of someone with you; it is matched against missing-person reports and then deleted. Families can also report a missing person."
+how:
+  es: Usas «La tengo conmigo» o «Reporta desaparecido» según tu rol en campo.
+  en: Use “I have them with me” or “Report missing” depending on your field role.
+active: true
+overview:
+  es: "Para rescatistas y equipos de respuesta: subes una foto de alguien que tienes contigo; se compara con reportes de búsqueda y la foto se borra. Las familias también pueden reportar a una persona desaparecida. Construido con voluntarios (el sitio menciona Ni500 / Torrenegra)."
+  en: "For rescuers and response teams: upload a photo of someone with you; it is matched against missing-person reports and then deleted. Families can also report a missing person. Built with volunteers (the site mentions Ni500 / Torrenegra)."
+features:
+  - es: «La tengo conmigo» — coincidencia por foto
+    en: “I have them with me” — photo match
+  - es: «Reporta desaparecido» para familias
+    en: “Report missing” for families
+  - es: Borrado inmediato de la foto tras el match (según el sitio)
+    en: Immediate photo deletion after match (per the site)
+tools:
+  - es: Flujo de coincidencia fotográfica para rescatistas
+    en: Photo-match flow for rescuers
+  - es: Reporte de persona desaparecida
+    en: Missing-person report
+audience:
+  es: Rescatistas, equipos de respuesta y familias en búsqueda.
+  en: Rescuers, response teams, and families searching.
+coverage:
+  es: Según reportes y coincidencias publicadas en encontrados.co.
+  en: Per reports and matches published on encontrados.co.
+limits:
+  es: No reproduzcamos datos personales de personas desaparecidas en cabuya.org; solo describimos la herramienta.
+  en: We do not reproduce missing-person PII on cabuya.org; we only describe the tool.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

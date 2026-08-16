@@ -1,0 +1,70 @@
+---
+/**
+ * Corag v3.0.0 empty-state component — used when a collection-driven listing
+ * has no entries (e.g., upcoming events, talks for a speaker without any).
+ */
+
+interface Props {
+  title: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  class?: string;
+  /**
+   * Heading level for the title. Defaults to `h2` because an empty state
+   * usually replaces a whole section: when it sits directly under the page
+   * `h1`, an `h3` would skip a level.
+   */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const {
+  title,
+  description,
+  ctaLabel,
+  ctaHref,
+  class: className = '',
+  headingLevel = 'h2',
+} = Astro.props;
+
+const Heading = headingLevel;
+---
+
+<div
+  class={`flex flex-col items-center justify-center rounded-2xl border border-dashed border-corag-border bg-corag-bg-elevated/60 px-6 py-12 text-center ${className}`}
+>
+  <svg
+    aria-hidden="true"
+    class="h-12 w-12 text-corag-primary dark:text-corag-primary-light mb-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75z"
+    ></path>
+  </svg>
+  <Heading class="text-lg font-semibold text-corag">
+    {title}
+  </Heading>
+  {
+    description && (
+      <p class="mt-2 max-w-md text-corag-secondary">
+        {description}
+      </p>
+    )
+  }
+  {
+    ctaLabel && ctaHref && (
+      <a
+        href={ctaHref}
+        class="mt-6 inline-flex items-center gap-2 rounded-full bg-corag-fill px-5 py-2.5 text-sm font-semibold text-corag-on-fill shadow-sm transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary"
+      >
+        {ctaLabel}
+      </a>
+    )
+  }
+</div>

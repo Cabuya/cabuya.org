@@ -1,0 +1,915 @@
+---
+/**
+ * Corag home page.
+ *
+ * The only surface that runs all six beats of the argument in `docs/MESSAGING.md`:
+ *   1 la intención existe → 2 la conexión falla → 3 Corag es el puente →
+ *   4 el puente se sostiene con evidencia → 5 Ayuda Directa → 6 únete al movimiento
+ *
+ * Deliberately static. No live figures are baked into the build: a stale
+ * humanitarian number damages trust more than no number, so every count lives in
+ * the application and we link to it.
+ */
+import BlogPreviewSection from '@/components/home/BlogPreviewSection.astro';
+import EvidenceNumbers from '@/components/home/EvidenceNumbers.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { channelIconPath } from '@/lib/channel-icons';
+import {
+  APP_PATHS,
+  APP_URL,
+  appUrl,
+  getDefaultOgImage,
+  HELP_CATEGORIES,
+  SOCIAL_LINKS,
+} from '@/lib/constances';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const h = t.home;
+
+/*
+ * Route slugs are English in both languages (repo rule 21); Spanish is served
+ * unprefixed and English under `/en`.
+ */
+const prefix = getUrlPrefix(lang);
+const routes = {
+  how: `${prefix}/how-it-works`,
+  trust: `${prefix}/transparency`,
+  dev: `${prefix}/developers`,
+  team: `${prefix}/contributors`,
+};
+
+/** App captures: Spanish by default; English UI when lang is `en`. */
+const appHomeMobileBase =
+  lang === 'en'
+    ? '/images/home/app/app-home-mobile-en'
+    : '/images/home/app/app-home-mobile';
+const appHomeDesktopBase =
+  lang === 'en'
+    ? '/images/home/app/app-home-desktop-en'
+    : '/images/home/app/app-home-desktop';
+const appAportarMobileBase =
+  lang === 'en'
+    ? '/images/home/app/app-aportar-mobile-en'
+    : '/images/home/app/app-aportar-mobile';
+
+/*
+ * The problem act renders each fragment AS the artifact it names — a chat
+ * bubble, a loose form, a spreadsheet, a call, a fading post, a stale list.
+ * Order-mapped to `problemFragments`, which is structurally parallel across
+ * locales (pinned by home-copy.test.ts). Decorations are aria-hidden.
+ */
+const FRAGMENT_KINDS = [
+  'chat',
+  'form',
+  'sheet',
+  'call',
+  'post',
+  'list',
+] as const;
+
+/*
+ * The developer code sample, hand-tinted with token colours. Every field and
+ * enum value is copied from the live contract documented on /developers
+ * (OpenAPI 3.1 at /api/public/openapi.json) — obviously-example values only,
+ * never plausible personal data or amounts (rule 0 in code form).
+ */
+const key = (name: string) => `<span class="text-corag-rosa">"${name}"</span>`;
+const str = (value: string) =>
+  `<span class="text-corag-on-fill">"${value}"</span>`;
+const devCodeSample = [
+  '{',
+  `  ${key('source')}: ${str('mi-app')},`,
+  `  ${key('externalId')}: ${str('ejemplo-001')},`,
+  `  ${key('type')}: ${str('offer')},`,
+  `  ${key('title')}: ${str('Ejemplo: mercados disponibles')},`,
+  `  ${key('category')}: ${str('alimentos')},`,
+  `  ${key('emergencySlug')}: ${str('eje-cafetero')},`,
+  `  ${key('contactName')}: ${str('Nombre de ejemplo')},`,
+  `  ${key('contactWhatsapp')}: ${str('+57 300 000 0000')},`,
+  `  ${key('publishContact')}: <span class="text-corag-on-fill">true</span>`,
+  '}',
+].join('\n');
+
+/*
+ * Channels strip (beat 6): the app plus the accounts in SOCIAL_LINKS —
+ * the single source of truth, so a channel is added or removed once. Inline
+ * `currentColor` icon paths keyed by the link's icon basename (simple-icons
+ * geometry for the three networks we actually run).
+ */
+const channelLinks = SOCIAL_LINKS.map((social) => ({
+  ...social,
+  iconPath: channelIconPath(social.icon),
+})).filter((social) => social.iconPath);
+
+const btnPrimary =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-corag-fill px-7 py-3 font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary';
+const btnOnDark =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-corag-rosa px-7 py-3 font-semibold text-corag-bg-dark transition-colors hover:bg-corag-rosa-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa';
+const btnGhostOnDark =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-corag-rosa/50 px-7 py-3 font-semibold text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa';
+const btnSecondary =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-corag-primary px-7 py-3 font-semibold text-corag-primary transition-colors hover:bg-corag-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary';
+---
+
+<MainLayout
+  lang={lang}
+  title={t.siteTitleFull}
+  description={t.siteDescription}
+  image={getDefaultOgImage(lang)}
+  preloadHeaderLogo={false}
+  lcpImageHref="/images/home/hero-caritas-45-648.webp"
+>
+  {/* ── Beat 3 + the coraje statement ─────────────────────────────────── */}
+  <section class="relative overflow-hidden bg-corag-bg-dark">
+    {/* Brand heart motif — decorative, clipped on the right edge */}
+    <svg
+      class="pointer-events-none absolute -right-48 top-1/2 h-[42rem] w-[42rem] -translate-y-1/2 text-corag-rosa opacity-[0.06]"
+      viewBox="0 0 512 512"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+        stroke="currentColor"
+        stroke-width="22"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        transform="rotate(-18 256 256)"></path>
+    </svg>
+    <div
+      class="hero-glow pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full"
+      aria-hidden="true"
+    >
+    </div>
+    {/* Below lg the field photo goes full-bleed behind the copy */}
+    <div class="absolute inset-0 lg:hidden" aria-hidden="true">
+      <img
+        src="/images/home/hero-caritas-45-648.webp"
+        srcset="/images/home/hero-caritas-45-480.webp 480w, /images/home/hero-caritas-45-648.webp 648w"
+        sizes="100vw"
+        alt=""
+        width={648}
+        height={810}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="h-full w-full object-cover object-top opacity-40"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-corag-bg-dark/80 via-corag-bg-dark/60 to-corag-bg-dark"
+      >
+      </div>
+    </div>
+    <div
+      class="hero-shell main-container relative flex min-h-[calc(100dvh-var(--corag-chrome-height))] items-center py-8 sm:py-12 lg:py-10"
+    >
+      <div class="grid w-full items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-6">
+          <p
+            class="hero-eyebrow text-xs font-semibold uppercase tracking-[0.2em] text-corag-rosa sm:text-sm"
+          >
+            {h.eyebrow}
+          </p>
+          <h1
+            class="hero-title mt-3 font-display text-4xl font-bold leading-[1.02] tracking-tight text-corag-on-fill sm:mt-4 sm:text-5xl lg:text-6xl xl:text-7xl"
+          >
+            {h.title}
+          </h1>
+          <p
+            class="hero-lead mt-4 max-w-xl text-base leading-relaxed text-corag-rosa sm:mt-5 sm:text-lg lg:text-xl"
+          >
+            {h.lead}
+          </p>
+          <div class="hero-ctas mt-6 flex flex-wrap gap-3 sm:mt-8 sm:gap-4">
+            <a
+              href={appUrl(APP_PATHS.home)}
+              class={btnOnDark}
+              data-umami-event="app_cta_click"
+              data-umami-event-surface="hero"
+            >{h.ctaPrimary}</a>
+            <a href={routes.how} class={btnGhostOnDark}>{h.ctaSecondary}</a>
+          </div>
+          <ul
+            class="hero-chips mt-6 flex flex-wrap gap-2 sm:mt-8 sm:gap-3"
+            role="list"
+          >
+            {
+              h.heroChips.map((chip) => (
+                <li class="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-corag-rosa sm:px-4 sm:py-1.5 sm:text-sm">
+                  {chip}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="hidden lg:col-span-6 lg:block">
+          {/* w-fit wrapper anchors the mini card to the photo, whatever
+              size the height cap resolves the photo to */}
+          <div class="relative mx-auto w-fit">
+            <img
+              src="/images/home/hero-caritas-45-648.webp"
+              srcset="/images/home/hero-caritas-45-480.webp 480w, /images/home/hero-caritas-45-648.webp 648w"
+              sizes="40vw"
+              alt={h.productPhotoAlt}
+              width={648}
+              height={810}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="hero-photo h-auto max-h-[calc(100dvh-var(--corag-chrome-height)-11rem)] max-w-md rounded-[28px] object-cover shadow-corag-lg xl:max-w-lg"
+            />
+            {/* Mini app card — the product, present from the first viewport */}
+            <div
+              class="absolute -bottom-8 -left-6 w-56 overflow-hidden rounded-[18px] border border-white/10 bg-corag-bg-dark shadow-corag-lg xl:w-64"
+            >
+              <div class="aspect-[3/4]">
+                <img
+                  src={`${appHomeMobileBase}-390.webp`}
+                  srcset={`${appHomeMobileBase}-390.webp 390w, ${appHomeMobileBase}-780.webp 780w`}
+                  sizes="16rem"
+                  alt={h.heroAppCardAlt}
+                  width={390}
+                  height={844}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover object-top"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="hero-scroll-cue pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-corag-rosa sm:block"
+      aria-hidden="true"
+    >
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M6 9l6 6 6-6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </section>
+
+  <div id="main-after-hero"></div>
+
+  {/* ── Beats 1 + 2 — the intent exists, the connection fails ─────────── */}
+  <section class="bg-corag-bg">
+    <div class="main-container py-20 sm:py-24 lg:py-32">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <div class="lg:col-span-5">
+          <div class="lg:sticky lg:top-24">
+            <p
+              class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+            >
+              {h.problemEyebrow}
+            </p>
+            <h2
+              class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+            >
+              {h.problemTitle}
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+              {h.problemBody}
+            </p>
+          </div>
+        </div>
+        {/* The fragmentation, shown: loose notes that never talk to each other */}
+        <ul
+          class="flex flex-col gap-4 lg:col-span-7 lg:col-start-6 lg:grid lg:grid-cols-2 lg:content-start lg:gap-5"
+          role="list"
+        >
+          {
+            h.problemFragments.map((fragment, index) => {
+              const kind = FRAGMENT_KINDS[index] ?? 'note';
+              return (
+                <li
+                  class={`problem-note problem-note--${kind} w-fit rounded-[18px] border bg-corag-bg-elevated px-6 py-4 shadow-corag-sm ${
+                    kind === 'chat'
+                      ? 'rounded-bl-[4px] border-corag-border'
+                      : 'border-dashed border-corag-border'
+                  }`}
+                  data-reveal
+                  style={`--reveal-delay: ${index * 70}ms`}
+                >
+                  <span
+                    class={`block font-display text-xl font-semibold text-corag-text-muted lg:text-2xl ${
+                      kind === 'post' ? 'problem-fade' : ''
+                    }`}
+                  >
+                    {fragment}
+                  </span>
+                  {kind === 'chat' && (
+                    <span
+                      class="mt-2 flex items-center justify-end gap-1.5"
+                      aria-hidden="true"
+                    >
+                      <span class="h-1.5 w-8 rounded-full bg-corag-border" />
+                      <svg class="h-4 w-6 text-corag-accent" viewBox="0 0 24 16" fill="none">
+                        <path
+                          d="M1 8.5l4 4L13 4M9 10.5l2 2L19 4"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  )}
+                  {kind === 'form' && (
+                    <span class="mt-3 flex flex-col gap-1.5" aria-hidden="true">
+                      <span class="h-2 w-36 rounded-full bg-corag-border" />
+                      <span class="h-2 w-24 rounded-full bg-corag-border/70" />
+                      <span class="h-2 w-28 rounded-full bg-corag-border/40" />
+                    </span>
+                  )}
+                  {kind === 'sheet' && (
+                    <span
+                      class="mt-3 grid w-44 grid-cols-3 gap-px overflow-hidden rounded-[6px] border border-corag-border bg-corag-border"
+                      aria-hidden="true"
+                    >
+                      {Array.from({ length: 6 }).map(() => (
+                        <span class="h-4 bg-corag-bg-elevated" />
+                      ))}
+                    </span>
+                  )}
+                  {kind === 'call' && (
+                    <span class="mt-2 flex items-center gap-2" aria-hidden="true">
+                      <svg
+                        class="h-4 w-4 text-corag-primary"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M6.6 3h2.3l1.6 4-2 1.5a13 13 0 006 6l1.5-2 4 1.6v2.3A2.6 2.6 0 0117.4 19 16.4 16.4 0 015 6.6 2.6 2.6 0 016.6 3z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <span class="h-1.5 w-16 rounded-full bg-corag-border" />
+                      <span class="h-1.5 w-6 rounded-full bg-corag-border/60" />
+                    </span>
+                  )}
+                  {kind === 'list' && (
+                    <span class="mt-3 flex flex-col gap-1.5" aria-hidden="true">
+                      <span class="flex items-center gap-2">
+                        <span class="h-3 w-3 rounded-[4px] border border-corag-border bg-corag-primary-soft" />
+                        <span class="problem-strike h-1.5 w-28 rounded-full bg-corag-border" />
+                      </span>
+                      <span class="flex items-center gap-2">
+                        <span class="h-3 w-3 rounded-[4px] border border-corag-border" />
+                        <span class="h-1.5 w-20 rounded-full bg-corag-border/60" />
+                      </span>
+                    </span>
+                  )}
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Beat 3 expanded — the bridge ──────────────────────────────────── */}
+  <section class="bg-corag-bg-brand">
+    <div class="main-container py-20 sm:py-24 lg:py-32">
+      <div class="max-w-3xl">
+        <p
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+        >
+          {h.howEyebrow}
+        </p>
+        <h2
+          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+        >
+          {h.howTitle}
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+          {h.howBody}
+        </p>
+      </div>
+      <ol
+        class="pipeline mt-12 grid gap-10 lg:mt-16 lg:grid-cols-5 lg:gap-6"
+        role="list"
+        aria-label={h.howStepsAria}
+      >
+        {
+          h.howSteps.map((step, index) => {
+            const isEvidence = index === h.howSteps.length - 1;
+            return (
+              <li
+                class="pipeline-step relative rounded-[18px] border border-corag-border bg-corag-bg-elevated p-6 shadow-corag-sm transition-shadow hover:shadow-corag-lg"
+                data-reveal
+                style={`--reveal-delay: ${index * 80}ms`}
+              >
+                {isEvidence ? (
+                  <span
+                    class="flex h-14 w-14 items-center justify-center rounded-full bg-corag-fill text-corag-on-fill"
+                    aria-hidden="true"
+                  >
+                    <svg class="h-7 w-7" viewBox="0 0 512 512">
+                      <path
+                        d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+                        fill="currentColor"
+                        transform="rotate(-18 256 256)"
+                      />
+                    </svg>
+                  </span>
+                ) : (
+                  <span
+                    class="font-display text-6xl font-bold leading-none text-corag-primary opacity-50"
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                )}
+                <h3 class="mt-4 font-display text-lg font-semibold text-corag">
+                  {step.title}
+                </h3>
+                <p class="mt-2 text-corag-secondary">{step.body}</p>
+              </li>
+            );
+          })
+        }
+      </ol>
+      <div class="mt-10 lg:mt-14">
+        <a href={routes.how} class={btnSecondary}>{h.howCta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Beat 4 — the bridge holds because of evidence ─────────────────── */}
+  <section class="bg-corag-bg">
+    <div class="main-container py-20 sm:py-24 lg:py-32">
+      <div class="mx-auto max-w-3xl text-center">
+        <p
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+        >
+          {h.trustEyebrow}
+        </p>
+        <h2
+          class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+        >
+          {h.trustTitle}
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+          {h.trustBody}
+        </p>
+      </div>
+      <div class="mt-12 lg:mt-16">
+        <EvidenceNumbers pillars={h.pillars} honestyLine={h.trustHonestyLine} />
+      </div>
+      <div class="mt-10 text-center">
+        <a href={routes.trust} class={btnSecondary}>{h.trustCta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Beat 5 — Ayuda Directa, the product shown ─────────────────────── */}
+  <section class="overflow-hidden bg-corag-bg-brand-strong">
+    <div class="main-container py-20 sm:py-24 lg:py-32">
+      <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
+        <div class="lg:col-span-4">
+          <p
+            class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+          >
+            {h.productEyebrow}
+          </p>
+          <h2
+            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+          >
+            {h.productTitle}
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+            {h.productBody}
+          </p>
+          <div class="mt-8">
+            <a
+              href={APP_URL}
+              class={btnPrimary}
+              data-umami-event="app_cta_click"
+              data-umami-event-surface="product"
+            >{h.productCta}</a>
+          </div>
+        </div>
+        <div class="lg:col-span-8">
+          <div class="relative" data-reveal>
+            {/* CSS browser frame — the application, shown */}
+            <figure
+              class="overflow-hidden rounded-[28px] border border-corag-border bg-corag-bg-elevated shadow-corag-lg"
+            >
+              <div
+                class="flex items-center gap-1.5 border-b border-corag-border bg-corag-bg px-5 py-3"
+                aria-hidden="true"
+              >
+                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/40"
+                ></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/25"
+                ></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-corag-primary/10"
+                ></span>
+              </div>
+              <img
+                src={`${appHomeDesktopBase}-1280.webp`}
+                srcset={`${appHomeDesktopBase}-640.webp 640w, ${appHomeDesktopBase}-960.webp 960w, ${appHomeDesktopBase}-1280.webp 1280w, ${appHomeDesktopBase}-1920.webp 1920w`}
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                alt={h.productScreenshotDesktopAlt}
+                width={1280}
+                height={800}
+                loading="lazy"
+                decoding="async"
+                class="w-full"
+              />
+            </figure>
+            {/* CSS phone frame overlapping the corner */}
+            <div
+              class="absolute -bottom-10 -right-2 hidden w-44 overflow-hidden rounded-[1.9rem] border-[6px] border-corag-bg-dark bg-corag-bg-dark shadow-corag-lg sm:block lg:-right-6 lg:w-52"
+            >
+              <img
+                src={`${appAportarMobileBase}-390.webp`}
+                srcset={`${appAportarMobileBase}-390.webp 390w, ${appAportarMobileBase}-780.webp 780w`}
+                sizes="13rem"
+                alt={h.productScreenshotMobileAlt}
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
+                class="w-full rounded-[1.5rem]"
+              />
+            </div>
+          </div>
+          <p class="mt-14 text-sm leading-relaxed text-corag-secondary sm:mt-16">
+            {h.productUiCaption}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Interoperability — the developer thesis, code shown ───────────── */}
+  <section class="bg-corag-bg">
+    <div class="main-container py-20 sm:py-24 lg:py-32">
+      <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div class="min-w-0 lg:col-span-5">
+          <p
+            class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary"
+          >
+            {h.devEyebrow}
+          </p>
+          <h2
+            class="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl lg:text-5xl"
+          >
+            {h.devTitle}
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-corag-secondary">
+            {h.devBody}
+          </p>
+          <div class="mt-8">
+            <a href={routes.dev} class={btnSecondary}>{h.devCta}</a>
+          </div>
+        </div>
+        <div class="min-w-0 lg:col-span-7">
+          <figure
+            class="overflow-hidden rounded-[28px] bg-corag-fill shadow-corag-lg"
+            data-reveal
+          >
+            <figcaption
+              class="flex items-center justify-between border-b border-white/10 px-6 py-3"
+            >
+              <span class="font-mono text-sm text-corag-on-fill/80"
+                >{h.devCodeTitle}</span
+              >
+              <span class="flex gap-1.5" aria-hidden="true">
+                <span class="h-2.5 w-2.5 rounded-full bg-corag-rosa/40"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-corag-rosa/20"></span>
+              </span>
+            </figcaption>
+            <pre
+              class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-corag-on-fill/80"><code set:html={devCodeSample} /></pre>
+          </figure>
+          <p class="mt-6 text-sm font-semibold text-corag-secondary">
+            {h.devCategoriesLabel}
+          </p>
+          <ul class="mt-3 flex flex-wrap gap-2" role="list">
+            {
+              HELP_CATEGORIES.map((category) => (
+                <li class="rounded-full border border-corag-border bg-corag-bg-elevated px-3 py-1 font-mono text-xs text-corag-secondary">
+                  {category}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <BlogPreviewSection lang={lang} />
+
+  {/* ── Beat 6 — the invitation, full-bleed brand moment ──────────────── */}
+  <section class="relative overflow-hidden bg-corag-bg-dark">
+    <svg
+      class="pointer-events-none absolute -bottom-56 -right-40 h-[38rem] w-[38rem] text-corag-rosa opacity-[0.07]"
+      viewBox="0 0 512 512"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+        stroke="currentColor"
+        stroke-width="22"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        transform="rotate(-18 256 256)"></path>
+    </svg>
+    <div
+      class="main-container relative py-20 text-center sm:py-24 lg:py-28"
+      data-reveal
+    >
+      <h2
+        class="font-display text-4xl font-bold tracking-tight text-corag-on-fill sm:text-5xl lg:text-6xl"
+      >
+        {h.closingTitle}
+      </h2>
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-corag-rosa">
+        {h.closingBody}
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a
+          href={APP_URL}
+          class={btnOnDark}
+          data-umami-event="app_cta_click"
+          data-umami-event-surface="closing"
+        >{h.closingCtaApp}</a>
+        <a href={routes.team} class={btnGhostOnDark}>{h.closingCtaTeam}</a>
+      </div>
+      {/* The channels that exist — nothing else (rule 0) */}
+      <div class="mt-14 border-t border-white/10 pt-8 sm:mt-16">
+        <p
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-rosa"
+        >
+          {h.closingChannelsTitle}
+        </p>
+        <ul
+          class="mt-5 flex flex-wrap items-center justify-center gap-3"
+          role="list"
+        >
+          <li>
+            <a
+              href={APP_URL}
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-corag-rosa/60 px-5 py-2 font-semibold text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa"
+              data-umami-event="app_cta_click"
+              data-umami-event-surface="channels"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 512 512" aria-hidden="true">
+                <path
+                  d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+                  fill="currentColor"
+                  transform="rotate(-18 256 256)"></path>
+              </svg>
+              {h.closingChannelApp}
+            </a>
+          </li>
+          {
+            channelLinks.map((channel) => (
+              <li>
+                <a
+                  href={channel.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  aria-label={channel.label}
+                  data-umami-event="social_click"
+                  data-umami-event-platform={channel.icon}
+                  data-umami-event-source="home-channels"
+                  class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-corag-rosa transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-rosa"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d={channel.iconPath} />
+                  </svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  /*
+   * Scroll-reveal enhancement — not an island, just a deferred module.
+   * The pre-reveal hidden state only exists after `data-reveal-ready` is
+   * stamped here, so without JS (or under reduced motion) the page is
+   * complete and static. CSS lives in global.css.
+   */
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = document.querySelectorAll('[data-reveal]');
+  if (!reduced && 'IntersectionObserver' in window && targets.length > 0) {
+    document.documentElement.setAttribute('data-reveal-ready', '');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.setAttribute('data-revealed', '');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+    for (const el of targets) observer.observe(el);
+  }
+</script>
+
+<style>
+  .hero-glow {
+    background: radial-gradient(
+      closest-side,
+      var(--color-corag-rosa),
+      transparent 70%
+    );
+    opacity: 0.1;
+    filter: blur(48px);
+  }
+
+  /*
+   * Height-aware hero compaction. Tailwind sizes the hero by width; these
+   * rules size it by the dimension that actually constrains a full-viewport
+   * banner — the height. Doubled class selectors out-rank the utilities.
+   */
+  /* Short laptops (1280x720, 1366x768): shrink the display type a step. */
+  @media (min-width: 1024px) and (max-height: 820px) {
+    .hero-title.hero-title {
+      font-size: 3rem;
+    }
+    .hero-lead.hero-lead {
+      font-size: 1rem;
+      margin-top: 0.75rem;
+    }
+    .hero-ctas.hero-ctas,
+    .hero-chips.hero-chips {
+      margin-top: 1.25rem;
+    }
+  }
+  /* Very short viewports (landscape phones, tiny screens): compact hard. */
+  @media (max-height: 620px) {
+    .hero-shell.hero-shell {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    .hero-eyebrow.hero-eyebrow {
+      /* 12px floor: anything smaller fails the legibility bar on phones. */
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+    }
+    .hero-title.hero-title {
+      font-size: 1.875rem;
+      margin-top: 0.5rem;
+    }
+    .hero-lead.hero-lead {
+      font-size: 0.875rem;
+      line-height: 1.45;
+      margin-top: 0.5rem;
+    }
+    .hero-ctas.hero-ctas,
+    .hero-chips.hero-chips {
+      margin-top: 0.875rem;
+    }
+  }
+
+  /* Motion is a whisper, and only for those who did not opt out. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-glow {
+      animation: hero-glow-drift 26s ease-in-out infinite alternate;
+    }
+    .hero-scroll-cue {
+      animation: hero-cue-bounce 2.2s ease-in-out infinite;
+    }
+  }
+
+  @keyframes hero-glow-drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-8rem, 6rem, 0) scale(1.25);
+    }
+  }
+
+  @keyframes hero-cue-bounce {
+    0%,
+    100% {
+      transform: translate(-50%, 0);
+    }
+    50% {
+      transform: translate(-50%, 0.4rem);
+    }
+  }
+
+  /* Problem act — a "post that gets lost" fades out to the right. */
+  .problem-fade {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      #000 55%,
+      rgb(0 0 0 / 0.28) 96%
+    );
+    mask-image: linear-gradient(90deg, #000 55%, rgb(0 0 0 / 0.28) 96%);
+  }
+
+  /* Problem act — the stale list's first row is struck through. */
+  .problem-strike {
+    position: relative;
+  }
+  .problem-strike::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: 50%;
+    height: 1.5px;
+    background: var(--color-corag-text-muted);
+    opacity: 0.7;
+  }
+
+  /* Problem act — the fragments sit like loose notes: a two-column scatter
+     at desktop widths (half the height of a single stack). */
+  @media (min-width: 1024px) {
+    .problem-note:nth-child(odd) {
+      transform: rotate(-1.5deg);
+      justify-self: start;
+    }
+    .problem-note:nth-child(even) {
+      transform: rotate(1.25deg) translateY(1.75rem);
+      justify-self: end;
+    }
+    .problem-note:nth-child(3) {
+      transform: rotate(1deg) translateX(1.5rem);
+    }
+    .problem-note:nth-child(5) {
+      transform: rotate(-2deg) translateX(-1rem);
+    }
+  }
+
+  /* Pipeline act — the connector segments draw themselves on reveal. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html[data-reveal-ready]) .pipeline-step:not(:first-child)::before {
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.5s ease 0.25s;
+    }
+    :global(html[data-reveal-ready])
+      .pipeline-step[data-revealed]:not(:first-child)::before {
+      transform: scaleY(1);
+    }
+    @media (min-width: 1024px) {
+      :global(html[data-reveal-ready])
+        .pipeline-step:not(:first-child)::before {
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+      :global(html[data-reveal-ready])
+        .pipeline-step[data-revealed]:not(:first-child)::before {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  /* Pipeline act — connectors drawn in the grid gaps, token-coloured. */
+  .pipeline-step:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    top: -2.5rem; /* the vertical grid gap */
+    width: 2px;
+    height: 2.5rem;
+    background: var(--color-corag-primary);
+    opacity: 0.25;
+  }
+  @media (min-width: 1024px) {
+    .pipeline-step:not(:first-child)::before {
+      left: -1.5rem; /* the horizontal grid gap */
+      top: 3.25rem;
+      width: 1.5rem;
+      height: 2px;
+    }
+  }
+</style>

@@ -1,0 +1,24 @@
+---
+/**
+ * Corag v3.0.0 eyebrow label — small uppercase tracking-widest text used above
+ * section titles or in hero banners.
+ */
+
+interface Props {
+  variant?: 'primary' | 'accent' | 'muted';
+  class?: string;
+}
+
+const { variant = 'primary', class: className = '' } = Astro.props;
+
+const colorClass =
+  variant === 'accent'
+    ? 'text-corag-accent dark:text-corag-accent'
+    : variant === 'muted'
+      ? 'text-corag-secondary'
+      : 'text-corag-primary dark:text-corag-primary-light';
+---
+
+<p class={`text-sm font-semibold uppercase tracking-widest ${colorClass} ${className}`}>
+  <slot />
+</p>

@@ -1,0 +1,14 @@
+name: Asaulia
+logo: /images/allies/asaulia.webp
+logoDark: /images/allies/asaulia-dark.webp
+kind: company
+role:
+  en: Allied company
+  es: Empresa aliada
+bio:
+  en: >-
+    We help brands with ambitious growth goals.
+  es: >-
+    Ayudamos a marcas que tienen metas ambiciosas de crecimiento.
+url: https://www.linkedin.com/company/asaulia/
+order: 0

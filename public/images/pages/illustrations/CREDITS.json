@@ -1,0 +1,130 @@
+{
+  "generatedBy": "scripts/prepare-illustrations.mjs",
+  "note": "Illustrations commissioned and owned by the Corag team, generated from the briefs in tmp/prompt-ilustracion-*.md. Backgrounds keyed out so they sit correctly on both the light and the dark theme. No text, no real people, no figures.",
+  "assets": [
+    {
+      "key": "illustration-partners",
+      "page": "/partners",
+      "source": "tmp/ilustrations/ilustracion-aliados.png",
+      "original": {
+        "width": 1448,
+        "height": 1086
+      },
+      "trimmed": {
+        "width": 1269,
+        "height": 706
+      },
+      "backgroundKeyed": "rgb(251, 247, 243)",
+      "files": [
+        {
+          "file": "illustration-partners-480.webp",
+          "width": 480,
+          "bytes": 20342
+        },
+        {
+          "file": "illustration-partners-768.webp",
+          "width": 768,
+          "bytes": 34962
+        },
+        {
+          "file": "illustration-partners-1024.webp",
+          "width": 1024,
+          "bytes": 47676
+        }
+      ]
+    },
+    {
+      "key": "illustration-leaders",
+      "page": "/leaders",
+      "source": "tmp/ilustrations/ilustracion-lideres.png",
+      "original": {
+        "width": 1448,
+        "height": 1086
+      },
+      "trimmed": {
+        "width": 1378,
+        "height": 659
+      },
+      "backgroundKeyed": "rgb(253, 250, 245)",
+      "files": [
+        {
+          "file": "illustration-leaders-480.webp",
+          "width": 480,
+          "bytes": 26924
+        },
+        {
+          "file": "illustration-leaders-768.webp",
+          "width": 768,
+          "bytes": 46166
+        },
+        {
+          "file": "illustration-leaders-1024.webp",
+          "width": 1024,
+          "bytes": 63164
+        }
+      ]
+    },
+    {
+      "key": "illustration-about",
+      "page": "/about",
+      "source": "tmp/ilustrations/ilustracion-sobre-corag.png",
+      "original": {
+        "width": 1448,
+        "height": 1086
+      },
+      "trimmed": {
+        "width": 1412,
+        "height": 422
+      },
+      "backgroundKeyed": "rgb(251, 247, 243)",
+      "files": [
+        {
+          "file": "illustration-about-480.webp",
+          "width": 480,
+          "bytes": 16858
+        },
+        {
+          "file": "illustration-about-768.webp",
+          "width": 768,
+          "bytes": 29128
+        },
+        {
+          "file": "illustration-about-1024.webp",
+          "width": 1024,
+          "bytes": 40300
+        }
+      ]
+    },
+    {
+      "key": "illustration-movement",
+      "page": "/movement",
+      "source": "tmp/ilustrations/ilustracion-movimiento.png",
+      "original": {
+        "width": 1672,
+        "height": 941
+      },
+      "trimmed": {
+        "width": 1328,
+        "height": 860
+      },
+      "backgroundKeyed": "source already transparent",
+      "files": [
+        {
+          "file": "illustration-movement-480.webp",
+          "width": 480,
+          "bytes": 95868
+        },
+        {
+          "file": "illustration-movement-768.webp",
+          "width": 768,
+          "bytes": 202956
+        },
+        {
+          "file": "illustration-movement-1024.webp",
+          "width": 1024,
+          "bytes": 327360
+        }
+      ]
+    }
+  ]
+}

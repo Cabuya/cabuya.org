@@ -1,0 +1,49 @@
+name: ayuda.red
+url: https://ayuda.red/
+aliases: []
+category: logistics
+featured: false
+order: 40
+logo: /images/ecosystem/ayudared/logo.webp
+logoAuthorization: pending_contact
+monogram: AR
+tagline:
+  es: Acopio, albergues y guías
+  en: Collection, shelters and guides
+what:
+  es: Mapa de puntos de acopio, albergues, voluntariado e instituciones; registro de personas desaparecidas; canales de donación y guías oficiales.
+  en: A map of collection points, shelters, volunteering and institutions; a missing-persons registry; donation channels and official guides.
+how:
+  es: Exploras la infraestructura de ayuda y los registros públicos del sitio.
+  en: Explore the site’s aid infrastructure and public registries.
+active: true
+overview:
+  es: "Mapa de infraestructura de ayuda: acopio, albergues, voluntariado e instituciones; registro de personas desaparecidas; canales de donación y guías oficiales."
+  en: "A map of aid infrastructure: collection, shelters, volunteering, and institutions; a missing-persons registry; donation channels and official guides."
+features:
+  - es: Mapa de acopio, albergues e instituciones
+    en: Map of collection, shelters, and institutions
+  - es: Registro de personas desaparecidas
+    en: Missing-persons registry
+  - es: Canales de donación y guías oficiales
+    en: Donation channels and official guides
+tools:
+  - es: Mapa de puntos de ayuda
+    en: Aid-points map
+  - es: Registros y guías públicas
+    en: Public registries and guides
+audience:
+  es: Personas que buscan logística de ayuda, donaciones o información de búsqueda.
+  en: People seeking aid logistics, donations, or search information.
+coverage:
+  es: Según los puntos y registros publicados en ayuda.red.
+  en: Per points and registries published on ayuda.red.
+limits:
+  es: No reproduzcamos datos personales de búsqueda en cabuya.org.
+  en: We do not reproduce missing-person PII on cabuya.org.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

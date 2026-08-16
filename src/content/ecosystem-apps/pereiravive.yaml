@@ -1,0 +1,93 @@
+name: PereiraVive
+url: https://pereiravive.com/
+aliases: []
+category: logistics
+featured: false
+order: 25
+logo: /images/ecosystem/pereiravive/logo.webp
+logoAuthorization: public_favicon_only
+monogram: PV
+tagline:
+  es: Arriendos sin registro
+  en: Rentals without signup
+what:
+  es: >-
+    Plataforma comunitaria y gratuita de arriendos en Pereira y municipios
+    cercanos tras el terremoto: buscar techo, publicar un inmueble o reportar
+    un letrero de «se arrienda» con foto — sin crear cuenta.
+  en: >-
+    A free community rental platform for Pereira and nearby municipalities
+    after the quake: find housing, list a place, or report a “for rent” street
+    sign with a photo — no account required.
+how:
+  es: >-
+    Filtras por tipo, municipio, barrio y precio; reportas letreros desde la
+    calle; quien arrienda publica o retira el aviso sin registro. También hay
+    canal para denunciar sobrecostos por la emergencia. El sitio pide verificar
+    el inmueble en persona y no consignar dinero por adelantado.
+  en: >-
+    Filter by type, municipality, neighborhood and price; report street signs;
+    landlords publish or remove listings without signup. There is also a
+    channel to report emergency price gouging. The site asks you to verify the
+    property in person and never send money in advance.
+overview:
+  es: >-
+    PereiraVive nace para que, después del terremoto, las familias que buscan
+    techo no tengan que recorrer toda la ciudad. Si ves un letrero de «se
+    arrienda», tomas una foto y alimentas un mapa/listado comunitario. Parte de
+    Red Vive; sin comisiones ni registro obligatorio.
+  en: >-
+    PereiraVive exists so that, after the quake, families looking for a roof do
+    not have to walk the whole city. If you see a “for rent” sign, you take a
+    photo and feed a community list/map. Part of Red Vive; no commissions and
+    no mandatory signup.
+features:
+  - es: Buscar arriendos por tipo, municipio, barrio y precio
+    en: Search rentals by type, municipality, neighborhood and price
+  - es: Reportar letreros de «se arrienda» vistos en la calle (con foto)
+    en: Report “for rent” street signs (with photo)
+  - es: Publicar un inmueble sin crear cuenta
+    en: List a property without creating an account
+  - es: Retirar el propio aviso sin registro
+    en: Remove your own listing without signup
+  - es: Denunciar sobrecostos de arriendo por la emergencia
+    en: Report emergency rental price gouging
+  - es: Cobertura Pereira, Dosquebradas y municipios cercanos (p. ej. Cartago, Santa Rosa)
+    en: Coverage for Pereira, Dosquebradas and nearby municipalities (e.g. Cartago, Santa Rosa)
+tools:
+  - es: Buscador y filtros de avisos
+    en: Listing search and filters
+  - es: «Vi un letrero» — reporte desde la calle
+    en: “I saw a sign” — street report
+  - es: Publicar / retirar aviso
+    en: Publish / remove listing
+  - es: Denuncias de sobrecosto
+    en: Price-gouging reports
+audience:
+  es: Familias que buscan arriendo tras el sismo; quienes arriendan; peatones que ven letreros.
+  en: Families seeking rentals after the quake; landlords; pedestrians who spot signs.
+coverage:
+  es: Pereira (Risaralda) y municipios listados en el sitio (p. ej. Dosquebradas, Cartago, Santa Rosa de Cabal).
+  en: Pereira (Risaralda) and municipalities listed on the site (e.g. Dosquebradas, Cartago, Santa Rosa de Cabal).
+limits:
+  es: >-
+    Es un tablero comunitario, no una inmobiliaria ni un aval de Corag. Los
+    avisos pueden desactualizarse; el sitio advierte no consignar dinero sin
+    ver el inmueble. No publicamos aquí cifras vivas de avisos. No encontramos
+    documentación pública de API ni MCP.
+  en: >-
+    A community board, not a real-estate agency or a Corag endorsement.
+    Listings can go stale; the site warns not to send money without seeing the
+    property. We do not publish live listing counts here. We did not find
+    public API or MCP documentation.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: >-
+      No encontramos documentación pública de API ni MCP en el sitio. Si la
+      tienen, indícalo en el formulario de inclusión.
+    en: >-
+      We did not find public API or MCP documentation on the site. If you have
+      either, note it in the listing request form.
+active: true

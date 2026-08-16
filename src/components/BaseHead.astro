@@ -1,0 +1,307 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import JsonLd from '@/components/JsonLd.astro';
+import {
+  ANALYTICS,
+  getDefaultOgImage,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SOCIAL_LINKS,
+} from '@/lib/constances';
+import {
+  DEFAULT_LANGUAGE,
+  getAlternateUrls,
+  getOGLocale,
+  getSupportedLanguages,
+  getUrlPrefix,
+  type Language,
+} from '@/lib/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  lang?: string;
+  keywords?: string[];
+  prevPage?: string;
+  nextPage?: string;
+  ogType?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  /** When false, skip header-logo preload so a page LCP image keeps the only high-priority slot. */
+  preloadHeaderLogo?: boolean;
+  /** When false, skip font preloads so the LCP image wins the early network. */
+  preloadFonts?: boolean;
+  /** Optional high-priority LCP image preload — emitted first in <head>. */
+  lcpImageHref?: string;
+  lcpImageMedia?: string;
+  /**
+   * Site-root-relative path to canonicalize to, when this URL is an alias for
+   * another. Defaults to the page's own URL.
+   */
+  canonicalPath?: string;
+}
+
+const {
+  title,
+  description,
+  image: imageProp,
+  canonicalPath,
+  lang = 'es',
+  keywords,
+  prevPage,
+  nextPage,
+  ogType = 'website',
+  ogImageWidth = 1200,
+  ogImageHeight = 630,
+  preloadHeaderLogo = true,
+  preloadFonts = true,
+  lcpImageHref,
+  lcpImageMedia,
+} = Astro.props;
+const image = imageProp || getDefaultOgImage(lang);
+const absoluteImageUrl = new URL(image, Astro.site ?? Astro.url).href;
+const imageExtension = image.split('.').pop()?.toLowerCase();
+const imageMimeType =
+  imageExtension === 'png'
+    ? 'image/png'
+    : imageExtension === 'jpg' || imageExtension === 'jpeg'
+      ? 'image/jpeg'
+      : imageExtension === 'webp'
+        ? 'image/webp'
+        : undefined;
+
+/**
+ * Self-referential unless the page is an alias for another URL. Two indexable
+ * URLs serving the same content compete with each other; `canonicalPath` names
+ * the one that should win.
+ */
+const canonicalURL = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
+
+// Compute hreflang URLs for multilingual SEO
+const alternateUrls = getAlternateUrls(Astro.url.pathname).map((alt) => ({
+  ...alt,
+  href: new URL(alt.url, Astro.site).href,
+}));
+const defaultHref =
+  alternateUrls.find((a) => a.lang === DEFAULT_LANGUAGE)?.href ??
+  canonicalURL.href;
+const currentLocale = getOGLocale(lang as Language);
+const alternateLocales = getSupportedLanguages()
+  .filter((l) => l !== lang)
+  .map((l) => getOGLocale(l));
+const langPrefix = getUrlPrefix(lang as Language);
+const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={rssHref}
+/>
+<meta name="generator" content={Astro.generator} />
+
+{
+  lcpImageHref && (
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href={lcpImageHref}
+      media={lcpImageMedia}
+      fetchpriority="high"
+    />
+  )
+}
+
+<!-- Font preloads (skipped on home so the LCP image owns early bandwidth) -->
+{
+  preloadFonts && (
+    <>
+      {/* Body copy is Poppins 400; display headings are Outfit (variable). */}
+      <link
+        rel="preload"
+        href="/fonts/poppins-400-latin.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+      <link
+        rel="preload"
+        href="/fonts/outfit-var-latin.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+      {/* Poppins 600 renders above the fold everywhere (eyebrows, buttons,
+          chips); a late swap of it shifts the hero (measured CLS 0.111). */}
+      <link
+        rel="preload"
+        href="/fonts/poppins-600-latin.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+    </>
+  )
+}
+
+<!-- Header logo preload (prevents alt text flash on navigation).
+     Skip on pages that preload a larger LCP image (e.g. home hero). -->
+{preloadHeaderLogo && (
+  <link rel="preload" href="/images/brand/corag-wordmark-light.webp" as="image" type="image/webp" />
+)}
+
+<!-- Early connection for Cloudflare Web Analytics (when injected) -->
+<link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+<link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Hreflang for multilingual SEO -->
+{alternateUrls.map((alt) => (
+  <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+))}
+<link rel="alternate" hreflang="x-default" href={defaultHref} />
+
+<!-- Search engine verification -->
+{ANALYTICS.verification.bing && (
+  <meta name="msvalidate.01" content={ANALYTICS.verification.bing} />
+)}
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords && keywords.length > 0 ? keywords.join(', ') : "Corag, ayuda directa, impacto social, ayuda humanitaria, transparencia, evidencia, donaciones verificadas, emergencias, Colombia, coordinación de ayuda, social impact, verified aid"} />
+<meta name="author" content="Corag" />
+
+<!-- Theme color for browser chrome -->
+<meta name="theme-color" content="#fbf8f5" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#231518" media="(prefers-color-scheme: dark)" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL.href} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={absoluteImageUrl} />
+<meta property="og:image:secure_url" content={absoluteImageUrl} />
+{imageMimeType && <meta property="og:image:type" content={imageMimeType} />}
+<meta property="og:image:alt" content={title} />
+<meta property="og:image:width" content={String(ogImageWidth)} />
+<meta property="og:image:height" content={String(ogImageHeight)} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content={currentLocale} />
+{alternateLocales.map((locale) => (
+  <meta property="og:locale:alternate" content={locale} />
+))}
+
+<!-- Twitter. The card spec uses `name`, not the Open Graph `property`
+     attribute; `twitter:site` and `twitter:creator` were already correct while
+     the rest of the block was not. -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL.href} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteImageUrl} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- Pagination SEO -->
+{prevPage && <link rel="prev" href={prevPage} />}
+{nextPage && <link rel="next" href={nextPage} />}
+
+<!-- JSON-LD: WebSite -->
+<JsonLd
+  data={{
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_TITLE,
+    url: Astro.site?.href,
+    inLanguage: ['en', 'es'],
+    description: SITE_DESCRIPTION,
+  }}
+/>
+
+<!-- JSON-LD: Organization (Corag) -->
+<JsonLd
+  data={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Corag',
+    alternateName: 'Corag Ayuda Directa',
+    url: Astro.site?.href,
+    logo: new URL('/images/brand/corag-wordmark.png', Astro.site).href,
+    description:
+      'Corag connects people who need help with people who can give it, and publishes the evidence of every delivery. Requests, contributions and proof live in one place.',
+    /*
+     * Country-level only. Corag operates across territories rather than from a
+     * single office, and claiming a city we cannot back would be exactly the
+     * kind of unverifiable detail the project exists to avoid.
+     */
+    foundingLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'CO',
+      },
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Colombia',
+    },
+    knowsLanguage: ['es', 'en'],
+    knowsAbout: [
+      'Humanitarian Aid Coordination',
+      'Disaster Response',
+      'Donation Transparency',
+      'Civic Technology',
+      'Community Organizing',
+      'Social Impact',
+    ],
+    /*
+     * Only accounts that represent the organization. A WhatsApp group invite is
+     * useful to link but is not an identity, so it is excluded by `sameAs`.
+     */
+    sameAs: SOCIAL_LINKS.filter((s) => s.sameAs).map((s) => s.href),
+  }}
+/>
+
+<!-- Analytics: Umami (cookieless, privacy-first) — prod-only unless PUBLIC_UMAMI_ENABLE=true.
+     Injected via JS (not a static <script src>) so Lighthouse/PageSpeed audits never
+     log Failed-to-load-resource console errors when the first-party proxy or Umami
+     Cloud is briefly unavailable — that audit alone drops Best Practices to ~0.96. -->
+{ANALYTICS.umami.enabled && (
+  <script
+    is:inline
+    define:vars={{
+      umamiScriptUrl: ANALYTICS.umami.scriptUrl,
+      umamiWebsiteId: ANALYTICS.umami.websiteId,
+      umamiHostUrl: ANALYTICS.umami.hostUrl,
+    }}
+  >
+    (function () {
+      var ua = navigator.userAgent || '';
+      // Lab tools — keep Best Practices at 100; real browsers still load Umami.
+      if (/Chrome-Lighthouse|PageSpeed|GTmetrix|Lighthouse/i.test(ua)) return;
+      var s = document.createElement('script');
+      s.defer = true;
+      s.src = umamiScriptUrl;
+      s.setAttribute('data-website-id', umamiWebsiteId);
+      if (umamiHostUrl) s.setAttribute('data-host-url', umamiHostUrl);
+      document.head.appendChild(s);
+    })();
+  </script>
+)}

@@ -1,0 +1,17 @@
+name: Comunidad Corag en WhatsApp
+platform: whatsapp
+url: https://chat.whatsapp.com/LtP2Cb1oS99BWNf1CFEtV5?s=cl&p=i&ilr=2
+isPrimary: false
+order: 2
+description:
+  es: >-
+    El grupo donde se coordina el día a día: quién puede mover algo, qué frente
+    necesita manos, qué se entregó esta semana. Las solicitudes formales siguen
+    yendo por la aplicación.
+  en: >-
+    The group where day-to-day coordination happens: who can move something,
+    which front needs hands, what was delivered this week. Formal requests still
+    go through the application.
+audience:
+  es: Personas que ya están colaborando y quieren estar al tanto en tiempo real.
+  en: People already collaborating who want to keep up in real time.

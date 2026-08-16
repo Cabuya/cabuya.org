@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: I need help, or I want to offer help
+    url: https://ayuda.cabuya.org
+    about: Publishing a need, offering help, contributing and tracking a contribution all happen in the application — not in this repository.
+  - name: Report a Code of Conduct concern
+    url: https://cabuya.org/conduct
+    about: Private intake, and it can be sent anonymously. Please do not open a public issue for this.
+  - name: Ask about integrating with the API
+    url: https://cabuya.org/developers
+    about: The public contract, the endpoints and what is worth building on top.

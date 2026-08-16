@@ -1,0 +1,50 @@
+name: Pereira Unida
+url: https://pereiraunida.com/
+aliases:
+  - https://pereira-unida.vercel.app
+category: matching
+featured: false
+order: 10
+logo: /images/ecosystem/pereiraunida/logo.webp
+logoAuthorization: pending_contact
+monogram: PU
+tagline:
+  es: Ayuda ciudadana en tiempo real
+  en: Real-time civic help
+what:
+  es: "Coordina y solicita ayuda ciudadana en Pereira y Dosquebradas: alimentos, herramientas, medicinas, voluntariado, red familiar y puntos de acopio."
+  en: "Coordinate and request civic help in Pereira and Dosquebradas: food, tools, medicine, volunteering, family networks and collection points."
+how:
+  es: Las personas publican necesidades y ofertas; otras responden en tiempo real.
+  en: People publish needs and offers; others respond in real time.
+active: true
+overview:
+  es: "Coordina ayuda ciudadana en tiempo real en Pereira y Dosquebradas: alimentos, herramientas, medicinas, voluntariado, red familiar y puntos de acopio."
+  en: "Coordinates civic help in real time in Pereira and Dosquebradas: food, tools, medicine, volunteering, family networks, and collection points."
+features:
+  - es: Publicar y responder solicitudes de ayuda
+    en: Post and respond to help requests
+  - es: Categorías como alimentos, medicinas, herramientas y voluntariado
+    en: Categories such as food, medicine, tools, and volunteering
+  - es: Cobertura Pereira y Dosquebradas
+    en: Coverage for Pereira and Dosquebradas
+tools:
+  - es: Tablero / flujo de solicitudes ciudadanas
+    en: Civic help request board / flow
+  - es: Puntos de acopio y red familiar
+    en: Collection points and family network
+audience:
+  es: Vecinos que necesitan o pueden ofrecer ayuda tras la emergencia.
+  en: Neighbors who need or can offer help after the emergency.
+coverage:
+  es: Pereira y Dosquebradas.
+  en: Pereira and Dosquebradas.
+limits:
+  es: Herramienta ciudadana independiente; no es operada por Corag.
+  en: An independent civic tool; not operated by Corag.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

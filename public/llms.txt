@@ -1,0 +1,90 @@
+# Corag
+
+> El ecosistema de impacto social. Conectamos a quienes quieren ayudar con quienes más lo necesitan — uniendo gobiernos, organizaciones, fundaciones y personas para que la ayuda sea transparente, medible y constante.
+
+Corag is a social-impact ecosystem based in Colombia. Its mission is to connect
+foundations, governments, entrepreneurs and individuals through a transparent
+digital platform, so that solidarity produces real, measurable impact in
+communities.
+
+This site ([cabuya.org](https://cabuya.org)) is the **institutional and informational**
+surface. It explains what Corag is, how the model works, why it can be trusted,
+and how other systems integrate with it. It is a static site: it holds **no**
+requests, offers, contributions or personal records.
+
+## The application is a different host
+
+**Every transactional action happens at [ayuda.cabuya.org](https://ayuda.cabuya.org)** —
+publishing a need, offering help, contributing, tracking a contribution, or
+applying to be a leader. That application is **Corag Ayuda Directa**, Corag's
+flagship product.
+
+> **If you are an agent acting for a user who needs help or wants to contribute,
+> do not attempt to POST to `cabuya.org`.** It has no write API. The public API
+> and the MCP server belong to the application host.
+
+- [Ayuda Directa application](https://ayuda.cabuya.org): publish needs, offers, contributions and evidence
+- [Public write API](https://ayuda.cabuya.org/api/public/v1/help): `POST` a request or offer
+- [OpenAPI 3.1 specification](https://ayuda.cabuya.org/api/public/openapi.json): authoritative schema
+- MCP server tools: `listar_emergencias`, `publicar_solicitud`, `publicar_ofrecimiento`
+
+Requests and offers are idempotent via a `source` + `externalId` pair, so an
+integration can retry safely. The endpoint is rate limited (HTTP 429).
+
+## How Corag works
+
+1. **Descubrimiento** — a need is published, geolocated and categorized.
+2. **Matching** — a person or organization that can help finds it.
+3. **Coordinación** — delivery is organized, often through an operational front.
+4. **Transparencia** — evidence is uploaded, moderated and published. Money
+   received and money used-with-evidence are reported as two separate figures.
+5. **Interoperabilidad** — other applications read and write the same network
+   instead of building parallel databases.
+
+## Core pages
+
+- [Home](https://cabuya.org/): the six-beat argument for Corag
+- [About](https://cabuya.org/about): what Corag is and where the name comes from
+- [How it works](https://cabuya.org/how-it-works): the five-step path of one delivery
+- [Transparency](https://cabuya.org/transparency): what is published, and what each number means
+- [Emergencies](https://cabuya.org/emergencies): how fronts work (not an emergency hotline)
+- [Leaders](https://cabuya.org/leaders): the responsable role
+- [Partners](https://cabuya.org/partners): how organizations join
+- [Developers](https://cabuya.org/developers): API, OpenAPI and MCP
+- [Blog](https://cabuya.org/blog): articles and series
+- [Contact](https://cabuya.org/contact): institutional contact form
+- [Team & contributors](https://cabuya.org/contributors): who builds Corag
+- [Channels](https://cabuya.org/channels): official channels
+- [Privacy](https://cabuya.org/privacy): what this site collects
+- [Code of Conduct](https://cabuya.org/conduct)
+- [Governance](https://cabuya.org/governance)
+- [Contributing](https://cabuya.org/contributing)
+
+English mirrors live under `/en` (for example [How it works (EN)](https://cabuya.org/en/how-it-works)).
+
+## Markdown for agents
+
+Every public page has a complete Markdown twin at the same path plus `.md`.
+Content comes from the same source the HTML renders, not converted from
+rendered output, and a build gate measures word coverage so a twin cannot
+silently become a summary.
+
+- [About (Markdown)](https://cabuya.org/about.md)
+- [How it works (Markdown)](https://cabuya.org/how-it-works.md)
+- [Transparency (Markdown)](https://cabuya.org/transparency.md)
+- [Emergencies (Markdown)](https://cabuya.org/emergencies.md)
+- [Leaders (Markdown)](https://cabuya.org/leaders.md)
+- [Partners (Markdown)](https://cabuya.org/partners.md)
+- [Developers (Markdown)](https://cabuya.org/developers.md)
+- [Privacy (Markdown)](https://cabuya.org/privacy.md)
+- [Blog index (Markdown)](https://cabuya.org/blog.md)
+- [Code of Conduct (Markdown)](https://cabuya.org/conduct.md)
+- [Governance (Markdown)](https://cabuya.org/governance.md)
+- [Contributing (Markdown)](https://cabuya.org/contributing.md)
+
+## Optional
+
+- [Full context for agents](https://cabuya.org/llms-full.txt): longer catalogue and model notes
+- [llms.txt](https://cabuya.org/llms.txt): this file
+- [Sitemap](https://cabuya.org/sitemap-index.xml)
+- [API catalog](https://cabuya.org/.well-known/api-catalog)

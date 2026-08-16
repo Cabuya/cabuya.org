@@ -1,0 +1,62 @@
+# robots.txt for Corag — el ecosistema de impacto social
+# https://cabuya.org
+
+# Default: allow all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+# Sitemap location
+Sitemap: https://cabuya.org/sitemap-index.xml
+
+# LLM guidance files
+# https://cabuya.org/llms.txt
+# https://cabuya.org/llms-full.txt
+
+# AI/LLM Crawlers - Explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Facebook / Meta link-preview crawlers (Sharing Debugger, WhatsApp, Messenger)
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /

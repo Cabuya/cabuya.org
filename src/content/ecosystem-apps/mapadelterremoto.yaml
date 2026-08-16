@@ -1,0 +1,49 @@
+name: Mapa del terremoto
+url: https://www.mapadelterremoto.com/
+aliases: []
+category: damage
+featured: false
+order: 30
+logo: /images/ecosystem/mapadelterremoto/logo.webp
+logoAuthorization: pending_contact
+monogram: MT
+tagline:
+  es: Daños en un solo mapa
+  en: Damage on one map
+what:
+  es: "Mapa abierto de daños del sismo del 10 de agosto de 2026 en Colombia: puntos de daño, albergues y acopio en varias ciudades."
+  en: "An open damage map for Colombia’s 10 August 2026 quake: damage points, shelters and collection sites across several cities."
+how:
+  es: Exploras el mapa y aportas puntos de daño o de logística de ayuda.
+  en: Explore the map and add damage or aid-logistics points.
+active: true
+overview:
+  es: "Mapa abierto de daños del sismo del 10 de agosto de 2026 en Colombia: puntos de daño, albergues y acopio en varias ciudades."
+  en: "An open damage map for Colombia’s 10 August 2026 quake: damage points, shelters, and collection sites across several cities."
+features:
+  - es: Puntos de daño en el mapa
+    en: Damage points on the map
+  - es: Albergues y puntos de acopio
+    en: Shelters and collection points
+  - es: Aporte ciudadano de nuevos puntos
+    en: Citizen contributions of new points
+tools:
+  - es: Mapa colaborativo de afectación
+    en: Collaborative impact map
+  - es: Capas de logística de ayuda
+    en: Aid-logistics layers
+audience:
+  es: Personas que necesitan ver o aportar información de afectación y logística.
+  en: People who need to see or add impact and logistics information.
+coverage:
+  es: Varias ciudades afectadas por el sismo del 10 de agosto de 2026.
+  en: Several cities affected by the 10 August 2026 quake.
+limits:
+  es: Datos ciudadanos; conviene contrastar con fuentes oficiales cuando la decisión sea crítica.
+  en: Citizen data; cross-check official sources when the decision is critical.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

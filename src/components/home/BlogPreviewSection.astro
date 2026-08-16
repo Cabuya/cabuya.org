@@ -1,0 +1,130 @@
+---
+import { getBlogPosts, getPostSlug } from '@/lib/blog';
+/**
+ * Home blog preview — the home's own presentation (Act V movement A).
+ *
+ * Deliberately static: the listing's interactive `BlogCard.svelte` stays
+ * untouched for `/blog`, while the home renders one featured post plus two
+ * compact ones with zero islands. Hero thumbnails reuse the existing
+ * responsive sets (`hero-480/768/1280.webp` next to each `hero.webp`).
+ */
+import { formatCalendarDateLocale } from '@/lib/dates';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'es' } = Astro.props;
+const t = getTranslations(lang as Language);
+const prefix = getUrlPrefix(lang as Language);
+
+const blogResult = await getBlogPosts({ lang: lang as Language, pageSize: 3 });
+const [featured, ...rest] = blogResult.postsResult;
+
+/** Build a srcset from the post's hero path, if it follows the standard set. */
+const heroSrcset = (heroImage: string | undefined): string | undefined =>
+  heroImage?.endsWith('/hero.webp')
+    ? [480, 768, 1280]
+        .map(
+          (w) => `${heroImage.replace(/hero\.webp$/, `hero-${w}.webp`)} ${w}w`
+        )
+        .join(', ')
+    : undefined;
+
+const postUrl = (postId: string) => `${prefix}/blog/${getPostSlug(postId)}/`;
+
+const cardBase =
+  'group relative block overflow-hidden rounded-[18px] border border-corag-border bg-corag-bg-elevated shadow-corag-sm transition-shadow hover:shadow-corag-lg motion-safe:transition-[box-shadow,transform] motion-safe:hover:-translate-y-1';
+---
+
+<section class="bg-corag-bg">
+  <div class="main-container py-20 sm:py-24 lg:py-28">
+    <h2
+      class="font-display text-3xl font-bold leading-[1.08] tracking-tight text-corag sm:text-4xl"
+    >
+      {t.homeSections.latestArticles}
+    </h2>
+    <div class="mt-10 grid gap-6 lg:grid-cols-12">
+      {
+        featured && (
+          <a
+            href={postUrl(featured.id)}
+            class={`${cardBase} lg:col-span-7`}
+            data-reveal
+          >
+            {featured.data.heroImage && (
+              <img
+                src={featured.data.heroImage}
+                srcset={heroSrcset(featured.data.heroImage)}
+                sizes="(min-width: 1024px) 56vw, 100vw"
+                alt=""
+                width={1280}
+                height={720}
+                loading="lazy"
+                decoding="async"
+                class="aspect-[16/9] w-full object-cover"
+              />
+            )}
+            <div class="p-6 lg:p-8">
+              <time class="text-sm text-corag-secondary">
+                {formatCalendarDateLocale(featured.data.pubDate, t.dateLocale)}
+              </time>
+              <h3 class="mt-2 font-display text-2xl font-bold text-corag transition-colors group-hover:text-corag-primary">
+                {featured.data.title}
+              </h3>
+              <p class="mt-3 leading-relaxed text-corag-secondary">
+                {featured.data.description}
+              </p>
+            </div>
+          </a>
+        )
+      }
+      <div class="flex flex-col gap-6 lg:col-span-5">
+        {
+          rest.map((post, index) => (
+            <a
+              href={postUrl(post.id)}
+              class={`${cardBase} flex-1`}
+              data-reveal
+              style={`--reveal-delay: ${(index + 1) * 100}ms`}
+            >
+              <div class="flex h-full flex-col sm:flex-row lg:flex-col">
+                {post.data.heroImage && (
+                  <img
+                    src={post.data.heroImage}
+                    srcset={heroSrcset(post.data.heroImage)}
+                    sizes="(min-width: 640px) 20rem, 100vw"
+                    alt=""
+                    width={768}
+                    height={432}
+                    loading="lazy"
+                    decoding="async"
+                    class="aspect-[16/9] w-full object-cover sm:w-64 lg:w-full"
+                  />
+                )}
+                <div class="p-6">
+                  <time class="text-sm text-corag-secondary">
+                    {formatCalendarDateLocale(post.data.pubDate, t.dateLocale)}
+                  </time>
+                  <h3 class="mt-2 font-display text-lg font-semibold text-corag transition-colors group-hover:text-corag-primary">
+                    {post.data.title}
+                  </h3>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <div class="mt-10 text-center">
+      <a
+        href={`${prefix}/blog`}
+        class="inline-block border-b-2 border-corag-primary text-base font-bold text-corag transition hover:text-corag-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary sm:text-lg"
+      >
+        {t.homeSections.viewAllPosts} &rarr;
+      </a>
+    </div>
+  </div>
+</section>

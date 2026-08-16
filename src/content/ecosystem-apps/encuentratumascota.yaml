@@ -1,0 +1,47 @@
+name: Encuentra tu mascota
+url: https://encuentratumascota.co/anuncios/se-busca
+aliases: []
+category: pets
+featured: false
+order: 10
+logo: /images/ecosystem/encuentratumascota/logo.webp
+logoAuthorization: pending_contact
+monogram: EM
+tagline:
+  es: Clasificados de mascotas
+  en: Pet classifieds
+what:
+  es: Clasificados para reunir mascotas perdidas con su familia.
+  en: Classifieds to reunite lost pets with their families.
+how:
+  es: Publicas o buscas anuncios «se busca» con fotos y datos de la mascota.
+  en: Post or browse “missing” listings with photos and pet details.
+active: true
+overview:
+  es: Clasificados para reunir mascotas perdidas con su familia, con anuncios «se busca» y fotos.
+  en: Classifieds to reunite lost pets with their families, with “missing” listings and photos.
+features:
+  - es: Anuncios «se busca»
+    en: “Missing” listings
+  - es: Fotos y datos de la mascota
+    en: Photos and pet details
+  - es: Publicación y búsqueda de anuncios
+    en: Post and browse listings
+tools:
+  - es: Clasificados de mascotas perdidas
+    en: Lost-pet classifieds
+audience:
+  es: Familias que buscan o reportan mascotas perdidas.
+  en: Families searching for or reporting lost pets.
+coverage:
+  es: Según los anuncios publicados en el sitio.
+  en: Per listings published on the site.
+limits:
+  es: No es un servicio veterinario ni de rescate oficial.
+  en: Not a veterinary service or official rescue agency.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

@@ -1,0 +1,165 @@
+---
+/**
+ * The invitation into the application, for use inside page content.
+ *
+ * Eight of sixteen pages measured with no route to the application at all —
+ * including the whole blog, which is the top of the funnel. This block is what
+ * closes those pages.
+ *
+ * It carries two links on purpose. The primary asks for the act; the secondary
+ * points at the published evidence, because the argument Corag makes is that
+ * the receipt exists. A CTA that only asks, and never shows, is exactly the
+ * kind of claim this project refuses to make.
+ *
+ * `data-app-invite` is the hook `FloatingAppCta` watches: while one of these is
+ * on screen, the floating pill hides itself rather than ask twice.
+ */
+import { APP_PATHS, appUrl } from '@/lib/constances';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  /**
+   * `band` is the full-bleed dark close for a page; `card` is the quieter
+   * bordered version that sits inside an article without hijacking it.
+   */
+  variant?: 'band' | 'card';
+  /** Analytics `surface` — where in the site this invitation lives. */
+  surface: string;
+  /** Optional override when a page can say something more specific. */
+  title?: string;
+  body?: string;
+  class?: string;
+}
+
+const {
+  lang,
+  variant = 'band',
+  surface,
+  title,
+  body,
+  class: className = '',
+} = Astro.props;
+
+const t = getTranslations(lang);
+const copy = t.appCta.invite;
+const isBand = variant === 'band';
+
+const heading = title ?? copy.title;
+const lead = body ?? copy.body;
+---
+
+<aside
+  data-app-invite
+  aria-label={copy.eyebrow}
+  class:list={[
+    'not-prose',
+    isBand
+      ? 'bg-corag-fill text-corag-on-fill'
+      : 'rounded-2xl border border-corag-border bg-corag-bg-elevated dark:border-white/10',
+    className,
+  ]}
+>
+  <div
+    class:list={[
+      'mx-auto max-w-4xl',
+      isBand ? 'px-6 py-16 text-center sm:py-20' : 'px-6 py-10 sm:px-8',
+    ]}
+  >
+    <p
+      class:list={[
+        'text-xs font-semibold uppercase tracking-[0.2em]',
+        isBand ? 'text-corag-rosa' : 'text-corag-primary',
+      ]}
+    >
+      {copy.eyebrow}
+    </p>
+
+    <h2
+      class:list={[
+        'mt-3 font-display font-bold tracking-tight',
+        isBand
+          ? 'text-3xl text-corag-on-fill sm:text-4xl lg:text-5xl'
+          : 'text-2xl text-corag sm:text-3xl',
+      ]}
+    >
+      {heading}
+    </h2>
+
+    <p
+      class:list={[
+        'mt-4 leading-relaxed',
+        isBand
+          ? 'mx-auto max-w-2xl text-lg text-corag-rosa'
+          : 'text-base text-corag-secondary',
+      ]}
+    >
+      {lead}
+    </p>
+
+    <div
+      class:list={[
+        'mt-8 flex flex-wrap gap-3 sm:gap-4',
+        isBand && 'justify-center',
+      ]}
+    >
+      <a
+        href={appUrl(APP_PATHS.contribute)}
+        class:list={[
+          'inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+          isBand
+            ? 'bg-corag-on-fill text-corag-fill hover:bg-corag-rosa focus-visible:outline-corag-rosa'
+            : 'bg-corag-fill text-corag-on-fill hover:bg-corag-fill-strong focus-visible:outline-corag-primary',
+        ]}
+        data-umami-event="app_cta_click"
+        data-umami-event-surface={surface}
+      >
+        <svg
+          class="h-5 w-5 shrink-0"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 21s-7.5-4.6-9.6-9A5.6 5.6 0 0 1 12 6.2 5.6 5.6 0 0 1 21.6 12c-2.1 4.4-9.6 9-9.6 9z"
+          ></path>
+        </svg>
+        {copy.primary}
+      </a>
+
+      {/* The other half of the audience. The application has no dedicated
+          "request help" route, so this points at its root, where the active
+          emergencies and their help points are listed. */}
+      <a
+        href={appUrl(APP_PATHS.home)}
+        class:list={[
+          'inline-flex min-h-[48px] items-center rounded-full border px-6 py-3 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+          isBand
+            ? 'border-corag-rosa/60 text-corag-rosa hover:bg-white/5 focus-visible:outline-corag-rosa'
+            : 'border-corag-border text-corag-secondary hover:bg-corag-primary-soft focus-visible:outline-corag-primary dark:border-white/20 dark:text-white/80',
+        ]}
+        data-umami-event="app_cta_click"
+        data-umami-event-surface={`${surface}-need`}
+      >
+        {copy.secondary}
+      </a>
+    </div>
+
+    <p class:list={['mt-6 text-sm', isBand ? 'text-corag-rosa' : 'text-corag-secondary']}>
+      <a
+        href={appUrl(APP_PATHS.evidence)}
+        class:list={[
+          // inline-flex + min-height so the target clears the WCAG 2.2 AA
+          // floor: as a bare inline link it measured 20px tall.
+          'inline-flex min-h-[44px] items-center underline underline-offset-4 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2',
+          isBand ? 'focus-visible:outline-corag-rosa' : 'focus-visible:outline-corag-primary',
+        ]}
+        data-umami-event="app_cta_click"
+        data-umami-event-surface={`${surface}-evidence`}
+      >
+        {copy.tertiary}
+      </a>
+    </p>
+  </div>
+</aside>

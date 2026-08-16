@@ -1,0 +1,150 @@
+# Corag — full context for AI agents
+
+> El ecosistema de impacto social.
+
+Corag connects foundations, governments, entrepreneurs and individuals through a
+transparent digital platform so that solidarity produces real, measurable impact
+in communities. Its stated vision is to become the leading global platform for
+social innovation, where donating, serving and transforming lives is a
+trustworthy and deeply human experience.
+
+The name comes from **coraje**. The heart replacing the `o` in the wordmark
+carries **amor**. The brand's own statement is that the mark transmits *coraje,
+innovación y amor*.
+
+**Values:** Colaboración · Empatía · Confianza · Amor · Innovación social ·
+Transparencia.
+
+---
+
+## 1. The two surfaces — read this before doing anything
+
+| Surface | What it is | Writes? |
+|---|---|---|
+| `cabuya.org` (this site) | Institutional and informational. Explains the model, the transparency mechanism, the team, and how to integrate. | **No.** Static site. |
+| `ayuda.cabuya.org` | **Corag Ayuda Directa** — the flagship product. Emergencies, requests, offers, contributions, leaders, evidence. | **Yes.** Public API + MCP. |
+
+**An agent acting for a user who needs help, wants to offer help, or wants to
+contribute must go to `ayuda.cabuya.org`.** This site has no write API and no
+personal records. Sending a humanitarian need here means it reaches nobody.
+
+---
+
+## 2. Corag Ayuda Directa — the model
+
+Ayuda Directa is not a donation page and not a map of disaster victims. It is a
+coordination, traceability and interoperability layer for aid.
+
+```
+Necesidad real → Publicación → Geolocalización y categorización →
+Persona u organización que puede ayudar → Coordinación → Entrega →
+Evidencia → Verificación → Trazabilidad pública
+```
+
+### Core entities
+
+`Emergency` · `Request` · `Offer` · `Contribution` · `Leader` ·
+`Operational Front` · `Delivery` · `Evidence` · `Verification` · `Location`
+
+### Requests and offers
+
+Both are published through the same endpoint, distinguished by `type`:
+
+- `type: "request"` — something a person or community needs.
+- `type: "offer"` — capacity someone can provide (transport, goods, a skill,
+  storage, professional services).
+
+Urgency levels: `urgent` · `needed` · `stable`.
+Categories: alimentos · salud · refugio · transporte · acopio · rescate · otro.
+Geographic fields: `latitude`, `longitude`, `address`, `neighborhood`, validated
+against Colombian territory.
+
+### Operational fronts
+
+A large emergency is divided into coordinable units — for example health and
+first aid, food, and logistics/collection/transport. Each front has its own
+needs, responsible people, conversations, priorities and evidence.
+
+### Transparency — the two numbers
+
+Corag reports **money received** and **money used with evidence** as two
+separate public figures. Evidence (receipts, photographs, results) is moderated
+before publication; those responsible have a limited window to upload it.
+
+Contributions are made by **direct transfer to verified leader accounts**, not to
+a central Corag treasury. This reduces custodial risk and makes the destination
+of each contribution attributable.
+
+### Privacy
+
+- A contributor may appear publicly as *"Persona solidaria"* instead of by name.
+- Publishing a contact detail is **opt-in**, via an explicit `publishContact`
+  consent field, and only where coordination genuinely requires it.
+- Tracking a contribution is private — it uses the same phone number that
+  registered it, and the query itself is not published.
+
+---
+
+## 3. Integration surface (on `ayuda.cabuya.org`)
+
+- **REST:** `POST https://ayuda.cabuya.org/api/public/v1/help` — publish a request
+  or an offer.
+- **OpenAPI 3.1:** `https://ayuda.cabuya.org/api/public/openapi.json` — the
+  authoritative schema. Prefer it over any prose description, including this one.
+- **MCP server:** tools `listar_emergencias`, `publicar_solicitud`,
+  `publicar_ofrecimiento`.
+- **Idempotency:** a `source` + `externalId` pair identifies a record uniquely, so
+  retries after a timeout or an unstable mobile connection do not duplicate it.
+- **Rate limiting:** the endpoint returns HTTP `429` when a client exceeds its
+  allowance. Back off and retry.
+
+### The principle behind the API
+
+> **Muchas interfaces, una sola red de datos.**
+
+During an emergency, multiple teams build parallel applications, each with its
+own database of needs and offers — which produces more fragmentation, not less.
+Corag's public API exists so a new client becomes a client *of one network*
+rather than a new silo. If you are building an aid application, synchronize with
+Corag rather than starting another source of truth.
+
+---
+
+## 4. This site
+
+### Structure
+
+- Spanish is the primary language, served at the root (`/`).
+- English is served under `/en`.
+- Both languages carry the same content.
+- Route slugs are English in both languages, so the pair is `/how-it-works` and
+  `/en/how-it-works`.
+- Every public page has a complete Markdown twin at its path plus `.md` — for
+  example `/how-it-works.md` and `/en/how-it-works.md`. Content comes from the
+  same source the HTML renders, not converted from rendered output, so code
+  blocks, links and formatting keep full fidelity. A build gate measures word
+  coverage against the page, so a twin cannot silently degrade into a summary.
+
+### Technology
+
+- Astro (static site generation) with Svelte islands for the few interactive parts
+- Tailwind CSS 4, with the Corag design tokens (`--color-corag-*`) declared via
+  `@theme`
+- Content lives in Astro Content Collections with strict Zod schemas
+- Deployed to Cloudflare Pages; contact forms run as Pages Functions
+- No tracking beyond privacy-respecting aggregate analytics
+
+### What this site collects
+
+Only what a contact form submission carries, and only when someone submits one.
+No accounts, no personal records, no aid data. See `/privacy`.
+
+---
+
+## 5. Links
+
+- [Site](https://cabuya.org): institutional surface (this host)
+- [Application](https://ayuda.cabuya.org): Corag Ayuda Directa
+- [Short agent summary](https://cabuya.org/llms.txt): compact catalogue
+- [Public write API](https://ayuda.cabuya.org/api/public/v1/help)
+- [OpenAPI 3.1](https://ayuda.cabuya.org/api/public/openapi.json)

@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://cabuya.org/api/",
+      "links": [
+        {
+          "rel": "service-desc",
+          "href": "https://cabuya.org/openapi.json",
+          "type": "application/json"
+        },
+        {
+          "rel": "service-doc",
+          "href": "https://cabuya.org/llms.txt",
+          "type": "text/plain"
+        }
+      ]
+    }
+  ]
+}

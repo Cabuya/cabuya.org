@@ -1,0 +1,49 @@
+name: Help Them Directly
+url: https://helpthemdirectly.org/en/
+aliases: []
+category: matching
+featured: false
+order: 30
+logo: /images/ecosystem/helpthemdirectly/logo.webp
+logoAuthorization: public_favicon_only
+monogram: HT
+tagline:
+  es: Ayuda directa a familias
+  en: Direct help to families
+what:
+  es: Directorio voluntario que conecta a quien quiere aportar con familias que recogen fondos por su cuenta. La campaña principal es el terremoto en Venezuela (2026); también hay un formulario para casos del terremoto en Colombia. El sitio no administra donaciones.
+  en: A volunteer directory that connects people who want to give with families fundraising on their own. The primary campaign is the Venezuela earthquake (2026); there is also a form for Colombia earthquake cases. The site does not collect or manage donations.
+how:
+  es: Eliges una campaña familiar y donas por los canales que la familia publica.
+  en: You pick a family campaign and donate through the channels that family publishes.
+active: true
+overview:
+  es: Directorio voluntario que conecta a quien quiere aportar con familias que recogen fondos por su cuenta. La campaña principal es el terremoto en Venezuela (2026); también hay un formulario para casos del terremoto en Colombia. El sitio no administra el dinero.
+  en: A volunteer directory connecting people who want to give with families fundraising on their own. The primary campaign is the Venezuela earthquake (2026); there is also a form for Colombia earthquake cases. The site does not manage the money.
+features:
+  - es: Campañas familiares con enlaces de donación propios
+    en: Family campaigns with their own donation links
+  - es: "Caso principal: terremoto Venezuela 2026"
+    en: "Primary case: Venezuela earthquake 2026"
+  - es: Formulario para casos del terremoto en Colombia
+    en: Form for Colombia earthquake cases
+tools:
+  - es: Directorio de campañas familiares
+    en: Family campaign directory
+  - es: Formulario de caso Colombia
+    en: Colombia case form
+audience:
+  es: Donantes que quieren transferir directo a familias; familias que publican su propia campaña.
+  en: Donors who want to transfer directly to families; families publishing their own campaign.
+coverage:
+  es: Principalmente Venezuela; formulario adicional para Colombia.
+  en: Primarily Venezuela; additional form for Colombia.
+limits:
+  es: No es un recaudador de Corag. El sitio declara que no cobra ni administra donaciones.
+  en: Not a Corag fundraiser. The site states it does not collect or manage donations.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

@@ -1,0 +1,17 @@
+name: Corag Ayuda Directa
+platform: website
+url: https://ayuda.cabuya.org
+isPrimary: true
+order: 1
+description:
+  es: >-
+    La aplicación. Aquí se publica una necesidad, se ofrece ayuda, se aporta y
+    se revisa la evidencia de lo que se entregó. Todo lo demás son canales de
+    conversación; esto es la operación.
+  en: >-
+    The application. This is where a need gets published, help gets offered,
+    contributions happen, and the evidence of every delivery gets reviewed.
+    Everything else is a conversation channel; this is the operation.
+audience:
+  es: Cualquier persona que necesite ayuda, quiera ofrecerla o quiera aportar.
+  en: Anyone who needs help, wants to offer it, or wants to contribute.

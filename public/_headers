@@ -1,0 +1,85 @@
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+# This is a static site with no accounts and no session cookies, so the surface
+# is small — but the two intake forms POST to a Pages Function, and the site is
+# the public face of a project whose whole argument is that it can be trusted.
+#
+# `script-src` needs `unsafe-inline` because Astro emits inline module scripts
+# for every island and the theme/notification bootstraps run before paint to
+# avoid a flash. `cloudflareinsights.com` is injected by the platform;
+# `cloud.umami.is` is only reached when the first-party proxy is disabled.
+# `connect-src` includes the application host so a page may link-check or fetch
+# public API metadata without the browser blocking it.
+#
+# There is no `frame-src` and no `frame-ancestors 'self'`: nothing on this site
+# embeds a frame, and nothing should embed this site.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://cloud.umami.is; connect-src 'self' https://cloud.umami.is https://ayuda.cabuya.org; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+
+/en/
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+
+# Agent-readiness .well-known endpoints (RFC 9727, RFC 8414, RFC 9728, SEP-1649, agent-skills v0.2.0)
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Cache-Control: public, max-age=300, must-revalidate
+
+/.well-known/oauth-authorization-server
+  Content-Type: application/json
+  Cache-Control: public, max-age=300, must-revalidate
+
+/.well-known/oauth-protected-resource
+  Content-Type: application/json
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Agent-markdown twins. `text/markdown` is deliberate — the WorkOS auth.md /
+# isitagentready scanner expects it — but browsers have no renderer for that
+# type and download the file or show a blank viewport. `Content-Disposition:
+# inline` tells them to display it instead, without changing what agents fetch.
+/*.md
+  Content-Disposition: inline
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# auth.md — WorkOS auth.md / isitagentready scanner expects text/markdown
+/auth.md
+  Content-Type: text/markdown; charset=utf-8
+  Content-Disposition: inline
+  Cache-Control: public, max-age=300, must-revalidate
+
+/.well-known/mcp/server-card.json
+  Cache-Control: public, max-age=300, must-revalidate
+
+/.well-known/agent-skills/index.json
+  Cache-Control: public, max-age=300, must-revalidate
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=2592000
+
+/icons/*
+  Cache-Control: public, max-age=2592000
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+
+/favicon.svg
+  Cache-Control: public, max-age=604800
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400, must-revalidate

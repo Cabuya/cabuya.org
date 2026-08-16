@@ -1,0 +1,255 @@
+---
+import '@/styles/global.css';
+import WebMCPBridge from '@/components/agent/WebMCPBridge.svelte';
+import BaseHead from '@/components/BaseHead.astro';
+import FloatingAppCta from '@/components/cta/FloatingAppCta.svelte';
+import Footer from '@/components/Footer.astro';
+import LanguageRedirect from '@/components/LanguageRedirect.astro';
+import Header from '@/components/layout/Header.svelte';
+import TopNotificationBar from '@/components/layout/TopNotificationBar.svelte';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { DESCRIPTION_MAX, truncateToBand } from '@/lib/meta-description';
+import {
+  getActiveNotifications,
+  localizeNotification,
+} from '@/lib/notifications';
+
+interface Props {
+  lang: string;
+  title: string;
+  description: string;
+  /** Canonicalize to another URL when this one is an alias. */
+  canonicalPath?: string;
+  image?: string;
+  keywords?: string[];
+  prevPage?: string;
+  nextPage?: string;
+  ogType?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  /** Forwarded to BaseHead — disable on pages with a dedicated LCP preload. */
+  preloadHeaderLogo?: boolean;
+  preloadFonts?: boolean;
+  lcpImageHref?: string;
+  lcpImageMedia?: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  canonicalPath,
+  image,
+  keywords,
+  prevPage,
+  nextPage,
+  ogType,
+  ogImageWidth,
+  ogImageHeight,
+  preloadHeaderLogo = true,
+  preloadFonts = true,
+  lcpImageHref,
+  lcpImageMedia,
+} = Astro.props;
+
+const language = lang as Language;
+const prefix = getUrlPrefix(language);
+/** No announcement chrome on any PTD URL (hub, editions, certificates). */
+const suppressTopNotifications = false;
+const activeNotifications = suppressTopNotifications
+  ? []
+  : (await getActiveNotifications()).map((entry) => {
+      const localized = localizeNotification(entry, language);
+      const href = localized.ctaHref;
+      if (
+        href?.startsWith('/') &&
+        !href.startsWith('//') &&
+        prefix &&
+        !href.startsWith(`${prefix}/`)
+      ) {
+        return { ...localized, ctaHref: `${prefix}${href}` };
+      }
+      return localized;
+    });
+
+/**
+ * Last line of defence for the 130-160 band `CLAUDE.md` requires: no page may
+ * emit a description past the maximum, whatever it passes in. Page components
+ * compose theirs with `buildMetaDescription`; this catches anything that does
+ * not, and cuts at a sentence or word boundary rather than mid-word.
+ */
+const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
+---
+
+<html lang={lang}>
+  <head>
+    <BaseHead
+      title={title}
+      description={metaDescription}
+      canonicalPath={canonicalPath}
+      image={image}
+      lang={lang}
+      keywords={keywords}
+      prevPage={prevPage}
+      nextPage={nextPage}
+      ogType={ogType}
+      ogImageWidth={ogImageWidth}
+      ogImageHeight={ogImageHeight}
+      preloadHeaderLogo={preloadHeaderLogo}
+      preloadFonts={preloadFonts}
+      lcpImageHref={lcpImageHref}
+      lcpImageMedia={lcpImageMedia}
+    />
+    <slot name="head" />
+    <LanguageRedirect lang={lang} />
+    <script is:inline>
+  (function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');})();
+</script>
+  </head>
+  <body
+    class:list={[
+      'flex flex-col min-h-screen text-corag bg-corag-bg',
+      activeNotifications.length > 0 && 'has-top-notification',
+    ]}
+  >
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-corag-bg-elevated focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-corag-primary">
+      Skip to content
+    </a>
+    {/*
+      Sticky chrome: notification bar + header travel together.
+      The bar collapses after scrolling past ~48px (hysteresis) and
+      reappears near the top — see TopNotificationBar.svelte.
+      PTD edition pages use a dedicated minimal header (legacy photocopy).
+    */}
+    <div
+      data-corag-chrome
+      class:list={[
+        'sticky top-0 z-50',
+        /* Light PTD: keep chrome transparent so the hero illustration
+           fades under the glass header (2024-style), not a solid cream bar. */
+      ]}
+    >
+      {
+        activeNotifications.length > 0 && (
+          <TopNotificationBar
+            client:load
+            lang={lang}
+            notifications={activeNotifications}
+          />
+        )
+      }
+      <Header client:load lang={lang} />
+    </div>
+    {/*
+      Keep --corag-chrome-height in sync with sticky chrome (header ±
+      notification bar). Hero uses it for 100dvh fill; ResizeObserver
+      covers bar collapse/expand and header reflow without layout jump
+      below the hero (chrome shrink and hero grow cancel).
+      Also re-sync on transitionend + trailing rAF — grid 0fr/1fr
+      animations can skip the final ResizeObserver callback.
+    */}
+    <script is:inline>
+      (function () {
+        var el = document.querySelector('[data-corag-chrome]');
+        if (!el) return;
+        var root = document.documentElement;
+        var raf = 0;
+        var sync = function () {
+          root.style.setProperty(
+            '--corag-chrome-height',
+            el.getBoundingClientRect().height + 'px'
+          );
+        };
+        var syncSoon = function () {
+          sync();
+          if (raf) cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(function () {
+            raf = 0;
+            sync();
+          });
+        };
+        sync();
+        if (typeof ResizeObserver !== 'undefined') {
+          new ResizeObserver(syncSoon).observe(el);
+        } else {
+          window.addEventListener('resize', syncSoon);
+        }
+        el.addEventListener('transitionend', syncSoon);
+      })();
+    </script>
+    {/*
+      In-page jump to #main-after-hero must clear sticky chrome. Native
+      scroll-padding can lag the ResizeObserver; re-measure on click.
+    */}
+    <script is:inline>
+      (function () {
+        document.addEventListener('click', function (event) {
+          var link = event.target && event.target.closest
+            ? event.target.closest('[data-scroll-to-after-hero]')
+            : null;
+          if (!link) return;
+          var target = document.getElementById('main-after-hero');
+          if (!target) return;
+          event.preventDefault();
+          var chrome = document.querySelector('[data-corag-chrome]');
+          var offset = chrome ? chrome.getBoundingClientRect().height : 68;
+          var top =
+            target.getBoundingClientRect().top + window.scrollY - offset;
+          var reduce = window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+          ).matches;
+          window.scrollTo({
+            top: Math.max(0, top),
+            behavior: reduce ? 'auto' : 'smooth',
+          });
+          if (history.replaceState) {
+            history.replaceState(null, '', '#main-after-hero');
+          }
+        });
+      })();
+    </script>
+    <main
+      id="main-content"
+      class:list={[
+        'flex-1 bg-corag-bg',
+      ]}
+    >
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    {/* client:idle — it waits for a short scroll before showing, so it has no
+        business competing with LCP. Ships on every MainLayout page. */}
+    <FloatingAppCta client:idle lang={lang} />
+    {/* client:load — WebMCP scanners detect tools on first paint; client:visible misses them. */}
+    <WebMCPBridge client:load lang={lang as 'en' | 'es'} />
+    {/*
+      Do NOT use define:vars here — Astro wraps define:vars scripts in an IIFE,
+      which breaks ES module `import` and causes:
+      "SyntaxError: Cannot use import statement outside a module" (Best Practices).
+      Defer setup until idle so analytics does not contend with LCP/TBT.
+    */}
+    <script>
+      const bootAnalytics = () => {
+        void import('@/lib/analytics').then(
+          ({
+            setupOutboundTracking,
+            shouldTrackScrollDepth,
+            trackScrollDepth,
+          }) => {
+            setupOutboundTracking();
+            if (shouldTrackScrollDepth(window.location.pathname)) {
+              trackScrollDepth();
+            }
+          }
+        );
+      };
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(bootAnalytics, { timeout: 4000 });
+      } else {
+        window.addEventListener('load', () => setTimeout(bootAnalytics, 1), {
+          once: true,
+        });
+      }
+    </script>
+  </body>
+</html>

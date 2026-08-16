@@ -1,0 +1,15 @@
+name: Sergio Alexander Florez Galeano
+avatar: /images/contributors/sergio-florez.webp
+roles: [contributor]
+role:
+  en: CTO at DailyBot · Product and engineering
+  es: CTO en DailyBot · Producto e ingeniería
+bio:
+  en: Builds Corag's public site and the Ayuda Directa application. Comes from the Pereira Tech Talks community, where he organizes meetups and leads the Speaker School.
+  es: Construye el sitio público de Corag y la aplicación Ayuda Directa. Viene de la comunidad Pereira Tech Talks, donde organiza los meetups y lidera la Escuela de Speakers.
+social:
+  github: https://github.com/xergioalex
+  linkedin: https://www.linkedin.com/in/xergioalex/
+  x: https://x.com/XergioAleX
+  website: https://xergioalex.com/
+order: 1

@@ -1,0 +1,11 @@
+{
+  "serverInfo": {
+    "name": "corag-site",
+    "version": "1.0.0",
+    "description": "cabuya.org — the institutional site for Corag, el ecosistema de impacto social. Read-only agent surface over public site content. This host has NO write API: publishing a need or an offer, contributing, and tracking a contribution all happen at https://ayuda.cabuya.org, which exposes its own public REST API, OpenAPI 3.1 spec and MCP server. Exposed via WebMCP in the browser and documented via Agent Skills at /.well-known/agent-skills/index.json."
+  },
+  "transport": {
+    "endpoint": "https://cabuya.org/"
+  },
+  "capabilities": ["tools", "resources"]
+}

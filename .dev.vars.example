@@ -1,0 +1,7 @@
+# Cloudflare Pages Functions / wrangler pages dev bindings.
+# Copy to `.dev.vars` (gitignored) and set DAILYBOT_API_KEY from
+# https://app.dailybot.com → User settings → API keys.
+#
+# Form + question UUIDs are baked into functions/api/_dailybot.ts.
+
+DAILYBOT_API_KEY=

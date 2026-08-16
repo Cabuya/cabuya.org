@@ -1,0 +1,150 @@
+---
+import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
+
+const brandBookSections = [
+  {
+    title: 'Colors',
+    href: '/internal/brand/colors',
+    description:
+      'Full Corag palette — primary, accent, surfaces, text, state — with WCAG ratios.',
+    icon: 'C',
+  },
+  {
+    title: 'Typography',
+    href: '/internal/brand/typography',
+    description:
+      'Outfit and Poppins — the scale, weights and hierarchy patterns.',
+    icon: 'T',
+  },
+  {
+    title: 'Logo usage',
+    href: '/internal/brand/logo-usage',
+    description:
+      'Logo variants, clear-space, do/don\u2019t, dark/light backgrounds.',
+    icon: 'L',
+  },
+  {
+    title: 'Iconography',
+    href: '/internal/brand/iconography',
+    description: 'Lucide icon system, sizing, semantic mapping.',
+    icon: 'I',
+  },
+  {
+    title: 'Spacing, radius, motion',
+    href: '/internal/brand/spacing-radius-motion',
+    description: 'Spatial scale, radius tokens, motion durations and easings.',
+    icon: 'S',
+  },
+  {
+    title: 'Voice & tone',
+    href: '/internal/brand/voice-and-tone',
+    description: 'Voice rules, vocabulary, and the anti-AI-slop checklist.',
+    icon: 'V',
+  },
+];
+---
+
+<ShowcaseLayout
+  title="Brand"
+  description="The Corag brand contract lives in the Brand Book. This page is a pointer."
+  section="brand"
+>
+  <section class="mb-10" data-component="brand-pointer">
+    <div class="rounded-2xl border border-corag-border bg-corag-primary-soft p-6 sm:p-8">
+      <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-corag-primary mb-2">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-corag-primary"></span>
+        Brand Book is canonical
+      </p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-corag-text mb-3">Corag</h2>
+      <p class="text-sm sm:text-base text-corag-text-secondary max-w-2xl">
+        Logo, palette, typography, voice, and per-edition kits are documented in the
+        <a href="/internal/brand" class="underline text-corag-primary font-semibold">Brand Book</a>. The
+        UI Design System (this section) renders <em>working examples</em> of those tokens. When
+        the two disagree, the Brand Book wins.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <a href="/internal/brand" class="inline-flex items-center gap-2 rounded-full bg-corag-fill text-corag-on-fill px-4 py-2 text-sm font-semibold hover:bg-corag-fill-strong transition-colors">
+          Open Brand Book
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/internal/ui/colors" class="inline-flex items-center gap-2 rounded-full border border-corag-border bg-corag-bg-elevated text-corag-text px-4 py-2 text-sm font-semibold hover:border-corag-primary transition-colors">
+          See live tokens
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12" data-component="brand-book-sections">
+    <h2 class="text-xl md:text-2xl font-bold mb-4 text-corag-text">Brand Book sections</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {brandBookSections.map((s) => (
+        <a
+          href={s.href}
+          class="group block rounded-2xl border border-corag-border bg-corag-bg-elevated p-5 transition-all hover:border-corag-primary hover:shadow-md"
+        >
+          <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-9 h-9 shrink-0 rounded-full bg-corag-fill text-corag-on-fill font-bold">{s.icon}</span>
+            <div class="flex-1">
+              <h3 class="text-base font-semibold text-corag-text group-hover:underline">{s.title}</h3>
+              <p class="text-sm text-corag-text-secondary mt-1">{s.description}</p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="mb-12" data-component="palette-quick-preview">
+    <h2 class="text-xl md:text-2xl font-bold mb-4 text-corag-text">Quick palette preview</h2>
+    <p class="text-sm text-corag-text-secondary mb-4">
+      Top-level brand swatches — the full table with hex, contrast, and usage lives in the
+      <a href="/internal/brand/colors" class="underline text-corag-primary">Brand Book \u2192 Colors</a>.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+      <div class="rounded-xl overflow-hidden border border-corag-border">
+        <div class="h-16 bg-corag-primary"></div>
+        <div class="p-2 text-center">
+          <div class="text-xs font-semibold text-corag-text">Primary</div>
+          <code class="text-xs text-corag-text-secondary">bg-corag-primary</code>
+        </div>
+      </div>
+      <div class="rounded-xl overflow-hidden border border-corag-border">
+        <div class="h-16 bg-corag-primary-strong"></div>
+        <div class="p-2 text-center">
+          <div class="text-xs font-semibold text-corag-text">Primary strong</div>
+          <code class="text-xs text-corag-text-secondary">bg-corag-primary-strong</code>
+        </div>
+      </div>
+      <div class="rounded-xl overflow-hidden border border-corag-border">
+        <div class="h-16 bg-corag-primary-soft"></div>
+        <div class="p-2 text-center">
+          <div class="text-xs font-semibold text-corag-text">Primary soft</div>
+          <code class="text-xs text-corag-text-secondary">bg-corag-primary-soft</code>
+        </div>
+      </div>
+      <div class="rounded-xl overflow-hidden border border-corag-border">
+        <div class="h-16 bg-corag-accent"></div>
+        <div class="p-2 text-center">
+          <div class="text-xs font-semibold text-corag-text">Accent</div>
+          <code class="text-xs text-corag-text-secondary">bg-corag-accent</code>
+        </div>
+      </div>
+      <div class="rounded-xl overflow-hidden border border-corag-border">
+        <div class="h-16 bg-corag-bg"></div>
+        <div class="p-2 text-center">
+          <div class="text-xs font-semibold text-corag-text">Background</div>
+          <code class="text-xs text-corag-text-secondary">bg-corag-bg</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-agent-reference="true" class="mt-16 border-t border-corag-border pt-8">
+    <h2 class="text-lg font-bold mb-3 text-corag-text">Agent reference</h2>
+    <p class="text-sm text-corag-text-secondary">
+      Source of truth: <code class="text-xs">docs/BRAND_GUIDE.md</code> ·
+      <code class="text-xs">analysis_results/BRAND_PALETTE.md</code> ·
+      <a href="/internal/brand" class="underline text-corag-primary">Brand Book</a>.
+    </p>
+  </section>
+</ShowcaseLayout>

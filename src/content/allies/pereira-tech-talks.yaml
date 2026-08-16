@@ -1,0 +1,17 @@
+name: Pereira Tech Talks
+logo: /images/allies/pereira-tech-talks.webp
+logoDark: /images/allies/pereira-tech-talks-dark.webp
+kind: community
+role:
+  en: Allied community
+  es: Comunidad aliada
+bio:
+  en: >-
+    Open tech community in Pereira since 2014 — monthly meetups, Pereira Tech Day,
+    Speaker School and more. Learn in public, share what you know and grow together.
+  es: >-
+    Comunidad tech abierta de Pereira desde 2014: meetups mensuales, Pereira Tech
+    Day, Escuela de Speakers y más. Aprender en público, compartir lo que sabes y
+    crecer en compañía.
+url: https://pereiratechtalks.org/
+order: 1

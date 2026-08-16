@@ -1,0 +1,504 @@
+---
+/**
+ * The renderer behind every institutional page — how it works, transparency,
+ * emergencies, leaders, partners, developers, privacy.
+ *
+ * Seven pages, one layout. The copy lives in `translations/{es,en}.ts` as an
+ * `InstitutionalPageCopy`, so adding a page means adding copy, not another
+ * bespoke template that drifts from the other six.
+ */
+
+import AppInvite from '@/components/cta/AppInvite.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import InstitutionalFigure from '@/components/ui/InstitutionalFigure.astro';
+import Section from '@/components/ui/Section.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { APP_URL } from '@/lib/constances';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { renderInlineMarkdown } from '@/lib/inline-markdown';
+import { getTranslations } from '@/lib/translations';
+
+import type {
+  InstitutionalLink,
+  InstitutionalPageCopy,
+} from '@/lib/translations/types';
+
+interface Props {
+  lang: Language;
+  /** Which institutional page's copy to render. */
+  copy: InstitutionalPageCopy;
+}
+
+const { lang, copy } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+/** Internal hrefs are stored unprefixed; external ones are already absolute. */
+const hrefOf = (link: InstitutionalLink): string =>
+  link.external ? link.href : `${prefix}${link.href}`;
+
+const breadcrumbs = [
+  { label: t.nav.home, href: `${prefix}/` },
+  { label: copy.title },
+];
+
+const btnPrimary =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-corag-fill px-7 py-3 font-semibold text-corag-on-fill transition-colors hover:bg-corag-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary';
+const btnSecondary =
+  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-corag-primary px-7 py-3 font-semibold text-corag-primary transition-colors hover:bg-corag-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary dark:border-corag-primary-light dark:text-corag-primary-light dark:hover:bg-white/10';
+
+const externalAttrs = (link: InstitutionalLink) =>
+  link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+
+/**
+ * `external` only means "leaves this site" — the developers page CTA is an
+ * external link to `openapi.json`, which is documentation, not a conversion.
+ * Counting it as one inflated `app_cta_click` with clicks that never reached
+ * the application.
+ */
+const isAppLink = (link: InstitutionalLink): boolean =>
+  link.external === true && link.href.startsWith(APP_URL);
+
+/** Section headings become anchor targets for the in-page index. */
+const slugify = (heading: string): string =>
+  heading
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip combining accents
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+---
+
+<MainLayout
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+>
+  <div class="relative overflow-hidden bg-corag-bg">
+    <div
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--corag-primary)_0%,_transparent_55%)] opacity-[0.07] dark:opacity-[0.12]"
+      aria-hidden="true"
+    >
+    </div>
+    {/* Brand motif — the hero's second column when the page has no figure */}
+    {
+      !copy.heroFigure && (
+        <svg
+          class="pointer-events-none absolute -right-24 top-1/2 hidden h-[26rem] w-[26rem] -translate-y-1/2 text-corag-primary opacity-[0.07] lg:block"
+          viewBox="0 0 512 512"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+            stroke="currentColor"
+            stroke-width="22"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            transform="rotate(-18 256 256)"
+          />
+        </svg>
+      )
+    }
+    <div class="main-container relative pt-12 sm:pt-16 pb-4">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+    <div class="main-container relative pt-6 pb-16 sm:pb-20">
+      <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
+        <div class={copy.heroFigure ? 'lg:col-span-6' : 'lg:col-span-8'}>
+          <Eyebrow>{copy.eyebrow}</Eyebrow>
+          <h1
+            class="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tight text-corag sm:text-5xl lg:text-6xl"
+          >
+            {copy.title}
+          </h1>
+          <p
+            class="mt-5 max-w-2xl text-lg leading-relaxed text-corag-secondary lg:text-xl"
+          >
+            {copy.lead}
+          </p>
+        </div>
+        {
+          copy.heroFigure && (
+            <div class="lg:col-span-6">
+              <InstitutionalFigure
+                figure={copy.heroFigure}
+                sizes="(min-width: 1024px) 46vw, 100vw"
+                eager
+              />
+            </div>
+          )
+        }
+      </div>
+
+      {/* In-page index: long, imagery-free pages need navigability */}
+      {
+        copy.sectionIndexLabel && (
+          <nav
+            class="mt-12 max-w-3xl rounded-[28px] border border-corag-border bg-corag-bg-elevated p-6"
+            aria-label={copy.sectionIndexLabel}
+          >
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-corag-primary">
+              {copy.sectionIndexLabel}
+            </p>
+            <ol class="mt-4 grid list-none gap-x-8 gap-y-2 sm:grid-cols-2">
+              {copy.sections.map((section) => (
+                <li>
+                  <a
+                    href={`#${slugify(section.heading)}`}
+                    class="inline-flex min-h-[24px] items-center text-corag-secondary transition-colors hover:text-corag-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-corag-primary"
+                  >
+                    {section.heading}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    copy.sections.map((section, index) => (
+      <Section
+        id={slugify(section.heading)}
+        title={section.heading}
+        surface={index % 2 === 1 ? 'alt' : 'default'}
+      >
+        {section.intro && (
+          <p class="-mt-4 mb-10 max-w-3xl text-lg text-corag-secondary">
+            {section.intro}
+          </p>
+        )}
+
+        <div class="space-y-10">
+          {section.blocks.map((block) => (
+            <>
+              {block.kind === 'prose' && (
+                <div class="max-w-3xl space-y-5">
+                  {block.paragraphs.map((paragraph) => (
+                    <p
+                      class="text-lg leading-relaxed text-corag-secondary"
+                      set:html={renderInlineMarkdown(paragraph)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* A journey, not a numbered list: each step may carry its own
+                  screen, and the steps are visibly connected. */}
+              {block.kind === 'steps' && (
+                <ol class="inst-steps list-none space-y-8 lg:space-y-12">
+                  {block.steps.map((step, stepIndex) => (
+                    <li
+                      class="inst-step relative grid gap-6 lg:grid-cols-12 lg:items-center lg:gap-10"
+                      data-reveal
+                    >
+                      <div
+                        class:list={[
+                          'flex gap-5',
+                          step.figure
+                            ? 'lg:col-span-6'
+                            : 'lg:col-span-9 lg:col-start-1',
+                          step.figure && stepIndex % 2 === 1
+                            ? 'lg:order-2 lg:col-start-7'
+                            : '',
+                        ]}
+                      >
+                        <span
+                          class="font-display text-5xl font-bold leading-none text-corag-primary opacity-50 lg:text-6xl"
+                          aria-hidden="true"
+                        >
+                          {String(stepIndex + 1).padStart(2, '0')}
+                        </span>
+                        <div class="min-w-0">
+                          <h3 class="font-display text-xl font-semibold text-corag">
+                            {step.title}
+                          </h3>
+                          <p class="mt-2 max-w-2xl leading-relaxed text-corag-secondary">
+                            {step.body}
+                          </p>
+                        </div>
+                      </div>
+                      {step.figure && (
+                        <div
+                          class:list={[
+                            'lg:col-span-6',
+                            stepIndex % 2 === 1 ? 'lg:order-1' : '',
+                          ]}
+                        >
+                          {/* Phone frames are portrait and would otherwise
+                              set the row height; cap them so a step stays a
+                              step rather than a full screen. */}
+                          <InstitutionalFigure
+                            figure={step.figure}
+                            sizes="(min-width: 1024px) 20rem, 60vw"
+                            class={
+                              step.figure.frame === 'phone'
+                                ? 'mx-auto max-w-[13rem]'
+                                : 'mx-auto max-w-xl'
+                            }
+                          />
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              )}
+
+              {block.kind === 'cards' && (
+                <ul class="grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {block.cards.map((card) => (
+                    <li
+                      class="flex h-full flex-col rounded-[18px] border border-corag-border bg-corag-bg-elevated p-7 shadow-corag-sm transition-shadow hover:shadow-corag-lg"
+                      data-reveal
+                    >
+                      <span
+                        class="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-corag-primary-soft text-corag-primary"
+                        aria-hidden="true"
+                      >
+                        <svg class="h-5 w-5" viewBox="0 0 512 512">
+                          <path
+                            d="M256 434 C 150 352, 84 290, 84 210 C 84 148, 132 106, 190 106 C 226 106, 246 124, 256 142 C 266 124, 286 106, 322 106 C 380 106, 428 148, 428 210 C 428 290, 362 352, 256 434 Z"
+                            fill="currentColor"
+                            transform="rotate(-18 256 256)"
+                          />
+                        </svg>
+                      </span>
+                      <h3 class="font-display text-lg font-semibold text-corag">
+                        {card.title}
+                      </h3>
+                      <p class="mt-3 leading-relaxed text-corag-secondary">
+                        {card.body}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {/* A designed set, not a footnote: these lists carry the
+                  ethical core of pages like /transparency. */}
+              {block.kind === 'list' && (
+                <ul
+                  class:list={[
+                    'grid list-none gap-4',
+                    block.items.length >= 4 ? 'sm:grid-cols-2' : 'max-w-3xl',
+                  ]}
+                >
+                  {/* min-w-0 on the item: a grid item defaults to
+                      min-width:auto, which lets an unbreakable inline URL
+                      widen the whole page (measured on /developers at 320px). */}
+                  {block.items.map((item) => (
+                    <li
+                      class="flex min-w-0 gap-4 rounded-[18px] border border-corag-border bg-corag-bg-elevated p-5 leading-relaxed text-corag-secondary"
+                      data-reveal
+                    >
+                      <span
+                        class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-corag-primary-soft text-corag-primary"
+                        aria-hidden="true"
+                      >
+                        <svg
+                          class="h-3.5 w-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M5 12.5l4.5 4.5L19 7"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="min-w-0"
+                        set:html={renderInlineMarkdown(item)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {block.kind === 'callout' && (
+                <aside
+                  class:list={[
+                    'flex max-w-3xl gap-5 rounded-[28px] p-7',
+                    block.tone === 'warning'
+                      ? 'bg-corag-fill text-corag-on-fill'
+                      : 'border border-corag-border bg-corag-bg-elevated',
+                  ]}
+                  data-reveal
+                >
+                  <span
+                    class:list={[
+                      'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
+                      block.tone === 'warning'
+                        ? 'bg-white/15 text-corag-on-fill'
+                        : 'bg-corag-primary-soft text-corag-primary',
+                    ]}
+                    aria-hidden="true"
+                  >
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d={
+                          block.tone === 'warning'
+                            ? 'M12 8v5m0 3.5h.01M10.3 3.9L2.6 17.4A2 2 0 004.3 20.4h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z'
+                            : 'M12 16v-5m0-3.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                        }
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <h3
+                      class:list={[
+                        'font-display text-lg font-semibold',
+                        block.tone === 'warning'
+                          ? 'text-corag-on-fill'
+                          : 'text-corag',
+                      ]}
+                    >
+                      {block.title}
+                    </h3>
+                    <p
+                      class:list={[
+                        'mt-2 leading-relaxed',
+                        block.tone === 'warning'
+                          ? 'text-corag-on-fill/90'
+                          : 'text-corag-secondary',
+                      ]}
+                    >
+                      {block.body}
+                    </p>
+                  </div>
+                </aside>
+              )}
+
+              {block.kind === 'figure' && (
+                <div data-reveal>
+                  <InstitutionalFigure
+                    figure={block.figure}
+                    sizes="(min-width: 1024px) 70vw, 100vw"
+                  />
+                </div>
+              )}
+
+              {block.kind === 'split' && (
+                <div
+                  class="grid gap-10 lg:grid-cols-12 lg:items-center"
+                  data-reveal
+                >
+                  <div
+                    class:list={[
+                      'space-y-5 lg:col-span-6',
+                      block.reverse ? 'lg:order-2' : '',
+                    ]}
+                  >
+                    {block.paragraphs.map((paragraph) => (
+                      <p
+                        class="text-lg leading-relaxed text-corag-secondary"
+                        set:html={renderInlineMarkdown(paragraph)}
+                      />
+                    ))}
+                  </div>
+                  <div
+                    class:list={[
+                      'lg:col-span-6',
+                      block.reverse ? 'lg:order-1' : '',
+                    ]}
+                  >
+                    <InstitutionalFigure
+                      figure={block.figure}
+                      sizes="(min-width: 1024px) 45vw, 100vw"
+                      class={
+                        block.figure.frame === 'phone'
+                          ? 'mx-auto max-w-[17rem]'
+                          : ''
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Two things that are deliberately not the same thing. */}
+              {block.kind === 'statPair' && (
+                <div class="relative grid gap-6 md:grid-cols-2" data-reveal>
+                  {block.items.map((item, itemIndex) => (
+                    <div
+                      class:list={[
+                        'rounded-[28px] bg-corag-bg-elevated p-8 shadow-corag-sm lg:p-10',
+                        itemIndex === 1
+                          ? 'border-2 border-corag-primary'
+                          : 'border border-corag-border',
+                      ]}
+                    >
+                      <h3 class="font-display text-2xl font-bold text-corag lg:text-3xl">
+                        {item.label}
+                      </h3>
+                      <p class="mt-3 leading-relaxed text-corag-secondary">
+                        {item.body}
+                      </p>
+                    </div>
+                  ))}
+                  {block.relation && (
+                    <span
+                      class="absolute left-1/2 top-1/2 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-corag-fill font-display text-xl font-bold text-corag-on-fill shadow-corag-sm md:flex"
+                      aria-hidden="true"
+                    >
+                      {block.relation}
+                    </span>
+                  )}
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+      </Section>
+    ))
+  }
+
+  <Section surface="alt" spacing="lg">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-corag">
+        {copy.cta.title}
+      </h2>
+      <p class="mt-4 text-lg leading-relaxed text-corag-secondary">
+        {copy.cta.body}
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
+        <a
+          href={hrefOf(copy.cta.primary)}
+          class={btnPrimary}
+          data-umami-event={isAppLink(copy.cta.primary) ? 'app_cta_click' : undefined}
+          data-umami-event-surface={isAppLink(copy.cta.primary) ? 'institutional-cta' : undefined}
+          {...externalAttrs(copy.cta.primary)}
+        >
+          {copy.cta.primary.label}
+        </a>
+        {
+          copy.cta.secondary && (
+            <a
+              href={hrefOf(copy.cta.secondary)}
+              class={btnSecondary}
+              {...externalAttrs(copy.cta.secondary)}
+            >
+              {copy.cta.secondary.label}
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </Section>
+
+  {/* The CTA above moves the reader along the argument — most of these point at
+      another page on this site. None of them reaches the application, which is
+      why every institutional page measured with no route to it. This closes
+      that. */}
+  <AppInvite lang={lang} surface="institutional-end" />
+</MainLayout>

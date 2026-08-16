@@ -1,0 +1,113 @@
+---
+/**
+ * The two-numbers component — beat 4's visual anchor.
+ *
+ * Shows the *shape* of the mechanism: "recibido" and "utilizado con
+ * evidencia" as two distinct panels joined by a ≠ badge, plus the direct-
+ * transfer band. Deliberately free of amounts: the real numbers live in the
+ * application, and a stale or invented figure here would break the very
+ * argument this section makes (AGENTS.md rule 0). A structure test pins the
+ * no-digits rule on this copy.
+ */
+import type { HomePillar } from '@/lib/translations/types';
+
+interface Props {
+  /** Exactly three pillars: received, used-with-evidence, direct transfer. */
+  pillars: HomePillar[];
+  honestyLine: string;
+}
+
+const { pillars, honestyLine } = Astro.props;
+const [received, used, direct] = pillars;
+---
+
+<div class="relative grid gap-6 md:grid-cols-2">
+  <div
+    class="rounded-[28px] border border-corag-border bg-corag-bg-elevated p-8 shadow-corag-sm lg:p-10"
+    data-reveal
+  >
+    <svg
+      class="h-8 w-8 text-corag-accent-strong"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 3v10m0 0l-3.5-3.5M12 13l3.5-3.5M4 17h16M6 21h12"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <h3 class="mt-4 font-display text-2xl font-bold text-corag lg:text-3xl">
+      {received.title}
+    </h3>
+    <p class="mt-3 leading-relaxed text-corag-secondary">{received.body}</p>
+  </div>
+
+  <div
+    class="rounded-[28px] border-2 border-corag-primary bg-corag-bg-elevated p-8 shadow-corag-sm lg:p-10"
+    data-reveal
+    style="--reveal-delay: 120ms"
+  >
+    <svg
+      class="h-8 w-8 text-corag-primary"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <h3 class="mt-4 font-display text-2xl font-bold text-corag lg:text-3xl">
+      {used.title}
+    </h3>
+    <p class="mt-3 leading-relaxed text-corag-secondary">{used.body}</p>
+  </div>
+
+  {/* The visual claim: the two numbers are different things. */}
+  <span
+    class="absolute left-1/2 top-1/2 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-corag-fill font-display text-xl font-bold text-corag-on-fill shadow-corag-sm md:flex"
+    aria-hidden="true"
+  >
+    ≠
+  </span>
+</div>
+
+<div
+  class="mt-6 flex flex-col gap-5 rounded-[28px] bg-corag-fill p-8 sm:flex-row sm:items-center sm:gap-8 lg:p-10"
+  data-reveal
+  style="--reveal-delay: 200ms"
+>
+  <svg
+    class="h-10 w-10 shrink-0 text-corag-on-fill"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <circle cx="5.5" cy="12" r="2.7" stroke="currentColor" stroke-width="1.8"
+    ></circle>
+    <circle cx="18.5" cy="12" r="2.7" stroke="currentColor" stroke-width="1.8"
+    ></circle>
+    <path
+      d="M9.5 12h5m0 0l-2-2m2 2l-2 2"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  </svg>
+  <div>
+    <h3 class="font-display text-xl font-semibold text-corag-on-fill lg:text-2xl">
+      {direct.title}
+    </h3>
+    <p class="mt-2 leading-relaxed text-corag-on-fill/90">{direct.body}</p>
+  </div>
+</div>
+
+<p class="mx-auto mt-8 max-w-2xl text-center leading-relaxed text-corag-secondary">
+  {honestyLine}
+</p>

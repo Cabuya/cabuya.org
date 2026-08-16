@@ -1,0 +1,32 @@
+{
+  "name": "Corag — El ecosistema de impacto social",
+  "short_name": "Corag",
+  "description": "Conectamos a fundaciones, gobiernos, empresas y personas con oportunidades reales de ayudar, con transparencia y trazabilidad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFE2E9",
+  "theme_color": "#78020E",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+name: jointDeveloper
+logo: /images/allies/joint-developer.webp
+logoDark: /images/allies/joint-developer-dark.webp
+kind: community
+role:
+  en: Allied community
+  es: Comunidad aliada
+bio:
+  en: >-
+    Community in Pereira that sparks interest in technology among women and
+    girls — workshops, monthly talks and shared opportunities through collective
+    learning.
+  es: >-
+    Comunidad de Pereira que despierta el interés de mujeres y niñas en la
+    tecnología: talleres, charlas mensuales y oportunidades compartidas mediante
+    el aprendizaje colectivo.
+url: https://jointdevweb.firebaseapp.com/
+order: 2

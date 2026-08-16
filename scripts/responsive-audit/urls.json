@@ -1,0 +1,131 @@
+{
+  "$comment": "Representative route subset for the responsive audit: one URL per template per language, verified against dist/. Regenerate with tmp/peek/rebuild-urls.mjs after adding a template.",
+  "baseUrl": "http://localhost:7777",
+  "routes": [
+    {
+      "url": "/",
+      "template": "home",
+      "lang": "es"
+    },
+    {
+      "url": "/en",
+      "template": "home",
+      "lang": "en"
+    },
+    {
+      "url": "/how-it-works",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/en/how-it-works",
+      "template": "institutional",
+      "lang": "en"
+    },
+    {
+      "url": "/transparency",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/en/transparency",
+      "template": "institutional",
+      "lang": "en"
+    },
+    {
+      "url": "/emergencies",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/leaders",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/partners",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/developers",
+      "template": "institutional",
+      "lang": "es"
+    },
+    {
+      "url": "/privacy",
+      "template": "institutional-index",
+      "lang": "es"
+    },
+    {
+      "url": "/en/privacy",
+      "template": "institutional-index",
+      "lang": "en"
+    },
+    {
+      "url": "/about",
+      "template": "narrative",
+      "lang": "es"
+    },
+    {
+      "url": "/en/about",
+      "template": "narrative",
+      "lang": "en"
+    },
+    {
+      "url": "/contributors",
+      "template": "directory",
+      "lang": "es"
+    },
+    {
+      "url": "/channels",
+      "template": "directory",
+      "lang": "es"
+    },
+    {
+      "url": "/contact",
+      "template": "form",
+      "lang": "es"
+    },
+    {
+      "url": "/en/contact",
+      "template": "form",
+      "lang": "en"
+    },
+    {
+      "url": "/conduct",
+      "template": "form",
+      "lang": "es"
+    },
+    {
+      "url": "/blog",
+      "template": "blog-listing",
+      "lang": "es"
+    },
+    {
+      "url": "/en/blog",
+      "template": "blog-listing",
+      "lang": "en"
+    },
+    {
+      "url": "/governance",
+      "template": "markdown-page",
+      "lang": "es"
+    },
+    {
+      "url": "/contributing",
+      "template": "markdown-page",
+      "lang": "es"
+    },
+    {
+      "url": "/blog/active-social-projects-that-need-support",
+      "template": "blog-post",
+      "lang": "es"
+    },
+    {
+      "url": "/en/blog/active-social-projects-that-need-support",
+      "template": "blog-post",
+      "lang": "en"
+    }
+  ]
+}

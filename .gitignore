@@ -1,0 +1,71 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# pnpm
+.pnpm-store/
+
+
+# test coverage
+coverage/
+
+# Lighthouse CI local results
+.lighthouseci/
+
+# environment variables
+.env
+.env.production
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# VSCode (local editor settings)
+.vscode/
+
+# devcontainer (local dev setup)
+.devcontainer/
+
+# Deep Work Plan outputs (plans + drafts are working artifacts, not tracked source)
+.dwp/
+
+# Temporary workspace (agent outputs, scratch files, ephemeral content)
+tmp/*
+!tmp/.gitkeep
+
+# Certificate signing secrets and raw attendee CSV drops (never commit)
+.secrets/
+tmp/certs/
+*.pem
+*-private*
+*-private.key
+attendees*.csv
+
+english.png
+spanish.png
+
+# Playwright ephemeral test output
+test-results/
+
+# CI release scratch files (written by GitHub Actions release scripts)
+.release_tag
+git_logs_output.txt
+packages_upgrades_output.txt
+
+# Stray local clone of the sibling skill repo (canonical working copy: tmp/repositories/cabuya-skill)
+/cabuya-skill/

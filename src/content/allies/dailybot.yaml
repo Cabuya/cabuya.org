@@ -1,0 +1,17 @@
+name: DailyBot
+logo: /images/allies/dailybot.webp
+logoDark: /images/allies/dailybot-dark.webp
+kind: company
+role:
+  en: Allied company
+  es: Empresa aliada
+bio:
+  en: >-
+    AI-powered async platform for team updates, standups and agent visibility in
+    Slack, Teams, Google Chat and Discord — progress, blockers and reports in one place.
+  es: >-
+    Plataforma async con IA para actualizaciones de equipo, standups y visibilidad
+    de agentes en Slack, Teams, Google Chat y Discord: progreso, bloqueos y reportes
+    en un solo lugar.
+url: https://www.dailybot.com/
+order: 2

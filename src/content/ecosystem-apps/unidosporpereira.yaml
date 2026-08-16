@@ -1,0 +1,49 @@
+name: Unidos por Pereira
+url: https://unidosporpereira.com/
+aliases: []
+category: logistics
+featured: false
+order: 20
+logo: /images/ecosystem/unidosporpereira/logo.webp
+logoAuthorization: public_favicon_only
+monogram: UP
+tagline:
+  es: Albergues, acopio y más
+  en: Shelters, collection and more
+what:
+  es: Albergues, centros de acopio, comidas, ayuda y mascotas tras el sismo, con hora de última actualización.
+  en: Shelters, collection centers, meals, help and pets after the quake, with last-updated times.
+how:
+  es: Consultas la información de emergencia organizada por temas y con marcas de tiempo.
+  en: Browse emergency information organized by topic with timestamps.
+active: true
+overview:
+  es: Información de emergencia organizada por temas — albergues, acopio, comidas, ayuda y mascotas — con hora de última actualización.
+  en: Emergency information organized by topic — shelters, collection, meals, help, and pets — with last-updated times.
+features:
+  - es: Albergues y centros de acopio
+    en: Shelters and collection centers
+  - es: Comidas y ayuda general
+    en: Meals and general help
+  - es: Información sobre mascotas
+    en: Pet-related information
+  - es: Marcas de tiempo de actualización
+    en: Last-updated timestamps
+tools:
+  - es: Directorio temático con timestamps
+    en: Topic directory with timestamps
+audience:
+  es: Personas en Pereira que buscan orientación logística tras el sismo.
+  en: People in Pereira looking for logistics guidance after the quake.
+coverage:
+  es: Pereira (según el alcance del sitio).
+  en: Pereira (per the site’s scope).
+limits:
+  es: Los datos llevan fecha; conviene verificar lo crítico en el momento.
+  en: Data is dated; verify anything critical in the moment.
+integrations:
+  publicApi: unknown
+  publicMcp: unknown
+  notes:
+    es: No encontramos documentación pública de API ni MCP en el sitio. Si la tienen, indícalo en el formulario de inclusión.
+    en: We did not find public API or MCP documentation on the site. If you have either, note it in the listing request form.

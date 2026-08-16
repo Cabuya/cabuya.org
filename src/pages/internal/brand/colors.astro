@@ -1,0 +1,465 @@
+---
+import InternalLayout from '@/layouts/InternalLayout.astro';
+
+/**
+ * Brand book — Color.
+ *
+ * The live reference for the Corag palette. Values mirror `src/styles/global.css`
+ * exactly; ratios are the measured results recorded in the migration's contrast
+ * audit. If a swatch here looks wrong against a real page, the token changed and
+ * this page is stale — fix it.
+ */
+
+interface Token {
+  role: string;
+  cssVar: string;
+  light: string;
+  dark: string;
+  usage: string;
+  /** Measured minimum contrast across every ground the token appears on. */
+  minRatio?: { light: number; dark: number };
+  note?: 'restricted' | 'no-flip';
+}
+
+const brand: Token[] = [
+  {
+    role: 'Primary',
+    cssVar: '--color-corag-primary',
+    light: '#78020E',
+    dark: '#FFC7D5',
+    usage: 'Foreground brand — text, links, icons, borders, focus rings',
+    minRatio: { light: 7.93, dark: 10.67 },
+  },
+  {
+    role: 'Primary strong',
+    cssVar: '--color-corag-primary-strong',
+    light: '#5A0109',
+    dark: '#FFE2E9',
+    usage: 'Hover · active · pressed',
+    minRatio: { light: 9.97, dark: 12.83 },
+  },
+  {
+    role: 'Primary soft',
+    cssVar: '--color-corag-primary-soft',
+    light: '#FFE2E9',
+    dark: '#3A1A20',
+    usage: 'Tinted surface behind primary content',
+  },
+  {
+    role: 'Primary light',
+    cssVar: '--color-corag-primary-light',
+    light: '#FFC7D5',
+    dark: '#FFC7D5',
+    usage:
+      'The dark-mode primary, available in both themes — for content on an intentionally dark canvas',
+    note: 'no-flip',
+  },
+];
+
+const fill: Token[] = [
+  {
+    role: 'Fill',
+    cssVar: '--color-corag-fill',
+    light: '#78020E',
+    dark: '#78020E',
+    usage: 'Background of a filled brand surface (buttons, solid chips)',
+    note: 'no-flip',
+  },
+  {
+    role: 'Fill strong',
+    cssVar: '--color-corag-fill-strong',
+    light: '#5A0109',
+    dark: '#5A0109',
+    usage: 'Its hover state',
+    note: 'no-flip',
+  },
+  {
+    role: 'On fill',
+    cssVar: '--color-corag-on-fill',
+    light: '#FFE2E9',
+    dark: '#FFE2E9',
+    usage: 'The label on that surface — 9.54:1 in both themes',
+    note: 'no-flip',
+  },
+];
+
+const rosa: Token[] = [
+  {
+    role: 'Rosa',
+    cssVar: '--color-corag-rosa',
+    light: '#FFC7D5',
+    dark: '#FFC7D5',
+    usage: 'Official brand color — warm surfaces, accents',
+    note: 'no-flip',
+  },
+  {
+    role: 'Rosa soft',
+    cssVar: '--color-corag-rosa-soft',
+    light: '#FFE2E9',
+    dark: '#FFE2E9',
+    usage: 'Lighter brand surface',
+    note: 'no-flip',
+  },
+  {
+    role: 'Accent',
+    cssVar: '--color-corag-accent',
+    light: '#BC727C',
+    dark: '#BC727C',
+    usage:
+      'Decorative only — hairlines, shapes, large display type, icon fills',
+    minRatio: { light: 2.46, dark: 4.51 },
+    note: 'restricted',
+  },
+  {
+    role: 'Accent strong',
+    cssVar: '--color-corag-accent-strong',
+    light: '#A34F5A',
+    dark: '#D8A3AA',
+    usage: 'The accent when it must carry readable text',
+    minRatio: { light: 4.53, dark: 7.22 },
+  },
+];
+
+const surfaces: Token[] = [
+  {
+    role: 'Bg',
+    cssVar: '--color-corag-bg',
+    light: '#FBF8F5',
+    dark: '#231518',
+    usage: 'Page background',
+  },
+  {
+    role: 'Bg elevated',
+    cssVar: '--color-corag-bg-elevated',
+    light: '#FFFFFF',
+    dark: '#2E1B1F',
+    usage: 'Cards, panels, header',
+  },
+  {
+    role: 'Bg brand',
+    cssVar: '--color-corag-bg-brand',
+    light: '#FFE2E9',
+    dark: '#3A1A20',
+    usage: 'Brand-tinted section',
+  },
+  {
+    role: 'Bg brand strong',
+    cssVar: '--color-corag-bg-brand-strong',
+    light: '#FFC7D5',
+    dark: '#4A2128',
+    usage: 'Stronger brand section',
+  },
+  {
+    role: 'Bg dark',
+    cssVar: '--color-corag-bg-dark',
+    light: '#231518',
+    dark: '#231518',
+    usage: 'Always-dark canvas',
+    note: 'no-flip',
+  },
+];
+
+const text: Token[] = [
+  {
+    role: 'Text',
+    cssVar: '--color-corag-text',
+    light: '#251F20',
+    dark: '#F0E3E4',
+    usage: 'Body copy',
+    minRatio: { light: 11.1, dark: 12.47 },
+  },
+  {
+    role: 'Text secondary',
+    cssVar: '--color-corag-text-secondary',
+    light: '#574F51',
+    dark: '#D6C4C7',
+    usage: 'Supporting copy',
+    minRatio: { light: 5.44, dark: 9.33 },
+  },
+  {
+    role: 'Text muted',
+    cssVar: '--color-corag-text-muted',
+    light: '#635B5D',
+    dark: '#92888A',
+    usage: 'The lightest permitted body text',
+    minRatio: { light: 4.52, dark: 4.53 },
+  },
+];
+
+const borders: Token[] = [
+  {
+    role: 'Border',
+    cssVar: '--color-corag-border',
+    light: '#E8E0DC',
+    dark: '#3E2A2E',
+    usage: 'Decorative hairlines, dividers',
+  },
+  {
+    role: 'Border strong',
+    cssVar: '--color-corag-border-strong',
+    light: '#C9B9B5',
+    dark: '#5C4247',
+    usage: 'Decorative emphasis',
+  },
+  {
+    role: 'Border interactive',
+    cssVar: '--color-corag-border-interactive',
+    light: '#968F8D',
+    dark: '#7F6C6F',
+    usage: 'Inputs, selects, control edges — the only one clearing 3:1',
+  },
+];
+
+const status: Token[] = [
+  {
+    role: 'Success',
+    cssVar: '--color-corag-success',
+    light: '#24735D',
+    dark: '#559381',
+    usage: 'entregado · con evidencia · completado',
+    minRatio: { light: 5.01, dark: 4.55 },
+  },
+  {
+    role: 'Success soft',
+    cssVar: '--color-corag-success-soft',
+    light: '#E7F3EE',
+    dark: '#16302A',
+    usage: 'Its chip background',
+  },
+  {
+    role: 'Warning',
+    cssVar: '--color-corag-warning',
+    light: '#995D30',
+    dark: '#B37B4F',
+    usage: 'en organización · pendiente',
+    minRatio: { light: 4.54, dark: 4.54 },
+  },
+  {
+    role: 'Warning soft',
+    cssVar: '--color-corag-warning-soft',
+    light: '#F6ECDF',
+    dark: '#33240F',
+    usage: 'Its chip background',
+  },
+  {
+    role: 'Info',
+    cssVar: '--color-corag-info',
+    light: '#3C6176',
+    dark: '#6E8B9B',
+    usage: 'informativo · neutral',
+    minRatio: { light: 5.81, dark: 4.51 },
+  },
+  {
+    role: 'Info soft',
+    cssVar: '--color-corag-info-soft',
+    light: '#EAF1F4',
+    dark: '#17262E',
+    usage: 'Its chip background',
+  },
+  {
+    role: 'Danger',
+    cssVar: '--color-corag-danger',
+    light: '#A43536',
+    dark: '#C37073',
+    usage: 'urgente · error',
+    minRatio: { light: 5.85, dark: 4.55 },
+  },
+  {
+    role: 'Danger soft',
+    cssVar: '--color-corag-danger-soft',
+    light: '#FDECEC',
+    dark: '#331416',
+    usage: 'Its chip background',
+  },
+];
+
+const groups: { title: string; blurb: string; tokens: Token[] }[] = [
+  {
+    title: 'Brand — foreground',
+    blurb: 'These flip between themes. Text, icons, borders, focus rings.',
+    tokens: brand,
+  },
+  {
+    title: 'Brand — solid fill',
+    blurb:
+      'These never flip. Buttons and filled chips, identical in both themes.',
+    tokens: fill,
+  },
+  {
+    title: 'Rosa & accent',
+    blurb:
+      'Rosa is an official brand color, not a tint. The accent is restricted.',
+    tokens: rosa,
+  },
+  {
+    title: 'Surfaces',
+    blurb: 'Page, elevated and brand-tinted grounds.',
+    tokens: surfaces,
+  },
+  {
+    title: 'Text',
+    blurb:
+      'Nothing lighter than “muted” is permitted for body copy. Two short aliases exist because they are used constantly: --color-corag re-exports --color-corag-text, and --color-corag-secondary re-exports --color-corag-text-secondary.',
+    tokens: text,
+  },
+  {
+    title: 'Borders',
+    blurb: 'Only “interactive” clears the 3:1 non-text requirement.',
+    tokens: borders,
+  },
+  {
+    title: 'Status',
+    blurb: 'Verified on page and chip grounds — never on rosa brand surfaces.',
+    tokens: status,
+  },
+];
+
+const verdict = (r?: number) =>
+  r === undefined ? null : r >= 4.5 ? 'AA' : r >= 3 ? 'large only' : 'fails AA';
+---
+
+<InternalLayout
+  title="Color — Brand Book"
+  description="The Corag palette: every token with its light and dark value, its role, and its measured contrast."
+  section="brand"
+  subsection="colors"
+>
+  <header class="mb-10 space-y-3">
+    <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">Brand Book · 02</p>
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100">Color</h1>
+    <p class="max-w-3xl text-base text-gray-600 dark:text-gray-300">
+      The official palette comes from Corag's <strong>Manual de Identidad Visual</strong>:
+      wine <code>#78020E</code>, its 50% <code>#BC727C</code>, rosa <code>#FFC7D5</code>
+      and rosa claro <code>#FFE2E9</code>. Everything else — neutrals and status colors —
+      was derived and measured, because a logo package cannot supply a product UI palette.
+    </p>
+    <p class="max-w-3xl text-sm text-gray-600 dark:text-gray-300">
+      Ratios below are the <strong>measured minimum</strong> across every ground the token
+      appears on, not a best case. Values mirror <code>src/styles/global.css</code>.
+    </p>
+  </header>
+
+  <section class="mb-10 rounded-2xl border border-corag-border bg-corag-bg-brand p-6">
+    <h2 class="text-lg font-semibold text-corag">The two rules that matter</h2>
+    <ol class="mt-3 space-y-2 text-sm text-corag-secondary">
+      <li>
+        <strong class="text-corag">The brand flips, the fill does not.</strong> In dark mode
+        <code>primary</code> becomes rosa, because wine on a dark ground measures 1.52:1.
+        A filled button must therefore use <code>bg-corag-fill</code> +
+        <code>text-corag-on-fill</code> — never <code>bg-corag-primary</code> +
+        <code>text-white</code>, which becomes white-on-rosa.
+      </li>
+      <li>
+        <strong class="text-corag">The accent is decorative.</strong>
+        <code>#BC727C</code> fails AA on every light ground. Large display type, hairlines,
+        shapes and labelled icons only. Use <code>accent-strong</code> when it must be read.
+      </li>
+    </ol>
+  </section>
+
+  {groups.map((group) => (
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{group.title}</h2>
+      <p class="mt-1 mb-4 text-sm text-gray-600 dark:text-gray-300">{group.blurb}</p>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[52rem] text-left text-sm">
+          <thead class="border-b border-gray-200 dark:border-gray-700">
+            <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <th class="py-2 pr-4">Light</th>
+              <th class="py-2 pr-4">Dark</th>
+              <th class="py-2 pr-4">Role</th>
+              <th class="py-2 pr-4">CSS variable</th>
+              <th class="py-2 pr-4">Min ratio</th>
+              <th class="py-2">Usage</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            {group.tokens.map((token) => (
+              <tr>
+                <td class="py-3 pr-4">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="inline-block h-8 w-8 shrink-0 rounded-lg border border-gray-200 dark:border-gray-700"
+                      style={`background:${token.light}`}
+                      aria-hidden="true"
+                    ></span>
+                    <code class="text-xs">{token.light}</code>
+                  </div>
+                </td>
+                <td class="py-3 pr-4">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="inline-block h-8 w-8 shrink-0 rounded-lg border border-gray-200 dark:border-gray-700"
+                      style={`background:${token.dark}`}
+                      aria-hidden="true"
+                    ></span>
+                    <code class="text-xs">{token.dark}</code>
+                  </div>
+                </td>
+                <td class="py-3 pr-4 font-medium text-gray-900 dark:text-gray-100">
+                  {token.role}
+                  {token.note === 'restricted' && (
+                    <span class="ml-2 rounded-full bg-corag-danger-soft px-2 py-0.5 text-[11px] font-semibold text-corag-danger">
+                      restricted
+                    </span>
+                  )}
+                  {token.note === 'no-flip' && (
+                    <span class="ml-2 rounded-full bg-corag-info-soft px-2 py-0.5 text-[11px] font-semibold text-corag-info">
+                      no flip
+                    </span>
+                  )}
+                </td>
+                <td class="py-3 pr-4"><code class="text-xs">{token.cssVar}</code></td>
+                <td class="py-3 pr-4 whitespace-nowrap">
+                  {token.minRatio ? (
+                    <span class="text-xs text-gray-600 dark:text-gray-300">
+                      {token.minRatio.light.toFixed(2)} / {token.minRatio.dark.toFixed(2)}
+                      <span
+                        class={`ml-2 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                          verdict(Math.min(token.minRatio.light, token.minRatio.dark)) === 'AA'
+                            ? 'bg-corag-success-soft text-corag-success'
+                            : 'bg-corag-warning-soft text-corag-warning'
+                        }`}
+                      >
+                        {verdict(Math.min(token.minRatio.light, token.minRatio.dark))}
+                      </span>
+                    </span>
+                  ) : (
+                    <span class="text-xs text-gray-500 dark:text-gray-400">surface</span>
+                  )}
+                </td>
+                <td class="py-3 text-gray-600 dark:text-gray-300">{token.usage}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Live check</h2>
+    <p class="mt-1 mb-4 text-sm text-gray-600 dark:text-gray-300">
+      These render with the real tokens. Toggle the theme — every one must stay readable.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <span class="rounded-full bg-corag-fill px-5 py-2.5 font-semibold text-corag-on-fill">Primary button</span>
+      <span class="rounded-full border border-corag-primary px-5 py-2.5 font-semibold text-corag-primary">Secondary button</span>
+      <span class="rounded-full bg-corag-success-soft px-3 py-1 text-sm font-medium text-corag-success">Con evidencia</span>
+      <span class="rounded-full bg-corag-warning-soft px-3 py-1 text-sm font-medium text-corag-warning">En organización</span>
+      <span class="rounded-full bg-corag-info-soft px-3 py-1 text-sm font-medium text-corag-info">Informativo</span>
+      <span class="rounded-full bg-corag-danger-soft px-3 py-1 text-sm font-medium text-corag-danger">Urgente</span>
+    </div>
+    <div class="mt-4 rounded-[18px] border border-corag-border bg-corag-bg-elevated p-6 shadow-corag-sm">
+      <p class="font-display text-xl font-semibold text-corag">Card on an elevated surface</p>
+      <p class="mt-1 text-corag-secondary">Supporting copy in the secondary token.</p>
+      <p class="mt-1 text-sm text-corag-text-muted">Muted copy — the lightest permitted body text.</p>
+    </div>
+  </section>
+
+  <footer class="border-t border-gray-200 pt-6 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
+    Full rules in <code>docs/DESIGN.md</code>; identity and voice in
+    <code>docs/BRAND_GUIDE.md</code>. Token values live in
+    <code>src/styles/global.css</code> — the only place they may be changed.
+  </footer>
+</InternalLayout>
