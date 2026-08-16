@@ -1,0 +1,9 @@
+{
+  "publisher_id": "good-app",
+  "canonical_url": "https://good-app.org",
+  "entity_domains": ["place"],
+  "status": "proposed",
+  "added": "2026-08-16",
+  "contact_org": "team@good-app.org",
+  "events": ["real-event"]
+}

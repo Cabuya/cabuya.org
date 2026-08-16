@@ -1,0 +1,8 @@
+{
+  "publisher_id": "measured",
+  "canonical_url": "https://measured.org",
+  "entity_domains": ["place"],
+  "status": "active",
+  "added": "2026-08-16",
+  "measured_level": "L2"
+}

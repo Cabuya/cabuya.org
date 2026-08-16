@@ -1,0 +1,13 @@
+{
+  "publisher_id": "reporte-co",
+  "canonical_url": "https://co.crafter.run",
+  "entity_domains": [
+    "place"
+  ],
+  "events": [
+    "sismo-eje-cafetero-2026"
+  ],
+  "status": "proposed",
+  "added": "2026-08-16",
+  "notes": "Wave-0 candidate (open source; PII-free reports; GeoJSON/CSV/KML/JSON feed observed). Entered on the team's behalf; awaiting their confirmation."
+}

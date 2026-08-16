@@ -1,0 +1,13 @@
+{
+  "publisher_id": "pereira-responde",
+  "canonical_url": "https://pereiraresponde.co",
+  "entity_domains": [
+    "place"
+  ],
+  "events": [
+    "sismo-eje-cafetero-2026"
+  ],
+  "status": "proposed",
+  "added": "2026-08-16",
+  "notes": "Wave-0 candidate (public API observed; the ecosystem's cleanest category crosswalk per the founding analysis). Entered on the team's behalf; awaiting their confirmation."
+}

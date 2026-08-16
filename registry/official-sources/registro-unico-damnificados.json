@@ -1,0 +1,11 @@
+{
+  "id": "registro-unico-damnificados",
+  "name": {
+    "en": "Single Registry of Affected Persons (UNGRD)",
+    "es": "Registro Único de Damnificados (UNGRD)"
+  },
+  "authority": "Unidad Nacional para la Gestión del Riesgo de Desastres",
+  "canonical_url": "https://www.gestiondelriesgo.gov.co",
+  "domain": "affected_persons",
+  "notes": "The official instrument for identifying affected people; platforms feed it, they do not replace it (mesa técnica report, 2026-08-16)."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "cruz-roja-rcf",
+  "name": {
+    "en": "Colombian Red Cross — Restoring Family Links",
+    "es": "Cruz Roja Colombiana — Restablecimiento del Contacto Familiar"
+  },
+  "authority": "Cruz Roja Colombiana",
+  "canonical_url": "https://www.cruzrojacolombiana.org",
+  "domain": "missing_persons",
+  "notes": "The official channel missing-person link-outs converge to (spec §7.1). Deep program URL to be confirmed with the institution before deep-linking."
+}

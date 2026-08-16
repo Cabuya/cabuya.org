@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cabuya.org/registry/schema/publisher-entry.schema.json",
+  "title": "Cabuya registry publisher entry",
+  "$comment": "Records what a publisher CLAIMS and what a reviewer checked about IDENTITY. Every measured field lives in KV, written only by the validator — never here. Inclusion is not endorsement.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "publisher_id",
+    "canonical_url",
+    "entity_domains",
+    "status",
+    "added"
+  ],
+  "properties": {
+    "publisher_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "$comment": "Assigned once, never reassigned — even after archive (spec §5.3)."
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "uniqueItems": true
+    },
+    "manifest_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "entity_domains": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "place"
+        ]
+      },
+      "$comment": "v0.1 has one entity; v0.2 candidates enter by RFC."
+    },
+    "declared_target": {
+      "type": "string",
+      "enum": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "$comment": "A declaration, never the badge — the badge is measured."
+    },
+    "crawl_policy_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "contact_org": {
+      "type": "string",
+      "format": "email",
+      "$comment": "ORG-LEVEL role address only (team@/info@/equipo@...), never a person's. The gate applies a heuristic; the reviewer applies judgement."
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "active",
+        "archived"
+      ],
+      "$comment": "`proposed` (extension over the founding model, recorded in the Task 11 log): entered on the team's behalf, pending their own confirmation — rendered as proposed, no badge served."
+    },
+    "sunset_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "added": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_pr": {
+      "type": "string",
+      "format": "uri"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

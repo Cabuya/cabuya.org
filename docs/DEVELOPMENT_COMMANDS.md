@@ -33,7 +33,7 @@
 |---|---|---|
 | `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass; invalid examples fail the schema OR declare their designed later-pass violation | ✅ live |
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
-| `pnpm run registry:check(:strict)` | Entries validate; ids/URLs unique; org-level contact; no HTML | Task 11 |
+| `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
 | `pnpm run checks:catalogue` | Every check id ↔ documented, both directions | Task 16 |
 
 ## Quality gates

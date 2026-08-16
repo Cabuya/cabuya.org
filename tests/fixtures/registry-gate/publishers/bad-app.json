@@ -1,0 +1,10 @@
+{
+  "publisher_id": "other-name",
+  "canonical_url": "https://good-app.org/",
+  "entity_domains": ["place"],
+  "status": "active",
+  "added": "2026-08-16",
+  "contact_org": "john.smith88@gmail.com",
+  "notes": "<script>alert(1)</script>",
+  "events": ["ghost-event"]
+}

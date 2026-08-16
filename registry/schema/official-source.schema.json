@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cabuya.org/registry/schema/official-source.schema.json",
+  "title": "Official channel entry",
+  "$comment": "Authoritative institutional channels the protocol links OUT to (spec §7.1). Not publishers; never validated for conformance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "authority",
+    "canonical_url",
+    "domain"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "object",
+      "required": [
+        "en",
+        "es"
+      ],
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "string"
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "missing_persons",
+        "affected_persons",
+        "alerts"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

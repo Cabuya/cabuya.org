@@ -1,0 +1,13 @@
+{
+  "publisher_id": "corag",
+  "canonical_url": "https://ayuda.corag.app",
+  "entity_domains": [
+    "place"
+  ],
+  "events": [
+    "sismo-eje-cafetero-2026"
+  ],
+  "status": "proposed",
+  "added": "2026-08-16",
+  "notes": "Wave-0 candidate (founding analysis: reference-implementation tier; public API with namespaced external-id writes observed in production). Entered on the team's behalf; awaiting their confirmation."
+}

@@ -3,7 +3,6 @@ name: CI
 # The main quality gate for cabuya.org.
 #
 # Gates appended by later migration tasks (keep this list current):
-#   - registry:check               (Task 11 — publisher-entry integrity)
 #   - validator workspace tests    (Task 12 — packages/validator)
 #   - checks:catalogue             (Task 16 — every check id documented)
 #   - perf:budgets                 (Task 34 — per-route JS budgets)
@@ -70,6 +69,9 @@ jobs:
 
       - name: Protocol gate — spec:boundary
         run: pnpm run spec:boundary
+
+      - name: Protocol gate — registry:check (strict)
+        run: pnpm run registry:check:strict
 
       - name: Build
         run: pnpm run build

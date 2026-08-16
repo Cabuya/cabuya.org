@@ -1,0 +1,13 @@
+{
+  "publisher_id": "pereira-ayuda",
+  "canonical_url": "https://pereiraayuda.com",
+  "entity_domains": [
+    "place"
+  ],
+  "events": [
+    "sismo-eje-cafetero-2026"
+  ],
+  "status": "proposed",
+  "added": "2026-08-16",
+  "notes": "Wave-0 candidate (published closed category vocabulary; public data surface observed). Entered on the team's behalf; awaiting their confirmation."
+}
