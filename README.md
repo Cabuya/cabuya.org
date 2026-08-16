@@ -1,5 +1,12 @@
 # cabuya.org
 
+## Project context
+
+This repository is becoming **cabuya.org — the home of the Cabuya Protocol**;
+the ratified founding record (decisions, protocol design, schemas, brand,
+governance) lives at [`docs/context/`](docs/context/README.md). The Corag
+content below is the imported baseline and is being replaced by the migration.
+
 **El ecosistema de impacto social.**
 
 This repository is the institutional website for **Corag** — a social-impact
