@@ -1,228 +1,63 @@
-# Accessibility Guide
+# Accessibility — WCAG AA, measured
 
-Accessibility standards and conventions for Corag. This site targets **WCAG 2.1 AA compliance** and **Lighthouse Accessibility score of 100**.
+> AA is the floor and it is *measured*: the token system re-computes its own
+> contrast ratios in the test suite, and axe runs over the route matrix in CI
+> (`a11y:check`, *Task 35*). "Looks accessible" is not a state this repo
+> recognizes.
 
-## Accessibility-First Philosophy
+---
 
-**Accessibility is a core value of this project, not an afterthought.** Every change to the codebase — whether a new component, page, or style update — MUST consider its accessibility impact.
+## 1. Contrast (enforced by computation)
 
-### For AI Agents: Accessibility Rules
+- 4.5:1 normal text · 3:1 large text and non-text UI.
+- **Only token text colors.** `text-gray-400/500` (+ `dark:` variants) are
+  test-banned. The muted floor is `text-cabuya-text-muted` (5.82:1 light /
+  5.88:1 dark-elevated — measured).
+- Fique (`#C79A4A`) never carries text on light; `cabuya-accent-strong` is
+  the text-safe fique (4.92:1). The token test scans for violations.
+- Dark mode is measured against the **elevated** surface (the lighter, binding
+  ground).
 
-When working on this codebase, **always apply these principles:**
+## 2. The two site-specific rules
 
-1. **Meet WCAG AA contrast ratios** — 4.5:1 for normal text, 3:1 for large text (>=18px or >=14px bold)
-2. **Use semantic HTML** — proper heading hierarchy, landmark elements, button vs link
-3. **Support keyboard navigation** — all interactive elements must be focusable and operable
-4. **Provide text alternatives** — meaningful alt text for informative images, `alt=""` for decorative images
-5. **Use ARIA correctly** — only when semantic HTML is insufficient, never misuse roles
+1. **The validator report must be readable as text.** Severity is never
+   communicated by color alone — every finding carries a text severity token
+   (`error`/`warning`/`info`), in the UI and in every output format.
+2. **The badge SVG speaks.** `<title>` + `aria-label` carrying state AND
+   version ("Cabuya 1.0 compatible — measured 2026-08-16"); state is also
+   text inside the SVG, not only color.
 
-## Color Contrast Standards
+## 3. Structure
 
-### Approved Text Color Pairings
+- Semantic landmarks (`header`/`nav`/`main id="main"`/`footer`) + a skip
+  link.
+- Heading hierarchy never skips levels; one `h1` per page.
+- Nav dropdowns use the **disclosure pattern** (`<button aria-expanded>`),
+  never `role="menu"`. Mobile drawer traps focus; Escape closes; focus
+  returns to the trigger.
+- Buttons act, links navigate — never a `<div onclick>`.
 
-These are the **only** gray text classes that should be used for body/secondary text:
+## 4. Media & motion
 
-| Use Case | Light Mode | Dark Mode | Combined Class |
-|----------|-----------|-----------|----------------|
-| **Body / secondary on canvas** | `text-corag-secondary` | `text-corag-secondary` (token flips in `.dark`) | Prefer Corag tokens over raw gray utilities |
-| **Legacy gray pair (avoid in new UI)** | `text-gray-600` | `dark:text-gray-300` | Only if migrating old markup; convert to `text-corag-secondary` |
-| **Primary text** | `text-gray-900` | `dark:text-white` | `text-gray-900 dark:text-white` |
-| **Headings** | `text-gray-900` | `dark:text-white` | `text-gray-900 dark:text-white` |
-| **Text on dark bg-main (#0f1124)** | N/A | `text-gray-300` | `text-gray-300` |
+- Every `<img>` has `width`, `height`, and either meaningful `alt` or
+  `alt=""` (decorative). Icon-only links carry `aria-label`.
+- Diagrams (`src/components/diagrams/`) are `role="img"` with a localized,
+  meaningful `aria-label`; their text is real text (HTML/SVG), not raster.
+- All non-essential motion sits behind `prefers-reduced-motion: reduce`.
 
-### Banned Text Color Classes
+## 5. Forms & dynamic content
 
-**NEVER use these classes for visible body text:**
+- Every control has a visible `<label>`; errors are text + `aria-live`
+  announcements; honeypots are `aria-hidden` and off the tab order.
+- Async results (validator report, form status) announce via
+  `aria-live="polite"` regions.
+- Focus is always visible (`focus-visible` ring tokens) and never removed.
 
-| Banned Class | Reason | Replacement |
-|-------------|--------|-------------|
-| `text-gray-400` | Fails 4.5:1 on both white and gray-50 backgrounds | `text-gray-600` |
-| `text-gray-500` (without dark pair) | May fail on some backgrounds | `text-gray-600 dark:text-gray-300` |
-| `dark:text-gray-400` | Fails 4.5:1 on gray-800 (#1f2937) and gray-900 (#111827) | `dark:text-gray-300` |
-| `dark:text-gray-500` | Fails contrast on all dark backgrounds | `dark:text-gray-300` |
+## 6. Verification
 
-### Contrast Reference
-
-| Text Color | Hex | vs White (#fff) | vs Gray-50 (#f8fafc) | vs Gray-800 (#1f2937) | vs Gray-900 (#111827) |
-|-----------|-----|:---------------:|:--------------------:|:---------------------:|:---------------------:|
-| gray-300 | #d1d5db | 2.1:1 | 2.0:1 | **6.5:1** | **8.1:1** |
-| gray-400 | #9ca3af | 3.0:1 | 2.9:1 | 3.8:1 | 4.8:1 |
-| gray-500 | #6b7280 | **5.0:1** | 4.8:1 | 2.5:1 | 3.1:1 |
-| gray-600 | #4b5563 | **7.5:1** | **7.2:1** | 1.7:1 | 2.1:1 |
-
-Bold values pass WCAG AA (4.5:1). This is why `text-gray-600 dark:text-gray-300` is the standard pairing.
-
-## Semantic HTML
-
-### Heading Hierarchy
-
-- Only one `<h1>` per page
-- Never skip heading levels (no h1 -> h3 without h2)
-- Homepage: `<h1>` in HeroSection, `<h2>` for each section, `<h3>` for items within sections
-- Other pages: `<h1>` via PageHero component
-
-### Landmark Elements
-
-```html
-<body>
-  <a href="#main-content" class="sr-only focus:not-sr-only ...">Skip to content</a>
-  <header>
-    <nav aria-label="Main navigation">...</nav>
-  </header>
-  <main id="main-content">
-    <section>...</section>
-  </main>
-  <footer>...</footer>
-</body>
-```
-
-### Button vs Link
-
-- `<a>` — navigates to a URL
-- `<button>` — performs an action (toggle, open dropdown, submit)
-
-## ARIA Patterns
-
-### Dropdown Navigation (Header)
-
-The site uses a **disclosure pattern** (not menu pattern) for navigation dropdowns:
-
-```html
-<button
-  aria-expanded="false"
-  aria-haspopup="true"
-  aria-controls="dropdown-id"
-  type="button"
->
-  Label
-</button>
-<div id="dropdown-id">
-  <a href="/page1">Link 1</a>
-  <a href="/page2">Link 2</a>
-</div>
-```
-
-**Do NOT use** `role="menu"` / `role="menuitem"` for navigation dropdowns. The ARIA menu pattern is for application menus (like a desktop app's File menu), not for website navigation.
-
-### Progress Bars
-
-```html
-<div
-  role="progressbar"
-  aria-valuenow="90"
-  aria-valuemin="0"
-  aria-valuemax="100"
-  aria-label="HTML proficiency: 90%"
->
-  <!-- Visual bar -->
-</div>
-```
-
-### Decorative Elements
-
-```html
-<!-- Decorative images: empty alt, hidden from screen readers -->
-<img src="/icons/chevron.svg" alt="" aria-hidden="true" />
-
-<!-- Icons inside labeled links: empty alt (parent has aria-label) -->
-<a href="https://github.com/user" aria-label="GitHub">
-  <img src="/icons/github.svg" alt="" />
-</a>
-
-<!-- Emoji used decoratively -->
-<span aria-hidden="true">☀️</span>
-```
-
-### Theme Toggle
-
-```html
-<button id="theme-toggle" aria-label="Toggle dark mode">
-  <span class="block dark:hidden" aria-hidden="true">☀️</span>
-  <span class="hidden dark:block" aria-hidden="true">🌙</span>
-</button>
-```
-
-## Images
-
-### All Images Must Have Dimensions
-
-Every `<img>` element **MUST** include `width` and `height` attributes to prevent Cumulative Layout Shift (CLS):
-
-```html
-<!-- Correct -->
-<img src="/image.jpg" alt="Description" width={600} height={400} class="w-full h-40 object-cover" />
-
-<!-- Wrong: missing dimensions -->
-<img src="/image.jpg" alt="Description" class="w-full h-40 object-cover" />
-```
-
-CSS classes still control the visual size. The `width`/`height` attributes tell the browser the aspect ratio for layout calculation.
-
-### Image Alt Text Rules
-
-| Image Type | Alt Text | Example |
-|-----------|---------|---------|
-| **Informative** | Descriptive text | `alt="Corag Logo"` |
-| **Decorative** | Empty string | `alt=""` |
-| **Icon in labeled link** | Empty string | `alt=""` (parent `<a>` has `aria-label`) |
-| **Blog hero** | Post title | `alt={post.data.title}` |
-
-## Keyboard Accessibility
-
-### Skip-to-Content Link
-
-Present on every page as the first focusable element:
-
-```html
-<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 ...">
-  Skip to content
-</a>
-```
-
-### Focus Indicators
-
-All interactive elements must have visible focus indicators. Tailwind's default focus ring handles most cases. Custom interactive elements should include:
-
-```html
-<button class="focus:outline-none focus:ring-2 focus:ring-blue-500">
-```
-
-## External Links
-
-All links opening in new tabs must include `rel="noopener"`:
-
-```html
-<a href="https://example.com" target="_blank" rel="noopener" aria-label="Example (opens in new tab)">
-```
-
-## Font Loading
-
-Use `font-display: swap` for custom fonts to prevent invisible text during loading:
-
-```css
-@font-face {
-  font-family: "Atkinson";
-  font-display: swap;
-  src: url("/fonts/atkinson-regular.woff") format("woff");
-}
-```
-
-## Accessibility Checklist for New Components
-
-Before creating or modifying a component:
-
-- [ ] Text contrast meets WCAG AA (4.5:1 normal, 3:1 large)
-- [ ] Uses `text-corag-secondary` (or approved Corag secondary) for secondary text — never `text-gray-400`, `text-gray-500`, or dark equivalents
-- [ ] All `<img>` elements have `width`, `height`, and appropriate `alt` text
-- [ ] Interactive elements are keyboard accessible (`<button>` or `<a>`)
-- [ ] Heading hierarchy is sequential (no skipped levels)
-- [ ] ARIA attributes used correctly (or not at all if semantic HTML suffices)
-- [ ] Dark mode tested for contrast compliance
-- [ ] External links have `rel="noopener"`
-
-## Related Documentation
-
-- [Performance Guide](PERFORMANCE.md) - CLS prevention, image optimization
-- [Standards](STANDARDS.md) - Coding standards including accessibility
-- [Dark Mode](features/DARK_MODE.md) - Theme implementation
-- [Brand Guide](BRAND_GUIDE.md) - Color palette and dark mode pairings
+| Layer | Tool |
+|---|---|
+| Token contrast | `tests/unit/lib/design-tokens.test.ts` (re-computed WCAG) |
+| Runtime scan | `a11y:check` — axe over eight routes × light/dark × mobile/desktop + menu/report states *(Task 35)* |
+| Manual | Keyboard walk, 200% zoom reflow, screen-reader pass — recorded in `analysis_results/PERF_A11Y_BASELINE.md` |
+| Lighthouse | a11y = 100 on the route matrix |

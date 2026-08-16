@@ -1,6 +1,13 @@
 # Markdown for Agents
 
-Native Markdown delivery layer for AI agents. Every page and blog post on the site has a `.md` endpoint serving clean, agent-friendly Markdown from the original source content.
+Native Markdown delivery layer for AI agents. Every page on the site has a
+`.md` endpoint serving clean, agent-friendly Markdown from the original
+source content.
+
+> **Migration status.** This contract carries over from the baseline and is
+> retargeted to the Cabuya page set in Task 32 (spec twins ARE the source
+> files; schema pages add `application/schema+json` negotiation; llms.txt is
+> build-generated). Blog-specific references below are historical until then.
 
 ## Architecture
 

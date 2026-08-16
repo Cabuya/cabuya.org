@@ -1,6 +1,6 @@
 # Environment setup
 
-Developer and Cloudflare Pages environment variables for Corag v3.
+Developer and Cloudflare Pages environment variables for cabuya.org. (Carried from the baseline; the variable set is finalized as Functions land — see docs/SECURITY.md §4 for the secrets inventory.)
 
 ## Local Docker
 

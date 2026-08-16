@@ -1,8 +1,8 @@
-# Onboarding — your first run
+# Onboarding — your first run (cabuya.org)
 
 This is the click-by-click version, written for someone who has **not** set up a
 project like this before. If you already work with Docker and dev containers,
-[Contributing](./CONTRIBUTING.md) is faster.
+[Contributing](../CONTRIBUTING.md) is faster.
 
 You do not need to understand the stack to get it running. That comes later.
 
@@ -148,7 +148,7 @@ pnpm run md:check:strict && pnpm run lang:check:strict && pnpm run seo:check:str
 pnpm run parity:check:strict && pnpm run redirects:check:strict
 ```
 
-[Contributing](./CONTRIBUTING.md) explains what each one protects and why it
+[Contributing](../CONTRIBUTING.md) explains what each one protects and why it
 exists.
 
 ---

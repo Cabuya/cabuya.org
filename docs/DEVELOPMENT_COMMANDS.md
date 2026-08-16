@@ -1,347 +1,70 @@
 # Development Commands
 
-Complete reference for all npm scripts and CLI commands available in Corag.
-
-## Quick Reference
-
-| Command | Description |
-|---------|-------------|
-| `pnpm run dev` | Start development server |
-| `pnpm run build` | Production build with type check |
-| `pnpm run biome:check` | Check code quality |
-| `pnpm run biome:fix` | Auto-fix code issues |
-| `pnpm run astro:check` | TypeScript type checking |
-| `pnpm run md:check` | Verify every HTML page has a **complete** `.md` twin |
-| `pnpm run md:check:strict` | Same; exits `1` on failure (CI gate) |
-| `pnpm run lang:check[:strict]` | Spanish renders at `/`, English at `/en` |
-| `pnpm run seo:check[:strict]` | Per-URL metadata and structured data |
-| `pnpm run parity:check[:strict]` | The two languages carry the **same** content |
-| `pnpm run redirects:check[:strict]` | Every redirect resolves; no live page shadowed |
-
-## Development
-
-### Start Dev Server
-
-```bash
-pnpm run dev
-```
-
-- Starts Astro development server at `http://localhost:7777`
-- Hot Module Replacement (HMR) enabled
-- Accessible on local network (host: true)
-
-### Preview Production Build
-
-```bash
-pnpm run astro:preview
-```
-
-- Previews the production build locally
-- Useful for testing before deployment
-
-## Build Commands
-
-### Production Build
-
-```bash
-pnpm run build
-```
-
-- Runs TypeScript checking (`astro check`)
-- Builds static site to `dist/` folder
-- Optimizes assets (CSS, JS, images)
-
-### Production Build (Cloudflare Pages)
-
-```bash
-pnpm run build
-```
-
-This command:
-1. Runs `prebuild` (generates WebP variants via `images:webp`)
-2. Runs TypeScript checking (`astro check`)
-3. Builds to `dist/` directory
-
-**Output structure:**
-```
-dist/
-├── index.html
-├── about/index.html
-├── blog/
-│   └── ...
-├── _astro/
-│   ├── *.css
-│   └── *.js
-└── images/
-```
-
-## Code Quality
-
-### Biome (Linting & Formatting)
-
-**Check for issues:**
-```bash
-pnpm run biome:check
-```
-
-**Auto-fix issues:**
-```bash
-pnpm run biome:fix
-```
-
-**Fix with unsafe transformations:**
-```bash
-pnpm run biome:fix:unsafe
-```
-
-Biome handles both linting and formatting. It replaces ESLint and Prettier.
-
-### TypeScript Checking
-
-```bash
-pnpm run astro:check
-```
-
-- Runs Astro's TypeScript checker
-- Validates `.astro`, `.ts`, `.tsx` files
-- Reports type errors
-
-### Markdown-for-Agents Parity Check
-
-```bash
-pnpm run md:check              # Report incomplete or missing .md twins
-pnpm run md:check:strict       # Same, exits 1 on failure (CI gate)
-pnpm run lang:check:strict     # Language integrity per URL
-pnpm run seo:check:strict      # Metadata and structured data per URL
-pnpm run parity:check:strict   # ES/EN carry the same content
-pnpm run redirects:check:strict # No redirect breaks a live page
-
-# The last four all read `dist/`, so they need a build first.
-```
-
-- Scans `dist/` for every `index.html` and checks it has a matching `.md` counterpart
-- Catches agent-markdown coverage gaps before deployment (`MARKDOWN_FOR_AGENTS.md` endpoints)
-- Requires `pnpm run build` to run first (operates on the build output)
-- Excludes: `/internal/*`, `/api/*`, `/.well-known/*`, `/_astro/*`, `/images/*`, `/404`, `/rss.xml`, pagination, tag listings, and redirect pages
-- When missing files appear, the report lists them by language (EN / ES)
-- Script lives at `scripts/check-md-parity.mjs`
-
-## Package Management
-
-### Check for Updates
-
-```bash
-pnpm run ncu:check
-```
-
-- Uses `npm-check-updates` to list available updates
-- Shows current vs latest versions
-
-### Upgrade All Packages
-
-```bash
-pnpm run ncu:upgrade
-```
-
-- Updates all dependencies in `package.json`
-- Run `pnpm install` after to apply changes
-
-### Install Dependencies
-
-```bash
-pnpm install
-```
-
-## Lighthouse
-
-### Run Lighthouse Audit
-
-```bash
-pnpm run lighthouse
-```
-
-- Runs Lighthouse CI against the built `dist/` folder
-- Requires a prior `pnpm run build` (the `dist/` directory must exist)
-- Requires Chrome installed locally
-- Tests pages defined in `lighthouserc.cjs`: `/`, `/about/`, `/blog/`, `/es/`
-- Asserts performance budgets: Performance >= 95, Accessibility = 100, Best Practices >= 95, SEO >= 95
-
-## Release
-
-### Create Release
-
-```bash
-pnpm run release
-```
-
-- Bumps patch version
-- Creates commit with release message
-- Format: `[🤖 Corag] New release to v{version} launched 🚀`
-
-## Astro CLI
-
-The Astro CLI is available via `pnpm run astro`:
-
-```bash
-# General help
-pnpm run astro -- --help
-
-# Add integration
-pnpm run astro -- add svelte
-
-# Sync content collections
-pnpm run astro -- sync
-```
-
-### Common Astro Commands
-
-| Command | Description |
-|---------|-------------|
-| `astro dev` | Start dev server |
-| `astro build` | Build for production |
-| `astro preview` | Preview build |
-| `astro check` | Type checking |
-| `astro sync` | Sync content collections |
-| `astro add` | Add integrations |
-
-## Workflow Examples
-
-### Daily Development
-
-```bash
-# Start working
-pnpm run dev
-
-# Before committing
-pnpm run biome:check
-pnpm run astro:check
-```
-
-### Before Pull Request
-
-```bash
-# Full validation
-pnpm run biome:check && pnpm run astro:check && pnpm run build
-```
-
-### Deploy (Cloudflare Pages)
-
-Cloudflare Pages deploys automatically on push to `main`. No manual deploy step needed. Ensure `pnpm run build` succeeds locally before pushing.
-
-### Update Dependencies
-
-```bash
-# Check what's available
-pnpm run ncu:check
-
-# Upgrade packages
-pnpm run ncu:upgrade
-
-# Install updated packages
-pnpm install
-
-# Verify everything works
-pnpm run build
-```
-
-## Environment Variables
-
-Astro uses `.env` files for environment variables:
-
-```bash
-# .env (local development)
-PUBLIC_SITE_URL=http://localhost:7777
-
-# Cloudflare Pages / production build (must match the hostname you share)
-# While the public preview is v3, keep this as the v3 host — apex
-# cabuya.org currently redirects OG assets to the legacy stack (404).
-PUBLIC_SITE_URL=https://cabuya.org
-
-# After DNS cutover to apex (when apex serves this build):
-# PUBLIC_SITE_URL=https://cabuya.org
-```
-
-**Access in code:**
-```typescript
-// Client-side (must use PUBLIC_ prefix)
-const url = import.meta.env.PUBLIC_SITE_URL;
-
-// Server-side only
-const secret = import.meta.env.SECRET_KEY;
-```
-
-## Troubleshooting
-
-### Clear Cache
-
-```bash
-# Remove Astro cache
-rm -rf .astro
-
-# Remove node_modules and reinstall
-rm -rf node_modules
-pnpm install
-```
-
-### Reset Build
-
-```bash
-# Remove build output
-rm -rf dist
-
-# Rebuild
-pnpm run build
-```
-
-### Port Already in Use
-
-```bash
-# Kill process on port 7777
-lsof -ti:7777 | xargs kill -9
-
-# Or use different port
-pnpm run dev -- --port 3000
-```
-
-### Devcontainer (Cursor / VS Code)
-
-When using the devcontainer, the host port is mapped to **7777** (not 7777) to avoid conflict with macOS AirPlay Receiver. Access the dev server at `http://localhost:7777`.
-
-## Scripts Reference
-
-Full `package.json` scripts:
-
-```json
-{
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro check && astro build",
-    "prebuild": "node scripts/generate-webp-homepage.mjs && node scripts/generate-webp-blog-shared.mjs && node scripts/generate-webp-blog-posts.mjs",
-    "astro": "astro",
-    "astro:check": "astro check",
-    "astro:preview": "astro preview",
-    "biome:check": "biome check",
-    "biome:fix": "biome check --write",
-    "biome:fix:unsafe": "biome check --write --unsafe",
-    "ncu:check": "ncu",
-    "ncu:upgrade": "ncu -u",
-    "test": "echo 'Running tests...'",
-    "release": "bash .github/scripts/prepare_release.sh"
-  }
-}
-```
-
-## Testing (Future)
-
-Testing is not yet configured. When implemented:
-
-```bash
-# Unit tests (Vitest)
-pnpm run test
-
-# E2E tests (Playwright)
-pnpm run test:e2e
-
-# Watch mode
-pnpm run test:watch
-```
+> Every npm script, what it does, and when to run it. Scripts marked
+> *(Task N)* land with that migration task — the roster is kept current so
+> nobody rediscovers the intended shape.
+
+---
+
+## Daily
+
+| Command | What |
+|---|---|
+| `pnpm run dev` | Dev server at `http://localhost:7777` |
+| `pnpm run build` | `astro check && astro build` (+ prebuild index, post-build internal-hub strip) |
+| `pnpm run astro:preview` | Preview the production build |
+| `pnpm run test` / `test:watch` / `test:coverage` | Vitest |
+| `pnpm run biome:check` / `biome:fix` / `biome:fix:unsafe` | Lint + format |
+| `pnpm run astro:check` | TypeScript over .astro/.ts |
+
+## Content gates (the five — all have `:strict` CI variants)
+
+| Command | Asserts |
+|---|---|
+| `pnpm run md:check` | Every page serves a COMPLETE `.md` twin (coverage ≥ 0.85, required sections) |
+| `pnpm run lang:check` | `/` renders English, `/es` renders Spanish — HTML and twin |
+| `pnpm run seo:check` | Per-URL SEO + structured data (+ OG image existence *(Task 22)*, JSON-LD matrix *(Task 33)*) |
+| `pnpm run parity:check` | EN and ES carry the SAME content |
+| `pnpm run redirects:check` | Every redirect resolves; no live page shadowed |
+
+## Protocol gates
+
+| Command | Asserts | Ships |
+|---|---|---|
+| `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass, invalid fail | Task 10 |
+| `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | Task 10 |
+| `pnpm run registry:check(:strict)` | Entries validate; ids/URLs unique; org-level contact; no HTML | Task 11 |
+| `pnpm run checks:catalogue` | Every check id ↔ documented, both directions | Task 16 |
+
+## Quality gates
+
+| Command | Asserts | Ships |
+|---|---|---|
+| `pnpm run perf:budgets` | Per-route JS budgets (docs 0 KB, landing ≤40, validator ≤90, registry ≤60) | Task 34 |
+| `pnpm run a11y:check` | Playwright + axe over the route matrix × themes × viewports | Task 35 |
+| `pnpm run lighthouse` / `lighthouse:full` | LHCI ≥ 95/100/100/95 on the eight routes | Task 34 retargets |
+| `pnpm exec playwright test tests/e2e/journeys/` | The five E2E journeys | Task 47 |
+
+## Validator workspace *(Tasks 12–16)*
+
+| Command | What |
+|---|---|
+| `pnpm --filter @cabuya/validator build` / `test` | The package |
+| `node packages/validator/dist/cli/index.js …` | Local CLI (`validate`, `feed`, `manifest`, `probe`, `explain`, `registry check`, `init`) |
+| `pnpm run validator:pack` | `npm pack --dry-run` review |
+
+## Utilities
+
+| Command | What |
+|---|---|
+| `pnpm run images:optimize` | WebP + responsive sets for staged images |
+| `pnpm run generate:agent-skills-index` | Regenerates the agent-skills index (runs in prebuild) |
+| `node scripts/revalidate.mjs --dry-run` | Registry re-validation state machine locally *(Task 28)* |
+| `pnpm run ncu:check` | Dependency update report (TS major is pinned out) |
+| `pnpm run release` | Version bump + release commit (CI release flow) |
+
+## Local Functions development
+
+`wrangler pages dev` runs the site with `functions/` (validate, contact,
+badge) against local KV *(documented fully in Task 27)*. Secrets come from
+`.dev.vars` — see `.dev.vars.example` for every name; never commit values.

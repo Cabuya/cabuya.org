@@ -1,152 +1,69 @@
 # Testing Guide
 
-Guide for testing in Corag.
+> How this repo tests, where suites live, and the coverage bars. Behavior
+> changes ship with their tests in the same commit; never weaken a test to
+> pass a gate.
 
-## Overview
+---
 
-This project uses **Vitest** for unit and component testing. The testing infrastructure covers:
+## 1. Toolchain
 
-- **Utility function tests** for all pure functions in `src/lib/`
-- **Svelte component tests** for key interactive components using `@testing-library/svelte`
-- **Coverage enforcement** at 80%+ on `src/lib/` code
+- **Vitest** (`pnpm run test`, `test:watch`, `test:coverage`) — unit +
+  integration, happy-dom environment where DOM is needed, Testing Library for
+  Svelte components.
+- **Playwright** — a11y gate (`a11y:check`, axe on the route matrix,
+  *Task 35*), E2E journeys (*Task 47*), responsive audit.
+- Gate scripts export testable functions; their unit tests live beside the
+  other suites with fixtures under `tests/fixtures/`.
 
-E2E testing (Playwright) is not yet configured.
-
-## Running Tests
-
-```bash
-# Run all tests (single run)
-pnpm run test
-
-# Watch mode (re-runs on file changes)
-pnpm run test:watch
-
-# Run with coverage report
-pnpm run test:coverage
-```
-
-## Test Structure
+## 2. Layout & naming
 
 ```
 tests/
-├── unit/
-│   ├── lib/                    # Utility function tests
-│   │   ├── blog.test.ts        # Blog utility functions (41 tests)
-│   │   ├── i18n.test.ts        # i18n utility functions (46 tests)
-│   │   ├── search.test.ts      # Search/Fuse.js functions (26 tests)
-│   │   └── translations.test.ts # Translation system (14 tests)
-│   └── components/             # Svelte component tests
-│       ├── BlogCard.test.ts    # Blog card rendering (14 tests)
-│       └── BlogPagination.test.ts # Pagination logic (17 tests)
-├── fixtures/
-│   └── posts.ts                # Mock blog post data
-├── helpers/
-│   └── setup.ts                # Test setup (jest-dom matchers)
-└── mocks/
-    └── astro-content.ts        # Mock for astro:content virtual module
+├── unit/            # *.test.ts, mirroring src/ paths (tests/unit/lib/i18n.test.ts)
+├── fixtures/        # shared fixture data (spec-gates/, quickstart/, …)
+└── e2e/             # Playwright: a11y/, journeys/, responsive/
+packages/validator/tests/   # the validator's own suites (see §4)
 ```
 
-## Writing New Tests
+## 3. Coverage bars
 
-### File Naming
+| Surface | Bar | Where enforced |
+|---|---|---|
+| `src/lib/` | ≥ 80% | vitest coverage thresholds *(Task 46)* |
+| Validator core | ≥ 90% lines | package config *(Task 46)* |
+| Every `E`-severity check | 1 must-fail + 1 near-miss fixture | structural invariant test |
 
-- Use `*.test.ts` for all test files
-- Place in `tests/unit/lib/` for utility tests
-- Place in `tests/unit/components/` for component tests
+## 4. The validator test strategy (the deep end)
 
-### Utility Function Tests
+| Layer | Content |
+|---|---|
+| Golden corpus | The 5 spec examples + ~35 synthetic fixtures from real ecosystem shapes (de-identified) |
+| Must-fail pairs | Every error check: one fixture that fires it, one near-miss that must NOT |
+| Message snapshots | Exact strings — incl. the three designed message sets from the invalid examples. A message change is a deliberate act |
+| Schema mutations | Delete each required property; assert exactly the expected check fires |
+| Parity | Same corpus through Node and the Workers runtime → byte-identical JSON |
+| Probe tests | A local fixture server reproducing the four traps (SPA catch-all, always-now, missing CORS, redirect chain) |
+| Non-echo | Sentinel values prove PII findings never quote the matched value |
+| Purity | The built core bundle contains no Node-only APIs |
+| No-network | A test fails if the engine calls fetch in `--no-network` mode |
 
-```typescript
-import { describe, expect, it } from 'vitest';
-import { myFunction } from '@/lib/myModule';
+## 5. House tests that guard the system itself
 
-describe('myFunction', () => {
-  it('returns expected result for valid input', () => {
-    expect(myFunction('input')).toBe('expected');
-  });
+- `tests/unit/lib/design-tokens.test.ts` — declared≡shown tokens, RE-COMPUTED
+  WCAG ratios, raw-grey ban, fique-on-light scan.
+- Gate self-tests — each gate proven red on a seeded violation when it lands.
+- Structure guards (internal hub excluded from production; sidebar links
+  resolve; nav ↔ IA consistency) — added with their surfaces.
 
-  it('handles edge case', () => {
-    expect(myFunction('')).toBe('default');
-  });
-});
-```
+## 6. Discipline
 
-### Svelte Component Tests
-
-```typescript
-import { render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
-import MyComponent from '@/components/MyComponent.svelte';
-
-describe('MyComponent', () => {
-  it('renders content', () => {
-    render(MyComponent, { props: { title: 'Hello' } });
-    expect(screen.getByText('Hello')).toBeDefined();
-  });
-});
-```
-
-### Using Fixtures
-
-Import mock data from `tests/fixtures/posts.ts`:
-
-```typescript
-import { publishedEnglishPost, demoEnglishPost } from '../../fixtures/posts';
-
-// Use `as never` for CollectionEntry type compatibility
-render(BlogCard, { props: { post: publishedEnglishPost as never } });
-```
-
-## Configuration
-
-### `vitest.config.ts`
-
-Key configuration:
-
-- **Environment:** `happy-dom` (lightweight DOM for tests)
-- **Path aliases:** `@/` maps to `src/` (matches tsconfig)
-- **Svelte support:** `@sveltejs/vite-plugin-svelte` (plain `svelte()` — the `hot` option was removed in v7; HMR is already off outside dev)
-- **Browser resolve:** `conditions: ['browser']` required for Svelte 5 component tests
-- **astro:content mock:** Aliased to `tests/mocks/astro-content.ts` since Vitest cannot resolve Astro virtual modules
-
-### Coverage
-
-- **Provider:** V8
-- **Target:** 80%+ on statements, branches, functions, and lines for `src/lib/`
-- **Excludes:** `src/lib/types.ts`, `src/lib/enum.ts` (type-only files)
-- **Reporters:** text, text-summary, html
-
-### Svelte 5 Compatibility
-
-Svelte 5 components require `resolve.conditions: ['browser']` in the Vitest config. Without this, `@testing-library/svelte` throws a `lifecycle_function_unavailable` error because Svelte resolves to server-side exports.
-
-## Test Conventions
-
-- Use descriptive `describe`/`it` blocks: `describe('getPostSlug')` + `it('strips date prefix from post ID')`
-- Prefer `expect().toBe()` for primitives, `expect().toEqual()` for objects
-- Test edge cases: empty strings, undefined values, boundary conditions
-- Do **not** test async functions that depend on `astro:content` (e.g., `getBlogPosts`, `getRelatedPosts`)
-- Import order: vitest > testing-library > source modules > fixtures
-
-## Testing Best Practices
-
-### Do
-
-- Test user-visible behavior, not implementation details
-- Use meaningful test descriptions that explain the expected behavior
-- Keep tests independent (no shared mutable state)
-- Use test fixtures for mock data
-- Test edge cases and error conditions
-
-### Don't
-
-- Test Astro/Svelte framework internals
-- Over-mock to the point tests are meaningless
-- Write flaky tests that depend on timing
-- Skip running tests before committing
-
-## Resources
-
-- [Vitest Documentation](https://vitest.dev/)
-- [Testing Library Svelte](https://testing-library.com/docs/svelte-testing-library/intro)
-- [Astro Testing Recipes](https://docs.astro.build/en/recipes/testing/)
+1. **New behavior ⇒ tests in the same task/commit** (happy path + meaningful
+   edges).
+2. **Full check, not the build:** validation = `pnpm run test && pnpm run
+   biome:check && pnpm run astro:check` minimum.
+3. **Keep existing tests green** — update intent, never delete to pass.
+4. **Proportionality:** docs/config changes don't need new tests but still
+   run the gates.
+5. **No flakes:** suites must survive `--sequence.shuffle`; fix
+   order-dependence when found.

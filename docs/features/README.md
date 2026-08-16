@@ -1,52 +1,14 @@
-# Features Documentation
+# Feature notes
 
-This directory contains detailed documentation for specific features implemented in the Corag website.
+Mechanics of retained site features. (The blog, forms-intake, authors/
+contributors and RSS notes were retired with their surfaces in the Cabuya
+migration — see `docs/context/` for the historical record.)
 
-## Available Feature Docs
+| Note | What |
+|---|---|
+| [DARK_MODE.md](DARK_MODE.md) | Theme flow, persistence, flash-free application |
+| [IMAGE_OPTIMIZATION.md](IMAGE_OPTIMIZATION.md) | WebP pipeline, responsive sets, `images:optimize` |
+| [PUBLIC_ASSETS.md](PUBLIC_ASSETS.md) | What lives in `public/` and its conventions |
+| [I18N.md](I18N.md) | Pointer to the i18n guide |
 
-| Feature | File | Description |
-|---------|------|-------------|
-| Authors | [AUTHORS.md](./AUTHORS.md) | Multi-author support: YAML schema, AuthorCard, JSON-LD integration |
-| Blog Posts | [BLOG_POSTS.md](./BLOG_POSTS.md) | Post structure, naming, frontmatter, hero layouts |
-| Blog Content Lifecycle | [BLOG_CONTENT_LIFECYCLE.md](./BLOG_CONTENT_LIFECYCLE.md) | Draft, scheduled, published, demo visibility rules |
-| Blog Search | [BLOG_SEARCH.md](./BLOG_SEARCH.md) | Client-side search functionality |
-| Content QA Checklist | [CONTENT_QA_CHECKLIST.md](./CONTENT_QA_CHECKLIST.md) | Gates before shipping content |
-| Contact Form | [CONTACT_FORM.md](./CONTACT_FORM.md) | Client-side intake contract |
-| Contributors | [CONTRIBUTORS.md](./CONTRIBUTORS.md) | The team directory |
-| Dark Mode | [DARK_MODE.md](./DARK_MODE.md) | Theme toggle and persistence |
-| Forms | [FORMS.md](./FORMS.md) | DailyBot intake architecture and env contract |
-| Image Optimization | [IMAGE_OPTIMIZATION.md](./IMAGE_OPTIMIZATION.md) | Sharp-based image pipeline and staging workflow |
-| Internationalization | [I18N.md](./I18N.md) | Multi-language support |
-| Pagination | [PAGINATION.md](./PAGINATION.md) | Blog post pagination |
-| Public Assets | [PUBLIC_ASSETS.md](./PUBLIC_ASSETS.md) | Static assets structure (`public/`) |
-| RSS Feed | [RSS_FEED.md](./RSS_FEED.md) | RSS feed generation |
-
-## Feature Documentation Pattern
-
-Each feature document follows this structure:
-
-1. **Overview** - What the feature does
-2. **Architecture** - How it's implemented
-3. **Components** - Related components and files
-4. **Configuration** - How to configure/customize
-5. **Usage Examples** - How to use/extend
-6. **Related Documentation** - Links to related docs
-
-## Adding New Feature Documentation
-
-1. Create a new markdown file in this directory:
-   ```bash
-   touch docs/features/NEW_FEATURE.md
-   ```
-
-2. Follow the documentation pattern above
-
-3. Add entry to this README's table
-
-4. Cross-reference from relevant component/page READMEs
-
-## Related Documentation
-
-- [Architecture Guide](../ARCHITECTURE.md)
-- [Standards](../STANDARDS.md)
-- [Documentation Guide](../DOCUMENTATION_GUIDE.md)
+New feature notes join this table (see `docs/DOCUMENTATION_GUIDE.md` §4).
