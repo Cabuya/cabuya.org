@@ -62,7 +62,6 @@ This agent focuses on:
 3. **Validate everything** — Run `pnpm run biome:check` and `pnpm run astro:check` after each change.
 4. **Commit incrementally** — Don't accumulate changes.
 5. **Stop on ambiguity** — Don't guess; escalate.
-6. **Enforce blog workflow policy** — New posts in `src/content/blog/` must be created with `/add-blog-post`.
 
 ## Workflow
 
@@ -162,8 +161,8 @@ pnpm run dev
 
 ### Creating a Blog Post (Mandatory Skill Flow)
 
-1. Invoke `/add-blog-post` (do not manually scaffold new post files)
-2. Ensure both `src/content/blog/en/` and `src/content/blog/es/` are created/updated
+1. Invoke `/doc-edit` (do not manually scaffold new post files)
+2. Ensure both `src/content/docs/en/` and `src/content/docs/es/` are created/updated
 3. Confirm frontmatter parity (including `series` and `seriesOrder` when present)
 4. Run `pnpm run build`
    - Wrappers never import `MainLayout`

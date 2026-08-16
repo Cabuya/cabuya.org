@@ -1,137 +1,83 @@
 # Commands Reference
 
-> **Auto-maintained.** Update this file whenever a skill or command is added or removed.
-> This repository (`cabuya.org`) has its own commands, tailored to an Astro site with two languages and a small set of content collections (blog, pages, authors, channels, contributors, tags, series, notifications).
-> See [Skills & Agents Catalog](skills_agents_catalog.md) for detailed tiers, capabilities, and domain guides.
+> **Auto-maintained.** Update whenever a skill or command is added or removed.
+> This repository (`cabuya.org`) is the Cabuya Protocol site: Astro, two
+> languages (EN at `/`, ES at `/es`), the `spec/` + `registry/` bounded
+> directories and the `@cabuya/validator` workspace.
+> Detailed tiers and capabilities: [Skills & Agents Catalog](skills_agents_catalog.md).
 
 ---
 
 ## How to Invoke Commands
 
-Different agents use different prefixes — **the behavior is identical, only the prefix changes:**
-
 | Agent | Prefix | Example |
 |-------|--------|---------|
-| **Claude Code** | `/` (native) | `/add-blog-post` |
-| **OpenAI Codex** | `#` | `#add-blog-post` |
-| **Cursor AI** | `#` | `#add-blog-post` |
-| **Gemini / others** | `#` | `#add-blog-post` |
+| **Claude Code** | `/` (native) | `/quick-fix` |
+| **OpenAI Codex / Cursor / Gemini / others** | `#` | `#quick-fix` |
 
-> **Why `#` for non-Claude agents?** Most AI CLIs (Codex, Cursor) intercept `/` as their own system commands, so `/add-blog-post` never reaches the AI. Using `#` avoids that interception. You can also just write the command name in plain text: "run add-blog-post".
+> Most non-Claude CLIs intercept `/` as their own namespace; `#` avoids the
+> interception. Plain text ("run quick-fix") also works.
 
-When a command is invoked (via `/`, `#`, or by name), the agent MUST:
-
-1. **READ** the linked procedure file completely
-2. **FOLLOW** its step-by-step instructions exactly
-3. **DO NOT** improvise or skip steps — the procedure file IS the spec
+When a command is invoked, the agent MUST: **read** the linked procedure file
+completely, **follow** it exactly, and **never** improvise or skip steps —
+the procedure file IS the spec.
 
 ---
 
-## Getting Started
+## Slash commands (`.agents/commands/`)
 
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/setup` | `.agents/commands/setup.md` | Doctor-style local setup — scaffolds `.env`, `.dev.vars` and `.devcontainer`, verifies the toolchain, and confirms the project runs. Idempotent; re-run any time. |
+| Command | Procedure file |
+|---|---|
+| `/agent-create` | [`.agents/commands/agent-create.md`](../commands/agent-create.md) |
+| `/agent-list` | [`.agents/commands/agent-list.md`](../commands/agent-list.md) |
+| `/branch` | [`.agents/commands/branch.md`](../commands/branch.md) |
+| `/code-review` | [`.agents/commands/code-review.md`](../commands/code-review.md) |
+| `/commit` | [`.agents/commands/commit.md`](../commands/commit.md) |
+| `/design-system` | [`.agents/commands/design-system.md`](../commands/design-system.md) |
+| `/dwp-create` | [`.agents/commands/dwp-create.md`](../commands/dwp-create.md) |
+| `/dwp-execute` | [`.agents/commands/dwp-execute.md`](../commands/dwp-execute.md) |
+| `/dwp-refine` | [`.agents/commands/dwp-refine.md`](../commands/dwp-refine.md) |
+| `/dwp-resume` | [`.agents/commands/dwp-resume.md`](../commands/dwp-resume.md) |
+| `/dwp-status` | [`.agents/commands/dwp-status.md`](../commands/dwp-status.md) |
+| `/dwp-verify` | [`.agents/commands/dwp-verify.md`](../commands/dwp-verify.md) |
+| `/lib-upgrade` | [`.agents/commands/lib-upgrade.md`](../commands/lib-upgrade.md) |
+| `/pr` | [`.agents/commands/pr.md`](../commands/pr.md) |
+| `/setup` | [`.agents/commands/setup.md`](../commands/setup.md) |
+| `/skill-create` | [`.agents/commands/skill-create.md`](../commands/skill-create.md) |
+| `/skill-list` | [`.agents/commands/skill-list.md`](../commands/skill-list.md) |
 
----
+## Skills invoked as commands (`.agents/skills/*/SKILL.md`)
 
-## Deep Work Plans
+| Skill | Purpose |
+|---|---|
+| `/add-check` | Implement one validator check end-to-end — catalogue entry, logic, fixture pair, agent-optimized message, docs metadata, gates |
+| `/add-component` | Create new Astro or Svelte components with correct patterns |
+| `/add-page` | Create new pages with correct routing and MainLayout usage |
+| `/audit-analytics` | Audit Umami analytics wiring — EVENTS catalog vs docs vs components, privacy lint, proxy config |
+| `/audit-content-parity` | Audit whether the Spanish and English versions of the same entry carry the same content — same sources, same structure, same bilingual fields |
+| `/audit-language-integrity` | Audit the sitewide language integrity of the build — Spanish URLs must render Spanish and English URLs English, in HTML and in the `.md` twin |
+| `/doc-edit` | Update documentation files including README, comments, and inline docs |
+| `/fix-lint` | Fix Biome linting/formatting errors in 1-3 files using auto-fix and minimal manual edits |
+| `/git-commit-push` | Commit all staged/unstaged changes and push to remote |
+| `/optimize-image` | Convert and optimize images to WebP with responsive sets for site imagery (brand, home, visuals) |
+| `/pr-review-lite` | Quick checklist review of a PR for style, obvious bugs, and missing tests |
+| `/quick-fix` | Fix small bugs and issues in 1-3 files following existing patterns |
+| `/refactor-safe` | Safe refactor in bounded scope (1-10 files, no behavior change) |
+| `/registry-review` | Review a registry publisher PR — schema, identity, uniqueness, org-level contact, crawl policy, no hand-written measured state |
+| `/release-spec` | Release a spec version — SemVer decision, the RC-requires-a-shipping-publisher rule, CHANGELOG, tags, validator range, skill sync |
+| `/security-check` | Quick security checklist for a PR or set of files (secrets, input, logging) |
+| `/spec-edit` | Change normative text in spec/ safely — RFC triage, boundary rules, CHANGELOG, example co-update, gates |
+| `/translate-sync` | Synchronize content between English and Spanish versions |
+| `/type-fix` | Fix TypeScript type errors in 1-3 files (explicit types, prefer no any) |
+| `/update-styles` | Update Tailwind styles with dark mode support |
+| `/write-tests` | Add or expand unit/integration tests for existing code (when testing is configured) |
 
-> Thin delegators to the installed [`deepworkplan` skill](../skills/deepworkplan/SKILL.md) (currently **v2.17.0**, from [`DailybotHQ/deepworkplan-skill`](https://github.com/DailybotHQ/deepworkplan-skill)). Plans live in `.dwp/plans/`; drafts in `.dwp/drafts/`. Opt-in addons installed: `ai-diff-reviewer` (Flow A local-only review), `dependency-upgrade` (`/lib-upgrade`), `design-system` (`/design-system`).
+## Vendored pack commands
 
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/dwp-create` | `.agents/commands/dwp-create.md` | Create a deep work plan (unified flow: info, draft, refine, final) |
-| `/dwp-execute` | `.agents/commands/dwp-execute.md` | Execute an existing deep work plan task by task |
-| `/dwp-refine` | `.agents/commands/dwp-refine.md` | Refine a draft or modify an existing final plan |
-| `/dwp-resume` | `.agents/commands/dwp-resume.md` | Resume an interrupted deep work plan from the first open task |
-| `/dwp-status` | `.agents/commands/dwp-status.md` | Check status of deep work plans without executing |
-| `/dwp-verify` | `.agents/commands/dwp-verify.md` | Objective pass/fail conformance report for the repo and its plans |
-
-## Git & Version Control
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/branch` | `.agents/commands/branch.md` | Generate branch names following naming convention |
-| `/commit` | `.agents/commands/commit.md` | Generate a conventional commit from staged changes |
-| `/pr` | `.agents/commands/pr.md` | Generate a pull request description from branch changes |
-| `/git-commit-push` | `.agents/skills/git-commit-push/SKILL.md` | Commit all changes and push to remote |
-
-## Code Quality & Review
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/code-review` | `.agents/commands/code-review.md` | Review code focusing on critical issues |
-| `/pr-review-lite` | `.agents/skills/pr-review-lite/SKILL.md` | Quick checklist review of a PR (style, bugs, patterns) |
-| `/fix-lint` | `.agents/skills/fix-lint/SKILL.md` | Fix Biome linting/formatting errors in 1-3 files |
-| `/type-fix` | `.agents/skills/type-fix/SKILL.md` | Fix TypeScript type errors in 1-3 files |
-| `/quick-fix` | `.agents/skills/quick-fix/SKILL.md` | Fix small bugs in 1-3 files following existing patterns |
-| `/security-check` | `.agents/skills/security-check/SKILL.md` | Quick security checklist (secrets, API routes, client exposure) |
-
-## Blog & Content
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/new-post` | `.agents/commands/new-post.md` | Create a new blog post (interactive guided flow) |
-| `/add-blog-post` | `.agents/skills/add-blog-post/SKILL.md` | Create blog posts — topic mode (writes content) or content mode (scaffolding) |
-| `/audit-analytics` | `.agents/skills/audit-analytics/SKILL.md` | Audit Umami event coverage, first-party proxy, and privacy-safe payloads |
-| `/audit-language-integrity` | `.agents/skills/audit-language-integrity/SKILL.md` | Audit sitewide language integrity and triage the scanner's two confidence tiers |
-| `/audit-content-parity` | `.agents/skills/audit-content-parity/SKILL.md` | Audit whether ES and EN carry the same content, and fix the six classes in the order that avoids re-work |
-| `/promote-post` | `.agents/skills/promote-post/SKILL.md` | Generate social media content for blog posts across multiple platforms |
-| `/optimize-image` | `.agents/skills/optimize-image/SKILL.md` | Convert and optimize images to WebP for blog posts |
-| `/audit-post` | `.agents/skills/audit-post/SKILL.md` | Pre-publication audit for blog posts (SEO, AEO, accessibility, images, content quality, i18n) |
-| `/audit-series` | `.agents/skills/audit-series/SKILL.md` | Pre-publication audit for blog series (definition, ordering, cross-post consistency, navigation) |
-| `/doc` | `.agents/commands/doc.md` | Document a module following the documentation guide |
-| `/doc-edit` | `.agents/skills/doc-edit/SKILL.md` | Update documentation files (README, comments, MDX, markdown) |
-
-## Feature Development
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/add-component` | `.agents/skills/add-component/SKILL.md` | Create new Astro or Svelte component with correct patterns |
-| `/add-institutional-block` | `.agents/skills/add-institutional-block/SKILL.md` | Add a block kind to the institutional-page renderer (union + renderer + twin serializer + tests) |
-| `/add-page` | `.agents/skills/add-page/SKILL.md` | Create new page with routing and MainLayout |
-| `/update-styles` | `.agents/skills/update-styles/SKILL.md` | Update Tailwind styles with dark mode support |
-| `/refactor-safe` | `.agents/skills/refactor-safe/SKILL.md` | Safe refactor in bounded scope (1-10 files, no behavior change) |
-| `/write-tests` | `.agents/skills/write-tests/SKILL.md` | Add or expand unit/integration tests (Vitest) |
-
-## i18n & Translation
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/translate-sync` | `.agents/skills/translate-sync/SKILL.md` | Synchronize content between English and Spanish versions |
-
-## Design System
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/design-system` | `.agents/commands/design-system.md` | Create or refresh [`docs/DESIGN.md`](../../docs/DESIGN.md) — the agent-facing UI contract (`--corag-*` tokens, type/spacing/radius scales, component patterns, WCAG AA rules) — via the DeepWorkPlan [`design-system` addon](../skills/deepworkplan/addons/design-system/SKILL.md). `visual-ui` profile only |
-
-## Dependency Management
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/lib-upgrade` | `.agents/commands/lib-upgrade.md` | Safely upgrade pnpm dependencies (batched, validated, revertible) via the DeepWorkPlan [`dependency-upgrade` addon](../skills/deepworkplan/addons/dependency-upgrade/SKILL.md) — patch/minor/major batches gated by `biome:check`, `astro:check`, `test`, `build` |
-
-## Skills & Agents Management
-
-| Command | Procedure File | Description |
-|---------|---------------|-------------|
-| `/skill-create` | `.agents/commands/skill-create.md` | Create a new skill with guided workflow |
-| `/skill-list` | `.agents/commands/skill-list.md` | List all available skills with tier and description |
-| `/agent-create` | `.agents/commands/agent-create.md` | Create a new agent with guided workflow |
-| `/agent-list` | `.agents/commands/agent-list.md` | List all available agents with tier and description |
-
----
-
-## Maintaining This File
-
-> **CRITICAL:** This file MUST be updated whenever a skill or command is added or removed.
-
-When creating new skills via `/skill-create`:
-1. Add the command to the correct category table above
-2. Use format: | `/command-name` | `.agents/skills/command-name/SKILL.md` | Brief description |
-
-When creating new commands via `.agents/commands/`:
-1. Add the command to the correct category table above
-2. Use format: | `/command-name` | `.agents/commands/command-name.md` | Brief description |
+- **DeepWorkPlan:** `/dwp-create`, `/dwp-execute`, `/dwp-refine`,
+  `/dwp-resume`, `/dwp-status`, `/dwp-verify` (aliases into the vendored
+  `deepworkplan` skill).
+- **DailyBot:** invoked by intent ("report this to Dailybot") — see the
+  vendored pack's router.
+- **AI Diff Reviewer:** "Review my current branch" (Flow A installed:
+  `.review/extension.md`).

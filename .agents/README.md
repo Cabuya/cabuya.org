@@ -57,13 +57,16 @@ This project includes reusable **Skills** (procedures) and **Agents** (specializ
 | git-commit-push | `/git-commit-push` | 1 | Commit all changes and push to remote |
 | add-component | `/add-component` | 1 | Create new Astro or Svelte component with correct patterns |
 | add-page | `/add-page` | 1 | Create new page with routing and MainLayout |
-| add-blog-post | `/add-blog-post` | 1 | Create blog post with Content Collections frontmatter |
 | translate-sync | `/translate-sync` | 1 | Synchronize content between English and Spanish versions |
 | update-styles | `/update-styles` | 1 | Update Tailwind styles with dark mode support |
 | write-tests | `/write-tests` | 2 | Add or expand tests (Vitest/Playwright when configured) |
 | refactor-safe | `/refactor-safe` | 2 | Safe refactor in bounded scope (1-10 files, no behavior change) |
+| spec-edit | `/spec-edit` | 2 | Change normative spec/ text safely (RFC triage, boundary, gates) |
+| add-check | `/add-check` | 2 | Implement one validator check end-to-end (fixtures, message, docs) |
+| registry-review | `/registry-review` | 1 | Review a registry publisher PR (identity, uniqueness, org contact) |
+| release-spec | `/release-spec` | 2 | Release a spec version (SemVer, RC rule, changelog, sync) |
 
-### Available Agents (5)
+### Available Agents (6)
 
 | Agent | Tier | Description |
 |-------|------|-------------|
@@ -72,6 +75,7 @@ This project includes reusable **Skills** (procedures) and **Agents** (specializ
 | security-auditor | 2 | Static site security; API routes, secrets, client exposure |
 | i18n-guardian | 2 | Translation quality specialist; multilingual consistency enforcer |
 | architect | 3 | Component design, routing, Content Collections planning |
+| content-writer | 2 | Bilingual (EN/ES) site content in the Cabuya register |
 
 ### Quick Commands
 

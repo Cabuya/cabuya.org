@@ -20,6 +20,18 @@ A security-focused reviewer who checks code and design against docs/SECURITY.md 
 
 **Adapted for this Astro repository:** Focus on static site security concerns - no hardcoded secrets, API route validation, build-time vs runtime security, client-side data exposure.
 
+**Cabuya-specific priority surfaces** (see `docs/SECURITY.md`):
+
+1. **`functions/api/validate.ts` — the SSRF surface.** Any change near it is
+   security-sensitive: scheme/address guards (IP literals incl. encoded
+   forms, localhost, metadata endpoints), per-hop redirect re-validation,
+   size/time caps, per-IP AND per-probed-host rate limits, zero retention
+   (`no-store`, no probed URL in any log/analytics).
+2. **PII discipline** — no personal data anywhere incl. fixtures/examples;
+   findings must quote pointers, never values.
+3. **The cron token** — write-only, one KV namespace; never widen.
+4. **Registry rendering** — entries are data; every rendered field escaped.
+
 This agent focuses on:
 
 - Secrets and configuration (no hardcoded credentials)

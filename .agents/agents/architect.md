@@ -131,7 +131,6 @@ When designing for this Astro repository, consider:
    - Custom components in `@layer components`
 
 4. **Content:**
-   - Blog posts in `src/content/blog/`
    - Follow schema in `content.config.ts`
 
 ## Stop Conditions

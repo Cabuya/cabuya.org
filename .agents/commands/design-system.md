@@ -7,7 +7,7 @@ description: Create or refresh this repo's DESIGN.md (design tokens + rules for 
 
 Create or refresh this repository's [`docs/DESIGN.md`](../../docs/DESIGN.md) — the
 agent-facing UI contract indexed from `AGENTS.md` — so coding agents generate
-interface output consistent with Corag' **own** conventions rather
+interface output consistent with Cabuya' **own** conventions rather
 than generic defaults. This command is a **thin delegator** to the DeepWorkPlan
 `deepworkplan-addon-design-system` addon; it carries no logic of its own.
 
@@ -32,7 +32,7 @@ than generic defaults. This command is a **thin delegator** to the DeepWorkPlan
   plain form handler). Do **not** add the `cli-output` or `conversational`
   profiles unless one of those surfaces actually appears — and always ask first.
 - **Design source for this repo:**
-  - `src/styles/global.css` — the Tailwind 4 `@theme` block (`--color-corag-*`
+  - `src/styles/global.css` — the Tailwind 4 `@theme` block (`--color-cabuya-*`
     tokens), the `.dark` override block, `@layer base` focus rings, and the
     `prefers-reduced-motion` block.
   - `tailwind.config.mjs` — `darkMode: ['class']`, typography plugin overrides.
@@ -41,9 +41,9 @@ than generic defaults. This command is a **thin delegator** to the DeepWorkPlan
   - `src/components/ui/` primitives (`Pill.astro`, `EmptyState.astro`) and
     `src/components/pages/*Page.astro` for real component patterns.
 - **Integrity rules to enforce:** body text ≥ WCAG AA 4.5:1 (`text-corag`,
-  `text-corag-secondary`); `text-gray-400/500` and their `dark:` variants are
-  **forbidden** for body text; `--corag-accent` (~2.4:1 on `--corag-bg`) is never body
-  text; `--color-corag-*` is never set outside `global.css`
+  `text-cabuya-secondary`); `text-gray-400/500` and their `dark:` variants are
+  **forbidden** for body text; `--cabuya-accent` (~2.4:1 on `--cabuya-bg`) is never body
+  text; `--color-cabuya-*` is never set outside `global.css`
   scope; light **and** dark verified; motion gated by `prefers-reduced-motion`.
 - Reason about the real tokens — never paste a third-party brand's `DESIGN.md`.
 - Keep `DESIGN.md` and `BRAND_GUIDE.md` consistent: `DESIGN.md` documents

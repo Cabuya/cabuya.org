@@ -22,7 +22,6 @@ Create new pages in the Astro application with correct file-based routing, MainL
 ## Non-Goals
 
 - Does NOT create components (use add-component skill)
-- Does NOT create blog posts (use add-blog-post skill)
 - Does NOT create API endpoints (separate concern)
 - Does NOT modify existing pages
 
@@ -111,7 +110,7 @@ import {Name}Page from '@/components/pages/{Name}Page.astro';
 <{Name}Page lang="en" />
 ```
 
-**Spanish wrapper** (`src/pages/en/{name}.astro`):
+**Spanish wrapper** (`src/pages/[lang]/{name}.astro`):
 ```astro
 ---
 import {Name}Page from '@/components/pages/{Name}Page.astro';
@@ -156,7 +155,7 @@ pnpm run build
 
 ### Pages
 - English: `src/pages/{path}.astro` -> URL: `/{route}`
-- Spanish: `src/pages/en/{path}.astro` -> URL: `/es/{route}`
+- Spanish: `src/pages/[lang]/{path}.astro` -> URL: `/es/{route}`
 - Type: {Static|Dynamic}
 
 ### SEO
@@ -228,7 +227,7 @@ $DESCRIPTION: A showcase of my development projects
 
 **Creates:**
 - `src/pages/projects.astro` -> `/projects`
-- `src/pages/en/projects.astro` -> `/es/projects`
+- `src/pages/[lang]/projects.astro` -> `/es/projects`
 
 ### Example 2: Page with Translations
 
@@ -241,7 +240,7 @@ $DESCRIPTION: Information about me
 
 **Creates:**
 - `src/pages/about.astro` (English, `lang='en'`)
-- `src/pages/en/about.astro` (Spanish, `lang='es'`)
+- `src/pages/[lang]/about.astro` (Spanish, `lang='es'`)
 
 ### Example 3: Dynamic Page
 
@@ -259,7 +258,6 @@ $DYNAMIC: true
 ## Related
 
 - [add-component](../add-component/SKILL.md) - Create components
-- [add-blog-post](../add-blog-post/SKILL.md) - Create blog posts
 - [translate-sync](../translate-sync/SKILL.md) - Synchronize translations
 - docs/ARCHITECTURE.md - Routing details
 - src/pages/README.md - Page patterns

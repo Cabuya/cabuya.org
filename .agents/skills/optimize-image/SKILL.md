@@ -1,6 +1,6 @@
 ---
 name: optimize-image
-description: Convert and optimize images to WebP for blog posts and series. Use proactively when adding images to blog posts or series.
+description: Convert and optimize images to WebP with responsive sets for site imagery (brand, home, visuals). Use proactively when adding images.
 disable-model-invocation: false
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: haiku
@@ -19,7 +19,7 @@ Convert user-provided images (PNG, JPG, etc.) to optimized WebP format and place
 
 ## Non-Goals
 
-- Does NOT create or modify blog post content (use `/add-blog-post` for that)
+- Does NOT create or modify blog post content (use `/doc-edit` for that)
 - Does NOT handle image generation or design
 - Does NOT modify the image optimization scripts themselves
 - Does NOT process images in bulk across all posts (use `pnpm run images:optimize` for staging pipeline)
@@ -295,7 +295,6 @@ Report this to the user for manual review.
 
 ## Related Skills/Agents
 
-- [`add-blog-post`](../add-blog-post/SKILL.md) - Creates blog posts that reference these optimized images
 - [`doc-edit`](../doc-edit/SKILL.md) - For updating image-related documentation
 
 ## Changelog

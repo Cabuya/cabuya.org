@@ -17,11 +17,11 @@ max-loc: 500
 
 ## Objective
 
-Synchronize content between English (en) and Spanish (es) versions of pages, blog posts, and translation strings. Ensures multilingual parity across the entire site.
+Synchronize content between English (en) and Spanish (es) versions of pages, content-collection entries, and translation strings. Ensures multilingual parity across the entire site.
 
 ## Non-Goals
 
-- Does NOT create new pages or posts from scratch (use `add-page` or `add-blog-post`)
+- Does NOT create new pages or posts from scratch (use `add-page` )
 - Does NOT modify the translation system architecture
 - Does NOT add new languages to `src/lib/i18n.ts` (only syncs existing active languages)
 - Does NOT change Content Collection schemas or `content.config.ts`
@@ -57,10 +57,8 @@ Determine the source language and content type from the file path:
 
 | Path Pattern | Language | Content Type |
 |---|---|---|
-| `src/pages/en/**` | Spanish | page |
+| `src/pages/[lang]/**` | Spanish | page |
 | `src/pages/**` (not es/) | English | page |
-| `src/content/blog/es/**` | Spanish | blog |
-| `src/content/blog/en/**` | English | blog |
 | `src/lib/translations/en.ts` | English | translation-strings |
 | `src/lib/translations/es.ts` | Spanish | translation-strings |
 
@@ -72,10 +70,10 @@ Map source to target path:
 
 | Source | Target |
 |---|---|
-| `src/pages/{path}.astro` | `src/pages/en/{path}.astro` |
-| `src/pages/en/{path}.astro` | `src/pages/{path}.astro` |
-| `src/content/blog/en/{slug}.md` | `src/content/blog/es/{slug}.md` |
-| `src/content/blog/es/{slug}.md` | `src/content/blog/en/{slug}.md` |
+| `src/pages/{path}.astro` | `src/pages/[lang]/{path}.astro` |
+| `src/pages/[lang]/{path}.astro` | `src/pages/{path}.astro` |
+| `src/content/docs/en/{slug}.md` | `src/content/docs/es/{slug}.md` |
+| `src/content/docs/es/{slug}.md` | `src/content/docs/en/{slug}.md` |
 
 If the target file does not exist, create it using the source as a template. If it exists, update it to match the source structure.
 
@@ -196,23 +194,23 @@ Escalate to higher tier if:
 
 **Input:**
 ```
-$SOURCE_FILE: src/content/blog/en/getting-started-with-astro.md
+$SOURCE_FILE: src/content/docs/en/quickstart.md
 ```
 
 **Actions:**
 1. Detect: English blog post
-2. Target: `src/content/blog/es/getting-started-with-astro.md`
+2. Target: `src/content/docs/es/quickstart.md`
 3. Translate title, description, and body to Spanish
 4. Preserve frontmatter dates, tags, hero image
 5. Validate and report
 
-**Creates:** `src/content/blog/es/getting-started-with-astro.md`
+**Creates:** `src/content/docs/es/quickstart.md`
 
 ### Example 2: Sync a Modified Spanish Page to English
 
 **Input:**
 ```
-$SOURCE_FILE: src/pages/en/about.astro
+$SOURCE_FILE: src/pages/[lang]/about.astro
 ```
 
 **Actions:**
@@ -243,7 +241,6 @@ $CONTENT_TYPE: translation-strings
 
 ## Related
 
-- [add-blog-post](../add-blog-post/SKILL.md) - Create multilingual blog posts
 - [add-page](../add-page/SKILL.md) - Create multilingual pages
 - [add-component](../add-component/SKILL.md) - Create components with i18n support
 - `i18n-guardian` agent - Translation quality specialist

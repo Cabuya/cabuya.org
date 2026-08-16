@@ -48,7 +48,7 @@ content edits to close what it finds.
 | Input | Required | Notes |
 |---|---|---|
 | A current build | yes | The scanner reads `dist/`, not `src/` |
-| `$SCOPE` | no | A collection or route family to focus on (`blog`, `pages`, …) |
+| `$SCOPE` | no | A collection or route family to focus on (`docs`, `pages`, …) |
 
 ## Steps
 
@@ -90,8 +90,8 @@ is the price of not flagging every heading and venue name.
 1. **Bodies.** A missing English file makes the whole English page Spanish.
    One file fixes dozens of blocks. Check first:
    ```bash
-   for f in src/content/blog/es/*.md; do
-     [ -f "src/content/blog/en/$(basename "$f")" ] || echo "missing EN: $f"
+   for f in src/content/docs/es/*.md; do
+     [ -f "src/content/docs/en/$(basename "$f")" ] || echo "missing EN: $f"
    done
    ```
 2. **Frontmatter titles.** A Spanglish English title ("Web Development
@@ -170,7 +170,6 @@ pnpm run biome:check
 ## Related
 
 - [`translate-sync`](../translate-sync/SKILL.md) — parity between language pairs
-- [`add-blog-post`](../add-blog-post/SKILL.md) — writes both language versions
 - [`i18n-guardian`](../../agents/i18n-guardian.md) — reads this skill's report
 - [`docs/I18N_GUIDE.md`](../../../docs/I18N_GUIDE.md) · [`docs/features/CONTENT_QA_CHECKLIST.md`](../../../docs/features/CONTENT_QA_CHECKLIST.md)
 

@@ -339,7 +339,7 @@ $CHANGES: Add new utility class for cards
 **Input:**
 ```
 $TARGET: src/components/pages/HomePage.astro
-$CHANGES: Scale the hero heading responsively; colours must come from Corag tokens
+$CHANGES: Scale the hero heading responsively; colours must come from Cabuya tokens
 ```
 
 **Before:**
@@ -351,12 +351,12 @@ $CHANGES: Scale the hero heading responsively; colours must come from Corag toke
 ```html
 <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
            font-bold tracking-tight
-           text-corag-on-fill">
+           text-cabuya-on-fill">
 ```
 
-> Note: never `text-gray-*` for text — the Corag token layer
-> (`text-corag`, `text-corag-secondary`, on-dark `text-corag-on-fill` /
-> `text-corag-rosa`) handles dark mode by itself. See `docs/DESIGN.md`.
+> Note: never `text-gray-*` for text — the Cabuya token layer
+> (`text-corag`, `text-cabuya-secondary`, on-dark `text-cabuya-on-fill` /
+> `text-cabuya-rosa`) handles dark mode by itself. See `docs/DESIGN.md`.
 
 ### Example 4: Responsive Grid Layout
 

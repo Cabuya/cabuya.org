@@ -164,7 +164,6 @@ Stop and ask if:
 - [`audit-language-integrity`](../audit-language-integrity/SKILL.md) — the sibling
   question: is each page in the language its URL promises?
 - [`translate-sync`](../translate-sync/SKILL.md) — translation quality.
-- [`add-blog-post`](../add-blog-post/SKILL.md) — produces both languages by construction.
 - [`audit-post`](../audit-post/SKILL.md) — single-post quality review.
 
 ## Changelog

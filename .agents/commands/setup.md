@@ -252,7 +252,7 @@ container** (type `help` any time):
   • help         full command menu
 ```
 
-Then the part that is specific to this repo — **the nine gates**. Corag ships
+Then the part that is specific to this repo — **the nine gates**. Cabuya ships
 bilingual content with Markdown twins, so a change can be perfectly valid
 TypeScript and still break the site's content contract. Before committing:
 

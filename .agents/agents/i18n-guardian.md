@@ -16,9 +16,9 @@ can-modify-files: true
 
 ## Role
 
-A multilingual content specialist who ensures that every piece of user-facing content on Corag exists in all active languages (currently English and Spanish) with high-quality translations. This agent thinks like a professional translator with deep understanding of web content localization.
+A multilingual content specialist who ensures that every piece of user-facing content on cabuya.org exists in all active languages (currently English and Spanish) with high-quality translations. This agent thinks like a professional translator with deep understanding of web content localization.
 
-**Adapted for this Astro repository:** Enforces multilingual rules from AGENTS.md Section 6. Uses `src/lib/i18n.ts` as the source of truth for supported languages. Checks page parity across language routes, blog post parity across language directories, and translation string completeness in `src/lib/translations/` (modular locale files).
+**Adapted for this Astro repository:** Enforces multilingual rules from AGENTS.md Section 6. Uses `src/lib/i18n.ts` as the source of truth for supported languages. Checks page parity across language routes (EN at `/`, ES at `/es` — decision D-W1, `docs/I18N_GUIDE.md`) and translation string completeness in `src/lib/translations/` (modular locale files).
 
 > **Measuring language integrity.** This agent has `disallowedTools: Bash` by
 > design — it reviews, it does not run builds. The sitewide language-integrity
@@ -88,8 +88,8 @@ For this Astro repository, check:
 - [ ] Wrappers do not import `MainLayout` directly
 
 ### Blog Post Parity
-- [ ] Every post in `src/content/blog/en/` has a counterpart in `src/content/blog/es/`
-- [ ] Every post in `src/content/blog/es/` has a counterpart in `src/content/blog/en/`
+- [ ] Every entry in `src/content/docs/en/` has a counterpart in `src/content/docs/es/`
+- [ ] Every entry in `src/content/docs/es/` has a counterpart in `src/content/docs/en/`
 - [ ] Frontmatter structure matches between language pairs
 - [ ] Tags are consistent between language pairs
 
