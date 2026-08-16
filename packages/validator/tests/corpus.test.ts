@@ -14,10 +14,17 @@ import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CHECKS, Engine, type Report } from '../src/index.js';
+import { BEHAVIOR_CHECK_IDS } from '../src/passes/behavior.js';
 import { denyPass } from '../src/passes/deny.js';
 import { schemaPass } from '../src/passes/schema.js';
 import { semanticPass } from '../src/passes/semantic.js';
-import { feed, type Json, place, without } from './fixtures/builders.js';
+import {
+  feed,
+  type Json,
+  manifest,
+  place,
+  without,
+} from './fixtures/builders.js';
 
 const SPEC = join(
   import.meta.dirname,
@@ -59,6 +66,9 @@ const errorIds = (report: Report) =>
  */
 const MUST_FAIL: Record<string, () => Json> = {
   SCH001: () => feed({ data: { places: 'not an array' } }),
+  // The manifest branch of the schema pass — a different document type, so
+  // it needs its own case rather than riding on the feed fixtures.
+  DSC005: () => without(manifest(), 'publisher'),
   ENV001: () => without(feed(), 'ttl'),
   ENV002: () => feed({ last_updated: '2026-08-16T04:00:00' }),
   ENV003: () => without(feed(), 'license'),
@@ -99,18 +109,31 @@ const MUST_FAIL: Record<string, () => Json> = {
 };
 
 describe('the structural invariant', () => {
-  it('every implemented ERROR check has a must-fail fixture', () => {
-    const missing = CHECKS.filter(
+  it('every implemented ERROR check is covered by one of the two mechanisms', () => {
+    // Content checks are covered by the MUST_FAIL table below; transport
+    // checks by the fixture-server suite. Coverage is keyed on the OWNING
+    // PASS, not on the id family — ENV007 (CORS) is an envelope-family
+    // check that only the behavior pass can exercise, and an earlier
+    // family-keyed version of this test let it slip through.
+    const uncovered = CHECKS.filter(
       (c) =>
         c.implemented &&
         c.severity === 'error' &&
-        // Transport-dependent checks belong to the behavior pass (Task 15).
-        !['behavior', 'discovery', 'api', 'write'].includes(c.family) &&
         // REC015 is a self-check: it asserts the validator does NOT fire.
         c.id !== 'REC015' &&
-        !(c.id in MUST_FAIL)
+        !(c.id in MUST_FAIL) &&
+        !BEHAVIOR_CHECK_IDS.includes(c.id)
     ).map((c) => c.id);
-    expect(missing).toEqual([]);
+    expect(uncovered).toEqual([]);
+  });
+
+  it('the transport exemption is not a rubber stamp — each id is exercised in the probe suite', () => {
+    const suite = readFileSync(
+      join(import.meta.dirname, 'behavior-pass.test.ts'),
+      'utf-8'
+    );
+    const unexercised = BEHAVIOR_CHECK_IDS.filter((id) => !suite.includes(id));
+    expect(unexercised).toEqual([]);
   });
 
   it('every must-fail fixture actually produces its check', async () => {

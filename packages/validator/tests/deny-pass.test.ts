@@ -10,7 +10,7 @@ import {
   denyChecks,
   ROLE_TOKEN,
 } from '../src/passes/deny.js';
-import { feed, feedWith, type Json, place } from './fixtures/builders.js';
+import { feed, feedWith, type Json } from './fixtures/builders.js';
 
 const ids = (findings: { id: string }[]) => findings.map((f) => f.id);
 const on = (over: Json) => ids(denyChecks(feedWith(over) as Json));

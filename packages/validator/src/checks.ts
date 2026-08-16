@@ -74,8 +74,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Soft-404: a discovery path answering 200 + text/html is absent',
     rule: 'A manifest is JSON. HTML at a discovery path means an SPA catch-all is answering — the manifest is absent, not present.',
     specAnchor: `${SPEC}/1-architecture#1-2`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'DSC003',
@@ -236,8 +235,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Access-Control-Allow-Origin: * present',
     rule: 'The one non-obvious MUST: without it every browser-based consumer needs a proxy.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'ENV008',
@@ -267,8 +265,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Content-Type: application/json, UTF-8',
     rule: 'Transport hygiene.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
 
   // ── Records (L2) ────────────────────────────────────────
@@ -524,8 +521,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Feed reachable on two probes; content-type stable',
     rule: 'A feed that answers differently on two probes cannot be consumed reliably.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'BEH002',
@@ -536,8 +532,7 @@ export const CHECKS: readonly CheckDefinition[] = [
       'Always-now: last_updated advances with the probe clock on identical content',
     rule: 'last_updated MUST be generated at build/publish time, never per request — a per-request timestamp is worse than no signal.',
     specAnchor: `${SPEC}/3-the-feed#3-1`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'BEH003',
@@ -547,8 +542,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'last_updated older than 7 × ttl (the stale badge state)',
     rule: 'Staleness is information, not failure — but it must be visible.',
     specAnchor: `${SPEC}/8-versioning-and-conformance#8-3`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'BEH004',

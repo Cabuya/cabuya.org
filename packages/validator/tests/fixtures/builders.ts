@@ -53,6 +53,28 @@ export function feedWith(over: Json): Json {
   return feed({}, [place(over)]);
 }
 
+/** A minimal manifest that satisfies the manifest schema. */
+export function manifest(over: Json = {}): Json {
+  return {
+    protocol: { name: 'cabuya', spec_version: '0.1.0' },
+    publisher: {
+      publisher_id: 'example-app',
+      canonical_url: 'https://example-app.org',
+    },
+    conformance_target: 'L2',
+    license: 'CC-BY-4.0',
+    feeds: [
+      {
+        name: 'places',
+        url: 'https://example-app.org/feeds/places.json',
+        entity: 'place',
+        profile: 'core',
+      },
+    ],
+    ...over,
+  };
+}
+
 /** Drop a key (rather than setting it undefined, which JSON keeps). */
 export function without<T extends Json>(object: T, key: string): Json {
   const copy: Json = { ...object };

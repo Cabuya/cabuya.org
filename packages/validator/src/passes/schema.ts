@@ -38,12 +38,22 @@ export function schemaNameFor(document: unknown): string {
  * reading `ENV003` in CI must find exactly that id on the docs page, and a
  * silent regex drift would break that contract without failing a test.
  */
-export function checkIdForSchemaError(error: ErrorObject): string {
+export function checkIdForSchemaError(
+  error: ErrorObject,
+  documentKind: 'feed' | 'manifest' = 'feed'
+): string {
   const path = error.instancePath;
   const missing =
     error.keyword === 'required'
       ? (error.params as { missingProperty?: string }).missingProperty
       : undefined;
+
+  // A manifest failure is DSC005 wherever it occurs. Without this branch a
+  // missing `publisher` would be reported as ENV001 — a FEED envelope check
+  // id — which is exactly the kind of mislabelling that makes an
+  // implementer distrust the whole report. (Caught by the corpus
+  // completeness test rather than by a reader in production.)
+  if (documentKind === 'manifest') return 'DSC005';
 
   // Envelope-level requirements
   if (path === '' && missing) {
@@ -94,16 +104,7 @@ export function checkIdForSchemaError(error: ErrorObject): string {
   if (/\/(lat|lon|address_text)$/.test(path)) return 'REC004';
   if (/\/id$/.test(path)) return 'REC002';
 
-  // Manifest
-  if (schemaOwnsManifest(path)) return 'DSC005';
-
   return 'SCH001';
-}
-
-function schemaOwnsManifest(path: string): boolean {
-  return /^\/(protocol|publisher|conformance_target|feeds|api|mcp|crawl_policy_url)/.test(
-    path
-  );
 }
 
 /**
@@ -189,8 +190,12 @@ const FALLBACK: { severity: Severity; level: Level; rule: string } = {
 };
 
 /** Convert one Ajv error into a Finding. */
-export function findingFor(error: ErrorObject, raw?: string): Finding {
-  const id = checkIdForSchemaError(error);
+export function findingFor(
+  error: ErrorObject,
+  raw?: string,
+  documentKind: 'feed' | 'manifest' = 'feed'
+): Finding {
+  const id = checkIdForSchemaError(error, documentKind);
   const check = getCheck(id);
   const { message, fix, patch } = authorMessage(error);
   const pointer = error.instancePath || '';
@@ -237,8 +242,9 @@ export const schemaPass: Pass = {
       );
     }
     if (validate(context.document)) return [];
+    const documentKind = name === 'manifest.schema.json' ? 'manifest' : 'feed';
     return (validate.errors ?? []).map((error) =>
-      findingFor(error, context.raw)
+      findingFor(error, context.raw, documentKind)
     );
   },
 };
