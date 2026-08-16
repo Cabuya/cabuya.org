@@ -462,8 +462,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'A contact value appears in any field, extensions included',
     rule: 'Contact values MUST NOT travel in feeds — namespaced extensions do not exempt them.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-2`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
   {
     id: 'PII002',
@@ -473,8 +472,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'confirmed_by is a role token, never a personal name',
     rule: 'confirmed_by ∈ team | volunteer | official_source | partner:{publisher_id}.',
     specAnchor: `${SPEC}/6-trust-and-verification#6-1`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
   {
     id: 'PII003',
@@ -484,8 +482,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'Free text matches a personal-data pattern',
     rule: 'Free text is the third leak channel: publishers MUST strip personal data from description / warning_text.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-1`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
   {
     id: 'PII004',
@@ -495,8 +492,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'A person-level entity appears',
     rule: 'Person-level data never federates — this is a join prohibition, not a field omission.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-1`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
   {
     id: 'PII005',
@@ -506,8 +502,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'A field name matches the deny-list even if the value looks clean',
     rule: 'A field named for contact data will eventually carry it.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-2`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
   {
     id: 'PII006',
@@ -517,8 +512,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     title: 'A moderation verdict about a third party is republished',
     rule: 'Moderation verdicts do not federate; suppressed records are omitted, never labelled downstream.',
     specAnchor: `${SPEC}/7-normative-exclusions#7-3`,
-    implemented: false,
-    plannedIn: 'Task 14',
+    implemented: true,
   },
 
   // ── Behavior (L2) ───────────────────────────────────────

@@ -44,6 +44,13 @@ export {
 } from './fetcher.js';
 export { locatePointer, parseJson, pointer } from './locate.js';
 export {
+  DENY_KEYS,
+  DENY_PATTERNS,
+  denyChecks,
+  denyPass,
+  ROLE_TOKEN,
+} from './passes/deny.js';
+export {
   authorMessage,
   checkIdForSchemaError,
   schemaNameFor,
