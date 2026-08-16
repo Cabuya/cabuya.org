@@ -1,0 +1,23 @@
+---
+/**
+ * The single dynamic tree serving every non-default language (D-W1).
+ * A language is served here when it is registered in `src/lib/i18n.ts` and
+ * is not the default — no per-language page directories, ever.
+ */
+import HomePage from '@/components/pages/HomePage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+
+export function getStaticPaths(): { params: { lang: Language } }[] {
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Language };
+---
+
+<HomePage lang={lang} />

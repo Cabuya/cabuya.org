@@ -45,9 +45,11 @@ describe('serializeGenericToMarkdown', () => {
 
 describe('siteNavigationBlock', () => {
   it('links home with the right prefix per language', () => {
-    expect(siteNavigationBlock('es').join('\n')).toContain(
-      'https://cabuya.org/'
+    expect(siteNavigationBlock('en').join('\n')).toContain(
+      '(https://cabuya.org/)'
     );
-    expect(siteNavigationBlock('en').join('\n')).toContain('/en');
+    expect(siteNavigationBlock('es').join('\n')).toContain(
+      '(https://cabuya.org/es)'
+    );
   });
 });

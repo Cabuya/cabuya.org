@@ -2,66 +2,45 @@
 # https://developers.cloudflare.com/pages/configuration/redirects/
 #
 # Order matters: the FIRST matching rule wins, and Cloudflare does not chain
-# redirects. Specific rules come before catch-alls and point at FINAL URLs.
+# redirects — every rule points at its FINAL URL.
 #
-# Cabuya migration (Task 7): every retired Corag route 301s to its closest
-# surviving surface. Task 8 (EN at root, ES at /es) adds the language-swap
-# rules; the deep-target rows below are refined as the new pages land
-# (Tasks 23-30 replace `/` targets with /developers, /registry, /join, ...).
+# Topology (D-W1, Task 8): English is canonical at the root; Spanish lives at
+# /es. Consequences for previously published URLs:
+#   - Old /en/... URLs (English used to live there) → the same path at root.
+#   - Old root URLs served Spanish; their route families are retired, so they
+#     301 to the closest surviving surface (refined per-task as Cabuya pages
+#     land: /developers T23, /registry T28, /join+/governance T30).
 
-# --- Retired Corag institutional + community routes → home (for now) -------
-/about                       /    301
-/how-it-works                /    301
-/transparency                /    301
-/emergencies                 /    301
-/leaders                     /    301
-/partners                    /    301
-/ecosystem                   /    301
-/developers                  /    301
-/privacy                     /    301
-/contact                     /    301
-/movement                    /    301
-/movement/*                  /    301
-/channels                    /    301
-/conduct                     /    301
-/contributing                /    301
-/governance                  /    301
-/community                   /    301
+# --- Retired Corag routes (old Spanish root URLs) → closest surface --------
+/about                       /es/    301
+/how-it-works                /es/    301
+/transparency                /es/    301
+/emergencies                 /es/    301
+/leaders                     /es/    301
+/partners                    /es/    301
+/ecosystem                   /es/    301
+/developers                  /es/    301
+/privacy                     /es/    301
+/contact                     /es/    301
+/movement                    /es/    301
+/movement/*                  /es/    301
+/channels                    /es/    301
+/conduct                     /es/    301
+/contributing                /es/    301
+/governance                  /es/    301
+/community                   /es/    301
+/blog                        /es/    301
+/blog/*                      /es/    301
+/rss.xml                     /es/    301
 
-# --- Blog family (retired wholesale) ---------------------------------------
-/blog                        /    301
-/blog/*                      /    301
-/rss.xml                     /    301
-
-# --- API endpoints that no longer exist ------------------------------------
+# --- Retired API endpoints -------------------------------------------------
 /api/posts.json              /    301
 /api/posts-en.json           /    301
 /api/posts-es.json           /    301
 /api/series/*                /    301
 /api/timeline/*              /    301
 
-# --- English mirror of everything above ------------------------------------
-/en/about                    /en/ 301
-/en/how-it-works             /en/ 301
-/en/transparency             /en/ 301
-/en/emergencies              /en/ 301
-/en/leaders                  /en/ 301
-/en/partners                 /en/ 301
-/en/ecosystem                /en/ 301
-/en/developers               /en/ 301
-/en/privacy                  /en/ 301
-/en/contact                  /en/ 301
-/en/movement                 /en/ 301
-/en/movement/*               /en/ 301
-/en/channels                 /en/ 301
-/en/conduct                  /en/ 301
-/en/contributing             /en/ 301
-/en/governance               /en/ 301
-/en/community                /en/ 301
-/en/blog                     /en/ 301
-/en/blog/*                   /en/ 301
-/en/rss.xml                  /en/ 301
-
-# --- Old /es URLs from the pre-baseline era (Spanish was moved to root) ----
-/es                          /    301
-/es/*                        /    301
+# --- Old English URLs: /en moved to the root -------------------------------
+# The route families are retired, so everything funnels to the new root.
+/en                          /    301
+/en/*                        /    301

@@ -166,9 +166,9 @@ export function jsonLdTypes(parsed) {
 
 /** The other language's URL for a page path. */
 export function siblingPath(pagePath) {
-  if (pagePath === 'index') return 'en';
-  if (pagePath === 'en') return 'index';
-  return pagePath.startsWith('en/') ? pagePath.slice(3) : `en/${pagePath}`;
+  if (pagePath === 'index') return 'es';
+  if (pagePath === 'es') return 'index';
+  return pagePath.startsWith('es/') ? pagePath.slice(3) : `es/${pagePath}`;
 }
 
 // ── Assertions ────────────────────────────────────────────

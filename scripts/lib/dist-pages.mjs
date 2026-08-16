@@ -39,7 +39,6 @@ export const EXCLUDED_PATTERNS = [
   /\/tag\//,
   /\/certificates(\/|$)/,
   /^certificates(\/|$)/,
-  /^en\/certificates(\/|$)/,
 ];
 
 /**
@@ -110,9 +109,9 @@ export function checkMdExists(pagePath, distDir = DIST_DIR) {
   return { found: false, mdPath: primaryMd };
 }
 
-/** The language a page path promises: `/en/...` is English, everything else Spanish. */
+/** The language a page path promises (D-W1): `/es/...` is Spanish, everything else English. */
 export function expectedLanguageFor(pagePath) {
-  return pagePath === 'en' || pagePath.startsWith('en/') ? 'en' : 'es';
+  return pagePath === 'es' || pagePath.startsWith('es/') ? 'es' : 'en';
 }
 
 /**

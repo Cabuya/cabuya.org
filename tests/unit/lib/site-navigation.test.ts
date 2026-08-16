@@ -24,8 +24,8 @@ describe('nav entries', () => {
     const home = NAV_ENTRIES.find((e) => e.path === '/');
     expect(home).toBeDefined();
     if (!home) return;
-    expect(navHref(home, 'es')).toBe('/');
-    expect(navHref(home, 'en')).toBe('/en');
+    expect(navHref(home, 'en')).toBe('/');
+    expect(navHref(home, 'es')).toBe('/es');
   });
 
   it('external entries pass through untouched', () => {

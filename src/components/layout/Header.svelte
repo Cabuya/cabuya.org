@@ -22,7 +22,7 @@ $: switchHref = lang === 'es' ? '/en/' : '/';
 >
   <div class="main-container flex items-center justify-between gap-4 py-3">
     <a
-      href={lang === 'es' ? '/' : '/en/'}
+      href={lang === 'en' ? '/' : `/${lang}/`}
       class="flex items-center gap-3"
       aria-label="Cabuya"
     >

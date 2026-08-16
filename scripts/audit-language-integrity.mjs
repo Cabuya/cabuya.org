@@ -50,8 +50,8 @@ const REPORT_DIR = reportIdx !== -1 ? argv[reportIdx + 1] : null;
 
 /** Group a page under the collection that owns it, ignoring the language prefix. */
 function collectionOf(pagePath) {
-  const withoutLang = pagePath.replace(/^en\/?/, '');
-  if (withoutLang === '' || pagePath === 'index' || pagePath === 'en') {
+  const withoutLang = pagePath.replace(/^es\/?/, '');
+  if (withoutLang === '' || pagePath === 'index' || pagePath === 'es') {
     return 'home';
   }
   const [first] = withoutLang.split('/');

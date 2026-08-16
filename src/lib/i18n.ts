@@ -1,34 +1,36 @@
 /**
- * Centralized i18n configuration module.
+ * Centralized i18n configuration module — the single source of truth for
+ * language configuration.
  *
- * This is the single source of truth for language configuration.
+ * Routing (decision D-W1, docs/DECISIONS.md): English is canonical and
+ * served at the site root with no prefix; every other language lives under
+ * `/{code}` and is served by the single `src/pages/[lang]/` dynamic tree.
+ * Every URL prefix derives from the LANGUAGES registry below — never
+ * hardcode `'/es'` in a component; use `getUrlPrefix(lang)`.
  *
- * Routing: Spanish (the community's primary language) is served at the root
- * with no prefix; English lives under `/en`. Every URL prefix is derived from
- * the LANGUAGES registry below — never hardcode `'/es'` or `'/en'` in a
- * component, use `getUrlPrefix(lang)` so a future swap stays a one-line change.
- *
- * To add a new language:
- *   1. Add the code to the Language type union
- *   2. Add an entry to the LANGUAGES registry below (non-empty urlPrefix)
- *   3. Add translations in translations.ts
- *   4. Create page wrappers in src/pages/{lang}/
+ * To add a new language (the whole procedure — no routing edits):
+ *   1. Add the code in `./language-codes.ts` and its entry to LANGUAGES below
+ *   2. Create `./translations/{code}.ts` (the exhaustive type forces
+ *      completeness)
+ *   3. Create its content folders (`src/content/docs/{code}/`, …)
+ * The `[lang]` tree, the switcher, hreflang and the sitemap all derive from
+ * the registry.
  */
+import { LANGUAGE_CODES } from './language-codes';
+
+export { LANGUAGE_CODES };
+
+/** Supported language codes (source: `./language-codes.ts`). */
+export type Language = (typeof LANGUAGE_CODES)[number];
 
 /**
- * Supported language codes.
- * Extend this union to add new languages.
+ * Default language — served at the site root with no prefix (D-W1: the
+ * normative payload is English by policy; standards live in English at the
+ * root). The default language MUST be the one whose `urlPrefix` is `''`.
+ * Spanish stays first-class at `/es` — and the PROTOCOL's feed-string
+ * baseline stays `es` regardless of site topology (different decisions).
  */
-export type Language = 'en' | 'es';
-
-/**
- * Default (fallback) language — used when no language prefix is detected.
- *
- * Spanish is the community's primary language, so it is served at the site
- * root (`/`) with no prefix; English is first-class international and lives
- * under `/en`. The default language MUST be the one whose `urlPrefix` is `''`.
- */
-export const DEFAULT_LANGUAGE: Language = 'es';
+export const DEFAULT_LANGUAGE: Language = 'en';
 
 /** Metadata for a supported language */
 export interface LanguageConfig {
@@ -53,15 +55,6 @@ export interface LanguageConfig {
  * The default language MUST have an empty urlPrefix.
  */
 export const LANGUAGES: Record<Language, LanguageConfig> = {
-  es: {
-    code: 'es',
-    name: 'Spanish',
-    nativeName: 'Espa\u00F1ol',
-    dateLocale: 'es-CO',
-    ogLocale: 'es_CO',
-    flag: '\u{1F1EA}\u{1F1F8}',
-    urlPrefix: '',
-  },
   en: {
     code: 'en',
     name: 'English',
@@ -69,7 +62,16 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     dateLocale: 'en-US',
     ogLocale: 'en_US',
     flag: '\u{1F1EC}\u{1F1E7}',
-    urlPrefix: '/en',
+    urlPrefix: '',
+  },
+  es: {
+    code: 'es',
+    name: 'Spanish',
+    nativeName: 'Espa\u00F1ol',
+    dateLocale: 'es-CO',
+    ogLocale: 'es_CO',
+    flag: '\u{1F1E8}\u{1F1F4}',
+    urlPrefix: '/es',
   },
 };
 

@@ -9,7 +9,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getTranslations(lang);
-const homeHref = lang === 'es' ? '/' : '/en/';
+const homeHref = lang === 'en' ? '/' : `/${lang}/`;
 ---
 
 <MainLayout

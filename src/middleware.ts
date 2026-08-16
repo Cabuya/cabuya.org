@@ -5,8 +5,7 @@
  *
  * ⚠️  CRITICAL — READ BEFORE ADDING NEW TOP-LEVEL ROUTES ⚠️
  *
- * This middleware uses a HARDCODED ALLOWLIST (`KNOWN_ROOT_PATHS` and
- * `KNOWN_EN_PATHS`). Single-segment paths NOT in the allowlist are rewritten
+ * This middleware uses a HARDCODED ALLOWLIST (`KNOWN_PATHS`). Single-segment paths NOT in the allowlist are rewritten
  * to /404 — even if the corresponding `src/pages/<name>/index.astro` exists.
  *
  * Symptoms when forgotten:
@@ -18,9 +17,9 @@
  *
  * When adding a new top-level page (e.g. `src/pages/foo.astro` or
  * `src/pages/foo/index.astro`):
- *   1. Add `'foo'` to KNOWN_ROOT_PATHS below
- *   2. If the page also has an English version at `src/pages/en/foo*`,
- *      add `'foo'` to KNOWN_EN_PATHS too
+ *   1. Add `'foo'` to KNOWN_PATHS below
+ *   2. Language-prefixed URLs (`/es/foo`) validate the same set — nothing
+ *      extra to add
  *
  * Do NOT debug Astro routing, file-system caches, or `[...slug]` vs `[slug]`
  * before checking this allowlist first.
@@ -29,23 +28,23 @@
  *   Every retired Corag route (blog, ecosystem, channels, contact, the seven
  *   institutional pages, movement, …) 301s in `public/_redirects` to its
  *   closest surviving surface. Route slugs stay English in both languages;
- *   the EN-at-root [lang] topology arrives in Task 8 and replaces the
- *   KNOWN_EN_PATHS mechanism.
+ *   the EN-at-root [lang] topology (Task 8) validates language-prefixed
+ *   URLs against the same KNOWN_PATHS set.
  */
 import { defineMiddleware } from 'astro:middleware';
 
-const KNOWN_ROOT_PATHS = new Set([
-  '',
-  'en',
-  'internal',
-  '404',
-  // Cabuya routes are added here as their tasks land:
-  // 'developers' (Task 23) · 'registry' (Task 28) · 'rfcs', 'changelog',
-  // 'governance', 'trademark', 'join' (Task 30). Task 8 replaces the /en
-  // handling with the [lang] topology.
-]);
+import { isValidLanguage } from '@/lib/i18n';
 
-const KNOWN_EN_PATHS = new Set(['']);
+/**
+ * Top-level route allowlist (English, unprefixed — D-W1). Language-prefixed
+ * URLs (`/es/...`) validate the SAME set: slugs are English in every
+ * language, so one list serves all languages.
+ *
+ * Cabuya routes are added here as their tasks land:
+ *   'developers' (Task 23) · 'registry' (Task 28) · 'rfcs', 'changelog',
+ *   'governance', 'trademark', 'join' (Task 30).
+ */
+const KNOWN_PATHS = new Set(['', 'internal', '404']);
 
 export const onRequest = defineMiddleware((context, next) => {
   const pathname = context.url.pathname;
@@ -65,17 +64,18 @@ export const onRequest = defineMiddleware((context, next) => {
     .split('/')
     .filter(Boolean);
 
-  // Single-segment paths at root (e.g. /sdfsd) that don't match known routes
-  if (segments.length === 1 && !KNOWN_ROOT_PATHS.has(segments[0])) {
+  // A leading valid language code shifts the check to the next segment
+  // (`/es` → home, `/es/foo` → validate `foo`). The default language has no
+  // prefix, so bare segments validate directly.
+  const [first, second] = segments;
+  const isLangPrefixed = first !== undefined && isValidLanguage(first);
+
+  if (segments.length === 1) {
+    if (isLangPrefixed || KNOWN_PATHS.has(first)) return next();
     return context.rewrite(new URL('/404', context.url));
   }
 
-  // /en/xxx when xxx is not a known English route
-  if (
-    segments.length === 2 &&
-    segments[0] === 'en' &&
-    !KNOWN_EN_PATHS.has(segments[1])
-  ) {
+  if (segments.length === 2 && isLangPrefixed && !KNOWN_PATHS.has(second)) {
     return context.rewrite(new URL('/404', context.url));
   }
 

@@ -42,7 +42,7 @@ export const NAV_ENTRIES: NavEntry[] = [
 /** Prefix a site-relative path for a language (external URLs pass through). */
 export function navHref(entry: NavEntry, lang: Language): string {
   if (entry.external) return entry.path;
-  const language = isValidLanguage(lang) ? lang : 'es';
+  const language = isValidLanguage(lang) ? lang : 'en';
   const prefix = getUrlPrefix(language);
   if (entry.path === '/') return prefix || '/';
   return `${prefix}${entry.path}`;

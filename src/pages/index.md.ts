@@ -4,9 +4,9 @@ import { SITE_URL } from '@/lib/constances';
 import { serializeGenericToMarkdown } from '@/lib/markdown-for-agents';
 import { getTranslations } from '@/lib/translations';
 
-/** `/index.md` — the home page as agent-readable Markdown (Spanish). */
+/** `/index.md` — the home page as agent-readable Markdown (English, root). */
 export const GET: APIRoute = () => {
-  const lang = 'es' as const;
+  const lang = 'en' as const;
   const t = getTranslations(lang);
 
   return new Response(
