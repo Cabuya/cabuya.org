@@ -37,6 +37,6 @@ export type { Language } from '../i18n';
 export { getDefaultLanguage, isValidLanguage } from '../i18n';
 // Re-export types for consumer convenience
 // Re-export sub-interfaces that consumers may need
-export type { PagePassion, SiteTranslations } from './types';
+export type { SiteTranslations } from './types';
 
 export default translations;

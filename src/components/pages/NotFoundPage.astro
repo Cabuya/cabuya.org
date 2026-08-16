@@ -1,8 +1,6 @@
 ---
-import Eyebrow from '@/components/ui/Eyebrow.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
-import { APP_URL } from '@/lib/constances';
-import { getUrlPrefix, type Language } from '@/lib/i18n';
+import type { Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -11,96 +9,35 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getTranslations(lang);
-const prefix = getUrlPrefix(lang);
-
-const ctas = [
-  {
-    href: `${prefix}/`,
-    label: t.notFoundPage.backHome,
-    variant: 'primary' as const,
-  },
-  {
-    href: APP_URL,
-    label: t.notFoundPage.appCta,
-    variant: 'secondary' as const,
-  },
-  {
-    href: `${prefix}/blog`,
-    label: t.notFoundPage.searchBlog,
-    variant: 'ghost' as const,
-  },
-];
+const homeHref = lang === 'es' ? '/' : '/en/';
 ---
 
-<MainLayout lang={lang} title={t.notFoundPage.title} description={t.notFoundPage.description}>
-  <section class="relative overflow-hidden bg-cabuya-bg py-16 sm:py-24">
-    <div
-      class="pointer-events-none absolute inset-0 opacity-40"
-      aria-hidden="true"
+<MainLayout
+  lang={lang}
+  title={t.notFoundPage.metaTitle}
+  description={t.notFoundPage.description}
+>
+  <section class="main-container py-24 text-center md:py-32">
+    <img
+      src="/images/brand/cabuya-isologo.webp"
+      alt=""
+      width="96"
+      height="96"
+      class="mx-auto h-24 w-24 opacity-80"
+    />
+    <h1
+      class="mt-8 font-display text-4xl font-bold text-cabuya-primary md:text-5xl"
     >
-      <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-cabuya-primary/10 blur-3xl"></div>
-      <div class="absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-cabuya-accent/15 blur-3xl"></div>
-    </div>
-
-    <div class="main-container relative">
-      <div class="mx-auto max-w-2xl text-center">
-        <Eyebrow>{t.notFoundPage.eyebrow}</Eyebrow>
-        <p class="mt-6 text-sm font-semibold uppercase tracking-widest text-cabuya-primary dark:text-cabuya-primary-light">
-          Corag
-        </p>
-        <h1 class="mt-3 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-cabuya">
-          {t.notFoundPage.heading}
-        </h1>
-        <p
-          class="mt-4 text-6xl sm:text-7xl font-bold tracking-tight text-cabuya-primary/25 dark:text-cabuya-primary-light/30"
-          aria-hidden="true"
-        >
-          404
-        </p>
-        <p class="mt-4 text-base leading-relaxed text-cabuya-secondary sm:text-lg">
-          {t.notFoundPage.message}
-        </p>
-
-        <div class="mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
-          {
-            ctas.map((cta) => (
-              <a
-                href={cta.href}
-                class:list={[
-                  'inline-flex min-h-[44px] items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary',
-                  cta.variant === 'primary' &&
-                    'bg-cabuya-fill px-7 text-base text-cabuya-on-fill hover:bg-cabuya-fill/90',
-                  cta.variant === 'secondary' &&
-                    'border-2 border-cabuya-primary text-cabuya-primary hover:bg-cabuya-primary-soft',
-                  cta.variant === 'ghost' &&
-                    'border border-cabuya-border text-cabuya-secondary hover:bg-cabuya-bg-elevated hover:text-cabuya',
-                ]}
-              >
-                {cta.label}
-              </a>
-            ))
-          }
-        </div>
-      </div>
-
-      <div class="mt-12 flex justify-center" aria-hidden="true">
-        <img
-          src="/images/brand/cabuya-isologo.webp"
-          alt=""
-          width="160"
-          height="160"
-          class="h-20 w-20 sm:h-24 sm:w-24 opacity-80 dark:hidden"
-          loading="lazy"
-        />
-        <img
-          src="/images/brand/cabuya-isologo.webp"
-          alt=""
-          width="160"
-          height="160"
-          class="hidden h-20 w-20 sm:h-24 sm:w-24 opacity-80 dark:block"
-          loading="lazy"
-        />
-      </div>
-    </div>
+      404 — {t.notFoundPage.title}
+    </h1>
+    <p class="mx-auto mt-4 max-w-xl text-cabuya-secondary">
+      {t.notFoundPage.description}
+    </p>
+    <a
+      href={homeHref}
+      class="mt-10 inline-block rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong"
+    >
+      {t.notFoundPage.backHome}
+    </a>
   </section>
 </MainLayout>

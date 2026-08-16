@@ -20,7 +20,6 @@ interface AssetsFetcher {
 }
 
 interface Env {
-  PUBLIC_UMAMI_WEBSITE_ID?: string;
   ASSETS: AssetsFetcher;
 }
 
@@ -62,9 +61,6 @@ const SPIDER_CRAWLER_PATTERN =
 const IGNORED_BOTS_PATTERN =
   /Googlebot|bingbot|YandexBot|Baiduspider|DuckDuckBot|Slurp|facebot|ia_archiver|Uptimebot|UptimeRobot|pingdom|StatusCake|NodePing|Site24x7|Checkly|DatadogSynthetics|NewRelicPinger|Better Uptime|AhrefsBot|SemrushBot|DataForSeoBot|MJ12bot|Discordbot|PetalBot|Barkrowler|BitSightBot|Jetslide|archive\.org_bot|RafineriBot|AwarioBot|Applebot(?!-Extended)|Twitterbot|SeznamBot|DotBot|AgentWarsBot|meta-webindexer/i;
 
-import { buildUmamiUpstreamUrl } from './_lib/umami-proxy';
-
-const UMAMI_API_URL = buildUmamiUpstreamUrl('api/send');
 
 function detectAiBot(userAgent: string): string | null {
   for (const { pattern, name } of AI_BOT_PATTERNS) {
@@ -98,66 +94,6 @@ function extractBotName(userAgent: string): string {
   return name.slice(0, 60);
 }
 
-function buildUmamiPayload(
-  websiteId: string,
-  eventName: string,
-  botName: string,
-  url: string,
-  hostname: string,
-  language: string,
-  userAgent?: string
-): object {
-  const data: Record<string, string> = {
-    bot: botName,
-    path: url,
-    method: 'GET',
-  };
-  if (userAgent) {
-    data.user_agent = userAgent.slice(0, 200);
-  }
-  return {
-    payload: {
-      website: websiteId,
-      url,
-      hostname,
-      language,
-      name: eventName,
-      data,
-    },
-    type: 'event',
-  };
-}
-
-async function sendToUmami(
-  websiteId: string,
-  eventName: string,
-  botName: string,
-  request: Request,
-  userAgent?: string
-): Promise<void> {
-  const requestUrl = new URL(request.url);
-
-  const body = buildUmamiPayload(
-    websiteId,
-    eventName,
-    botName,
-    requestUrl.pathname,
-    requestUrl.hostname,
-    'en-US',
-    userAgent
-  );
-
-  try {
-    await fetch(UMAMI_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-  } catch {
-    // Silently fail — analytics should never break the site
-  }
-}
-
 /**
  * Detect Lighthouse-family user-agents (Google PageSpeed Insights, Lighthouse
  * DevTools, Lighthouse CI). These tools audit `robots.txt` strictly against
@@ -168,18 +104,6 @@ async function sendToUmami(
  */
 const LIGHTHOUSE_UA_PATTERN = /Chrome-Lighthouse|PageSpeed|Lighthouse/i;
 
-/**
- * Serve a Content-Signal-free version of `/robots.txt` to Lighthouse-family
- * tools so their strict `robots-txt` audit passes. Every other client
- * (Googlebot, AI crawlers, users, isitagentready.com's scanner) still sees
- * the canonical static `/robots.txt` with the `Content-Signal` directive.
- *
- * Why at the middleware layer: Lighthouse is a quality tool, not a search
- * engine. Google's cloaking policy targets ranking crawlers (Googlebot),
- * which still receives the full directive. This UA rewrite does not change
- * what search engines index; it only removes a false-positive flag from
- * one specific strict parser.
- */
 async function tryRewriteRobotsForLighthouse(
   context: EventContext
 ): Promise<Response | null> {
@@ -295,54 +219,6 @@ async function tryServeMarkdown(
 }
 
 /** Track a markdown request to Umami analytics */
-function trackMarkdownRequest(
-  context: EventContext,
-  source: 'content_negotiation' | 'direct_url'
-): void {
-  const websiteId = context.env.PUBLIC_UMAMI_WEBSITE_ID;
-  if (!websiteId) return;
-
-  const userAgent = context.request.headers.get('user-agent') || '';
-  const knownBot = detectAiBot(userAgent);
-  const botName = knownBot || (isUnknownBot(userAgent) ? extractBotName(userAgent) : 'unknown');
-  const url = new URL(context.request.url);
-
-  console.log(
-    `[Markdown ${source}] ${botName} → ${url.pathname} (${userAgent.slice(0, 100)})`
-  );
-
-  const data: Record<string, string> = {
-    bot: botName,
-    path: url.pathname,
-    source,
-    user_agent: userAgent.slice(0, 200),
-  };
-
-  context.waitUntil(
-    fetch(UMAMI_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        payload: {
-          website: websiteId,
-          url: url.pathname,
-          hostname: url.hostname,
-          language: 'en-US',
-          name: 'markdown_request',
-          data,
-        },
-        type: 'event',
-      }),
-    }).catch(() => {})
-  );
-}
-
-/** Check if the request is for a direct .md URL (e.g., /about.md) */
-function isDirectMarkdownUrl(pathname: string): boolean {
-  return pathname.endsWith('.md') &&
-    !MARKDOWN_EXCLUDED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
 export async function onRequest(context: EventContext): Promise<Response> {
   // 0. robots.txt UA rewrite — strip Content-Signal for Lighthouse-family
   //    tools to keep PageSpeed SEO at 1.00 without weakening the directive
@@ -353,15 +229,10 @@ export async function onRequest(context: EventContext): Promise<Response> {
   // 1. Markdown content negotiation — serve .md if Accept: text/markdown
   const markdownResponse = await tryServeMarkdown(context);
   if (markdownResponse) {
-    trackMarkdownRequest(context, 'content_negotiation');
     return markdownResponse;
   }
 
-  // 2. Track direct .md URL requests (e.g., /about.md, /blog/post.md)
   const url = new URL(context.request.url);
-  if (isDirectMarkdownUrl(url.pathname)) {
-    trackMarkdownRequest(context, 'direct_url');
-  }
 
   // 3. AI bot analytics
   const userAgent = context.request.headers.get('user-agent') || '';
@@ -373,13 +244,6 @@ export async function onRequest(context: EventContext): Promise<Response> {
       `[AI Bot] ${botName} → ${url.pathname} (${context.request.method})`
     );
 
-    const websiteId = context.env.PUBLIC_UMAMI_WEBSITE_ID;
-    if (websiteId) {
-      context.waitUntil(
-        sendToUmami(websiteId, 'ai_bot_visit', botName, context.request)
-      );
-    }
-
     return context.next();
   }
 
@@ -390,18 +254,6 @@ export async function onRequest(context: EventContext): Promise<Response> {
       `[Unknown Bot] ${name} → ${url.pathname} (${context.request.method}) UA: ${userAgent.slice(0, 150)}`
     );
 
-    const websiteId = context.env.PUBLIC_UMAMI_WEBSITE_ID;
-    if (websiteId) {
-      context.waitUntil(
-        sendToUmami(
-          websiteId,
-          'unknown_bot_visit',
-          name,
-          context.request,
-          userAgent
-        )
-      );
-    }
   }
 
   return context.next();

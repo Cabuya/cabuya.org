@@ -141,7 +141,6 @@ For specialized pages, you can create additional layouts:
 
 ```astro
 ---
-// src/layouts/BlogLayout.astro
 import MainLayout from './MainLayout.astro';
 
 interface Props {

@@ -1,18 +1,10 @@
 ---
 import '@/styles/global.css';
-import WebMCPBridge from '@/components/agent/WebMCPBridge.svelte';
 import BaseHead from '@/components/BaseHead.astro';
-import FloatingAppCta from '@/components/cta/FloatingAppCta.svelte';
 import Footer from '@/components/Footer.astro';
-import LanguageRedirect from '@/components/LanguageRedirect.astro';
 import Header from '@/components/layout/Header.svelte';
-import TopNotificationBar from '@/components/layout/TopNotificationBar.svelte';
-import { getUrlPrefix, type Language } from '@/lib/i18n';
+import type { Language } from '@/lib/i18n';
 import { DESCRIPTION_MAX, truncateToBand } from '@/lib/meta-description';
-import {
-  getActiveNotifications,
-  localizeNotification,
-} from '@/lib/notifications';
 
 interface Props {
   lang: string;
@@ -53,24 +45,6 @@ const {
 } = Astro.props;
 
 const language = lang as Language;
-const prefix = getUrlPrefix(language);
-/** No announcement chrome on any PTD URL (hub, editions, certificates). */
-const suppressTopNotifications = false;
-const activeNotifications = suppressTopNotifications
-  ? []
-  : (await getActiveNotifications()).map((entry) => {
-      const localized = localizeNotification(entry, language);
-      const href = localized.ctaHref;
-      if (
-        href?.startsWith('/') &&
-        !href.startsWith('//') &&
-        prefix &&
-        !href.startsWith(`${prefix}/`)
-      ) {
-        return { ...localized, ctaHref: `${prefix}${href}` };
-      }
-      return localized;
-    });
 
 /**
  * Last line of defence for the 130-160 band `CLAUDE.md` requires: no page may
@@ -101,7 +75,6 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       lcpImageMedia={lcpImageMedia}
     />
     <slot name="head" />
-    <LanguageRedirect lang={lang} />
     <script is:inline>
   (function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');})();
 </script>
@@ -109,18 +82,12 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
   <body
     class:list={[
       'flex flex-col min-h-screen text-cabuya bg-cabuya-bg',
-      activeNotifications.length > 0 && 'has-top-notification',
     ]}
   >
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-cabuya-bg-elevated focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-cabuya-primary">
       Skip to content
     </a>
-    {/*
-      Sticky chrome: notification bar + header travel together.
-      The bar collapses after scrolling past ~48px (hysteresis) and
-      reappears near the top — see TopNotificationBar.svelte.
-      PTD edition pages use a dedicated minimal header (legacy photocopy).
-    */}
+    {/* Sticky chrome: the header. */}
     <div
       data-cabuya-chrome
       class:list={[
@@ -129,16 +96,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
            fades under the glass header (2024-style), not a solid cream bar. */
       ]}
     >
-      {
-        activeNotifications.length > 0 && (
-          <TopNotificationBar
-            client:load
-            lang={lang}
-            notifications={activeNotifications}
-          />
-        )
-      }
-      <Header client:load lang={lang} />
+      <Header client:load lang={language} />
     </div>
     {/*
       Keep --cabuya-chrome-height in sync with sticky chrome (header ±
@@ -217,11 +175,6 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       <slot />
     </main>
     <Footer lang={lang} />
-    {/* client:idle — it waits for a short scroll before showing, so it has no
-        business competing with LCP. Ships on every MainLayout page. */}
-    <FloatingAppCta client:idle lang={lang} />
-    {/* client:load — WebMCP scanners detect tools on first paint; client:visible misses them. */}
-    <WebMCPBridge client:load lang={lang as 'en' | 'es'} />
     {/*
       Do NOT use define:vars here — Astro wraps define:vars scripts in an IIFE,
       which breaks ES module `import` and causes:

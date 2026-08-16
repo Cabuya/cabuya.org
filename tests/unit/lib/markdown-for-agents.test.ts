@@ -1,301 +1,53 @@
+/**
+ * Guards the agent-Markdown serializer: front block, sections, and the
+ * shared Site navigation block, in both languages.
+ */
 import { describe, expect, it } from 'vitest';
 
 import {
-  serializeBlogIndexToMarkdown,
-  serializePageToAgentMarkdown,
-  serializePostToAgentMarkdown,
+  serializeGenericToMarkdown,
+  siteNavigationBlock,
 } from '@/lib/markdown-for-agents';
 
-// ─── Mock Data ─────────────────────────────────────────
+describe('serializeGenericToMarkdown', () => {
+  const base = {
+    title: 'Test title',
+    description: 'A description.',
+    canonical: 'https://cabuya.org/test/',
+  } as const;
 
-const mockPost = {
-  id: 'en/2024-03-15_my-awesome-post',
-  data: {
-    title: 'My Awesome Post',
-    description: 'A test post about Astro and Markdown.',
-    pubDate: new Date('2024-03-15'),
-    updatedDate: new Date('2024-04-01'),
-    tags: ['tech', 'astro'],
-  },
-  body: '## Introduction\n\nThis is a test post.\n\n```js\nconsole.log("hello");\n```\n',
-};
+  it('emits the front block with canonical and language', () => {
+    const md = serializeGenericToMarkdown({ ...base, lang: 'en' });
+    expect(md).toContain('# Test title');
+    expect(md).toContain('A description.');
+    expect(md).toContain('Canonical: https://cabuya.org/test/');
+    expect(md).toContain('Language: en');
+  });
 
-const mockPostNoOptionals = {
-  id: 'en/2024-05-01_minimal-post',
-  data: {
-    title: 'Minimal Post',
-    description: 'A post with no optional fields.',
-    pubDate: new Date('2024-05-01'),
-  },
-  body: 'Just some text.',
-};
-
-const mockPostEmptyBody = {
-  id: 'es/2024-06-01_empty-body',
-  data: {
-    title: 'Empty Body Post',
-    description: 'This post has no body content.',
-    pubDate: new Date('2024-06-01'),
-    tags: ['personal'],
-  },
-  body: undefined,
-};
-
-const mockPage = {
-  id: 'en/about',
-  data: {
-    title: 'About — Corag',
-    description: 'El ecosistema de impacto social.',
-    lastUpdated: new Date('2026-03-09'),
-  },
-  body: '## Who We Are\n\nWe are Corag, a community of professionals and volunteers.',
-};
-
-const mockPageNoLastUpdated = {
-  id: 'es/contact',
-  data: {
-    title: 'Contacto — Corag',
-    description: 'Conectemos y construyamos algo juntos.',
-  },
-  body: '## Ponte en Contacto\n\nSiempre abierto a conversaciones.',
-};
-
-// ─── serializePostToAgentMarkdown ──────────────────────
-
-describe('serializePostToAgentMarkdown', () => {
-  it('should produce correct output with all fields', () => {
-    const result = serializePostToAgentMarkdown(mockPost as any, {
-      slug: 'my-awesome-post',
+  it('renders body and sections in order', () => {
+    const md = serializeGenericToMarkdown({
+      ...base,
       lang: 'en',
+      body: 'Body text.',
+      sections: [{ heading: 'Extra', lines: ['- one', '- two'] }],
     });
-
-    expect(result).toContain('# My Awesome Post');
-    expect(result).toContain('> A test post about Astro and Markdown.');
-    expect(result).toContain('Published: 2024-03-15');
-    expect(result).toContain('Updated: 2024-04-01');
-    expect(result).toContain('Language: en');
-    expect(result).toContain(
-      'Canonical: https://cabuya.org/en/blog/my-awesome-post'
-    );
-    expect(result).toContain('Tags: tech, astro');
-    expect(result).toContain('---');
-    expect(result).toContain('## Introduction');
-    expect(result).toContain('```js');
-    expect(result).toContain('console.log("hello");');
+    expect(md.indexOf('Body text.')).toBeLessThan(md.indexOf('## Extra'));
+    expect(md).toContain('- one');
   });
 
-  it('should format date as YYYY-MM-DD', () => {
-    const result = serializePostToAgentMarkdown(mockPost as any, {
-      slug: 'my-awesome-post',
-      lang: 'en',
-    });
-
-    expect(result).toMatch(/Published: \d{4}-\d{2}-\d{2}/);
-    expect(result).toMatch(/Updated: \d{4}-\d{2}-\d{2}/);
-  });
-
-  it('should omit updatedDate and tags when not present', () => {
-    const result = serializePostToAgentMarkdown(mockPostNoOptionals as any, {
-      slug: 'minimal-post',
-      lang: 'en',
-    });
-
-    expect(result).not.toContain('Updated:');
-    expect(result).not.toContain('Tags:');
-    expect(result).toContain('Published: 2024-05-01');
-  });
-
-  it('should handle ES language with correct canonical URL', () => {
-    const result = serializePostToAgentMarkdown(mockPostEmptyBody as any, {
-      slug: 'empty-body',
-      lang: 'es',
-    });
-
-    expect(result).toContain('Language: es');
-    expect(result).toContain('Canonical: https://cabuya.org/blog/empty-body');
-  });
-
-  it('should handle empty/undefined body gracefully', () => {
-    const result = serializePostToAgentMarkdown(mockPostEmptyBody as any, {
-      slug: 'empty-body',
-      lang: 'es',
-    });
-
-    expect(result).toContain('---');
-    expect(result).toContain('# Empty Body Post');
-    // Should not crash, should end cleanly
-    expect(result.endsWith('\n')).toBe(true);
-  });
-
-  it('should preserve code blocks in body', () => {
-    const result = serializePostToAgentMarkdown(mockPost as any, {
-      slug: 'my-awesome-post',
-      lang: 'en',
-    });
-
-    expect(result).toContain('```js\nconsole.log("hello");\n```');
-  });
-
-  it('should end with a trailing newline', () => {
-    const result = serializePostToAgentMarkdown(mockPost as any, {
-      slug: 'my-awesome-post',
-      lang: 'en',
-    });
-
-    expect(result.endsWith('\n')).toBe(true);
+  it('always ends with the localized Site navigation block', () => {
+    const mdEn = serializeGenericToMarkdown({ ...base, lang: 'en' });
+    const mdEs = serializeGenericToMarkdown({ ...base, lang: 'es' });
+    expect(mdEn).toContain('## Site Navigation');
+    expect(mdEs).toContain('## Navegación del Sitio');
   });
 });
 
-// ─── serializeBlogIndexToMarkdown ──────────────────────
-
-describe('serializeBlogIndexToMarkdown', () => {
-  const entries = [
-    {
-      title: 'First Post',
-      slug: 'first-post',
-      description: 'The first post.',
-      pubDate: new Date('2024-06-01'),
-      tags: ['tech'],
-    },
-    {
-      title: 'Second Post',
-      slug: 'second-post',
-      description: 'The second post.',
-      pubDate: new Date('2024-05-15'),
-    },
-  ];
-
-  it('should produce correct index structure', () => {
-    const result = serializeBlogIndexToMarkdown(entries, {
-      lang: 'en',
-      title: 'Corag Blog',
-      description: 'A technical blog.',
-    });
-
-    expect(result).toContain('# Corag Blog');
-    expect(result).toContain('> A technical blog.');
-    expect(result).toContain('Language: en');
-    expect(result).toContain('Canonical: https://cabuya.org/en/blog');
-    expect(result).toContain('Total posts: 2');
-    expect(result).toContain('## All articles (2 available)');
-  });
-
-  it('mirrors the tag filter the HTML renders, ordered by frequency', () => {
-    const result = serializeBlogIndexToMarkdown(
-      [
-        { ...entries[0], tags: ['volunteering', 'colombia'] },
-        { ...entries[1], tags: ['volunteering'] },
-      ],
-      { lang: 'en', title: 'Blog', description: 'Test.' }
+describe('siteNavigationBlock', () => {
+  it('links home with the right prefix per language', () => {
+    expect(siteNavigationBlock('es').join('\n')).toContain(
+      'https://cabuya.org/'
     );
-
-    expect(result).toContain('## Topics');
-    expect(result).toContain(
-      '- [#volunteering](/en/blog/tag/volunteering) — 2'
-    );
-    expect(result).toContain('- [#colombia](/en/blog/tag/colombia) — 1');
-    // The most-used tag leads, as it does in the filter.
-    expect(result.indexOf('#volunteering')).toBeLessThan(
-      result.indexOf('#colombia')
-    );
-  });
-
-  it('omits the topics block entirely when no post carries a tag', () => {
-    const untagged = entries.map(({ tags: _tags, ...rest }) => rest);
-    const result = serializeBlogIndexToMarkdown(untagged, {
-      lang: 'en',
-      title: 'Blog',
-      description: 'Test.',
-    });
-
-    expect(result).not.toContain('## Topics');
-  });
-
-  it('should include post links with .md URLs', () => {
-    const result = serializeBlogIndexToMarkdown(entries, {
-      lang: 'en',
-      title: 'Blog',
-      description: 'Test.',
-    });
-
-    expect(result).toContain('[First Post](/en/blog/first-post.md)');
-    expect(result).toContain('[Second Post](/en/blog/second-post.md)');
-  });
-
-  it('should use no prefix for the Spanish (default) index', () => {
-    const result = serializeBlogIndexToMarkdown(entries, {
-      lang: 'es',
-      title: 'Blog de Corag',
-      description: 'Blog técnico.',
-    });
-
-    expect(result).toContain('Language: es');
-    expect(result).toContain('Canonical: https://cabuya.org/blog');
-    expect(result).toContain('/blog/first-post.md');
-  });
-
-  it('should handle empty entries list', () => {
-    const result = serializeBlogIndexToMarkdown([], {
-      lang: 'en',
-      title: 'Empty Blog',
-      description: 'No posts yet.',
-    });
-
-    expect(result).toContain('Total posts: 0');
-    expect(result).toContain('## All articles (0 available)');
-  });
-});
-
-// ─── serializePageToAgentMarkdown ──────────────────────
-
-describe('serializePageToAgentMarkdown', () => {
-  it('should produce correct output with all fields', () => {
-    const result = serializePageToAgentMarkdown(mockPage as any, {
-      slug: 'about',
-      lang: 'en',
-    });
-
-    expect(result).toContain('# About — Corag');
-    expect(result).toContain('> El ecosistema de impacto social.');
-    expect(result).toContain('Language: en');
-    expect(result).toContain('Canonical: https://cabuya.org/en/about');
-    expect(result).toContain('Last Updated: 2026-03-09');
-    expect(result).toContain('## Who We Are');
-  });
-
-  it('should handle index slug with correct canonical URL', () => {
-    const indexPage = {
-      ...mockPage,
-      id: 'en/index',
-      data: { ...mockPage.data, title: 'Home' },
-    };
-    const result = serializePageToAgentMarkdown(indexPage as any, {
-      slug: 'index',
-      lang: 'en',
-    });
-
-    expect(result).toContain('Canonical: https://cabuya.org');
-    // Should not be https://cabuya.org/en/index
-    expect(result).not.toContain('/index');
-  });
-
-  it('should handle ES language', () => {
-    const result = serializePageToAgentMarkdown(mockPageNoLastUpdated as any, {
-      slug: 'contact',
-      lang: 'es',
-    });
-
-    expect(result).toContain('Language: es');
-    expect(result).toContain('Canonical: https://cabuya.org/contact');
-    expect(result).not.toContain('Last Updated:');
-  });
-
-  it('should omit lastUpdated when not present', () => {
-    const result = serializePageToAgentMarkdown(mockPageNoLastUpdated as any, {
-      slug: 'contact',
-      lang: 'es',
-    });
-
-    expect(result).not.toContain('Last Updated:');
+    expect(siteNavigationBlock('en').join('\n')).toContain('/en');
   });
 });

@@ -25,67 +25,27 @@
  * Do NOT debug Astro routing, file-system caches, or `[...slug]` vs `[slug]`
  * before checking this allowlist first.
  *
- * cabuya.org migration note:
- *   The retired community routes (`/meetups`, `/talks`, `/speakers`,
- *   `/slides`, `/verticals`, `/pereira-tech-day(s)`, `/communities`,
- *   `/certificates`, `/press`, `/call-for-speakers`, `/calendar`, `/sponsors`)
- *   were removed with their collections. Each has a 301 in
- *   `public/_redirects` pointing at its closest Corag equivalent.
- *
- *   Route slugs are English in both languages (repo rule 21); Spanish is
- *   served unprefixed and English under `/en`. Every new top-level route must
- *   be added here as its page lands — a route missing from this allowlist
- *   works in dev and 404s in production.
+ * Cabuya migration note (Task 7):
+ *   Every retired Corag route (blog, ecosystem, channels, contact, the seven
+ *   institutional pages, movement, …) 301s in `public/_redirects` to its
+ *   closest surviving surface. Route slugs stay English in both languages;
+ *   the EN-at-root [lang] topology arrives in Task 8 and replaces the
+ *   KNOWN_EN_PATHS mechanism.
  */
 import { defineMiddleware } from 'astro:middleware';
 
 const KNOWN_ROOT_PATHS = new Set([
   '',
-  'about',
-  'how-it-works',
-  'transparency',
-  'emergencies',
-  'leaders',
-  'partners',
-  'ecosystem',
-  'developers',
-  'privacy',
-  'blog',
-  'contact',
-  'movement',
-  'channels',
-  'conduct',
-  'contributing',
-  'governance',
-  'api',
   'en',
   'internal',
   '404',
-  'favicon.ico',
-  'favicon.svg',
-  'sitemap-index.xml',
-  'rss.xml',
+  // Cabuya routes are added here as their tasks land:
+  // 'developers' (Task 23) · 'registry' (Task 28) · 'rfcs', 'changelog',
+  // 'governance', 'trademark', 'join' (Task 30). Task 8 replaces the /en
+  // handling with the [lang] topology.
 ]);
 
-const KNOWN_EN_PATHS = new Set([
-  'about',
-  'how-it-works',
-  'transparency',
-  'emergencies',
-  'leaders',
-  'partners',
-  'ecosystem',
-  'developers',
-  'privacy',
-  'blog',
-  'contact',
-  'movement',
-  'channels',
-  'conduct',
-  'contributing',
-  'governance',
-  'rss.xml',
-]);
+const KNOWN_EN_PATHS = new Set(['']);
 
 export const onRequest = defineMiddleware((context, next) => {
   const pathname = context.url.pathname;

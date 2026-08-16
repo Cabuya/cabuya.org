@@ -2,177 +2,66 @@
 # https://developers.cloudflare.com/pages/configuration/redirects/
 #
 # Order matters: the FIRST matching rule wins, and Cloudflare does not chain
-# redirects. Any specific `/es/...` rule must therefore appear before the
-# `/es/*` catch-all at the bottom AND point straight at its final URL.
-
-# ---------------------------------------------------------------------------
-# Language swap: Spanish moved from /es to the site root
-# ---------------------------------------------------------------------------
-# Spanish is the community's primary language and is now served at `/`, with
-# English under `/en`. Every previously published `/es/...` URL keeps working
-# via a permanent redirect to its new root URL.
+# redirects. Specific rules come before catch-alls and point at FINAL URLs.
 #
-# Note: the old English URLs (`/about`, `/blog/...`) cannot be redirected to
-# `/en/...` — those paths now legitimately serve Spanish. English content is
-# re-announced through the updated sitemap and hreflang tags instead.
-# ---------------------------------------------------------------------------
-# cabuya.org migration — retired route families from the previous site
-# ---------------------------------------------------------------------------
-# The site became cabuya.org. These route families no longer exist; each is sent
-# to the closest surviving page rather than 404ing, because external links and
-# search indexes still point at them.
-#
-# Route slugs are English in both languages; Spanish is served unprefixed.
-# Only retired paths appear here — a live page must never be listed, or the
-# redirect shadows the page itself.
-#
-# Ordered most-specific first. These MUST appear before the `/es/*` catch-all.
+# Cabuya migration (Task 7): every retired Corag route 301s to its closest
+# surviving surface. Task 8 (EN at root, ES at /es) adds the language-swap
+# rules; the deep-target rows below are refined as the new pages land
+# (Tasks 23-30 replace `/` targets with /developers, /registry, /join, ...).
 
-# Community programme -> how Corag works
-/verticals                    /how-it-works/                 301
-/verticals/*                  /how-it-works/                 301
-/en/verticals                 /en/how-it-works/              301
-/en/verticals/*               /en/how-it-works/              301
+# --- Retired Corag institutional + community routes → home (for now) -------
+/about                       /    301
+/how-it-works                /    301
+/transparency                /    301
+/emergencies                 /    301
+/leaders                     /    301
+/partners                    /    301
+/ecosystem                   /    301
+/developers                  /    301
+/privacy                     /    301
+/contact                     /    301
+/movement                    /    301
+/movement/*                  /    301
+/channels                    /    301
+/conduct                     /    301
+/contributing                /    301
+/governance                  /    301
+/community                   /    301
 
-# People directories -> the movement page that replaced them.
-# `/contributors` listed named people, allied communities and allied companies.
-# Corag presents itself as a movement rather than through representatives, so
-# the roster was removed and the URL renamed. These all point straight at the
-# final destination — Cloudflare does not chain redirects.
-/speakers                     /movement/                     301
-/speakers/*                   /movement/                     301
-/en/speakers                  /en/movement/                  301
-/en/speakers/*                /en/movement/                  301
-/contributors                 /movement/                     301
-/contributors/*               /movement/                     301
-/en/contributors              /en/movement/                  301
-/en/contributors/*            /en/movement/                  301
+# --- Blog family (retired wholesale) ---------------------------------------
+/blog                        /    301
+/blog/*                      /    301
+/rss.xml                     /    301
 
-# Localized slugs briefly used during the migration
-/colaboradores                /movement/                     301
-/como-funciona                /how-it-works/                 301
-/transparencia                /transparency/                 301
-/desarrolladores              /developers/                   301
-/emergencias                  /emergencies/                  301
-/lideres                      /leaders/                      301
-/aliados                      /partners/                     301
-/privacidad                   /privacy/                      301
-/sobre-corag                  /about/                        301
-/contacto                     /contact/                      301
-/en/allies                    /en/partners/                  301
+# --- API endpoints that no longer exist ------------------------------------
+/api/posts.json              /    301
+/api/posts-en.json           /    301
+/api/posts-es.json           /    301
+/api/series/*                /    301
+/api/timeline/*              /    301
 
-# Partner organizations -> allies
-/communities                  /partners/                     301
-/communities/*                /partners/                     301
-/sponsors                     /partners/                     301
-/sponsors/*                   /partners/                     301
-/sponsor-us                   /partners/                     301
-/en/communities               /en/partners/                  301
-/en/communities/*             /en/partners/                  301
-/en/sponsors                  /en/partners/                  301
-/en/sponsors/*                /en/partners/                  301
-/en/sponsor-us                /en/partners/                  301
+# --- English mirror of everything above ------------------------------------
+/en/about                    /en/ 301
+/en/how-it-works             /en/ 301
+/en/transparency             /en/ 301
+/en/emergencies              /en/ 301
+/en/leaders                  /en/ 301
+/en/partners                 /en/ 301
+/en/ecosystem                /en/ 301
+/en/developers               /en/ 301
+/en/privacy                  /en/ 301
+/en/contact                  /en/ 301
+/en/movement                 /en/ 301
+/en/movement/*               /en/ 301
+/en/channels                 /en/ 301
+/en/conduct                  /en/ 301
+/en/contributing             /en/ 301
+/en/governance               /en/ 301
+/en/community                /en/ 301
+/en/blog                     /en/ 301
+/en/blog/*                   /en/ 301
+/en/rss.xml                  /en/ 301
 
-# Press and speaker calls -> about / contact
-/press                        /about/                        301
-/call-for-speakers            /contact/                      301
-/en/press                     /en/about/                     301
-/en/call-for-speakers         /en/contact/                   301
-
-# Event programme -> home
-/meetups                      /                              301
-/meetups/*                    /                              301
-/talks                        /                              301
-/talks/*                      /                              301
-/slides                       /                              301
-/slides/*                     /                              301
-/calendar                     /                              301
-/pereira-tech-day             /                              301
-/pereira-tech-day/*           /                              301
-/pereira-tech-days            /                              301
-/pereira-tech-days/*          /                              301
-/certificates                 /                              301
-/certificates/*               /                              301
-/verify                       /                              301
-/verify/*                     /                              301
-/en/meetups                   /en/                           301
-/en/meetups/*                 /en/                           301
-/en/talks                     /en/                           301
-/en/talks/*                   /en/                           301
-/en/slides                    /en/                           301
-/en/slides/*                  /en/                           301
-/en/calendar                  /en/                           301
-/en/pereira-tech-day          /en/                           301
-/en/pereira-tech-day/*        /en/                           301
-/en/pereira-tech-days         /en/                           301
-/en/pereira-tech-days/*       /en/                           301
-/en/certificates              /en/                           301
-/en/certificates/*            /en/                           301
-/en/verify                    /en/                           301
-/en/verify/*                  /en/                           301
-
-# Retired sections -> their closest surviving page
-/community                    /partners/                     301
-/en/community                 /en/partners/                  301
-
-# ---------------------------------------------------------------------------
-# Blog archive migrated from corag.org
-# ---------------------------------------------------------------------------
-# The 51 posts moved from Spanish source slugs to English ones (repo rule 21).
-# Each old path redirects so whatever link equity exists survives the move.
-
-/blog/a-que-organizaciones-sociales-puedo-ayudar-desde-mi-ciudad        /blog/which-organizations-to-help-in-your-city/                    301
-/blog/actividades-sociales-para-ayudar-personas-en-colombia             /blog/social-activities-to-help-people-in-colombia/                301
-/blog/como-apoyar-proyectos-sociales-desde-empresas-en-colombia         /blog/how-companies-can-support-social-projects-in-colombia/       301
-/blog/como-ayudar-a-personas-necesitadas-en-colombia-hoy                /blog/how-to-help-people-in-need-in-colombia/                      301
-/blog/como-ayudar-familias-en-pobreza-extrema-en-colombia               /blog/how-to-help-families-in-extreme-poverty/                     301
-/blog/como-ayudar-sin-dinero-en-colombia-opciones-reales                /blog/how-to-help-without-money/                                   301
-/blog/como-crear-impacto-social-desde-cero-paso-a-paso                  /blog/how-to-create-social-impact-from-scratch/                    301
-/blog/como-donar-sin-caer-en-estafas-en-internet                        /blog/how-to-donate-without-getting-scammed/                       301
-/blog/como-empezar-a-hacer-voluntariado-sin-experiencia-previa          /blog/how-to-start-volunteering-with-no-experience/                301
-/blog/como-encontrar-fundaciones-verificadas-en-mi-ciudad               /blog/how-to-find-verified-foundations-in-your-city/               301
-/blog/como-encontrar-voluntariado-cerca-de-mi-facilmente                /blog/how-to-find-volunteering-near-you/                           301
-/blog/como-funcionan-las-fundaciones-sociales-en-colombia               /blog/how-social-foundations-work-in-colombia/                     301
-/blog/como-funcionan-los-proyectos-de-impacto-social-hoy                /blog/how-social-impact-projects-work-today/                       301
-/blog/como-hacer-donaciones-seguras-en-colombia-paso-a-paso             /blog/how-to-donate-safely-in-colombia/                            301
-/blog/como-involucrarse-en-proyectos-sociales-activos-cerca-de-mi       /blog/how-to-join-active-social-projects-near-you/                 301
-/blog/como-la-tecnologia-esta-cambiando-el-voluntariado-en-el-mundo     /blog/how-technology-is-changing-volunteering/                     301
-/blog/como-medir-el-impacto-de-un-proyecto-social-correctamente         /blog/how-to-measure-social-project-impact/                        301
-/blog/como-participar-en-actividades-sociales-en-mi-ciudad-hoy          /blog/how-to-take-part-in-social-activities-in-your-city/          301
-/blog/como-participar-en-parches-sociales-en-mi-ciudad                  /blog/how-to-join-a-parche-social/                                 301
-/blog/como-participar-en-proyectos-que-generan-impacto-real             /blog/how-to-join-projects-with-real-impact/                       301
-/blog/como-saber-si-una-fundacion-es-confiable-o-real                   /blog/how-to-tell-if-a-foundation-is-trustworthy/                  301
-/blog/como-ser-voluntario-en-colombia-paso-a-paso                       /blog/how-to-volunteer-in-colombia-step-by-step/                   301
-/blog/como-unirme-a-comunidades-de-impacto-social-reales                /blog/how-to-join-real-social-impact-communities/                  301
-/blog/como-unirme-a-proyectos-de-voluntariado-activos-en-colombia       /blog/how-to-join-active-volunteering-projects-in-colombia/        301
-/blog/diferencia-entre-ong-y-fundacion-social-explicada-facil           /blog/ngo-vs-social-foundation-explained/                          301
-/blog/donde-donar-alimentos-en-pereira-de-forma-segura                  /blog/where-to-donate-food-in-pereira-safely/                      301
-/blog/donde-encontrar-eventos-sociales-en-pereira-hoy                   /blog/where-to-find-social-events-in-pereira/                      301
-/blog/donde-hacer-voluntariado-en-pereira-hoy                           /blog/where-to-volunteer-in-pereira/                               301
-/blog/ejemplos-de-impacto-social-en-comunidades-vulnerables             /blog/examples-of-social-impact-in-vulnerable-communities/         301
-/blog/estrategias-transformacion-digital-2026                           /blog/digital-transformation-strategies-for-social-organizations/  301
-/blog/eventos-de-voluntariado-en-colombia-este-mes                      /blog/volunteering-events-in-colombia-this-month/                  301
-/blog/experiencias-de-voluntariado-reales-en-colombia                   /blog/real-volunteering-experiences-in-colombia/                   301
-/blog/fundaciones-confiables-en-colombia-para-donar-hoy                 /blog/trustworthy-foundations-in-colombia-to-donate-to/            301
-/blog/fundaciones-que-reciben-donaciones-confiables-en-colombia         /blog/foundations-that-receive-donations-safely-in-colombia/       301
-/blog/innovacion-en-impacto-social-en-america-latina-hoy                /blog/social-impact-innovation-in-latin-america/                   301
-/blog/lista-de-organizaciones-sociales-activas-en-colombia              /blog/list-of-active-social-organizations-in-colombia/             301
-/blog/mejores-fundaciones-para-hacer-voluntariado-en-colombia           /blog/best-foundations-to-volunteer-with-in-colombia/              301
-/blog/ong-en-colombia-que-trabajan-con-comunidades-vulnerables          /blog/ngos-in-colombia-working-with-vulnerable-communities/        301
-/blog/organizaciones-que-buscan-voluntarios-en-colombia-ahora           /blog/organizations-looking-for-volunteers-in-colombia/            301
-/blog/plataformas-digitales-para-conectar-personas-con-causas-sociales  /blog/digital-platforms-that-connect-people-with-social-causes/    301
-/blog/por-que-el-impacto-social-es-clave-en-las-empresas-modernas       /blog/why-social-impact-matters-for-modern-companies/              301
-/blog/proyectos-sociales-activos-que-necesitan-apoyo-hoy                /blog/active-social-projects-that-need-support/                    301
-/blog/que-es-impacto-social-y-como-se-genera-realmente                  /blog/what-social-impact-is-and-how-it-is-created/                 301
-/blog/que-es-responsabilidad-social-empresarial-con-ejemplos-reales     /blog/what-corporate-social-responsibility-is/                     301
-/blog/que-fundaciones-ayudan-ninos-en-situacion-vulnerable              /blog/foundations-that-help-children-at-risk/                      301
-/blog/que-hacen-las-organizaciones-sin-fines-de-lucro-realmente         /blog/what-nonprofits-actually-do/                                 301
-/blog/que-necesito-para-ser-voluntario-social-en-mi-ciudad              /blog/what-you-need-to-volunteer-in-your-city/                     301
-/blog/que-se-puede-donar-a-comunidades-vulnerables-realmente            /blog/what-you-can-actually-donate-to-vulnerable-communities/      301
-/blog/que-significa-transformacion-social-en-la-vida-real               /blog/what-social-transformation-means-in-real-life/               301
-/blog/que-son-los-parches-sociales-y-como-participar-en-ellos           /blog/what-parches-sociales-are-and-how-to-join/                   301
-/blog/voluntariado-para-jovenes-en-colombia-oportunidades-reales        /blog/volunteering-for-young-people-in-colombia/                   301
-/blog/como-ser-voluntario-en-colombia-paso-a-paso-corag                 /blog/how-to-volunteer-in-colombia-step-by-step/                   301
-
-/es                               /                                               301
-/es/*                             /:splat                                         301
+# --- Old /es URLs from the pre-baseline era (Spanish was moved to root) ----
+/es                          /    301
+/es/*                        /    301

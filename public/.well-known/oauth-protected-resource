@@ -1,7 +1,0 @@
-{
-  "resource": "https://cabuya.org",
-  "resource_name": "Corag",
-  "authorization_servers": ["https://cabuya.org"],
-  "scopes_supported": ["public:read"],
-  "bearer_methods_supported": ["header"]
-}

@@ -15,9 +15,7 @@ export let placement: 'header' | 'menu' = 'header';
 let isDark = false;
 
 $: t = getTranslations(lang);
-$: ariaLabel = isDark
-  ? t.slides.toolbar.themeToLight
-  : t.slides.toolbar.themeToDark;
+$: ariaLabel = isDark ? t.theme.toLight : t.theme.toDark;
 
 onMount(() => {
   isDark = document.documentElement.classList.contains('dark');

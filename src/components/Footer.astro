@@ -1,251 +1,46 @@
 ---
-import { SOCIAL_LINKS } from '@/lib/constances';
-import { getTodayInSiteTimezone } from '@/lib/dates';
-import { DEFAULT_LANGUAGE, getUrlPrefix } from '@/lib/i18n';
-import {
-  navGroup,
-  navHref,
-  navLabel,
-  SITE_NAVIGATION,
-} from '@/lib/site-navigation';
-import type { Language } from '@/lib/translations';
+/**
+ * Minimal migration footer (Task 7). The four-column footer ships with the
+ * site shell (Task 18); until then: the principle, the licence line, and the
+ * honest pointers that already exist.
+ */
+import type { Language } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
-  lang?: string;
+  lang: string;
 }
 
-const { lang = DEFAULT_LANGUAGE } = Astro.props;
-const language = lang as Language;
-const t = getTranslations(language);
-const prefix = getUrlPrefix(language);
-const year = Number.parseInt(getTodayInSiteTimezone().slice(0, 4), 10);
-
-/**
- * Footer columns come from `SITE_NAVIGATION` so they cannot drift from the
- * header, mobile menu, or agent-Markdown Site Navigation block.
- */
-const howCoragWorksGroup = SITE_NAVIGATION.find(
-  (g) => g.title.en === 'How Corag works'
-);
-const communityGroup = SITE_NAVIGATION.find((g) => g.title.en === 'Community');
-
-const entryByPath = (path: string) =>
-  SITE_NAVIGATION.flatMap((g) => g.entries).find((e) => e.path === path);
-
-const linkFor = (path: string) => {
-  const entry = entryByPath(path);
-  if (!entry) return null;
-  return { label: navLabel(entry, language), href: navHref(entry, language) };
-};
-
-const howCoragWorks = navGroup('How Corag works', language);
-const community = [
-  linkFor('/about'),
-  ...navGroup('Community', language),
-  ...navGroup('Content', language),
-].filter((link): link is { label: string; href: string } => link !== null);
-
-const utilityLinks = [
-  linkFor('/contact'),
-  ...navGroup('Ayuda Directa', language),
-].filter((link): link is { label: string; href: string } => link !== null);
-
-const tagline = t.footer.tagline;
+const { lang } = Astro.props;
+const t = getTranslations(lang as Language);
+const year = new Date().getFullYear();
 ---
 
-<footer
-  class="relative border-t border-cabuya-border bg-cabuya-bg text-cabuya-secondary"
-  style="padding-bottom: max(2rem, env(safe-area-inset-bottom)); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
->
-  <div
-    class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cabuya-primary via-cabuya-accent to-cabuya-primary"
-    aria-hidden="true"
-  >
-  </div>
-
-  <div class="main-container pt-14 pb-10">
-    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-      <div class="lg:col-span-5 text-left">
-        <a
-          href={prefix || '/'}
-          class="inline-flex items-center"
-          aria-label="Corag"
-        >
-          <img
-            src="/images/brand/cabuya-lockup.webp"
-            alt=""
-            width={342}
-            height={100}
-            class="h-12 w-auto dark:hidden sm:h-14"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            src="/images/brand/cabuya-lockup-dark.webp"
-            alt=""
-            width={342}
-            height={100}
-            class="hidden h-12 w-auto dark:block sm:h-14"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-        <p
-          class:list={[
-            'mt-4 max-w-sm text-sm leading-relaxed',
-            'text-cabuya-secondary',
-          ]}
-        >
-          {tagline}
-        </p>
-        <ul class="mt-6 flex gap-2" role="list">
-          {
-            SOCIAL_LINKS.map((social) => (
-              <li>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-cabuya-border text-cabuya-secondary transition-colors hover:border-cabuya-primary hover:text-cabuya"
-                  aria-label={social.label}
-                  data-umami-event="social_click"
-                  data-umami-event-platform={social.icon}
-                >
-                  <img
-                    src={`/icons/${social.icon}.svg`}
-                    alt=""
-                    width={20}
-                    height={20}
-                    loading="lazy"
-                    decoding="async"
-                    class="h-5 w-5 dark:hidden"
-                  />
-                  <img
-                    src={`/icons/${social.icon}_white.svg`}
-                    alt=""
-                    width={20}
-                    height={20}
-                    loading="lazy"
-                    decoding="async"
-                    class="hidden h-5 w-5 dark:block"
-                  />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <nav
-        aria-label={howCoragWorksGroup?.title[language] ?? howCoragWorksGroup?.title.en}
-        class="lg:col-span-3 text-left"
-      >
-        <p
-          class:list={[
-            'text-xs uppercase tracking-widest',
-            'font-semibold text-cabuya-primary',
-          ]}
-        >
-          {howCoragWorksGroup?.title[language] ?? howCoragWorksGroup?.title.en}
-        </p>
-        <ul class="mt-4 space-y-1">
-          {
-            howCoragWorks.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class:list={[
-                    'inline-flex min-h-[44px] items-center text-sm transition-colors',
-                    'text-cabuya-secondary hover:text-cabuya-primary',
-                  ]}
-                  data-umami-event="nav_click"
-                  data-umami-event-item={link.href.split('/').filter(Boolean).pop() ?? 'home'}
-                  data-umami-event-source="footer"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <nav
-        aria-label={communityGroup?.title[language] ?? communityGroup?.title.en}
-        class="lg:col-span-4 text-left"
-      >
-        <p
-          class:list={[
-            'text-xs uppercase tracking-widest',
-            'font-semibold text-cabuya-primary',
-          ]}
-        >
-          {communityGroup?.title[language] ?? communityGroup?.title.en}
-        </p>
-        <ul class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
-          {
-            community.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class:list={[
-                    'inline-flex min-h-[44px] items-center text-sm transition-colors',
-                    'text-cabuya-secondary hover:text-cabuya-primary',
-                  ]}
-                  data-umami-event="nav_click"
-                  data-umami-event-item={link.href.split('/').filter(Boolean).pop() ?? 'home'}
-                  data-umami-event-source="footer"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-    </div>
-
+<footer class="border-t border-cabuya-border bg-cabuya-bg-elevated">
+  <div class="main-container py-10">
+    <blockquote class="max-w-xl text-cabuya-text">
+      {t.footer.principle}
+      <span class="mt-1 block text-sm text-cabuya-text-muted">
+        {t.footer.principleGloss}
+      </span>
+    </blockquote>
     <div
-      class:list={[
-        'mt-12 flex flex-col gap-5 border-t pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8',
-        'border-cabuya-border',
-      ]}
+      class="mt-8 flex flex-col gap-2 border-t border-cabuya-border pt-6 text-sm text-cabuya-text-muted md:flex-row md:items-center md:justify-between"
     >
-      <p
-        class:list={[
-          'text-sm leading-relaxed',
-          'text-cabuya-secondary',
-        ]}
-      >
-        &copy; {year}{' '}
-        {t.footer.copyright}. {t.footer.allRightsReserved}
-      </p>
-      <nav
-        aria-label={language === 'es' ? 'Enlaces rápidos' : 'Quick links'}
-        class="flex flex-wrap items-center gap-x-6 gap-y-2"
-      >
-        {
-          utilityLinks.map((link) => (
-            <a
-              href={link.href}
-              class:list={[
-                'inline-flex min-h-[44px] items-center text-sm font-bold tracking-wide hover:underline',
-                'text-cabuya-primary',
-              ]}
-              data-umami-event="nav_click"
-              data-umami-event-item={link.href.includes('://')
-                ? 'app'
-                : (link.href.split('/').filter(Boolean).pop() ?? 'home')}
-              data-umami-event-source="footer"
-              {...(link.href.startsWith('http')
-                ? { target: '_blank', rel: 'noopener noreferrer' }
-                : {})}
-            >
-              {link.label}
-            </a>
-          ))
-        }
+      <p>© {year} Cabuya · {t.footer.license}</p>
+      <nav aria-label="Footer" class="flex gap-5">
+        <a href={GITHUB_URL} class="nav-link" rel="noopener" target="_blank">
+          {t.footer.sourceCode}
+        </a>
+        <a
+          href={`${GITHUB_URL}/tree/main/docs/context`}
+          class="nav-link"
+          rel="noopener"
+          target="_blank"
+        >
+          {t.footer.foundingRecord}
+        </a>
       </nav>
     </div>
   </div>
