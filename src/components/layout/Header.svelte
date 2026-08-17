@@ -383,8 +383,18 @@ onMount(() => {
           -->
           <span class="sr-only">{labels.language}:</span>
           {lang.toUpperCase()}
+          <!--
+            The chevron is the first thing to go on a folded phone.
+
+            At 280px the header cluster — switcher, theme toggle, drawer button —
+            plus the logo overran the viewport by 13px, and `gap-2` is a floor
+            rather than a knob: the responsive audit fails any pair of touch
+            targets closer than 8px. Dropping the chevron below 340px buys 18px
+            and costs nothing the disclosure needs: the control is still a button
+            carrying `aria-expanded`, and the globe is still the affordance.
+          -->
           <svg
-            class="h-3 w-3 transition-transform duration-150"
+            class="h-3 w-3 transition-transform duration-150 max-[339px]:hidden"
             class:rotate-180={openGroup === 'language'}
             viewBox="0 0 12 12"
             fill="none"
