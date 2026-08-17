@@ -1,0 +1,47 @@
+---
+/**
+ * An image or diagram with its caption.
+ *
+ * `width` and `height` are required, not optional: a figure without intrinsic
+ * dimensions reserves no space, and the caption below it jumps when the image
+ * lands. That is most of the layout shift a content site ever produces.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption?: string;
+  /** Above-the-fold figures opt out of lazy loading. */
+  eager?: boolean;
+  class?: string;
+}
+const {
+  src,
+  alt,
+  width,
+  height,
+  caption,
+  eager = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<figure class:list={['my-8', className]}>
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding={eager ? 'sync' : 'async'}
+    class="h-auto w-full rounded-xl border border-cabuya-border"
+  />
+  {
+    caption && (
+      <figcaption class="mt-3 text-sm text-cabuya-text-secondary">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

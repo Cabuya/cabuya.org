@@ -1,6 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import type { Language } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -33,11 +34,21 @@ const homeHref = lang === 'en' ? '/' : `/${lang}/`;
     <p class="mx-auto mt-4 max-w-xl text-cabuya-secondary">
       {t.notFoundPage.description}
     </p>
-    <a
-      href={homeHref}
-      class="mt-10 inline-block rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong"
-    >
-      {t.notFoundPage.backHome}
-    </a>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href={homeHref}
+        class="inline-block rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+      >
+        {t.notFoundPage.backHome}
+      </a>
+      <a
+        href={`${GITHUB_URL}/tree/main/docs/context`}
+        rel="noopener"
+        target="_blank"
+        class="inline-block rounded-cabuya-sm border border-cabuya-border-interactive px-6 py-3 font-medium text-cabuya-primary transition-colors hover:bg-cabuya-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+      >
+        {t.notFoundPage.otherExitLabel}
+      </a>
+    </div>
   </section>
 </MainLayout>

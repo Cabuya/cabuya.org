@@ -12,7 +12,7 @@
  */
 import { SITE_URL } from '@/lib/constances';
 import { getUrlPrefix, type Language } from '@/lib/i18n';
-import { NAV_ENTRIES, navHref } from '@/lib/site-navigation';
+import { agentNavEntries, navHref } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
 
 export interface MarkdownSection {
@@ -44,7 +44,7 @@ export function alternateUrl(lang: Language, routePath: string): string {
 export function siteNavigationBlock(lang: Language): string[] {
   const t = getTranslations(lang);
   const lines = [`## ${t.markdown.siteNavigation}`, ''];
-  for (const entry of NAV_ENTRIES) {
+  for (const entry of agentNavEntries()) {
     const href = entry.external
       ? entry.path
       : `${SITE_URL}${navHref(entry, lang)}`;

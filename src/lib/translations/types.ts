@@ -14,6 +14,8 @@ export interface SiteTranslations {
   siteTitle: string;
   siteTitleFull: string;
   siteDescription: string;
+  /** One line for the footer column — shorter than the meta description. */
+  siteDescriptionShort: string;
 
   nav: {
     home: string;
@@ -22,6 +24,14 @@ export interface SiteTranslations {
     openMenu: string;
     closeMenu: string;
     switchToLanguage: string; // label for the language switcher target
+    skipToContent: string;
+  };
+
+  /** The one standing banner: the spec is a draft under review. */
+  specBanner: {
+    label: string;
+    text: string;
+    linkLabel: string;
   };
 
   theme: {
@@ -46,6 +56,8 @@ export interface SiteTranslations {
     license: string;
     sourceCode: string;
     foundingRecord: string;
+    languages: string;
+    specStatus: string;
   };
 
   notFoundPage: {
@@ -53,6 +65,8 @@ export interface SiteTranslations {
     title: string;
     description: string;
     backHome: string;
+    /** Second exit: the portal, for someone who followed a docs link. */
+    otherExitLabel: string;
   };
 
   markdown: {

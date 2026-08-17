@@ -1,0 +1,20 @@
+---
+/**
+ * A hairline rule.
+ *
+ * Decorative by default — `<hr>` is announced as a separator, and a page with
+ * fifteen of them is a page a screen-reader user has to wade through. Pass
+ * `semantic` when the rule genuinely marks a change of subject that the
+ * heading structure does not already express.
+ */
+interface Props {
+  semantic?: boolean;
+  class?: string;
+}
+const { semantic = false, class: className = '' } = Astro.props;
+---
+
+<hr
+  class:list={['border-0 border-t border-cabuya-border', className]}
+  role={semantic ? undefined : 'presentation'}
+/>

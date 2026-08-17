@@ -1,0 +1,53 @@
+---
+/**
+ * A boxed aside: a note, a caveat, a limitation stated plainly.
+ *
+ * The tone token sets the colour, but the label carries the meaning — a
+ * callout that says only "⚠" in amber tells a colour-blind reader nothing.
+ * Every variant renders its label as text.
+ */
+type Tone = 'note' | 'caution' | 'limit';
+
+interface Props {
+  tone?: Tone;
+  /** Overrides the default label; keep it short and literal. */
+  label?: string;
+  class?: string;
+}
+
+const { tone = 'note', label, class: className = '' } = Astro.props;
+
+const TONE: Record<Tone, { border: string; text: string; label: string }> = {
+  note: {
+    border: 'border-cabuya-info/40 bg-cabuya-info-soft',
+    text: 'text-cabuya-info',
+    label: 'Note',
+  },
+  caution: {
+    border: 'border-cabuya-warning/40 bg-cabuya-warning-soft',
+    text: 'text-cabuya-warning',
+    label: 'Caution',
+  },
+  limit: {
+    border: 'border-cabuya-border bg-cabuya-bg-brand/50',
+    text: 'text-cabuya-text-muted',
+    label: 'What this does not do',
+  },
+};
+
+const style = TONE[tone];
+---
+
+<aside class:list={['my-6 rounded-xl border p-5', style.border, className]}>
+  <p
+    class:list={[
+      'mb-1.5 text-xs font-semibold uppercase tracking-wider',
+      style.text,
+    ]}
+  >
+    {label ?? style.label}
+  </p>
+  <div class="text-sm leading-relaxed text-cabuya-text-secondary">
+    <slot />
+  </div>
+</aside>

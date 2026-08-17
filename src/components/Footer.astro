@@ -1,11 +1,18 @@
 ---
 /**
- * Minimal migration footer (Task 7). The four-column footer ships with the
- * site shell (Task 18); until then: the principle, the licence line, and the
- * honest pointers that already exist.
+ * The site footer: four columns per the IA, then the founding principle.
+ *
+ * Columns come from `site-navigation.ts` and are pruned to live routes, so the
+ * footer grows as the site does without anyone remembering to edit it — and it
+ * never lists a page that does not exist.
+ *
+ * The principle is rendered in Spanish with an English gloss in both languages,
+ * rather than translated. It is a phrase the working group said in Spanish;
+ * replacing it with an English sentence would quietly erase where it came from.
  */
 import type { Language } from '@/lib/i18n';
-import { GITHUB_URL } from '@/lib/site-navigation';
+import { getUrlPrefix } from '@/lib/i18n';
+import { liveFooterColumns, navHref } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -13,35 +20,106 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const t = getTranslations(lang as Language);
+const language = lang as Language;
+const t = getTranslations(language);
+const columns = liveFooterColumns();
 const year = new Date().getFullYear();
+
+const languageLinks: Array<{ code: Language; label: string }> = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+];
 ---
 
-<footer class="border-t border-cabuya-border bg-cabuya-bg-elevated">
-  <div class="main-container py-10">
-    <blockquote class="max-w-xl text-cabuya-text">
-      {t.footer.principle}
-      <span class="mt-1 block text-sm text-cabuya-text-muted">
-        {t.footer.principleGloss}
-      </span>
-    </blockquote>
-    <div
-      class="mt-8 flex flex-col gap-2 border-t border-cabuya-border pt-6 text-sm text-cabuya-text-muted md:flex-row md:items-center md:justify-between"
-    >
-      <p>© {year} Cabuya · {t.footer.license}</p>
-      <nav aria-label="Footer" class="flex gap-5">
-        <a href={GITHUB_URL} class="nav-link" rel="noopener" target="_blank">
-          {t.footer.sourceCode}
-        </a>
+<footer class="mt-24 border-t border-cabuya-border bg-cabuya-bg-elevated">
+  <div class="main-container py-12 sm:py-16">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+      <div class="lg:col-span-1">
         <a
-          href={`${GITHUB_URL}/tree/main/docs/context`}
-          class="nav-link"
-          rel="noopener"
-          target="_blank"
+          href={getUrlPrefix(language) || '/'}
+          class="inline-flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabuya-primary"
+          aria-label="Cabuya"
         >
-          {t.footer.foundingRecord}
+          <img
+            src="/images/brand/cabuya-isologo.webp"
+            alt=""
+            width="32"
+            height="32"
+            class="h-8 w-8"
+          />
+          <span class="font-display text-base font-bold text-cabuya-primary">
+            Cabuya
+          </span>
         </a>
+        <p class="mt-3 max-w-xs text-sm text-cabuya-text-secondary">
+          {t.siteDescriptionShort}
+        </p>
+      </div>
+
+      {
+        columns.map((column) => (
+          <nav aria-label={column.label[language] ?? column.label.en}>
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+              {column.label[language] ?? column.label.en}
+            </h2>
+            <ul class="mt-3 flex flex-col gap-2">
+              {column.entries.map((entry) => (
+                <li>
+                  <a
+                    href={navHref(entry, language)}
+                    class="nav-link text-sm"
+                    rel={entry.external ? 'noopener' : undefined}
+                    target={entry.external ? '_blank' : undefined}
+                  >
+                    {entry.label[language] ?? entry.label.en}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+
+      <nav aria-label={t.footer.languages}>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+          {t.footer.languages}
+        </h2>
+        <ul class="mt-3 flex flex-col gap-2">
+          {
+            languageLinks.map((entry) => (
+              <li>
+                <a
+                  href={getUrlPrefix(entry.code) || '/'}
+                  class="nav-link text-sm"
+                  hreflang={entry.code}
+                  lang={entry.code}
+                  aria-current={entry.code === language ? 'true' : undefined}
+                >
+                  {entry.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </nav>
+    </div>
+
+    <div class="mt-12 border-t border-cabuya-border pt-8">
+      <blockquote class="max-w-2xl">
+        <p class="font-display text-lg text-cabuya-text" lang="es">
+          {t.footer.principle}
+        </p>
+        <footer class="mt-1 text-sm text-cabuya-text-secondary">
+          {t.footer.principleGloss}
+        </footer>
+      </blockquote>
+
+      <div
+        class="mt-8 flex flex-col gap-2 text-sm text-cabuya-text-muted md:flex-row md:items-center md:justify-between"
+      >
+        <p>© {year} Cabuya · {t.footer.license}</p>
+        <p>{t.footer.specStatus}</p>
+      </div>
     </div>
   </div>
 </footer>

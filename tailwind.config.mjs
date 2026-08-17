@@ -14,7 +14,8 @@ export default {
               color: 'var(--tw-prose-headings)',
               fontWeight: '700',
             },
-            // más personalizaciones...
+            // Everything else comes from the token-mapped `--tw-prose-*`
+            // variables in global.css.
           },
         },
       },

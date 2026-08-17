@@ -1,0 +1,16 @@
+---
+/**
+ * The paragraph directly under a heading that frames the section.
+ *
+ * One per section, at most. A page where every paragraph is a lead has no
+ * lead — the size stops meaning "start here" and becomes decoration.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<p class:list={['max-w-2xl text-lg leading-relaxed text-cabuya-text-secondary', className]}>
+  <slot />
+</p>

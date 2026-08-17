@@ -1,0 +1,22 @@
+---
+/**
+ * A small label above a heading, naming the section the reader is entering.
+ *
+ * Never a link and never the only thing that identifies a section: a screen
+ * reader moving by heading skips kickers entirely, so anything load-bearing
+ * belongs in the heading itself.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<p
+  class:list={[
+    'text-xs font-semibold uppercase tracking-[0.12em] text-cabuya-text-muted',
+    className,
+  ]}
+>
+  <slot />
+</p>

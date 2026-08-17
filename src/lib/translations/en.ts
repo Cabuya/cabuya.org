@@ -6,6 +6,8 @@ export const en: SiteTranslations = {
   siteTitleFull: 'Cabuya — the open aid interoperability protocol',
   siteDescription:
     'Cabuya is an open format that lets aid apps publish and read the same data: collection points, needs, capacities and deliveries. Any team can implement it in an afternoon, and nobody has to ask anyone for permission.',
+  siteDescriptionShort:
+    'An open format so aid apps publish and read the same data. Conformance is measured, never declared.',
 
   nav: {
     home: 'Home',
@@ -14,6 +16,13 @@ export const en: SiteTranslations = {
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
     switchToLanguage: 'Cambiar a español',
+    skipToContent: 'Skip to content',
+  },
+
+  specBanner: {
+    label: 'Draft',
+    text: 'Specification 0.1 is a draft under review. Anchors and field names may still change.',
+    linkLabel: 'How the protocol changes',
   },
 
   theme: {
@@ -42,6 +51,8 @@ export const en: SiteTranslations = {
     license: 'Apache-2.0 code · CC0 spec & registry',
     sourceCode: 'Source code',
     foundingRecord: 'Founding record',
+    languages: 'Languages',
+    specStatus: 'Specification 0.1 — draft under review',
   },
 
   notFoundPage: {
@@ -50,6 +61,7 @@ export const en: SiteTranslations = {
     description:
       'The thread you followed leads nowhere — the page may have moved during the migration, or the address has a typo.',
     backHome: 'Back to the home page',
+    otherExitLabel: 'Read the founding record',
   },
 
   markdown: {
