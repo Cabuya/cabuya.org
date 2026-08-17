@@ -34,7 +34,7 @@ const strings = {
       { id: 'L4', name: 'Federates', effort: 'Per app' },
     ],
     stopKicker: 'Stops at L1 — respected',
-    stops: ['Directory-only — by choice', 'Link-out-only — by rule §7.1'],
+    stops: ['Directory-only — by choice', 'Link-out-only — by rule 7.1'],
     measured: 'Measured, never declared',
   },
   es: {
@@ -47,7 +47,7 @@ const strings = {
       { id: 'L4', name: 'Federa', effort: 'Según la app' },
     ],
     stopKicker: 'Se detienen en L1 — respetadas',
-    stops: ['Solo directorio — por decisión', 'Solo enlace — por regla §7.1'],
+    stops: ['Solo directorio — por decisión', 'Solo enlace — por regla 7.1'],
     measured: 'Se mide, nunca se declara',
   },
 } as const;
@@ -57,10 +57,27 @@ const t = {
   ...(copy[lang as keyof typeof copy] ?? copy.en),
 };
 
-// Geometry: each rung sits one step right and one step up from the last.
-const STEP_W = 112;
-const STEP_H = 46;
-const RUNG_H = 48;
+/*
+ * Geometry: each rung sits one step right and one step up from the last.
+ *
+ * Every number here earns its keep, because three of them were wrong and the
+ * drawing showed it: at 48 units tall a rung could not hold a two-line name, so
+ * "Serves & consumes" spilled out of its box; the rise was shorter than a rung,
+ * so boxes touched; and the "measured, never declared" label was drawn at the
+ * top rung's own vertical centre, which put it straight through the L4 box.
+ *
+ * The rung is now tall enough for two lines plus their descenders, the rise is
+ * taller than the rung so the stair has air between treads, and the labels are
+ * placed relative to box edges rather than to centres.
+ */
+const STEP_W = 116;
+const STEP_H = 52;
+const RUNG_W = 104;
+const RUNG_H = 54;
+/** The drawing's own coordinate space, kept in one place. */
+const VIEW = { width: 640, height: 360 };
+/** Where the accent line ends: inside the box, with room for the 4px dot. */
+const ACCENT_X = VIEW.width - 24;
 
 /**
  * Level names wrap to two lines when they need to.
@@ -77,8 +94,9 @@ function wrap(name: string): string[] {
   const first = words.slice(0, -1).join(' ');
   return [first, words[words.length - 1]];
 }
-const BASE_X = 40;
-const BASE_Y = 268;
+const BASE_X = 24;
+/** The bottom rung's top edge: its effort label still fits under it. */
+const BASE_Y = 276;
 const rungs = t.levels.map((level, index) => ({
   ...level,
   lines: wrap(level.name),
@@ -87,6 +105,22 @@ const rungs = t.levels.map((level, index) => ({
   // L2 is the rung the whole site is trying to get people to: the one accent.
   accent: level.id === 'L2',
 }));
+
+const top = rungs[rungs.length - 1];
+/**
+ * The two classes that stop at L1, and where the note sits.
+ *
+ * It stays inside the drawing rather than becoming a caption — the point of this
+ * figure is that they are members, not a footnote — but it moves into the empty
+ * upper-left quadrant, which is the only region no rung, effort label or accent
+ * line passes through. A dashed hairline ties it to the L1 rung.
+ */
+const stopsNote = { x: BASE_X, kickerY: 96, firstLineY: 120, lineHeight: 19 };
+const stopsConnector = {
+  x: rungs[1].x,
+  y1: stopsNote.firstLineY + stopsNote.lineHeight + 12,
+  y2: rungs[1].y - 8,
+};
 ---
 
 <!--
@@ -102,12 +136,20 @@ const rungs = t.levels.map((level, index) => ({
   tabindex="0"
 >
   <svg
-    viewBox="0 0 640 340"
+    viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
     aria-hidden="true"
     focusable="false"
-    style="aspect-ratio: 640 / 340"
+    style={`aspect-ratio: ${VIEW.width} / ${VIEW.height}`}
   >
     <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- The rise, drawn as one continuous hairline *under* the rungs -->
+    <path
+      d={`M ${BASE_X} ${BASE_Y + RUNG_H} ${rungs
+        .map((r) => `L ${r.x} ${r.y + RUNG_H} L ${r.x + RUNG_W} ${r.y + RUNG_H}`)
+        .join(' ')}`}
+      class="cabuya-line"
+    />
 
     <!-- The rungs -->
     {
@@ -116,60 +158,48 @@ const rungs = t.levels.map((level, index) => ({
           <rect
             x={rung.x}
             y={rung.y}
-            width={STEP_W - 12}
+            width={RUNG_W}
             height={RUNG_H}
             rx="6"
             class:list={['cabuya-node', rung.accent && 'cabuya-node--accent']}
           />
-          <text x={rung.x + 12} y={rung.y + 16} class="cabuya-label">
+          <text x={rung.x + 12} y={rung.y + 20} class="cabuya-label">
             {rung.id}
           </text>
           {rung.lines.map((line, lineIndex) => (
             <text
               x={rung.x + 12}
-              y={rung.y + 32 + lineIndex * 13}
+              y={rung.y + 37 + lineIndex * 13}
               class="cabuya-sub"
-              style="font-size: 10.5px"
+              style="font-size: 11px"
             >
               {line}
             </text>
           ))}
-          <text
-            x={rung.x + 12}
-            y={rung.y + RUNG_H + 15}
-            class="cabuya-kicker"
-          >
+          <text x={rung.x + 12} y={rung.y + RUNG_H + 16} class="cabuya-kicker">
             {rung.effort}
           </text>
         </g>
       ))
     }
 
-    <!-- The rise, drawn as one continuous hairline behind the rungs -->
-    <path
-      d={`M ${BASE_X} ${BASE_Y + RUNG_H} ${rungs
-        .map((r) => `L ${r.x} ${r.y + RUNG_H} L ${r.x + STEP_W - 12} ${r.y + RUNG_H}`)
-        .join(' ')}`}
-      class="cabuya-line"
-    />
-
     <!-- The two classes that stop at L1, drawn on the ladder, not beside it -->
     <line
-      x1={BASE_X + STEP_W}
-      y1={BASE_Y - STEP_H - 30}
-      x2={BASE_X + STEP_W}
-      y2={BASE_Y - STEP_H - 92}
+      x1={stopsConnector.x}
+      y1={stopsConnector.y1}
+      x2={stopsConnector.x}
+      y2={stopsConnector.y2}
       class="cabuya-line cabuya-line--dashed"
     />
     <g>
-      <text x={BASE_X + STEP_W + 10} y={BASE_Y - STEP_H - 92} class="cabuya-kicker">
+      <text x={stopsNote.x} y={stopsNote.kickerY} class="cabuya-kicker">
         {t.stopKicker}
       </text>
       {
         t.stops.map((stop, index) => (
           <text
-            x={BASE_X + STEP_W + 10}
-            y={BASE_Y - STEP_H - 72 + index * 18}
+            x={stopsNote.x}
+            y={stopsNote.firstLineY + index * stopsNote.lineHeight}
             class="cabuya-sub"
           >
             {stop}
@@ -178,24 +208,30 @@ const rungs = t.levels.map((level, index) => ({
       }
     </g>
 
-    <!-- The measured claim, at the top of the climb -->
+    <!--
+      The measured claim, above the top rung rather than across it.
+
+      Right-anchored on the top rung's own right edge, so the label reads as
+      belonging to L4 and to the line that leaves it, and it cannot run off the
+      frame the way an end-anchor at the accent line's tip did.
+    -->
     <g>
       <line
-        x1={rungs[4].x + STEP_W - 12}
-        y1={rungs[4].y + RUNG_H / 2}
-        x2="600"
-        y2={rungs[4].y + RUNG_H / 2}
+        x1={top.x + RUNG_W}
+        y1={top.y + RUNG_H / 2}
+        x2={ACCENT_X}
+        y2={top.y + RUNG_H / 2}
         class="cabuya-line cabuya-line--accent"
       />
       <circle
-        cx="600"
-        cy={rungs[4].y + RUNG_H / 2}
+        cx={ACCENT_X}
+        cy={top.y + RUNG_H / 2}
         r="4"
         class="cabuya-arrowhead--accent"
       />
       <text
-        x="600"
-        y={rungs[4].y + RUNG_H / 2 - 18}
+        x={top.x + RUNG_W}
+        y={top.y - 12}
         text-anchor="end"
         class="cabuya-kicker"
       >

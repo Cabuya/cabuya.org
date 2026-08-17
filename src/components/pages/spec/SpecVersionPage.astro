@@ -56,8 +56,16 @@ const metaDescription =
             href={`${prefix}/developers/spec/${version}/${section.slug}`}
             class="group flex items-baseline gap-3 rounded-cabuya-sm border border-cabuya-border px-4 py-3 transition-colors hover:border-cabuya-primary"
           >
+            {/*
+              The number without the section sign.
+
+              `§` belongs to the specification's own headings, where it is the
+              document's numbering and the thing every anchor is derived from
+              (`satteriSpecAnchors`). Repeated in our chrome, beside a title that
+              already says which section this is, it reads as a stray glyph.
+            */}
             <span class="font-mono text-xs text-cabuya-text-muted">
-              §{section.number}
+              {section.number}
             </span>
             <span class="font-medium group-hover:text-cabuya-primary">
               {section.title}

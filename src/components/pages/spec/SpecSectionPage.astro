@@ -65,7 +65,8 @@ const body = localizeInternalLinks(await Astro.slots.render('default'), lang);
       label: section.version,
       href: `${prefix}/developers/spec/${section.version}`,
     },
-    { label: `§${section.number}` },
+    /* The title, not `§7`: a breadcrumb's last step should name the page. */
+    { label: section.title },
   ]}
   headings={buildToc(headings)}
 >
@@ -108,7 +109,7 @@ const body = localizeInternalLinks(await Astro.slots.render('default'), lang);
             class="group rounded-cabuya-sm border border-cabuya-border p-4 transition-colors hover:border-cabuya-primary"
           >
             <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
-              {t.docs.previous} · §{previous.number}
+              {t.docs.previous} · {previous.number}
             </span>
             <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
               {previous.title}
@@ -123,7 +124,7 @@ const body = localizeInternalLinks(await Astro.slots.render('default'), lang);
             class="group rounded-cabuya-sm border border-cabuya-border p-4 text-right transition-colors hover:border-cabuya-primary sm:col-start-2"
           >
             <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
-              {t.docs.next} · §{next.number}
+              {t.docs.next} · {next.number}
             </span>
             <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
               {next.title}

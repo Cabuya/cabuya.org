@@ -75,8 +75,16 @@ const t = {
 const STEP_W = 112;
 const GAP = 16;
 const LEFT = 16;
-const TOP = 96;
+/*
+ * `TOP` leaves room for the "you are here" marker above the active step — its
+ * label sits at `TOP - 40` — and nothing more. It was 96, which on the landing,
+ * where no step is active, rendered 70 units of empty band under the kicker and
+ * made the whole figure read smaller than the space it occupies.
+ */
+const TOP = 84;
 const H = 92;
+/** Just enough room under the row for the total-effort label. */
+const VIEW = { width: 640, height: 224 };
 const steps = t.steps.map((step, index) => ({
   ...step,
   x: LEFT + index * (STEP_W + GAP),
@@ -97,10 +105,10 @@ const steps = t.steps.map((step, index) => ({
   tabindex="0"
 >
   <svg
-    viewBox="0 0 640 260"
+    viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
     aria-hidden="true"
     focusable="false"
-    style="aspect-ratio: 640 / 260"
+    style={`aspect-ratio: ${VIEW.width} / ${VIEW.height}`}
   >
     <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
 
@@ -159,7 +167,7 @@ const steps = t.steps.map((step, index) => ({
       ))
     }
 
-    <text x="320" y="248" text-anchor="middle" class="cabuya-kicker">
+    <text x="320" y={VIEW.height - 12} text-anchor="middle" class="cabuya-kicker">
       {t.total}
     </text>
   </svg>

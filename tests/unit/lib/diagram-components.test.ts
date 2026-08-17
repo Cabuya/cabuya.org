@@ -94,8 +94,30 @@ describe.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
       expect(source).toContain('aria-label={t.ariaLabel}');
     });
 
-    it('reserves its own space', () => {
-      expect(source).toMatch(/aspect-ratio:\s*\d+\s*\/\s*\d+/);
+    it('reserves its own space, from the same numbers as its viewBox', () => {
+      /*
+       * The figure must declare an aspect ratio or it has no height until the
+       * SVG lays out, which is a shift on every diagram page. The ratio also has
+       * to be the viewBox's own numbers — a box that reserves the wrong height
+       * shifts the page just as surely as one that reserves none.
+       *
+       * Literal (`aspect-ratio: 640 / 340`) and interpolated
+       * (`aspect-ratio: ${VIEW.width} / ${VIEW.height}`) both pass, because the
+       * comparison is against whatever the `viewBox` says in the same file. The
+       * interpolated form is the better one: it cannot drift.
+       */
+      const aspect = source.match(/aspect-ratio:\s*([^"`;]+)/)?.[1];
+      expect(aspect, 'the figure must declare an aspect ratio').toBeTruthy();
+
+      const viewBox = source.match(
+        /viewBox=(?:"0 0 ([^"]+)"|\{`0 0 ([^`]+)`\})/
+      );
+      const dimensions = viewBox?.[1] ?? viewBox?.[2];
+      expect(dimensions, 'the SVG must declare a viewBox').toBeTruthy();
+
+      const parts = (value: string) =>
+        value.replace(/\//g, ' ').split(/\s+/).filter(Boolean);
+      expect(parts(aspect ?? '')).toEqual(parts(dimensions ?? ''));
     });
 
     it('hides the SVG from assistive technology', () => {
