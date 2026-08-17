@@ -34,6 +34,8 @@ import ThemeToggle from './ThemeToggle.svelte';
 export let lang: Language;
 /** Current path, so active state and the switcher work without reading location. */
 export let pathname = '/';
+/** Which theme preference the toggle writes — the portal keeps its own. */
+export let themeScope: 'site' | 'docs' = 'site';
 /** Injectable for tests; defaults to whatever is live today. */
 export let groups: NavGroup[] = liveGroups();
 
@@ -343,6 +345,7 @@ onMount(() => {
       </a>
       <ThemeToggle
         labels={{ toDark: labels.toDark, toLight: labels.toLight }}
+        scope={themeScope}
       />
 
       {#if groups.length > 0}

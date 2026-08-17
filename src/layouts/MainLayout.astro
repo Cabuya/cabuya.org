@@ -26,12 +26,21 @@ interface Props {
   preloadFonts?: boolean;
   lcpImageHref?: string;
   lcpImageMedia?: string;
+  /**
+   * Which theme preference this page reads and writes.
+   *
+   * `docs` is the developers portal, which defaults to dark. See the script
+   * below for why that default does not override a reader who has already
+   * chosen.
+   */
+  themeScope?: 'site' | 'docs';
 }
 
 const {
   lang,
   title,
   description,
+  themeScope = 'site',
   canonicalPath,
   image,
   keywords,
@@ -79,8 +88,41 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       lcpImageMedia={lcpImageMedia}
     />
     <slot name="head" />
-    <script is:inline>
-  (function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');})();
+    {/*
+      Theme resolution, before first paint.
+
+      Two scopes, because the portal is a different surface: it has a sidebar,
+      a contents rail and code on every page, and dark is what a reader of that
+      surface expects. The landing is not that surface.
+
+      A scoped default is only safe if it is a *default*. Three rules keep the
+      flip from reading as a bug:
+
+      1. It happens here, in a blocking script, so the page never paints in one
+         theme and repaints in the other.
+      2. It coincides with entering the portal, where the sidebar and contents
+         rail appear at the same moment. A theme change that lands with a
+         visible change of context reads as intent; one that lands alone reads
+         as breakage.
+      3. It never overrides a reader who has already chosen. Someone who set
+         light did so for a reason — for some readers dark type haloes and is
+         genuinely harder — so an explicit site preference carries into the
+         portal. The dark default is for readers who have expressed nothing,
+         and one toggle inside the portal pins the portal separately from then
+         on.
+    */}
+    <script is:inline define:vars={{ themeScope }}>
+  (function () {
+    var key = themeScope === 'docs' ? 'theme:docs' : 'theme';
+    var choice = null;
+    try {
+      choice = localStorage.getItem(key) || (themeScope === 'docs' ? localStorage.getItem('theme') : null);
+    } catch (error) {
+      /* Storage disabled. Fall through to the scope's default. */
+    }
+    if (!choice) choice = themeScope === 'docs' ? 'dark' : 'light';
+    document.documentElement.classList.toggle('dark', choice === 'dark');
+  })();
 </script>
   </head>
   <body
@@ -112,6 +154,7 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
         client:idle
         lang={language}
         pathname={pathname}
+        themeScope={themeScope}
         labels={{
           openMenu: t.nav.openMenu,
           closeMenu: t.nav.closeMenu,

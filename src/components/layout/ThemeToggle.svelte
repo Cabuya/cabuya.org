@@ -20,6 +20,14 @@ export let labels: { toDark: string; toLight: string } = {
 };
 /** `header` sits in the desktop nav; `menu` is a larger mobile control. */
 export let placement: 'header' | 'menu' = 'header';
+/**
+ * Which preference this button writes.
+ *
+ * The portal keeps its own, so a reader who wants dark docs and a light
+ * landing gets both. A single global key would make this button appear to
+ * work and then be overridden on the next navigation.
+ */
+export let scope: 'site' | 'docs' = 'site';
 
 let isDark = false;
 
@@ -33,7 +41,7 @@ function toggleTheme() {
   isDark = document.documentElement.classList.toggle('dark');
   const newTheme = isDark ? 'dark' : 'light';
   try {
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem(scope === 'docs' ? 'theme:docs' : 'theme', newTheme);
   } catch {
     // Storage disabled — visual toggle still works for this session.
   }
