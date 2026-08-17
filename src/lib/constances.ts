@@ -154,7 +154,29 @@ const cloudflareBeaconToken = (
   import.meta.env.PUBLIC_CF_BEACON_TOKEN || ''
 ).trim();
 
+/**
+ * Umami Cloud's website id.
+ *
+ * The script URL is fixed rather than configurable: it is the one host the CSP
+ * allows, and a variable one would mean either a wildcard in `script-src` or a
+ * setting that silently fails when it disagrees with the policy. One id in the
+ * environment, one origin in the policy.
+ *
+ * Env-gated like the beacon, and for the same reason — a fork, a preview and a
+ * local build send nothing. Nobody's development traffic lands in the
+ * dashboard.
+ */
+const umamiWebsiteId = (import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '').trim();
+
 export const ANALYTICS = {
+  umami: {
+    websiteId: umamiWebsiteId,
+    scriptUrl: 'https://cloud.umami.is/script.js',
+    /** Cookieless and identifier-free, so there is nothing to consent to. */
+    enabled:
+      Boolean(umamiWebsiteId) &&
+      (import.meta.env.PROD || import.meta.env.PUBLIC_UMAMI_ENABLE === 'true'),
+  },
   cloudflare: {
     token: cloudflareBeaconToken,
     /**

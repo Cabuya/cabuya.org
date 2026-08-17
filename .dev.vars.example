@@ -58,5 +58,9 @@ CF_KV_READ_TOKEN=
 # These are `PUBLIC_` (build-time, Astro) rather than Function bindings, so
 # they belong in the Pages build environment, not here — listed for
 # completeness.
+#   PUBLIC_UMAMI_WEBSITE_ID  — cloud.umami.is → Settings → Websites → the id.
+#                              Setting it is all that is needed: the script URL
+#                              is fixed and already allowed by the CSP.
+#   PUBLIC_UMAMI_ENABLE      — "true" to load it outside production, to verify
 #   PUBLIC_CF_BEACON_TOKEN   — dash.cloudflare.com → Web Analytics → JS snippet
 #   PUBLIC_CF_BEACON_ENABLE  — "true" to load it outside production, to verify

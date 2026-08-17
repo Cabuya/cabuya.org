@@ -48,8 +48,19 @@ import { join } from 'node:path';
 const DIST = 'dist';
 const HEADERS = join(DIST, '_headers');
 
-/** The one third-party script origin: the analytics beacon. */
+/**
+ * The third-party origins the policy allows, and the only ones.
+ *
+ * Both are analytics and both are env-gated in the page, so a deployment that
+ * configures neither loads neither — the policy simply permits them.
+ *
+ * `UMAMI` appears in `connect-src` as well as `script-src`: the script loads
+ * from that host and posts its page views back to `/api/send` on it. Allowing
+ * only the load produces a script that runs and reports nothing, which is the
+ * worst shape of broken analytics — it looks configured.
+ */
 const BEACON = 'https://static.cloudflareinsights.com';
+const UMAMI = 'https://cloud.umami.is';
 
 function htmlFiles(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -98,6 +109,7 @@ function policy(hashes) {
   const scriptSources = [
     "'self'",
     BEACON,
+    UMAMI,
     ...hashes.map((hash) => `'sha256-${hash}'`),
   ].join(' ');
 
@@ -112,7 +124,7 @@ function policy(hashes) {
     // Inline styles: Astro's scoped component CSS. See the note above.
     "style-src 'self' 'unsafe-inline'",
     `script-src ${scriptSources}`,
-    "connect-src 'self'",
+    `connect-src 'self' ${UMAMI}`,
     'upgrade-insecure-requests',
   ].join('; ');
 }

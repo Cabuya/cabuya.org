@@ -289,6 +289,29 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
 />
 
 <!--
+  Analytics: Umami Cloud — cookieless, no identifiers, no consent banner.
+
+  One `<script>` with the website id; Umami records the page view itself. It
+  loads only when `PUBLIC_UMAMI_WEBSITE_ID` is set, so a fork, a preview and a
+  local build send nothing.
+
+  `cloud.umami.is` is in `script-src` *and* `connect-src`: the script loads from
+  there and posts to `/api/send` there. Allowing only the first would load a
+  script that silently fails to report — the shape of broken analytics that
+  looks configured.
+-->
+{
+  ANALYTICS.umami.enabled && (
+    <script
+      is:inline
+      defer
+      src={ANALYTICS.umami.scriptUrl}
+      data-website-id={ANALYTICS.umami.websiteId}
+    />
+  )
+}
+
+<!--
   Analytics: Cloudflare Web Analytics — cookieless, no consent banner needed.
 
   Injected by a tiny inline script rather than a static `<script src>` for one
