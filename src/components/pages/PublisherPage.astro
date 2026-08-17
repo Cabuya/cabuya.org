@@ -19,6 +19,7 @@
 import { SPEC_VERSION } from '@cabuya/validator';
 import CodeBlock from '@/components/developers/CodeBlock.astro';
 import Callout from '@/components/editorial/Callout.astro';
+import JsonLd from '@/components/JsonLd.astro';
 import HistorySparkline from '@/components/registry/HistorySparkline.astro';
 import StateBadge from '@/components/registry/StateBadge.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
@@ -33,6 +34,7 @@ import { getUrlPrefix } from '@/lib/i18n';
 import type { PublisherEntry } from '@/lib/registry-loader';
 import { displayHost, publisherHistory } from '@/lib/registry-loader';
 import { fetchMeasuredStatuses, measurementAge } from '@/lib/registry-status';
+import { breadcrumbList } from '@/lib/structured-data';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -51,6 +53,11 @@ const history = publisherHistory(entry.publisher_id);
 const now = new Date();
 
 const snippets = badgeEmbedSnippets(SITE_URL, entry.publisher_id, lang);
+
+const trail = breadcrumbList([
+  { name: t.registry.title, url: `${SITE_URL}${prefix}/registry` },
+  { name: entry.publisher_id },
+]);
 
 const title = `${entry.publisher_id} — ${t.registry.title}`;
 
@@ -77,6 +84,8 @@ const description = t.registry.publisherMetaDescription
 ---
 
 <MainLayout lang={lang} title={title} description={description}>
+  {trail && <JsonLd data={trail} />}
+
   <!--
     The border is load-bearing in dark mode: `bg-cabuya-bg-dark` and
     `bg-cabuya-bg` are close enough there that without it the hero has no edge

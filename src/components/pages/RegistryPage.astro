@@ -15,10 +15,12 @@
  * volunteer directory would imply a relationship that does not exist.
  */
 import Callout from '@/components/editorial/Callout.astro';
+import JsonLd from '@/components/JsonLd.astro';
 import RegistryFilters from '@/components/registry/RegistryFilters.astro';
 import RegistryTable from '@/components/registry/RegistryTable.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { STATE_LABELS, STATE_TONE_CLASSES } from '@/lib/badge';
+import { SITE_URL } from '@/lib/constances';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
 import type { BadgeState } from '@/lib/registry-loader';
@@ -27,6 +29,8 @@ import {
   fetchMeasuredStatuses,
   statusSourceIsLive,
 } from '@/lib/registry-status';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { registryDataset } from '@/lib/structured-data';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -52,6 +56,20 @@ const live = statusSourceIsLive();
  * read the same age — and so the built HTML is stable enough to diff.
  */
 const now = new Date();
+
+/**
+ * The registry is a dataset, and saying so is the one strong structured-data
+ * claim on the site that the page can fully back: CC0, at a stable location,
+ * with a distribution URL that serves the actual records.
+ */
+const dataset = registryDataset({
+  siteUrl: SITE_URL,
+  lang,
+  name: t.registry.metaTitle,
+  description: t.registry.metaDescription,
+  publisherCount: entries.length,
+  repositoryUrl: GITHUB_URL,
+});
 
 /**
  * Label and tone per state, for the freshness script.
@@ -82,6 +100,8 @@ const presentStates = [
   title={t.registry.metaTitle}
   description={t.registry.metaDescription}
 >
+  <JsonLd data={dataset} />
+
   <!--
     The border is load-bearing in dark mode: `bg-cabuya-bg-dark` and
     `bg-cabuya-bg` are close enough there that without it the hero has no edge

@@ -20,13 +20,13 @@
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-
 import {
   collectPages,
   DIST_DIR,
   expectedLanguageFor,
   htmlPathFor,
 } from './lib/dist-pages.mjs';
+import { requiredTypesFor, SITEWIDE_TYPES } from './lib/jsonld-matrix.mjs';
 
 const argv = process.argv.slice(2);
 const STRICT = argv.includes('--strict');
@@ -46,13 +46,19 @@ const INTENTIONAL_NOINDEX = [
 ];
 
 /** JSON-LD `@type` expected for a page, by path shape. */
+/**
+ * The types a route must carry.
+ *
+ * Sitewide pair plus whatever the matrix requires for this kind of page. The
+ * matrix mirrors `src/lib/structured-data.ts`; a test asserts they agree.
+ *
+ * The version this replaced still listed `meetups`, `speakers` and `blog` from
+ * the Corag era, so it matched nothing on this site and asserted nothing — a
+ * gate that had been passing by describing pages that no longer existed.
+ */
 function expectedJsonLdTypes(pagePath) {
-  const path = pagePath.replace(/^en\/?/, '');
-  if (/^meetups\/.+/.test(path)) return ['Event'];
-  if (/^pereira-tech-days\/.+/.test(path)) return ['Event'];
-  if (/^speakers\/.+/.test(path)) return ['Person'];
-  if (/^blog\/(?!series$)(?!series\/).+/.test(path)) return ['BlogPosting'];
-  return [];
+  const entry = requiredTypesFor(pagePath);
+  return [...SITEWIDE_TYPES, ...(entry?.required ?? [])];
 }
 
 // ── Extraction ────────────────────────────────────────────

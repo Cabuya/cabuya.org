@@ -2,13 +2,21 @@
 /**
  * Where the reader is, in the portal's own terms.
  *
- * Deliberately not the site-wide `Breadcrumbs` component: that one emits
- * `BreadcrumbList` JSON-LD for search engines, and duplicating structured data
- * on a docs page that already has its own would produce two competing trails.
- * This is navigation only.
+ * Not the site-wide `Breadcrumbs` component, because the portal's trail starts
+ * at the portal rather than at the site root and the markup differs. It does
+ * emit `BreadcrumbList` — this is the only trail these pages have, and an
+ * earlier version of this comment claimed it was skipping the structured data
+ * to avoid competing with a trail that was never rendered here.
+ *
+ * The graph is built from the same array the list renders, never a second one.
+ * A structured trail that disagrees with the visible one is worse than none: a
+ * search result would show a path the reader cannot follow.
  */
+import JsonLd from '@/components/JsonLd.astro';
+import { SITE_URL } from '@/lib/constances';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
+import { breadcrumbList } from '@/lib/structured-data';
 import { getTranslations } from '@/lib/translations';
 
 interface Crumb {
@@ -29,7 +37,16 @@ const crumbs: Crumb[] = [
   { label: t.docs.portal, href: `${prefix}/developers` },
   ...trail,
 ];
+
+const graph = breadcrumbList(
+  crumbs.map((crumb) => ({
+    name: crumb.label,
+    url: crumb.href ? `${SITE_URL}${crumb.href}` : undefined,
+  }))
+);
 ---
+
+{graph && <JsonLd data={graph} />}
 
 <nav aria-label={t.docs.breadcrumb} class="mb-6">
   <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-cabuya-text-muted">

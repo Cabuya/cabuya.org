@@ -30,7 +30,7 @@ Every EN/ES pair emits both directions + `x-default` → the EN page:
 Derived from the language registry — never hand-written per page. Machine
 surfaces (llms.txt, schemas, badges, API) emit none.
 
-## 3. Structured data (JSON-LD) — the page-type matrix *(gate-enforced from Task 33)*
+## 3. Structured data (JSON-LD) — the page-type matrix *(gate-enforced)*
 
 | Page type | Types |
 |---|---|
@@ -42,8 +42,25 @@ surfaces (llms.txt, schemas, badges, API) emit none.
 | RFCs | `TechArticle` |
 | Sitewide | `BreadcrumbList` via the breadcrumbs component |
 
-All emitted by the central helper; every block must parse (test) and match
-the matrix (`seo:check`).
+The matrix is declared once in `src/lib/structured-data.ts` and mirrored for
+the gate in `scripts/lib/jsonld-matrix.mjs`; a test asserts the two agree, the
+way the normative-language rule does. `seo:check` classifies every built page
+by its URL and fails when a required type is missing — seed-tested by removing
+the registry's `Dataset` emitter, which produced two findings (one per
+language).
+
+**Why it is gated at all.** Structured data is invisible: nothing in a browser
+renders it, no page looks wrong without it, and a diff that deletes an emitter
+reads as a deleted line rather than as a lost rich result. The version of this
+matrix that shipped with the migrated codebase still described `meetups`,
+`speakers` and `blog` routes from the previous project — so it matched nothing,
+asserted nothing, and passed.
+
+**What is deliberately absent.** No `Review`, no `AggregateRating`, no `Offer`,
+anywhere. The registry lists applications and measures feeds; it does not rate
+anybody, and a rating type would be the machine-readable version of the
+endorsement the registry page spends two paragraphs refusing to make. A test
+asserts the `Dataset` carries none of them.
 
 ## 4. Meta
 
