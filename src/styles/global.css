@@ -567,6 +567,28 @@
     dominant-baseline: middle;
   }
 
+  /* Markdown tables scroll instead of widening the page.
+   *
+   * A table authored in Markdown has no wrapper to put `overflow-x` on — the
+   * HAST plugin API Sätteri gives us can set properties but cannot insert an
+   * element — so the scroll goes on the table itself. `display: block` makes it
+   * a scroll container; its rows form an anonymous table box inside, sized to
+   * their content, which is what scrolls.
+   *
+   * Found by `illustrations:check` at 280px: `/governance` carried a four-column
+   * RFC-tier table that pushed the document 13px past the viewport, so the whole
+   * page scrolled sideways. Generated tables (the schema reference, the check
+   * catalogue) are already inside `not-prose` blocks with their own containers.
+   */
+  @media (max-width: 768px) {
+    .prose :where(table) {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+  }
+
   /* Mobile horizontal scroll for wide tables.
    * The !important rules below override Tailwind Typography's `.prose table`
    * styles, which have equal or higher specificity than `.table-responsive`
