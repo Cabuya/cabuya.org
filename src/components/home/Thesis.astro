@@ -12,6 +12,7 @@
  * erase where the project came from.
  */
 import Kicker from '@/components/editorial/Kicker.astro';
+import SectionOrnament from '@/components/editorial/SectionOrnament.astro';
 import type { Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
 
@@ -47,5 +48,15 @@ const t = getTranslations(lang);
     <p class="mt-8 max-w-2xl border-l-2 border-cabuya-accent pl-4 text-sm text-cabuya-text-muted">
       {t.home.thesis.intentNote}
     </p>
+
+    {/*
+      `MK-03` closes the section rather than dividing two of them.
+
+      The landing's seams all carry a rule already, and the ornament's entry is
+      explicit that it stands in for one. As a closing mark under the argument it
+      does the job it was drawn for: a breath after the thesis, in the project's
+      own vocabulary instead of an asterisk.
+    */}
+    <SectionOrnament class="mt-12 sm:mt-14" />
   </div>
 </section>

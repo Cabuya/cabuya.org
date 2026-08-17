@@ -69,8 +69,8 @@
 
 | Class | Count |
 |---|---|
-| Illustrations to generate | **13** (2 flagship, 5 high, 4 medium, 2 low) |
-| Diagram components | 8 (all built, Task 19) |
+| Illustrations, all generated and integrated | **13** (2 flagship, 5 high, 4 medium, 2 low) + the two share cards |
+| Diagram components | 8 (all built) |
 | Deliberate skip decisions | 10 (covering 15 surfaces — some rows group a family of pages) |
 
 Thirteen generated images for a site with thirty-odd surfaces, against ten

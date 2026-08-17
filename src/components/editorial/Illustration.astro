@@ -1,0 +1,87 @@
+---
+/**
+ * The only way artwork from the illustration pack reaches a page.
+ *
+ * Everything the pack's integration guide calls non-negotiable is enforced
+ * here rather than remembered at nine call sites: intrinsic `width`/`height`
+ * (an illustration without them is the largest layout shift on its page),
+ * `alt=""` because every one of them is decorative, `decoding="async"`, and a
+ * plain `<img>` — never a `<picture>` with a `prefers-color-scheme` source,
+ * since one transparent file serves both themes and a `-dark` file does not
+ * exist to point at.
+ *
+ * The one `<picture>` this component will emit is a **width** switch: an entry
+ * with a `mobile` variant serves it through a `media` source, so exactly one
+ * file is fetched. Both variants share an aspect ratio by construction (see
+ * `scripts/build-illustrations.mjs`), which is what lets a single
+ * `width`/`height` pair describe either of them without a shift on load.
+ *
+ * `data-illustration` marks every one of them for `illustrations:check`, which
+ * loads each surface at fifteen viewports and fails if an illustration is
+ * missing, squashed, clipped, or too small to read on a phone.
+ */
+import { type IllustrationId, illustration } from '@/lib/illustrations';
+
+interface Props {
+  id: IllustrationId;
+  /** Utility classes for the slot. The component owns nothing visual itself. */
+  class?: string;
+  /** Override when a surface renders the asset at an unusual width. */
+  sizes?: string;
+  /** `eager` above the fold, `lazy` below it. */
+  loading?: 'eager' | 'lazy';
+  /** Only the LCP candidate — the landing hero — should ask for priority. */
+  priority?: boolean;
+}
+
+const {
+  id,
+  class: className,
+  sizes,
+  loading = 'lazy',
+  priority = false,
+} = Astro.props;
+
+const art = illustration(id);
+const resolvedSizes = sizes ?? art.sizes;
+---
+
+{
+  art.mobile ? (
+    <picture>
+      <source
+        media={art.mobile.media}
+        srcset={art.mobile.srcset}
+        sizes={resolvedSizes}
+        type="image/webp"
+      />
+      <img
+        src={art.src}
+        srcset={art.srcset}
+        sizes={resolvedSizes}
+        alt=""
+        width={art.width}
+        height={art.height}
+        loading={loading}
+        fetchpriority={priority ? 'high' : undefined}
+        decoding="async"
+        class={className}
+        data-illustration={id}
+      />
+    </picture>
+  ) : (
+    <img
+      src={art.src}
+      srcset={art.srcset}
+      sizes={resolvedSizes}
+      alt=""
+      width={art.width}
+      height={art.height}
+      loading={loading}
+      fetchpriority={priority ? 'high' : undefined}
+      decoding="async"
+      class={className}
+      data-illustration={id}
+    />
+  )
+}

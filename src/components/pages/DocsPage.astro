@@ -22,12 +22,14 @@
  * the nav decides whether the route is offered.
  */
 import { getCollection, render } from 'astro:content';
+import Illustration from '@/components/editorial/Illustration.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import DocsLayout from '@/layouts/DocsLayout.astro';
 import { SITE_URL } from '@/lib/constances';
 import { faqJsonLd } from '@/lib/faq-jsonld';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
+import type { IllustrationId } from '@/lib/illustrations';
 import { buildToc } from '@/lib/toc';
 
 interface Props {
@@ -76,6 +78,23 @@ const updated =
   entry.data.updated instanceof Date
     ? entry.data.updated.toISOString().slice(0, 10)
     : undefined;
+
+/**
+ * Which prose route carries artwork, keyed by slug.
+ *
+ * A map rather than frontmatter because the illustration is a property of the
+ * *route*, not of its text: both languages of one route get the same drawing,
+ * and a wordless asset has nothing to translate. Frontmatter would put the same
+ * value in two files and let them disagree.
+ *
+ * `skill` is the only entry today — `DV-04` in the pack. The others (`consume`,
+ * `mcp`, `faq`, `profiles`) have no entry of their own, and a page ships without
+ * an illustration rather than borrowing one.
+ */
+const PAGE_ART: Partial<Record<string, IllustrationId>> = {
+  skill: 'skill-handover',
+};
+const art = PAGE_ART[page];
 ---
 
 <DocsLayout
@@ -87,5 +106,14 @@ const updated =
   updated={updated}
 >
   {structuredData && <JsonLd data={structuredData} />}
+  {
+    art && (
+      <Illustration
+        id={art}
+        loading="eager"
+        class="not-prose mx-auto mb-8 h-auto w-full max-w-[17rem] sm:max-w-sm"
+      />
+    )
+  }
   <Content />
 </DocsLayout>

@@ -21,6 +21,7 @@
  * art's absence costs nothing: flip `HERO_ART.present` off and the copy column
  * simply takes the width. No placeholder box, per the integration guide.
  */
+import Illustration from '@/components/editorial/Illustration.astro';
 import { getUrlPrefix, type Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
 
@@ -45,27 +46,22 @@ const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
 /**
  * The illustration slot.
  *
- * The generated asset has a true alpha channel rather than the matched light
- * and dark pair the entry originally called for, so there is no `-dark` file
- * and no `<picture>`: the ink is drawn in both forest and ivory, which means
- * the page's own ground shows through correctly in either theme. That is also
- * the only way to hit `#FAF9F6` and `#082A24` exactly — every lossy WebP of a
- * flattened ground lands a step or two off and leaves a faint rectangle.
+ * The asset and its intrinsic size come from `src/lib/illustrations.ts`; the
+ * component enforces the pack's rules. Two things are specific to this surface:
  *
- * Two widths because line work this fine goes soft at 1x on a retina display.
- * `sizes` states the real rendered width — the column is height-driven, so at
- * a tall viewport the 4:5 art is wider than its intrinsic 520 px and the 2x
- * file is the right pick; below `lg` the column does not render at all.
+ * - **It renders on every viewport.** It used to be `hidden lg:flex`, which
+ *   meant the site's one flagship drawing was invisible to a phone — the
+ *   majority of readers. Below `lg` it sits under the copy at a capped height.
+ * - **Two framings, one fetch.** Under the header the rope is meant to bleed
+ *   off the top edge and read as descending out of the chrome; below the copy
+ *   on a phone that same bleed reads as a drawing someone trimmed. The registry
+ *   entry therefore carries a `mobile` variant framed with a margin on all four
+ *   sides, served through a `media` source so only one file is downloaded.
+ *
+ * Flip `present` off and the copy column simply takes the width: no
+ * placeholder box, per the integration guide.
  */
-const HERO_ART = {
-  src: '/images/visuals/home/hero-cordage.webp',
-  srcset:
-    '/images/visuals/home/hero-cordage.webp 520w, /images/visuals/home/hero-cordage-2x.webp 1040w',
-  sizes: '(min-width: 1024px) 40vw, 1px',
-  width: 520,
-  height: 650,
-  present: true,
-};
+const HERO_ART = { present: true };
 ---
 
 <section
@@ -122,67 +118,15 @@ const HERO_ART = {
 
     {
       HERO_ART.present && (
-        <div class="hidden lg:flex lg:items-start lg:justify-end lg:self-stretch">
-          <img
-            src={HERO_ART.src}
-            srcset={HERO_ART.srcset}
-            sizes={HERO_ART.sizes}
-            alt=""
-            width={HERO_ART.width}
-            height={HERO_ART.height}
+        <div class="flex justify-center lg:items-start lg:justify-end lg:self-stretch">
+          <Illustration
+            id="hero-cordage"
             loading="eager"
-            fetchpriority="high"
-            decoding="async"
-            class="h-full w-auto max-w-full object-contain object-top"
-          />
-        </div>
-      )
-    }
-
-    {
-      HERO_ART.present && (
-        <div class="hero-art-mobile -mx-4 mt-4 md:-mx-6 lg:hidden">
-          <img
-            src={HERO_ART.src}
-            alt=""
-            width={HERO_ART.width}
-            height={HERO_ART.height}
-            loading="lazy"
-            decoding="async"
-            class="h-52 w-full object-cover object-bottom sm:h-64"
+            priority
+            class="h-auto max-h-[52vh] w-auto max-w-[19rem] object-contain object-top sm:max-h-[58vh] sm:max-w-sm lg:h-full lg:max-h-none lg:max-w-full"
           />
         </div>
       )
     }
   </div>
 </section>
-
-<style>
-  /*
-   * The phone gets the bottom of the drawing, not a shrunken copy of it.
-   *
-   * `object-cover` with `object-bottom` keeps the full width and crops height
-   * from the top, so what survives is the fan of fibres — the part that reads
-   * at 160px tall. Nothing is cropped horizontally, which is the crop that
-   * would actually damage this composition.
-   *
-   * The mask is what makes the crop honest: without it the rope would start
-   * at a hard horizontal edge in the middle of the page, which looks like a
-   * mistake rather than a choice. Fading the top third into the ground is the
-   * same "feather into the paper" the illustration brief asks of every edge.
-   */
-  .hero-art-mobile img {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(0 0 0 / 0.35) 22%,
-      #000 55%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(0 0 0 / 0.35) 22%,
-      #000 55%
-    );
-  }
-</style>

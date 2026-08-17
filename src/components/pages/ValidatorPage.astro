@@ -6,6 +6,7 @@
  * lazy-loads the engine on first run: a reader who came to understand what the
  * validator does should not download it.
  */
+import Illustration from '@/components/editorial/Illustration.astro';
 import ValidatorApp from '@/components/validator/ValidatorApp.svelte';
 import DocsLayout from '@/layouts/DocsLayout.astro';
 import type { Language } from '@/lib/i18n';
@@ -29,6 +30,9 @@ const headings = buildToc([
   { depth: 2, text: t.validator.urlModeTitle },
   { depth: 2, text: t.validator.pasteModeTitle },
 ]);
+
+/** Flip off and the intro takes the full column — no reserved space. */
+const GAUGE_ART = { present: true };
 ---
 
 <DocsLayout
@@ -38,16 +42,42 @@ const headings = buildToc([
   trail={[{ label: t.validator.title }]}
   headings={headings}
 >
-  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.validator.lead}</p>
+  {/*
+    `DV-03` — a thread through a gauge, beside the form.
 
-  <p class="not-prose mb-6 text-sm">
-    <a
-      href={`${prefix}/developers/validator/checks`}
-      class="text-cabuya-primary underline underline-offset-2"
-    >
-      {t.checks.title}
-    </a>
-  </p>
+    The entry asks for it beside the validator itself, and the validator is a
+    Svelte island: putting the art inside would mean shipping an `<img>` through
+    hydration for no reason. It sits in the intro band instead, which is the
+    same visual row as the top of the form on a laptop and stacks above it on a
+    phone. Measurement without judgement is the point of the drawing — nothing
+    in it may read as a score — so it deliberately does not sit next to the
+    result panel, where it would look like a verdict.
+  */}
+  <div
+    class="not-prose mb-6 grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-8"
+  >
+    <div>
+      <p class="text-lg leading-relaxed text-cabuya-text-secondary">
+        {t.validator.lead}
+      </p>
+      <p class="mt-4 text-sm">
+        <a
+          href={`${prefix}/developers/validator/checks`}
+          class="text-cabuya-primary underline underline-offset-2"
+        >
+          {t.checks.title}
+        </a>
+      </p>
+    </div>
+    {
+      GAUGE_ART.present && (
+        <Illustration
+          id="validator-gauge"
+          class="mx-auto h-auto w-full max-w-[9rem] sm:mx-0 sm:max-w-[11rem] lg:max-w-[13.75rem]"
+        />
+      )
+    }
+  </div>
 
   <ValidatorApp
     client:idle

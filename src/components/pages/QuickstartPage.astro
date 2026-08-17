@@ -32,6 +32,8 @@ import CodeBlock from '@/components/developers/CodeBlock.astro';
 import DocsTabs from '@/components/developers/DocsTabs.astro';
 import QuickstartPath from '@/components/diagrams/developers/QuickstartPath.astro';
 import Callout from '@/components/editorial/Callout.astro';
+import Illustration from '@/components/editorial/Illustration.astro';
+import SectionOrnament from '@/components/editorial/SectionOrnament.astro';
 import DocsLayout from '@/layouts/DocsLayout.astro';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
@@ -83,9 +85,8 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
 /**
  * `DV-02` — one thread drawn from a bundle, above the five steps.
  *
- * Transparent, one file for both themes; composited against `#FAF9F6` and
- * `#082A24` before shipping. Small on purpose: the entry asks for calm, and
- * the promise on this page is one small thing today, not a network.
+ * Small on purpose: the entry asks for calm, and the promise on this page is
+ * one small thing today, not a network.
  *
  * `loading="lazy"`, against the entry's `eager`. The entry assumed the steps
  * sat near the top; they arrive after the lead, the two path cards and the
@@ -93,15 +94,7 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
  * at. The integration guide's rule — eager above the fold, lazy below it —
  * is the one that describes the page as built.
  */
-const THREAD_ART = {
-  src: '/images/visuals/developers/quickstart-first-thread.webp',
-  srcset:
-    '/images/visuals/developers/quickstart-first-thread.webp 360w, /images/visuals/developers/quickstart-first-thread-2x.webp 720w',
-  sizes: '(min-width: 640px) 384px, 88vw',
-  width: 360,
-  height: 240,
-  present: true,
-};
+const THREAD_ART = { present: true };
 ---
 
 <DocsLayout
@@ -154,16 +147,9 @@ const THREAD_ART = {
   <!-- The five steps, with the ladder as the spine -->
   {
     THREAD_ART.present && (
-      <img
-        src={THREAD_ART.src}
-        srcset={THREAD_ART.srcset}
-        sizes={THREAD_ART.sizes}
-        alt=""
-        width={THREAD_ART.width}
-        height={THREAD_ART.height}
-        loading="lazy"
-        decoding="async"
-        class="not-prose mx-auto mt-10 w-full max-w-sm"
+      <Illustration
+        id="quickstart-first-thread"
+        class="not-prose mx-auto mt-10 h-auto w-full max-w-[17rem] sm:max-w-sm"
       />
     )
   }
@@ -283,6 +269,15 @@ const THREAD_ART = {
     }
   </DocsTabs>
 
+  {/*
+    `MK-03`, once. Everything above is the mechanics of publishing; everything
+    below is the one decision that is the publisher's, and then where the
+    validator takes over. This page's only structure is its headings, which is the
+    case the ornament's entry describes — and two on a page this long is inside
+    "sparingly".
+  */}
+  <SectionOrnament class="my-12 sm:my-16" />
+
   <!-- 5. The PII decision, as a step -->
   <h2 id={headings[3].slug}>{t.quickstart.piiTitle}</h2>
   <p>{t.quickstart.piiLead}</p>
@@ -344,6 +339,8 @@ const THREAD_ART = {
     lang="shellscript"
     uiLang={lang}
   />
+
+  <SectionOrnament class="my-12 sm:my-16" />
 
   <!-- 7. How long this takes, honestly -->
   <h2 id={headings[5].slug}>{t.quickstart.honestyTitle}</h2>

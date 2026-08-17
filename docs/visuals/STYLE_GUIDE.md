@@ -55,34 +55,56 @@ page.
 
 ---
 
-## 3. Light / dark strategy (decide per visual)
+## 3. Light / dark strategy — transparent, one file
 
-The site ships both themes. A raster cannot recolour itself, so every entry
-picks one strategy and states it:
+The site ships both themes. A raster cannot recolour itself, and the answer is
+**not** two files: **every illustration is a true alpha asset with no ground of
+any kind**, and the page supplies the background.
 
-- **(A) Transparent.** Line art on a true alpha canvas, no fill. The same file
-  sits on either ground. Use for marks, ornaments and spot glyphs where the
-  line work *is* the image. Draw in a mid-tone that reads on both grounds, or
-  state that the integrator will supply a filtered dark variant.
-- **(B) Matched pair.** Two files, `{slug}.webp` and `{slug}-dark.webp`, each
-  filled **edge to edge with the exact page hex**: light exactly `#FAF9F6`,
-  dark exactly `#082A24`. Use for atmospheric illustrations with a ground.
+Two things make that work rather than merely convenient:
 
-Default: (A) for marks and ornaments, (B) for anything atmospheric.
+- **The ink carries both values.** The line work is drawn with forest-dark
+  (`#0B3D32`) contours *and* ivory (`#F6F3ED`) highlights worked into the
+  forms, the way an engraving reads on either paper. A drawing in one flat
+  value vanishes on one of the two grounds; this is the instruction that makes
+  a single file legitimate, and every prompt states it under
+  **ONE FILE, BOTH THEMES**.
+- **The ground is then exactly right by construction.** A filled asset has to
+  reproduce `#FAF9F6` or `#082A24` exactly or it leaves a rectangle on the
+  page — and it cannot: lossy WebP of a flat ground lands one to three steps
+  off (`#FAF9F6` → `#FBF9F5`, `#082A24` → `#092A23`), and near-lossless
+  costs 295 KB to avoid it. Measured on HP-01, which is why this section
+  changed.
+
+**Matched pairs are retired.** No entry ships a `{slug}-dark.webp`, and no
+integration uses a `<picture>` with a `prefers-color-scheme` source; a
+transparent asset takes a plain `<img>`.
+
+**One exception, forced by the format.** `OG-01` is a JPEG — no alpha channel
+exists in that format — and Open Graph has no `prefers-color-scheme`, so no
+second file could ever be selected. It is filled on the light ground and says
+so in full. Nothing else may use it as precedent.
 
 ### Edges and framing (mandatory, every illustration)
 
-No border, frame, rectangle, box or outline. Nothing touches or is clipped by
-an edge. The art sits centred with generous margin and **feathers into the
-background on all four sides**, so there is no visible boundary:
+No border, frame, rectangle, box or outline. **Nothing touches or crosses an
+edge.** Every stroke terminates inside the canvas and feathers out before it
+gets there, with a clear margin of **at least 8% of the canvas** on all four
+sides containing no ink at all — no thread, no fibre tip, no stray mark.
 
-- **Filled (B):** every pixel of margin, and all four corners, must equal the
-  exact page hex. Test by sampling a corner. This is the single most common
-  failure and it leaves a visible halo on the page.
-- **Transparent (A):** true alpha, soft edges, never hard-cropped.
+The reason is not neatness. These assets get scaled, and sometimes cropped, by
+layouts and by platforms we do not control; a composition that runs to the
+border reads as a broken image rather than a drawing. An asset that violates
+this is regenerated, not cropped — cropping changes the aspect ratio the entry
+specifies.
 
-Each prompt states this in an **EDGES / BACKGROUND** line and repeats it in the
-**AVOID** list.
+**One exception, and it is per-entry, not general:** `HP-01` may cross the
+**top** edge, because the rope is meant to continue out of frame and the hero
+aligns that cut to the header's bottom rule. Its left, right and bottom edges
+follow the rule like everything else.
+
+Each prompt states this in an **EDGES / BACKGROUND** block and repeats it at
+the head of the **AVOID** list.
 
 ---
 
@@ -122,9 +144,12 @@ on `<img>` and reserve the space.
 ## 6. Asset paths
 
 ```
-public/images/visuals/{area}/{slug}.webp        # primary (light or transparent)
-public/images/visuals/{area}/{slug}-dark.webp   # only for matched pairs
+public/images/visuals/{area}/{slug}.webp        # transparent, 1x
+public/images/visuals/{area}/{slug}-2x.webp     # only where 1x goes soft
 ```
+
+No `-dark` file exists for any entry — see §3. The OG card is the exception
+to the whole scheme and lives at `public/images/og-default*.jpg`.
 
 `{area}` ∈ `home` · `developers` · `registry` · `governance` · `og` · `marks`.
 `{slug}` is short kebab-case English in every case — slugs are English
@@ -178,10 +203,11 @@ Two additions specific to this project, and both are load-bearing:
 - **Priority:** flagship | high | medium | low
 - **Purpose:** {what it communicates, and why that matters here}
 - **Aspect & dimensions:** {aspect} · {displayed px} · generate @2x ({px})
-- **Light/dark strategy:** transparent | matched pair ({note})
+- **Light/dark strategy:** transparent, one asset (§3) — state the reasoning
 - **Prompt:**
-  > {copy-paste ready: the §1 house style block verbatim, the subject and
-  >  composition, the EDGES / BACKGROUND line, and the §8 AVOID list}
+  > {copy-paste ready: the §1 house style block verbatim, the ONE FILE, BOTH
+  >  THEMES clause, the subject and composition, the EDGES / BACKGROUND block
+  >  with its no-clipping rule, and the §8 AVOID list}
 - **Suggested asset path:** `public/images/visuals/{area}/{slug}.webp`
 - **Alt text (EN):** {meaningful, or `alt=""` (decorative)}
 - **Alt text (ES):** {…}

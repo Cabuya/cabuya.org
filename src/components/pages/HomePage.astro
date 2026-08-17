@@ -37,6 +37,14 @@ const t = getTranslations(lang);
   title={t.home.metaTitle}
   description={t.home.metaDescription}
 >
+  {/*
+    No ornament between these sections, and the reason is worth writing down:
+    every tinted band on this page carries `border-y`, so each seam already has a
+    rule. `MK-03` exists to *replace* a rule, not to sit next to one — dropped in
+    here it read as a second divider a few pixels from the first. It closes the
+    thesis section instead (see `Thesis.astro`), and it separates the movements of
+    the quickstart, which is the long page whose only structure is its headings.
+  */}
   <Hero lang={lang} />
   <Thesis lang={lang} />
   <HowItWorks lang={lang} />

@@ -48,9 +48,20 @@ describe('og fallback — the overwrite guard', () => {
   });
 });
 
-describe('og fallback — the cards it produced', () => {
+/**
+ * The cards that are actually in place, and who owns them.
+ *
+ * This block used to assert that both cards **carry** the fallback marker,
+ * which was true while the fallback was the shipped card — and which would now
+ * require keeping the fallback forever to stay true. The real per-language
+ * artwork landed (`OG-01`, installed by `scripts/build-og-cards.mjs`), so the
+ * assertion is inverted rather than dropped, and it is a stronger one: the
+ * shipped cards must carry **no** marker, and `mayWrite` must refuse them. That
+ * is the guard doing its job on the real files rather than on a fixture.
+ */
+describe('og fallback — the cards in place are the designer’s, and stay that way', () => {
   it.each(CARDS.map((card: { path: string }) => card.path))(
-    '%s exists, is exactly 1200x630, and carries the marker',
+    '%s exists, is exactly 1200x630, and the generator will not touch it',
     (path: string) => {
       const buffer = readFileSync(join(ROOT, path));
 
@@ -73,8 +84,12 @@ describe('og fallback — the cards it produced', () => {
       }
       expect(size).toEqual([CARD_WIDTH, CARD_HEIGHT]);
 
-      expect(buffer.includes(FALLBACK_MARKER), 'marker survives encoding').toBe(
-        true
+      expect(
+        buffer.includes(FALLBACK_MARKER),
+        'a shipped card carrying the marker would be overwritten on the next build'
+      ).toBe(false);
+      expect(mayWrite(buffer), 'the guard must refuse the real artwork').toBe(
+        false
       );
       // The prompt pack's ceiling: a card that is slow to fetch is a card some
       // platforms silently drop.

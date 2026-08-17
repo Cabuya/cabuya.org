@@ -15,6 +15,7 @@
  * volunteer directory would imply a relationship that does not exist.
  */
 import Callout from '@/components/editorial/Callout.astro';
+import Illustration from '@/components/editorial/Illustration.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import RegistryFilters from '@/components/registry/RegistryFilters.astro';
 import RegistryTable from '@/components/registry/RegistryTable.astro';
@@ -56,6 +57,9 @@ const live = statusSourceIsLive();
  * read the same age — and so the built HTML is stable enough to diff.
  */
 const now = new Date();
+
+/** Flip off and the header is the heading and the lead — no reserved space. */
+const NET_ART = { present: true };
 
 /**
  * The registry is a dataset, and saying so is the one strong structured-data
@@ -109,12 +113,37 @@ const presentStates = [
   -->
   <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
     <div class="main-container py-16 md:py-20">
-      <h1 class="font-display text-3xl font-bold md:text-4xl">
-        {t.registry.title}
-      </h1>
-      <p class="mt-4 max-w-3xl text-base text-white/80 md:text-lg">
-        {t.registry.lead}
-      </p>
+      {/*
+        `RG-01` — the net, beside the intro.
+
+        Every knot the same size as every other, which is the registry's whole
+        political claim drawn rather than asserted: it lists, it measures, and it
+        does not rank. It belongs to this header only — a publisher page showing
+        the net would read as that publisher standing for the network.
+
+        The header ground is always forest (`bg-cabuya-bg-dark`), in both themes,
+        so this is the second surface where the transparent asset lands on a
+        ground that is neither page ground.
+      */}
+      <div class="grid items-center gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        <div>
+          <h1 class="font-display text-3xl font-bold md:text-4xl">
+            {t.registry.title}
+          </h1>
+          <p class="mt-4 max-w-3xl text-base text-white/80 md:text-lg">
+            {t.registry.lead}
+          </p>
+        </div>
+        {
+          NET_ART.present && (
+            <Illustration
+              id="registry-net"
+              loading="eager"
+              class="mx-auto h-auto w-full max-w-[15rem] sm:max-w-xs lg:max-w-none"
+            />
+          )
+        }
+      </div>
     </div>
   </section>
 
@@ -127,10 +156,26 @@ const presentStates = [
         </Callout>
 
         {
+          /*
+           * `MK-02` — the coiled thread, beside the not-yet-measured note.
+           *
+           * Its entry describes exactly this state: "nothing has been measured"
+           * is a true statement about today, not a failure, and the mark should
+           * be neutral and unhurried. It appears only with the note, so it
+           * disappears the day the measurement store is connected — which is
+           * the correct behaviour for a drawing that means "waiting".
+           */
           !live && (
-            <p class="mt-6 rounded-cabuya-md border border-dashed border-cabuya-border-strong bg-cabuya-bg-brand/40 p-4 text-sm text-cabuya-text-secondary">
-              {t.registry.buildTimeOnlyNote}
-            </p>
+            <div class="mt-6 flex flex-col items-start gap-4 rounded-cabuya-md border border-dashed border-cabuya-border-strong bg-cabuya-bg-brand/40 p-4 sm:flex-row sm:items-center sm:gap-5">
+              <Illustration
+                id="empty-coil"
+                class="h-auto w-20 shrink-0 sm:w-28"
+                sizes="(min-width: 640px) 112px, 80px"
+              />
+              <p class="text-sm text-cabuya-text-secondary">
+                {t.registry.buildTimeOnlyNote}
+              </p>
+            </div>
           )
         }
       </div>

@@ -12,9 +12,11 @@
  * pull request against it, can go straight there.
  */
 import { getCollection, render } from 'astro:content';
+import Illustration from '@/components/editorial/Illustration.astro';
 import ContactForm from '@/components/forms/ContactForm.svelte';
 import MainLayout from '@/layouts/MainLayout.astro';
 import type { Language } from '@/lib/i18n';
+import type { IllustrationId } from '@/lib/illustrations';
 import type { RootDocId } from '@/lib/root-docs';
 import { rootDoc, rootDocSummary } from '@/lib/root-docs';
 import { GITHUB_URL } from '@/lib/site-navigation';
@@ -38,25 +40,58 @@ const { Content } = await render(entry);
 const doc = rootDoc(docId, lang);
 const description = rootDocSummary(doc);
 const sourceUrl = `${GITHUB_URL}/blob/main/${doc.file}`;
+
+/**
+ * Which of the three documents carries artwork.
+ *
+ * `RG-02` for governance — hands working cord together, plural and equal, which
+ * is shared stewardship without claiming an authority nobody granted us — and
+ * `RG-03` for the join page, a rope mid-splice with one new strand being laid
+ * in: adding to the network is a normal operation, not an application to a club.
+ *
+ * `TRADEMARK` gets none. The pack has no entry for it, and a page borrows no
+ * drawing: an illustration that means nothing in particular is decoration, and
+ * this one would be sitting above the strictest text on the site.
+ */
+const DOC_ART: Partial<Record<RootDocId, IllustrationId>> = {
+  GOVERNANCE: 'governance-hands',
+  CONTRIBUTING: 'join-splice',
+};
+const art = DOC_ART[docId];
 ---
 
 <MainLayout lang={lang} title={doc.title} description={description}>
   <article>
     <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
       <div class="main-container py-14 md:py-20">
-        <h1 class="font-display text-3xl font-bold md:text-4xl">{doc.title}</h1>
-        <p class="mt-4 max-w-3xl text-base text-white/80">{description}</p>
-        <p class="mt-6 text-sm">
-          <a
-            href={sourceUrl}
-            rel="noopener"
-            class="inline-flex items-center gap-2 text-white/70 underline underline-offset-4 hover:text-white"
-          >
-            <code class="font-mono">{doc.file}</code>
-            <span aria-hidden="true">↗</span>
-            <span class="sr-only">{t.rootDocs.sourceLinkSuffix}</span>
-          </a>
-        </p>
+        <div class="grid items-center gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          <div>
+            <h1 class="font-display text-3xl font-bold md:text-4xl">
+              {doc.title}
+            </h1>
+            <p class="mt-4 max-w-3xl text-base text-white/80">{description}</p>
+            <p class="mt-6 text-sm">
+              <a
+                href={sourceUrl}
+                rel="noopener"
+                class="inline-flex items-center gap-2 text-white/70 underline underline-offset-4 hover:text-white"
+              >
+                <code class="font-mono">{doc.file}</code>
+                <span aria-hidden="true">↗</span>
+                <span class="sr-only">{t.rootDocs.sourceLinkSuffix}</span>
+              </a>
+            </p>
+          </div>
+          {
+            art && (
+              <Illustration
+                id={art}
+                loading="eager"
+                class="mx-auto h-auto w-full max-w-[15rem] sm:max-w-xs lg:max-w-none"
+              />
+            )
+          }
+        </div>
       </div>
     </section>
 

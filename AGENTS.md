@@ -179,7 +179,9 @@ Five content gates (all `:strict` in CI): `md:check` (complete `.md` twins) ·
 · `parity:check` (both languages carry the SAME content) · `redirects:check`.
 Protocol gates: `spec:check` + `spec:boundary` ·
 `registry:check` · `checks:catalogue` ·
-`perf:budgets` · `a11y:check`.
+`perf:budgets` · `a11y:check` · `illustrations:check` (every drawing present,
+unclipped, undistorted and legible at 15 viewports in both themes) ·
+`responsive:full`.
 
 ### 8. Performance budgets (normative — docs/PERFORMANCE.md)
 
@@ -247,6 +249,9 @@ retention). No secrets in the repo, ever; env names documented in
 13. Editing files via the `.claude/` symlink (use `.agents/`), or editing the
     vendored packs (`deepworkplan`, `dailybot`, `ai-diff-reviewer`).
 14. Weakening or deleting a test to make a gate pass.
+15. Placing pack artwork with a hand-written `<img>` instead of
+    `<Illustration id="…" />`, or hiding a drawing below a breakpoint
+    (`hidden lg:block`) — `illustrations:check` fails on both.
 
 ## Pre-Commit Checklist
 

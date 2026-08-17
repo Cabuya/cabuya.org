@@ -227,7 +227,26 @@ describe('hero call-to-action honesty', () => {
     // The placeholder policy: no grey box, no reserved min-height for a file
     // that does not exist. The slot renders only when the asset does.
     expect(source).toContain('HERO_ART.present && (');
-    expect(source).toContain('width={HERO_ART.width}');
-    expect(source).toContain('height={HERO_ART.height}');
+    // The dimensions moved into `Illustration.astro`, which reads them from
+    // `src/lib/illustrations.ts` — one declaration per asset, measured against
+    // the real file by `illustrations.test.ts`. What matters here is that the
+    // hero still goes through that component and still asks for priority: it is
+    // the LCP image on the site's most-visited surface.
+    expect(source).toContain('<Illustration');
+    expect(source).toContain('id="hero-cordage"');
+    expect(source).toContain('loading="eager"');
+    expect(source).toContain('priority');
+  });
+
+  it('renders the hero art on a phone, not only from lg', () => {
+    /*
+     * The regression this exists for shipped twice: first as `hidden lg:flex`,
+     * which meant the site's flagship drawing did not exist for most readers,
+     * and then as a bottom crop under a mask, which read as trimmed. The wrapper
+     * must therefore be visible by default and only *change* at `lg`.
+     */
+    const wrapper = source.match(/<div class="([^"]*lg:self-stretch[^"]*)"/);
+    expect(wrapper, 'the art column wrapper').not.toBeNull();
+    expect(wrapper?.[1]).not.toContain('hidden');
   });
 });

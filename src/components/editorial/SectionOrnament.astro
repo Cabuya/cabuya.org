@@ -1,0 +1,29 @@
+---
+/**
+ * A breath between sections, in the project's own vocabulary.
+ *
+ * `MK-03` from the illustration pack: two dark strands and one gold one meeting
+ * at a single crossing. It replaces the generic horizontal rule the landing
+ * would otherwise need between long sections — a rule says "new topic", and
+ * these sections are one argument.
+ *
+ * **Used sparingly.** Its entry says three or four times on the longest page
+ * and never between every heading, so it lives in a component rather than as a
+ * class someone can sprinkle: adding one is a deliberate edit to a page.
+ *
+ * `aria-hidden` on the wrapper, and the mark itself is decorative — a screen
+ * reader gets the same thing a `<hr>` would give it, which is nothing. It is
+ * not an `<hr>` because an `<hr>` is a thematic break and this is punctuation.
+ */
+import Illustration from '@/components/editorial/Illustration.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`flex justify-center ${className}`} aria-hidden="true">
+  <Illustration id="ornament-braid" class="h-auto w-40 opacity-80 sm:w-60" />
+</div>

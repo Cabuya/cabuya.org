@@ -132,6 +132,18 @@ severity as text; that rule is normative in `docs/ACCESSIBILITY.md`.)
   marker comment if raw fique text is used, so the guard test knows.
 - **Nav:** the disclosure pattern (`aria-expanded` on a `<button>`), never
   `role="menu"`. Focus trapped in the mobile drawer, Escape closes.
+- **Illustrations:** `<Illustration id="…" />`
+  (`src/components/editorial/Illustration.astro`), never a hand-written `<img>`.
+  The component owns `alt=""` (all of it is decorative), the intrinsic
+  `width`/`height` from `src/lib/illustrations.ts`, the `srcset`, and the rule
+  that one transparent file serves both themes — no `-dark` asset and no
+  `<picture>` with a `prefers-color-scheme` source. The slot's own utilities are
+  the caller's business: `h-auto w-full` plus a `max-w-*` ladder, so the drawing
+  is present and legible on a phone rather than shrunk to a smudge or hidden
+  below a breakpoint. `docs/visuals/INTEGRATION_GUIDE.md` §4 is the long version.
+- **Section punctuation:** `<SectionOrnament />` for a breath between movements
+  of a long page. Not next to an existing rule or a background change — it
+  replaces one.
 
 ## 5. Do / Don't (agents: check your diff against this list)
 
@@ -142,6 +154,8 @@ severity as text; that rule is normative in `docs/ACCESSIBILITY.md`.)
 | `text-cabuya-accent-strong` for fique-hued text | `text-cabuya-accent` on a light ground for text |
 | Add a measured token when a value is missing | Inline a hex in a component |
 | `width` + `height` on every `<img>` | Un-dimensioned images (CLS) |
+| `<Illustration id="…" />` for pack artwork | A hand-written `<img>` with copied paths and sizes |
+| Artwork visible on a phone, capped by `max-w-*` | `hidden lg:block` on a drawing, or a crop that reads as trimmed |
 | `client:visible` / `client:idle` | `client:load` without a measured reason |
 | `prefers-reduced-motion` guards on animation | Unconditional motion |
 | Both themes verified before commit | "Looks fine in light mode" |
@@ -156,3 +170,5 @@ severity as text; that rule is normative in `docs/ACCESSIBILITY.md`.)
 | No hex literals in the token showcase | same |
 | Prose variables resolve to tokens, in the compiled CSS | `prose:check` |
 | WCAG runtime scan (axe, route matrix) | `a11y:check` |
+| Every illustration's declared size ≡ the file on disk (dimensions, ratio, alpha, weight, no orphans) | `tests/unit/lib/illustrations.test.ts` |
+| Every illustration present, decoded, visible, unclipped, undistorted and legible — 15 viewports × 2 themes | `illustrations:check` |

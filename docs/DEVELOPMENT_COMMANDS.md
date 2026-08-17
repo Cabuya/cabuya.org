@@ -109,6 +109,9 @@ authoritative.
 | Command | What |
 |---|---|
 | `pnpm run images:optimize` | WebP + responsive sets for staged images |
+| `pnpm run illustrations:build -- --masters=<dir>` | Re-frames and encodes every illustration from the masters (1x + 2x, weight-searched). The masters are not in the repo — see `docs/visuals/README.md` |
+| `pnpm run illustrations:check` | Every drawing present, decoded, visible, unclipped, undistorted and legible at 15 viewports × 2 themes. Needs `build` + `astro preview`. `--quick` for four viewports |
+| `pnpm run og:cards -- --masters=<dir>` | Installs the per-language share cards at exactly 1200 × 630 |
 | `pnpm run generate:agent-skills-index` | Regenerates the agent-skills index (runs in prebuild) |
 | `pnpm run revalidate:dry-run` | Every transition the cron would make, against the live feeds, writing nothing |
 | `node scripts/revalidate.mjs --dry-run --fixtures tests/fixtures/revalidate` | The same, against fixtures — no network, deterministic, what the test suite runs |

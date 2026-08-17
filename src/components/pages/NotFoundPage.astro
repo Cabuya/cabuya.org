@@ -1,4 +1,5 @@
 ---
+import Illustration from '@/components/editorial/Illustration.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import type { Language } from '@/lib/i18n';
 import { GITHUB_URL } from '@/lib/site-navigation';
@@ -19,12 +20,20 @@ const homeHref = lang === 'en' ? '/' : `/${lang}/`;
   description={t.notFoundPage.description}
 >
   <section class="main-container py-24 text-center md:py-32">
-    <img
-      src="/images/brand/cabuya-isologo.webp"
-      alt=""
-      width="96"
-      height="96"
-      class="mx-auto h-24 w-24 opacity-80"
+    {/*
+      `MK-01` — the thread that snapped and was knotted back together, in place
+      of the isologo the page used to repeat.
+
+      A broken link is a small failure and the page should be gracious about it.
+      The mark says "this happens, it is fixable, keep going" in the project's
+      own vocabulary, and it says it without the logo implying the brand is the
+      subject of the page.
+    */}
+    <Illustration
+      id="404-retied"
+      loading="eager"
+      class="mx-auto h-auto w-full max-w-[13.5rem] sm:max-w-xs"
+      sizes="(min-width: 640px) 320px, 216px"
     />
     <h1
       class="mt-8 font-display text-4xl font-bold text-cabuya-primary md:text-5xl"

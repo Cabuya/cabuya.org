@@ -7,6 +7,7 @@
  * end on something a reader can actually go and do — which is the only kind of
  * call to action this project is allowed to make.
  */
+import Illustration from '@/components/editorial/Illustration.astro';
 import type { Language } from '@/lib/i18n';
 import { GITHUB_URL } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
@@ -22,20 +23,17 @@ const t = getTranslations(lang);
  * `HP-02` — the open knot, to the left of the contribution paths.
  *
  * Transparent, so it sits on the panel's forest fill (`#0B3D32`) as readily as
- * on either page ground; verified against all three. The asset's own sides are
- * feathered in the export because the generator ran the cords off the canvas —
- * see the entry, which asks for a regeneration rather than treating the fade
- * as the fix.
+ * on either page ground; verified against all three — this is the one asset
+ * that lands on a third ground, which is exactly the case transparency was
+ * chosen for.
+ *
+ * The export used to feather its own sides, because the generator ran both
+ * cords off the canvas and a fade was the least-bad repair. It no longer does:
+ * `build-illustrations.mjs` re-frames every master to its own bounding box and
+ * pads the 8% margin back on, so the cords end inside the canvas and the gold
+ * cord keeps its frayed tail.
  */
-const JOIN_ART = {
-  src: '/images/visuals/home/join-open-knot.webp',
-  srcset:
-    '/images/visuals/home/join-open-knot.webp 720w, /images/visuals/home/join-open-knot-2x.webp 1440w',
-  sizes: '(min-width: 1024px) 38vw, 90vw',
-  width: 720,
-  height: 480,
-  present: true,
-};
+const JOIN_ART = { present: true };
 
 const links = [
   {
@@ -58,16 +56,9 @@ const links = [
   >
     {
       JOIN_ART.present && (
-        <img
-          src={JOIN_ART.src}
-          srcset={JOIN_ART.srcset}
-          sizes={JOIN_ART.sizes}
-          alt=""
-          width={JOIN_ART.width}
-          height={JOIN_ART.height}
-          loading="lazy"
-          decoding="async"
-          class="order-last mx-auto w-full max-w-md lg:order-first lg:max-w-none"
+        <Illustration
+          id="join-open-knot"
+          class="order-last mx-auto h-auto w-full max-w-[17rem] sm:max-w-sm lg:order-first lg:max-w-none"
         />
       )
     }
