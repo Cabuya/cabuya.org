@@ -9,7 +9,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { DENY_KEYS, DENY_PATTERNS, SPA_EXCLUSIONS } from '@cabuya/validator';
+import {
+  CORS_RECIPES,
+  DENY_KEYS,
+  DENY_PATTERNS,
+  SPA_EXCLUSIONS,
+} from '@cabuya/validator';
 
 import type { Language } from '@/lib/i18n';
 import { diagramLines } from '@/lib/markdown-for-agents';
@@ -74,6 +79,22 @@ export function quickstartSections(lang: Language): TwinSection[] {
               entry.path ? ` (\`${entry.path}\`)` : ''
             }`
         ),
+      ],
+    },
+    {
+      heading: t.quickstart.corsTitle,
+      lines: [
+        t.quickstart.corsLead,
+        '',
+        `> ${t.quickstart.corsWhy}`,
+        '',
+        ...CORS_RECIPES.flatMap((recipe) => [
+          `**${recipe.label}**${recipe.file ? ` — \`${recipe.file}\`` : ''}`,
+          '',
+          recipe.note[lang] ?? recipe.note.en,
+          ...(recipe.snippet ? ['', '```', recipe.snippet, '```'] : []),
+          '',
+        ]),
       ],
     },
     {

@@ -22,7 +22,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { DENY_KEYS, DENY_PATTERNS, SPA_EXCLUSIONS } from '@cabuya/validator';
+import {
+  CORS_RECIPES,
+  DENY_KEYS,
+  DENY_PATTERNS,
+  SPA_EXCLUSIONS,
+} from '@cabuya/validator';
 import CodeBlock from '@/components/developers/CodeBlock.astro';
 import DocsTabs from '@/components/developers/DocsTabs.astro';
 import QuickstartPath from '@/components/diagrams/developers/QuickstartPath.astro';
@@ -50,6 +55,7 @@ const feed = readFileSync(join(FIXTURES, 'feed.json'), 'utf-8').trim();
 const headings = buildToc([
   { depth: 2, text: t.quickstart.fileFirstTitle },
   { depth: 2, text: t.quickstart.spaTitle },
+  { depth: 2, text: t.quickstart.corsTitle },
   { depth: 2, text: t.quickstart.piiTitle },
   { depth: 2, text: t.quickstart.validatorTitle },
   { depth: 2, text: t.quickstart.honestyTitle },
@@ -192,8 +198,55 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
     }
   </DocsTabs>
 
-  <!-- 4. The PII decision, as a step -->
-  <h2 id={headings[2].slug}>{t.quickstart.piiTitle}</h2>
+  <!-- 4. The header two static files cannot carry -->
+  <h2 id={headings[2].slug}>{t.quickstart.corsTitle}</h2>
+  <p>{t.quickstart.corsLead}</p>
+
+  <Callout tone="caution" label={t.quickstart.corsTitle}>
+    <p>{t.quickstart.corsWhy}</p>
+  </Callout>
+
+  <DocsTabs
+    name="cors-recipes"
+    legend={t.quickstart.corsTitle}
+    tabs={CORS_RECIPES.map((entry) => ({
+      id: entry.id,
+      label: entry.label,
+    }))}
+  >
+    {
+      CORS_RECIPES.map((entry) => (
+        <div data-tab={entry.id}>
+          <div class="p-4">
+            <p class="text-sm leading-relaxed text-cabuya-text-secondary">
+              {segments(entry.note[lang] ?? entry.note.en).map((segment) =>
+                segment.code ? (
+                  <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5 text-xs">
+                    {segment.text}
+                  </code>
+                ) : (
+                  segment.text
+                )
+              )}
+            </p>
+            {entry.snippet && (
+              <div class="mt-3">
+                <CodeBlock
+                  code={entry.snippet}
+                  lang={entry.file?.endsWith('.json') ? 'json' : 'text'}
+                  title={entry.file ?? entry.label}
+                  uiLang={lang}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </DocsTabs>
+
+  <!-- 5. The PII decision, as a step -->
+  <h2 id={headings[3].slug}>{t.quickstart.piiTitle}</h2>
   <p>{t.quickstart.piiLead}</p>
 
   <div class="not-prose my-6 grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
@@ -237,7 +290,7 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   </Callout>
 
   <!-- 6. Where the validator begins -->
-  <h2 id={headings[3].slug}>{t.quickstart.validatorTitle}</h2>
+  <h2 id={headings[4].slug}>{t.quickstart.validatorTitle}</h2>
   <p>{t.quickstart.validatorLead}</p>
   <p class="not-prose my-6">
     <a
@@ -255,7 +308,7 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   />
 
   <!-- 7. How long this takes, honestly -->
-  <h2 id={headings[4].slug}>{t.quickstart.honestyTitle}</h2>
+  <h2 id={headings[5].slug}>{t.quickstart.honestyTitle}</h2>
   <p>{t.quickstart.honestyBody}</p>
   <p>{t.quickstart.honestyAfternoon}</p>
 

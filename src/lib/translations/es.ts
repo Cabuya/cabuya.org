@@ -187,7 +187,7 @@ export const es: SiteTranslations = {
     lead: 'Cabuya es un documento y un validador. No hay cuenta que crear, ni llave que solicitar, ni con quién negociar — nosotros incluidos.',
     promiseTitle: 'La versión de cinco minutos',
     promiseBody:
-      'Publica un archivo JSON con tus lugares en una URL estable, y un manifiesto pequeño en una ruta conocida que declare quién eres. Ejecuta el validador contra ambos y corrige lo que reporte. Eso es conformidad en L2, y para una aplicación pequeña es una tarde.',
+      'Publica un archivo JSON con tus lugares en una URL estable, y un manifiesto pequeño en una ruta conocida que declare quién eres. Sírvelos con `Access-Control-Allow-Origin: *`, ejecuta el validador contra ellos y corrige lo que reporte. Eso es conformidad en L2, y para una aplicación pequeña es una tarde.',
     transportsTitle: 'Un esquema, cuatro transportes',
     transportsLead:
       'El mismo registro place se mueve de cuatro maneras. Cuál sirves es una decisión de operación; el registro no cambia, así que un consumidor escrito contra uno funciona contra los otros.',
@@ -219,9 +219,9 @@ export const es: SiteTranslations = {
   quickstart: {
     metaTitle: 'Guía rápida — Cabuya',
     metaDescription:
-      'Publica tu primer feed de Cabuya: dos archivos, una ejecución del validador y una entrada en el registro. Copiar y pegar toma cinco minutos.',
+      'Publica tu primer feed de Cabuya: dos archivos, una cabecera, una ejecución del validador y una entrada en el registro. Copiar y pegar toma cinco minutos.',
     title: 'Publica tu primer feed',
-    lead: 'Dos archivos y una ejecución del validador. Todo lo de abajo está listo para copiar y pegar, y cumple con la especificación que enseña: los bloques de esta página los revisa la suite de pruebas contra el validador real.',
+    lead: 'Dos archivos, una cabecera de respuesta y una ejecución del validador. Todo lo de abajo está listo para copiar y pegar, y cumple con la especificación que enseña: los bloques de esta página los revisa la suite de pruebas contra el validador real.',
 
     agentPathTitle: 'Si tienes un agente de código',
     agentPathBody:
@@ -264,6 +264,11 @@ export const es: SiteTranslations = {
     spaWhy:
       'Cuatro de las veinte aplicaciones del análisis fundacional fallaron aquí, y las cuatro creían haber publicado. El manifiesto se alcanzaba, respondía 200 y contenía su página de inicio.',
 
+    corsTitle: 'Una cabecera, que un archivo no puede llevar',
+    corsLead:
+      'Dos archivos estáticos son válidos contra el esquema y todavía no son L2. El feed además tiene que poder leerse desde un navegador, y eso es una cabecera de respuesta que define tu hosting — no algo que puedas poner dentro del JSON.',
+    corsWhy:
+      'La especificación la llama el único MUST no obvio. Sin `Access-Control-Allow-Origin: *`, cualquier consumidor que corra en un navegador necesita un proxy en servidor para leerte — así que quienes tienen el menor costo de implementación son justo los que quedan afuera. El validador la reporta como ENV007, y es la comprobación que falla primero un publicador que hizo bien todo lo demás.',
     piiTitle: 'Antes de publicar: la única decisión que es tuya',
     piiLead:
       'Cabuya lleva lugares, no personas. Revisa los campos que vas a mapear y confirma que ninguno guarda el nombre de una persona, un teléfono o correo personal, un caso individual, o una decisión de moderación sobre una persona.',
@@ -281,7 +286,7 @@ export const es: SiteTranslations = {
 
     honestyTitle: 'Cuánto toma esto de verdad',
     honestyBody:
-      'Cinco minutos es el número honesto para el camino de arriba: dos archivos estáticos, copiados, editados y subidos. Es un nivel de conformidad real —L2— y les sirve de verdad a los consumidores.',
+      'Cinco minutos es el número honesto para el camino de arriba: dos archivos estáticos y una cabecera, copiados, editados y subidos. Es un nivel de conformidad real —L2— y les sirve de verdad a los consumidores.',
     honestyAfternoon:
       'Mapear una base de datos viva al esquema es una tarde, a veces dos: hay que reconciliar tus estados con el vocabulario compartido, y alguien tiene que decidir qué significan tus datos en realidad. Ese trabajo no se puede evitar, y es preferible decirlo aquí a dejar que aparezca en el paso 4.',
   },

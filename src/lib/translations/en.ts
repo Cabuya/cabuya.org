@@ -186,7 +186,7 @@ export const en: SiteTranslations = {
     lead: 'Cabuya is a document and a validator. There is no account to create, no key to request, and nobody to negotiate with — including us.',
     promiseTitle: 'The five-minute version',
     promiseBody:
-      'Publish a JSON file describing your places at a stable URL, and a small manifest at a known path stating who you are. Run the validator against both and correct what it reports. That is conformance at L2, and for a small application it is an afternoon.',
+      'Publish a JSON file describing your places at a stable URL, and a small manifest at a known path stating who you are. Serve both with `Access-Control-Allow-Origin: *`, run the validator against them and correct what it reports. That is conformance at L2, and for a small application it is an afternoon.',
     transportsTitle: 'One schema, four transports',
     transportsLead:
       'The same place record moves four ways. Which one you serve is an operations decision; the record does not change, so a consumer written against one works against the others.',
@@ -219,9 +219,9 @@ export const en: SiteTranslations = {
   quickstart: {
     metaTitle: 'Quickstart — Cabuya',
     metaDescription:
-      'Publish your first Cabuya feed. Two files, one validator run, and a registry entry. Copy-paste in five minutes; a real mapping is an afternoon.',
+      'Publish your first Cabuya feed. Two files, one header, one validator run, one registry entry. Copy-paste in five minutes; a real mapping is an afternoon.',
     title: 'Publish your first feed',
-    lead: 'Two files and a validator run. Everything below is copy-paste ready and conforms to the specification it teaches — the blocks on this page are checked by the test suite against the real validator.',
+    lead: 'Two files, one response header and a validator run. Everything below is copy-paste ready and conforms to the specification it teaches — the blocks on this page are checked by the test suite against the real validator.',
 
     agentPathTitle: 'If you have a coding agent',
     agentPathBody:
@@ -264,6 +264,11 @@ export const en: SiteTranslations = {
     spaWhy:
       'Four of the twenty applications in the founding analysis failed here, and all four believed they had published. The manifest was reachable, returned 200, and contained their homepage.',
 
+    corsTitle: 'One header, which a file cannot carry',
+    corsLead:
+      'Two static files are schema-valid and are not yet L2. The feed also has to be readable from a browser, and that is a response header your host sets — not something you can put inside the JSON.',
+    corsWhy:
+      'The specification calls this the one non-obvious MUST. Without `Access-Control-Allow-Origin: *`, any consumer running in a browser needs a server-side proxy to read you — so the participants with the lowest cost to build are exactly the ones locked out. The validator reports it as ENV007, and it is the check a publisher who did everything else right fails first.',
     piiTitle: 'Before you publish: the one decision that is yours',
     piiLead:
       'Cabuya carries places, not people. Review the fields you are about to map and confirm that none of them holds a person’s name, a personal phone or email, an individual case, or a moderation verdict about an individual.',
@@ -281,7 +286,7 @@ export const en: SiteTranslations = {
 
     honestyTitle: 'How long this actually takes',
     honestyBody:
-      'Five minutes is the honest number for the path above: two static files, copied, edited and uploaded. It is a real conformance level — L2 — and it is genuinely useful to consumers.',
+      'Five minutes is the honest number for the path above: two static files and one header, copied, edited and uploaded. It is a real conformance level — L2 — and it is genuinely useful to consumers.',
     honestyAfternoon:
       'Mapping a live database into the schema is an afternoon, sometimes two: your statuses have to be reconciled with the shared vocabulary, and somebody has to decide what your data actually means. That work is not avoidable, and stating it here is better than leaving it to surface at step 4.',
   },

@@ -98,6 +98,11 @@ export {
 export const SPEC_VERSION = '0.1.0';
 
 /**
+ * SPA catch-all guidance, exported because the website's quickstart and the
+ * agent skill's stack guides render the same notes this CLI prints.
+ */
+export * from './cors-recipes.js';
+/**
  * The schemas, inlined at build time.
  *
  * Exported so an embedder — the Pages Function, a browser island, the skill —
@@ -105,8 +110,4 @@ export const SPEC_VERSION = '0.1.0';
  * finding its own copy.
  */
 export { bundledSchemas, SCHEMAS } from './schemas.js';
-/**
- * SPA catch-all guidance, exported because the website's quickstart and the
- * agent skill's stack guides render the same notes this CLI prints.
- */
 export * from './spa-exclusions.js';

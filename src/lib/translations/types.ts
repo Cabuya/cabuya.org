@@ -188,6 +188,10 @@ export interface SiteTranslations {
     spaLead: string;
     spaWhy: string;
 
+    /** The CORS step: the one L2 requirement that is not a file. */
+    corsTitle: string;
+    corsLead: string;
+    corsWhy: string;
     piiTitle: string;
     piiLead: string;
     piiKeysLabel: string;
