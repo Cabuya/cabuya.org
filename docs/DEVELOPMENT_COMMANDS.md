@@ -35,6 +35,7 @@
 | `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass; invalid examples fail the schema OR declare their designed later-pass violation | ✅ live |
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
+| `pnpm run prose:check(:strict)` | Every `--tw-prose-*` variable in the **compiled** CSS resolves to a Cabuya token, and the mapping is unlayered. Reads `dist/`, so it runs after the build | ✅ live |
 | `pnpm run registry:ids:check` | The badge endpoint's inlined id list still matches `registry/publishers/` — a new entry whose own badge would 404 fails here | ✅ live |
 | `pnpm run checks:catalogue(:strict)` | Ids unique, well-formed and never reused; every check has a title, rule and a spec anchor that resolves to a file on disk; every **implemented** check has its Spanish rule and fix; every **catalogued-but-unimplemented** check says where it is planned. Once `/developers/validator/checks` exists (Task 26) the same run cross-checks ids ↔ page anchors in both directions — it needs `pnpm run validator:build` first, and CI therefore runs it after the site build | ✅ live |
 

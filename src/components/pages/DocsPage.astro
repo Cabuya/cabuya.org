@@ -1,0 +1,91 @@
+---
+/**
+ * One renderer for every prose page in the portal.
+ *
+ * The quickstart, the spec reader and the schema reference are bespoke
+ * components because they compose generated content — a field table built from
+ * a schema is not prose. These five are prose, and prose belongs in Markdown
+ * that a writer can edit without opening a component.
+ *
+ * ## Why the collection and not a page each
+ *
+ * Five routes × two languages is ten files. Written as components that would be
+ * ten places to forget the table of contents, ten places for the trail to
+ * disagree with the sidebar, and ten chances for the English page to grow a
+ * section the Spanish one does not have. As collection entries it is one
+ * renderer, one trail, one heading extraction — and `parity:check` compares the
+ * two languages of the same route because they are the same route.
+ *
+ * The sidebar is not driven from here. It is driven from `portal-nav.ts`, which
+ * also has to list routes that come from loaders and have no Markdown file at
+ * all. `order` and `section` in the frontmatter sort a page within its section;
+ * the nav decides whether the route is offered.
+ */
+import { getCollection, render } from 'astro:content';
+import JsonLd from '@/components/JsonLd.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { SITE_URL } from '@/lib/constances';
+import { faqJsonLd } from '@/lib/faq-jsonld';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { buildToc } from '@/lib/toc';
+
+interface Props {
+  lang: Language;
+  /** Route slug without the language or the `/developers` prefix. */
+  page: string;
+}
+
+const { lang, page } = Astro.props;
+const entries = await getCollection('docs');
+const entry = entries.find((item) => item.id === `${lang}/${page}`);
+
+if (!entry) {
+  throw new Error(
+    `No docs entry for ${lang}/${page}. Every portal route needs a file in both languages — a missing translation is a missing file, by design.`
+  );
+}
+
+const { Content, headings } = await render(entry);
+
+/** DocsLayout prepends "Developers"; the trail is what comes after it. */
+const trail = [{ label: entry.data.title }];
+
+const canonical = `${SITE_URL}${getUrlPrefix(lang)}/developers/${page}`;
+
+/**
+ * Structured data, generated from the body the reader sees.
+ *
+ * Only when the frontmatter asks for it: a page that is not an FAQ must not
+ * emit `FAQPage`, and a page that stops being one stops emitting it the moment
+ * its headings stop looking like questions.
+ */
+const structuredData =
+  entry.data.jsonld === 'faq' && entry.body
+    ? faqJsonLd(entry.body, canonical, lang)
+    : null;
+
+/**
+ * The date is rendered only when the frontmatter carries one.
+ *
+ * A stale "updated" is worse than none: it tells a reader the page was checked
+ * when it was not. The schema requires the field, so the honesty is enforced at
+ * the point of writing rather than here.
+ */
+const updated =
+  entry.data.updated instanceof Date
+    ? entry.data.updated.toISOString().slice(0, 10)
+    : undefined;
+---
+
+<DocsLayout
+  lang={lang}
+  title={entry.data.title}
+  description={entry.data.description}
+  trail={trail}
+  headings={buildToc(headings)}
+  updated={updated}
+>
+  {structuredData && <JsonLd data={structuredData} />}
+  <Content />
+</DocsLayout>

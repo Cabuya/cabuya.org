@@ -1,0 +1,21 @@
+---
+/**
+ * Every prose route in the portal, from the `docs` collection.
+ *
+ * `getStaticPaths` reads the English entries and generates one route each, so a
+ * page exists exactly when its Markdown does. Astro resolves static files
+ * before dynamic ones, which is why the quickstart, the specification reader,
+ * the schema reference and the validator keep their bespoke components without
+ * colliding with this.
+ */
+import DocsPage from '@/components/pages/DocsPage.astro';
+import { docsRoutes } from '@/lib/docs-routes';
+
+export async function getStaticPaths() {
+  return (await docsRoutes()).map((page) => ({ params: { page } }));
+}
+
+const { page } = Astro.params as { page: string };
+---
+
+<DocsPage lang="en" page={page} />

@@ -314,54 +314,6 @@
     @apply md:max-w-[50%];
   }
 
-  /*
-   * Prose, retargeted to the token layer.
-   *
-   * The typography plugin styles Markdown-rendered content through its own
-   * `--tw-prose-*` variables. Pointing each at a Cabuya token — rather than
-   * restyling `.prose p`, `.prose a`, … one selector at a time — means prose
-   * inherits the palette, including the dark-mode flip, for free.
-   *
-   * The `invert` set is deliberately identical: the tokens already flip under
-   * `.dark`, so `prose-invert` would flip an already-flipped palette back.
-   * Nothing in this codebase should ever need that class.
-   */
-  .prose {
-    --tw-prose-body: var(--color-cabuya-text-secondary);
-    --tw-prose-headings: var(--color-cabuya-text);
-    --tw-prose-lead: var(--color-cabuya-text-secondary);
-    --tw-prose-links: var(--color-cabuya-primary);
-    --tw-prose-bold: var(--color-cabuya-text);
-    --tw-prose-counters: var(--color-cabuya-text-muted);
-    --tw-prose-bullets: var(--color-cabuya-border-strong);
-    --tw-prose-hr: var(--color-cabuya-border);
-    --tw-prose-quotes: var(--color-cabuya-text);
-    --tw-prose-quote-borders: var(--color-cabuya-accent);
-    --tw-prose-captions: var(--color-cabuya-text-muted);
-    --tw-prose-code: var(--color-cabuya-text);
-    --tw-prose-pre-code: var(--color-cabuya-on-fill);
-    --tw-prose-pre-bg: var(--color-cabuya-bg-dark);
-    --tw-prose-th-borders: var(--color-cabuya-border-strong);
-    --tw-prose-td-borders: var(--color-cabuya-border);
-
-    --tw-prose-invert-body: var(--color-cabuya-text-secondary);
-    --tw-prose-invert-headings: var(--color-cabuya-text);
-    --tw-prose-invert-lead: var(--color-cabuya-text-secondary);
-    --tw-prose-invert-links: var(--color-cabuya-primary);
-    --tw-prose-invert-bold: var(--color-cabuya-text);
-    --tw-prose-invert-counters: var(--color-cabuya-text-muted);
-    --tw-prose-invert-bullets: var(--color-cabuya-border-strong);
-    --tw-prose-invert-hr: var(--color-cabuya-border);
-    --tw-prose-invert-quotes: var(--color-cabuya-text);
-    --tw-prose-invert-quote-borders: var(--color-cabuya-accent);
-    --tw-prose-invert-captions: var(--color-cabuya-text-muted);
-    --tw-prose-invert-code: var(--color-cabuya-text);
-    --tw-prose-invert-pre-code: var(--color-cabuya-on-fill);
-    --tw-prose-invert-pre-bg: var(--color-cabuya-bg-dark);
-    --tw-prose-invert-th-borders: var(--color-cabuya-border-strong);
-    --tw-prose-invert-td-borders: var(--color-cabuya-border);
-  }
-
   /* Headings take the display face; body prose stays in Poppins. */
   .prose :is(h1, h2, h3, h4) {
     font-family: var(--font-display);
@@ -679,4 +631,70 @@
     opacity: 1;
     translate: 0 0;
   }
+}
+
+/*
+ * Prose, retargeted to the token layer.
+ *
+ * The typography plugin styles Markdown-rendered content through its own
+ * `--tw-prose-*` variables. Pointing each at a Cabuya token — rather than
+ * restyling `.prose p`, `.prose a`, … one selector at a time — means prose
+ * inherits the palette, including the dark-mode flip, for free.
+ *
+ * The `invert` set is deliberately identical: the tokens already flip under
+ * `.dark`, so `prose-invert` would flip an already-flipped palette back.
+ * Nothing in this codebase should ever need that class.
+ *
+ * ## Why this block is not inside a layer
+ *
+ * It was, in `@layer components`, and it did nothing. Tailwind 4's typography
+ * plugin registers `.prose` as a utility, and utilities come after components
+ * in the cascade — so every one of these declarations lost to the plugin's own
+ * defaults, and prose across the whole site rendered in Tailwind slate rather
+ * than in Cabuya tokens.
+ *
+ * In light mode that was invisible: the plugin's body colour is a dark grey on
+ * a near-white page, which looks approximately right. In dark mode it was
+ * `oklch(37.3%)` body text on a `#082a24` background — a contrast ratio around
+ * 1.5:1, which is not a styling preference, it is unreadable.
+ *
+ * Unlayered rules beat every cascade layer, whatever the plugin does with its
+ * own. That is the property this block needs, so it lives outside them all.
+ * `prose:check` fails the build if the winning declaration in the compiled CSS
+ * stops pointing at a token.
+ */
+.prose {
+  --tw-prose-body: var(--color-cabuya-text-secondary);
+  --tw-prose-headings: var(--color-cabuya-text);
+  --tw-prose-lead: var(--color-cabuya-text-secondary);
+  --tw-prose-links: var(--color-cabuya-primary);
+  --tw-prose-bold: var(--color-cabuya-text);
+  --tw-prose-counters: var(--color-cabuya-text-muted);
+  --tw-prose-bullets: var(--color-cabuya-border-strong);
+  --tw-prose-hr: var(--color-cabuya-border);
+  --tw-prose-quotes: var(--color-cabuya-text);
+  --tw-prose-quote-borders: var(--color-cabuya-accent);
+  --tw-prose-captions: var(--color-cabuya-text-muted);
+  --tw-prose-code: var(--color-cabuya-text);
+  --tw-prose-pre-code: var(--color-cabuya-on-fill);
+  --tw-prose-pre-bg: var(--color-cabuya-bg-dark);
+  --tw-prose-th-borders: var(--color-cabuya-border-strong);
+  --tw-prose-td-borders: var(--color-cabuya-border);
+
+  --tw-prose-invert-body: var(--color-cabuya-text-secondary);
+  --tw-prose-invert-headings: var(--color-cabuya-text);
+  --tw-prose-invert-lead: var(--color-cabuya-text-secondary);
+  --tw-prose-invert-links: var(--color-cabuya-primary);
+  --tw-prose-invert-bold: var(--color-cabuya-text);
+  --tw-prose-invert-counters: var(--color-cabuya-text-muted);
+  --tw-prose-invert-bullets: var(--color-cabuya-border-strong);
+  --tw-prose-invert-hr: var(--color-cabuya-border);
+  --tw-prose-invert-quotes: var(--color-cabuya-text);
+  --tw-prose-invert-quote-borders: var(--color-cabuya-accent);
+  --tw-prose-invert-captions: var(--color-cabuya-text-muted);
+  --tw-prose-invert-code: var(--color-cabuya-text);
+  --tw-prose-invert-pre-code: var(--color-cabuya-on-fill);
+  --tw-prose-invert-pre-bg: var(--color-cabuya-bg-dark);
+  --tw-prose-invert-th-borders: var(--color-cabuya-border-strong);
+  --tw-prose-invert-td-borders: var(--color-cabuya-border);
 }

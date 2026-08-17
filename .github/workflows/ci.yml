@@ -91,6 +91,13 @@ jobs:
       - name: Content gate — /internal never reaches production (strict)
         run: pnpm run internal:check:strict
 
+      # Reads the compiled stylesheet, because the question is not what we
+      # wrote but which declaration wins. The mapping this guards spent several
+      # tasks losing silently to the typography plugin's defaults — invisible
+      # in light mode, unreadable in dark.
+      - name: Design gate — prose uses the palette (strict)
+        run: pnpm run prose:check:strict
+
       # Runs AFTER the site build on purpose: the gate's last assertion
       # cross-checks every check id against the anchors on the built
       # /developers/validator/checks page. That page arrives in Task 26, and

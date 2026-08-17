@@ -17,6 +17,20 @@
   the text-safe fique (4.92:1). The token test scans for violations.
 - Dark mode is measured against the **elevated** surface (the lighter, binding
   ground).
+- **Prose is measured too, and it was the one place that was not.** Every
+  Markdown-rendered page is styled through the typography plugin's
+  `--tw-prose-*` variables, and for six tasks those resolved to the plugin's
+  defaults rather than to tokens, because the mapping sat inside a cascade
+  layer the plugin's utilities beat. In light mode that measured fine by
+  accident. In dark mode the body text was about **1.5:1** — the specification,
+  the quickstart and every portal page. Measured after the fix: body 10.44:1,
+  headings 13.87:1, links 5.96:1 in dark; 7.71 / 13.07 / 11.54 in light.
+  `prose:check` reads the compiled stylesheet and fails the build if any prose
+  variable stops resolving to a token.
+
+  The lesson worth keeping: **a contrast rule that is only checked against
+  declared tokens does not check the surfaces those tokens never reached.** The
+  token test was green throughout.
 
 ## 2. The two site-specific rules
 

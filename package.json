@@ -71,6 +71,8 @@
     "retention:check": "node scripts/check-no-retention.mjs",
     "retention:check:strict": "node scripts/check-no-retention.mjs --strict",
     "internal:check": "node scripts/check-internal-excluded.mjs",
+    "prose:check": "node scripts/check-prose-tokens.mjs",
+    "prose:check:strict": "node scripts/check-prose-tokens.mjs --strict",
     "internal:check:strict": "node scripts/check-internal-excluded.mjs --strict",
     "checks:catalogue": "node scripts/check-checks-catalogue.mjs",
     "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict"

@@ -1,0 +1,20 @@
+---
+import DocsPage from '@/components/pages/DocsPage.astro';
+import { docsRoutes } from '@/lib/docs-routes';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+
+export async function getStaticPaths() {
+  const pages = await docsRoutes();
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .flatMap((lang) => pages.map((page) => ({ params: { lang, page } })));
+}
+
+const { lang, page } = Astro.params as { lang: Language; page: string };
+---
+
+<DocsPage lang={lang} page={page} />

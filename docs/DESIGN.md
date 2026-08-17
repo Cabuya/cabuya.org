@@ -10,7 +10,7 @@
 
 ---
 
-## 1. The five hard rules
+## 1. The six hard rules
 
 1. **Single declaration site.** `--color-cabuya-*` variables are declared only
    in `src/styles/global.css`. Never set or override one in a component, an
@@ -30,6 +30,15 @@
 5. **Every color on the site comes from a token.** No hex literals in
    components. If a design needs a value that doesn't exist, add a token (with
    a measured ratio in its comment) — don't inline it.
+6. **The prose token mapping is unlayered, and stays that way.** `.prose`
+   points every `--tw-prose-*` variable at a Cabuya token, and that block sits
+   outside every `@layer` in `global.css`. It was inside `@layer components`
+   for six tasks and did nothing: Tailwind 4 registers `.prose` as a *utility*,
+   utilities win over components, and so the entire reading surface — the
+   specification, the quickstart, every portal page — rendered in the plugin's
+   default slate. Light mode hid it; dark mode was `oklch(37.3%)` body text on
+   `#082a24`, about 1.5:1. `prose:check` reads the **compiled** stylesheet and
+   fails the build if the winning declaration stops being a token.
 
 ## 2. Color tokens
 
@@ -145,4 +154,5 @@ severity as text; that rule is normative in `docs/ACCESSIBILITY.md`.)
 | Measured contrast re-computed (body pairs, fique-strong, borders, fill pair) | same |
 | Raw-grey ban · fique-on-light-text ban · no `corag-` remnants | same |
 | No hex literals in the token showcase | same |
+| Prose variables resolve to tokens, in the compiled CSS | `prose:check` |
 | WCAG runtime scan (axe, route matrix) | `a11y:check` (migration Task 35) |

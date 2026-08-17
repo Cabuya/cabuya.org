@@ -82,8 +82,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Profiles', es: 'Perfiles' },
         path: '/developers/profiles',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
       },
     ],
   },
@@ -113,8 +112,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Agent skill', es: 'Skill para agentes' },
         path: '/developers/skill',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
         blurb: {
           en: 'Install the protocol into an agent; it works offline.',
           es: 'Instala el protocolo en un agente; funciona sin conexión.',
@@ -129,8 +127,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Consumption rules', es: 'Reglas de consumo' },
         path: '/developers/consume',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
         blurb: {
           en: 'Six rules for reading someone else’s feed without harming them.',
           es: 'Seis reglas para leer el feed de otro sin hacerle daño.',
@@ -139,14 +136,12 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'MCP server', es: 'Servidor MCP' },
         path: '/developers/mcp',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
       },
       {
         label: { en: 'FAQ', es: 'Preguntas frecuentes' },
         path: '/developers/faq',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
       },
     ],
   },

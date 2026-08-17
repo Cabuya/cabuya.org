@@ -39,6 +39,13 @@ const docs = defineCollection({
     section: z.enum(['start', 'reference', 'tools', 'consuming']),
     order: z.number().int().nonnegative(),
     /**
+     * Structured data to emit for this page, when it has a shape worth
+     * declaring. Only `faq` today, and it is generated from the page's own
+     * headings rather than written — a second copy of the answers is a copy
+     * that drifts, and the one that drifts is the one search engines read.
+     */
+    jsonld: z.enum(['faq']).optional(),
+    /**
      * The date the content last changed, and it must be honest: the portal
      * renders it, and a stale "updated" is worse than none — it tells a reader
      * the page was checked when it was not.

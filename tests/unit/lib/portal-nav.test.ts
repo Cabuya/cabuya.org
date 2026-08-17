@@ -32,11 +32,34 @@ import { buildToc, slugify } from '@/lib/toc';
 const ROOT = process.cwd();
 const PAGES = join(ROOT, 'src', 'pages');
 
+const DOCS = join(ROOT, 'src', 'content', 'docs');
+
+/**
+ * Does a route in the sidebar have something behind it?
+ *
+ * Two ways for a portal route to exist, and both count. A bespoke component
+ * (`quickstart.astro`, the spec reader) is a file under `src/pages`. A prose
+ * page is a pair of Markdown files rendered by `developers/[page].astro`.
+ *
+ * The prose case requires **both** languages, which is stricter than checking
+ * for a route file. A sidebar entry pointing at a page that exists in English
+ * and 404s on `/es` is exactly the defect this test is for, and a single-file
+ * check would have called it live.
+ */
 function routeExists(path: string): boolean {
   const bare = path.replace(/^\//, '');
-  return (
+  if (
     existsSync(join(PAGES, `${bare}.astro`)) ||
     existsSync(join(PAGES, bare, 'index.astro'))
+  ) {
+    return true;
+  }
+
+  const slug = bare.replace(/^developers\//, '');
+  return (
+    existsSync(join(PAGES, 'developers', '[page].astro')) &&
+    existsSync(join(DOCS, 'en', `${slug}.md`)) &&
+    existsSync(join(DOCS, 'es', `${slug}.md`))
   );
 }
 

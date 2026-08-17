@@ -38,11 +38,11 @@
 | `/developers/validator` | Live validator (paste mode live; URL mode wired, awaiting the Function) | ✅ live |
 | `/developers/validator/checks` | The full check catalogue; stable anchors `#REC001` | ✅ live |
 | `/developers/validator/probe` | What our probe UA does and why (politeness page) | Task 27 |
-| `/developers/consume` | The six consumption rules as a checklist | Task 29 |
-| `/developers/profiles` | Core vs Extended; how extension sets become profiles | Task 29 |
-| `/developers/mcp` | The reference MCP server — documented, honestly "not yet deployed" | Task 29 |
-| `/developers/faq` | The four adoption blockers + more, anchor-linked | Task 29 |
-| `/developers/skill` | Skill install page per agent + compatibility matrix | Task 29 |
+| `/developers/consume` | The six consumption rules as a checklist | ✅ live |
+| `/developers/profiles` | Core vs Extended; how extension sets become profiles | ✅ live |
+| `/developers/mcp` | The reference MCP server — documented, honestly "not yet deployed" | ✅ live |
+| `/developers/faq` | The four adoption blockers + more, anchor-linked | ✅ live |
+| `/developers/skill` | Skill install page per agent + compatibility matrix | ✅ live |
 
 ### Machine surfaces (no `/es` twin — language-neutral or EN-pinned)
 
