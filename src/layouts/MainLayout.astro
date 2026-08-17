@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import WebMcpTools from '@/components/agents/WebMcpTools.astro';
 import BaseHead from '@/components/BaseHead.astro';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/layout/Header.svelte';
@@ -240,6 +241,16 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       <slot />
     </main>
     <Footer lang={lang} />
+    {/*
+      The site's two public actions, offered to an agent driving the browser.
+
+      Every page, not only the landing: an agent lands wherever a link took it,
+      and the tools describe the site rather than the page. Inline and feature-
+      detected, so a browser without `navigator.modelContext` — which is every
+      browser today except Chrome behind a flag — parses ~40 lines and does
+      nothing. See the component for why it is not an island.
+    */}
+    <WebMcpTools />
     {/*
       No analytics boot script.
 

@@ -24,14 +24,20 @@ const API = 'https://api.cloudflare.com/client/v4';
 const DRY_RUN = process.env.DNS_AID_DRY_RUN === '1';
 
 /**
- * Where the MCP server actually runs.
+ * Where an MCP server actually runs — opt-in, and checked before it is published.
  *
- * Not this site: cabuya.org explains the protocol, an application serves it.
- * Verified
- * with a `tools/list` call — it returns listar_emergencias and friends. If that
- * ever stops being true, drop the _mcp record rather than pointing it at a 404.
+ * This used to default to `ayuda.cabuya.org` on the strength of a `tools/list`
+ * call that once succeeded. That host does not resolve today, so the default
+ * published a `_mcp._agents` record pointing at nothing: a discovery record is a
+ * promise to an agent, and one that resolves to NXDOMAIN is worse than no record
+ * at all, because the agent burns a lookup and a connection attempt on it.
+ *
+ * So: no default. Set `DNS_AID_MCP_HOST` when a server exists, and this script
+ * resolves the host first and refuses to publish if it cannot. cabuya.org's own
+ * reference server is specified and not deployed (see `/developers/mcp`), which
+ * is why there is nothing to point at yet.
  */
-const MCP_HOST = process.env.DNS_AID_MCP_HOST || 'ayuda.cabuya.org';
+const MCP_HOST = process.env.DNS_AID_MCP_HOST || null;
 
 /** Hostnames that agents / scanners resolve (FQDN without trailing dot). */
 const TARGET_HOSTS = (process.env.DNS_AID_HOSTS || 'cabuya.org')
@@ -178,6 +184,26 @@ async function upsertHttps(zoneId, token, name, targetHost) {
   }
 }
 
+/**
+ * Does the host exist at all?
+ *
+ * DNS-over-HTTPS rather than `node:dns`, so the answer comes from a resolver the
+ * script can reach in any sandbox, and so a stale local resolver cannot green-light
+ * a record that the internet cannot follow.
+ */
+async function resolves(host) {
+  try {
+    const res = await fetch(
+      `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(host)}&type=A`,
+      { headers: { accept: 'application/dns-json' } }
+    );
+    const json = await res.json();
+    return Array.isArray(json.Answer) && json.Answer.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 async function ensureDnssec(zoneId, token) {
   if (DRY_RUN) {
     console.log('[dry-run] Would GET/PATCH DNSSEC status');
@@ -213,11 +239,27 @@ async function main() {
   console.log(`Zone ${ZONE_NAME} (${zoneId})`);
   console.log(`Targets: ${TARGET_HOSTS.join(', ')}`);
 
+  const mcpHost = MCP_HOST && (await resolves(MCP_HOST)) ? MCP_HOST : null;
+  if (MCP_HOST && !mcpHost) {
+    console.warn(
+      `Skipping _mcp._agents: ${MCP_HOST} does not resolve. A discovery record\n` +
+        '  pointing at NXDOMAIN costs an agent a lookup and gives it nothing.'
+    );
+  }
+  if (!MCP_HOST) {
+    console.log(
+      'No DNS_AID_MCP_HOST set — publishing _index._agents only.\n' +
+        '  The reference MCP server is specified and not deployed; there is nothing to advertise.'
+    );
+  }
+
   for (const host of TARGET_HOSTS) {
     // _index points at this site, which serves llms.txt and the .md twins.
     await upsertHttps(zoneId, token, indexRecordName(host, ZONE_NAME), host);
-    // _mcp points at the application — that is where the MCP server is.
-    await upsertHttps(zoneId, token, mcpRecordName(host, ZONE_NAME), MCP_HOST);
+    // _mcp points at the application — only once one answers.
+    if (mcpHost) {
+      await upsertHttps(zoneId, token, mcpRecordName(host, ZONE_NAME), mcpHost);
+    }
   }
 
   if (token) {

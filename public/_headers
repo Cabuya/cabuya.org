@@ -45,8 +45,10 @@
 
 # The agent-readiness surface.
 #
-# What the site publishes for agents is the `.md` twin of every page, and
-# `llms.txt`. That is the whole list, and it is deliberately short.
+# What the site publishes for agents: the `.md` twin of every page, `llms.txt`
+# and `llms-full.txt`, `/openapi.json`, `/.well-known/api-catalog` (RFC 9727),
+# `/auth.md`, and `/.well-known/agent-skills/index.json` with the skill it
+# digests. Each one describes something that exists.
 #
 # Removed in the launch dry run: the OAuth metadata endpoints, `auth.md`, the
 # agent-skills index, an `api-catalog` link header pointing at a file that was
@@ -58,15 +60,19 @@
 # A published discovery document for endpoints that do not exist is precisely
 # the failure this project measures other people's manifests for.
 #
-# Restored since, because these three describe endpoints that do exist:
-# `/openapi.json` (the three public, authless endpoints, and nothing else),
-# `/.well-known/api-catalog` (RFC 9727, pointing at that document and at the
-# human pages beside it), and the `Link` headers below (RFC 8288).
+# `auth.md` and the skills index are back, and they are the inverse of what was
+# deleted. The new `auth.md` documents that there is **no** registration flow,
+# no issuer and no credential, lists only endpoints a Function serves, and names
+# each absent document with the reason it is absent —
+# `tests/unit/content/agent-discovery.test.ts` enforces all three. The skills
+# index lists one skill this site serves itself, with a sha256 of the exact
+# bytes; it does not list the `Cabuya/cabuya-skill` pack, which is still in
+# development.
 #
-# Still absent, and staying absent: OAuth and OIDC discovery, the protected
-# resource metadata, `auth.md` and an MCP server card. This site has no
-# authorization server, no protected resource and no deployed MCP endpoint,
-# and a card advertising one would be the same lie in a newer format.
+# Still absent, and staying absent until the thing itself exists: OAuth and OIDC
+# discovery, the protected resource metadata, and an MCP server card. This site
+# has no authorization server, no protected resource and no deployed MCP
+# endpoint, and a card advertising one would be the same lie in a newer format.
 
 # Agent discovery, on every HTML page. `api-catalog` and `service-desc` are
 # IANA-registered relations; `describedby` points an agent at the file written
@@ -78,6 +84,17 @@
 # extension, so nothing infers the type for it.
 /.well-known/api-catalog
   Content-Type: application/linkset+json
+
+# `.md` is served as `text/markdown` rather than downloaded. An agent that asked
+# for Markdown and received `application/octet-stream` gets a file, not a
+# document — and the agent-readiness scanner reads the type, not the extension.
+/auth.md
+  Content-Type: text/markdown; charset=utf-8
+
+# The exact path rather than `agent-skills/*`, which would also match
+# `index.json` and leave the winning Content-Type to rule-ordering trivia.
+/.well-known/agent-skills/publish-a-feed/SKILL.md
+  Content-Type: text/markdown; charset=utf-8
   Cache-Control: public, max-age=3600
 
 /openapi.json

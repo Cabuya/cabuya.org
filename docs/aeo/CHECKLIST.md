@@ -74,18 +74,49 @@ Record results:
 - [ ] Verify content negotiation middleware: `grep "text/markdown" functions/_middleware.ts`
 - [ ] **Sync check:** Compare page `.md` files against HTML content — no major sections missing
 - [ ] **Bilingual sync:** EN and ES `.md` files cover the same sections (`ls src/content/pages/en/ src/content/pages/es/`)
-- [ ] **Analytics:** Verify `markdown_request` events appear in Umami (Events tab → filter `markdown_request`)
-- [ ] **Analytics sources:** Check both `content_negotiation` and `direct_url` sources are being captured
+- [ ] **Analytics:** nothing to verify here. Both providers measure page views
+      and referrers and neither records a custom event, so the `markdown_request`
+      events these two lines used to check do not exist. Twin usage is not
+      measured, and that is a decision rather than a gap — see `docs/ANALYTICS.md`
 - [ ] Full docs: [Markdown for Agents](MARKDOWN_FOR_AGENTS.md)
 
 ## 8b. Agent-readiness (isitagentready.com)
 
-- [ ] `/auth.md` returns `200` with `Content-Type: text/markdown` and an H1 containing `auth.md`
-- [ ] `/.well-known/oauth-protected-resource` — `resource` origin matches the scanned host; `bearer_methods_supported` includes `header`
-- [ ] `/.well-known/oauth-authorization-server` includes `agent_auth` with `register_uri` + anonymous method
-- [ ] WebMCP tools register on page load via `navigator.modelContext.registerTool()` (`WebMCPBridge` uses `client:load`)
-- [ ] DNS-AID: HTTPS records for `_index._agents` and `_index._agents.v3` — see [DNS_AID.md](DNS_AID.md)
+What the scanner asks for, and what this site answers. The four "not published"
+rows are decisions, not gaps: each would raise the score and describe
+infrastructure that does not exist.
+
+**Published**
+
+- [ ] `/auth.md` → `200`, states there is no authentication, and lists every
+      public endpoint with the limits `functions/api/validate.ts` enforces
+- [ ] `/.well-known/agent-skills/index.json` → `200`, RFC v0.2.0 shape, and the
+      `sha256` matches the skill it points at
+- [ ] `/.well-known/agent-skills/publish-a-feed/SKILL.md` → `200`
+- [ ] WebMCP: `navigator.modelContext.provideContext()` declares
+      `validate_cabuya_feed` and `read_cabuya_page_as_markdown` on every page
+      (`src/components/agents/WebMcpTools.astro`, inline + feature-detected)
+- [ ] `/.well-known/api-catalog` → `200` (RFC 9727) and `/openapi.json` → `200`
+- [ ] `/llms.txt`, `/llms-full.txt`, and a `.md` twin for every page
+- [ ] DNS-AID: an HTTPS record for `_index._agents` — `pnpm run dns:aid:dry-run`
+      first, then `dns:aid:publish` with `CF_API_TOKEN`. See [DNS_AID.md](DNS_AID.md)
+
+**Not published, on purpose**
+
+| Asked for | Why not |
+|---|---|
+| `/.well-known/openid-configuration` | No OpenID Provider. Nothing to sign in to. |
+| `/.well-known/oauth-authorization-server` | No authorization server, and no `agent_auth` block to put in it. |
+| `/.well-known/oauth-protected-resource` | Nothing here is protected. Every byte is public. |
+| `/.well-known/mcp/server-card.json` | The reference MCP server is specified and **not deployed** (`/developers/mcp`). It ships when two live conforming feeds exist. |
+| `_mcp._agents` DNS record | Same reason: there is no MCP host to point it at. The publisher script resolves the host first and refuses if it does not answer. |
+
+Each row becomes a row in the first list on the day the thing itself exists —
+`auth.md` carries the same table, so an agent reads the decision rather than
+inferring it from a 404.
+
 - [ ] Re-scan: `curl -s https://isitagentready.com/api/scan -H 'content-type: application/json' -d '{"url":"https://cabuya.org"}'`
+- [ ] Gate: `pnpm run agents:check` (the generated files match the repository)
 
 ## 9. Quick Local Validation
 

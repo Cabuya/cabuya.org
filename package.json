@@ -75,6 +75,8 @@
     "a11y:check": "playwright test tests/e2e/a11y",
     "perf:budgets": "node scripts/audit-js-budgets.mjs",
     "perf:budgets:strict": "node scripts/audit-js-budgets.mjs --strict",
+    "agents:generate": "tsx scripts/generate-agent-surface.ts",
+    "agents:check": "tsx scripts/generate-agent-surface.ts --check",
     "llms:generate": "tsx scripts/generate-llms-txt.ts",
     "llms:check": "tsx scripts/generate-llms-txt.ts --check",
     "issues:day-one": "node scripts/generate-day-one-issues.mjs",

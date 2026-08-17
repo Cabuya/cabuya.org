@@ -99,6 +99,7 @@ authoritative.
 |---|---|---|
 | `pnpm run csp:check` | — | Fails when `dist/_headers` no longer matches the built output. The policy itself is written by `postbuild` |
 | `pnpm run llms:generate` / `llms:check` | `public/llms.txt` | `llms:check` |
+| `pnpm run agents:generate` / `agents:check` | `public/auth.md`, `public/.well-known/agent-skills/index.json` and the skill it digests | `agents:check` |
 | `pnpm run og:fallback(:force)` | The fallback social card | `seo:check` |
 | `pnpm --filter @cabuya/validator run schemas:precompile` | The ahead-of-time schema validators, so the browser never calls `new Function` | `schemas:check` |
 | `pnpm run issues:day-one(:check)` | The day-one issue set for the repository | `issues:day-one:check` |
@@ -112,7 +113,6 @@ authoritative.
 | `pnpm run illustrations:build -- --masters=<dir>` | Re-frames and encodes every illustration from the masters (1x + 2x, weight-searched). The masters are not in the repo — see `docs/visuals/README.md` |
 | `pnpm run illustrations:check` | Every drawing present, decoded, visible, unclipped, undistorted and legible at 15 viewports × 2 themes. Needs `build` + `astro preview`. `--quick` for four viewports |
 | `pnpm run og:cards -- --masters=<dir>` | Installs the per-language share cards at exactly 1200 × 630 |
-| `pnpm run generate:agent-skills-index` | Regenerates the agent-skills index (runs in prebuild) |
 | `pnpm run revalidate:dry-run` | Every transition the cron would make, against the live feeds, writing nothing |
 | `node scripts/revalidate.mjs --dry-run --fixtures tests/fixtures/revalidate` | The same, against fixtures — no network, deterministic, what the test suite runs |
 | `node scripts/revalidate.mjs --only <publisher_id>` | Narrow a run to one entry |
