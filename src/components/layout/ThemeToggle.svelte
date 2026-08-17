@@ -1,11 +1,9 @@
 <script lang="ts">
 /**
  * Compact theme toggle for the site header / mobile menu.
- * Persists to localStorage['theme'] and tracks Umami theme_toggle.
+ * Persists to localStorage['theme'].
  */
 import { onMount } from 'svelte';
-
-import { EVENTS, trackEvent } from '@/lib/analytics';
 
 /**
  * The two labels this button carries, passed in rather than looked up.
@@ -39,7 +37,6 @@ function toggleTheme() {
   } catch {
     // Storage disabled — visual toggle still works for this session.
   }
-  trackEvent(EVENTS.THEME_TOGGLE, { theme: newTheme });
 }
 </script>
 

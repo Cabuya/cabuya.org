@@ -144,6 +144,8 @@ export const en: SiteTranslations = {
     foundingRecord: 'Founding record',
     languages: 'Languages',
     specStatus: 'Specification 0.1 — draft under review',
+    analytics:
+      'Cookieless analytics: page views and load speed, in aggregate. No cookies, no identifiers, nothing about who you are.',
   },
 
   notFoundPage: {

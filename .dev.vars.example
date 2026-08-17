@@ -47,3 +47,16 @@ DAILYBOT_FORM_QUESTIONS=
 CF_ACCOUNT_ID=
 CF_REGISTRY_KV_ID=
 CF_KV_READ_TOKEN=
+
+# ── Analytics ─────────────────────────────────────────────
+#
+# Cloudflare Web Analytics. Cookieless, no consent banner, no identifier that
+# survives a page load — and absent by default, so a fork, a preview and a
+# local build send nothing at all. Nobody's development traffic should reach
+# the project's dashboard.
+#
+# These are `PUBLIC_` (build-time, Astro) rather than Function bindings, so
+# they belong in the Pages build environment, not here — listed for
+# completeness.
+#   PUBLIC_CF_BEACON_TOKEN   — dash.cloudflare.com → Web Analytics → JS snippet
+#   PUBLIC_CF_BEACON_ENABLE  — "true" to load it outside production, to verify

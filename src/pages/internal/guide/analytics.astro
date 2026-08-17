@@ -11,14 +11,6 @@ const dashboards = [
     cookies: 'None',
   },
   {
-    name: 'Umami Analytics',
-    url: 'cloud.umami.is',
-    login: 'Umami account',
-    measures: 'Page views, sessions, top pages, referrers, UTM, custom events',
-    scriptSize: '~2KB',
-    cookies: 'None',
-  },
-  {
     name: 'Google Search Console',
     url: 'search.google.com/search-console',
     login: 'Google account',
@@ -45,27 +37,6 @@ const dashboards = [
 ];
 
 const weeklyTasks = [
-  {
-    tool: 'Umami',
-    action: 'Check Markdown requests',
-    question:
-      'How many agents are consuming content via .md endpoints or Accept: text/markdown?',
-  },
-  {
-    tool: 'Umami',
-    action: 'Check Top Pages',
-    question: 'Which blog posts are getting the most traction?',
-  },
-  {
-    tool: 'Umami',
-    action: 'Check Referrers',
-    question: 'Where is traffic coming from? (social, search, direct)',
-  },
-  {
-    tool: 'Umami',
-    action: 'Review event dashboard',
-    question: 'Are key CTA and outbound clicks being tracked?',
-  },
   {
     tool: 'Cloudflare',
     action: 'Core Web Vitals snapshot',
@@ -94,69 +65,93 @@ const monthlyTasks = [
     action: 'Core Web Vitals trends',
     question: 'Are any pages slow for real users?',
   },
-  {
-    tool: 'Umami',
-    action: 'Month-over-month comparison',
-    question: 'Is traffic growing? Which content drives growth?',
-  },
 ];
 
+/**
+ * What the dashboard can answer, and what it cannot.
+ *
+ * Cloudflare Web Analytics measures page views, referrers, countries and Web
+ * Vitals from its own beacon. It has **no custom-event API**, so every question
+ * below is answered by comparing page-view counts rather than by an event —
+ * which is a real limit and is stated as one rather than worked around.
+ */
 const keyMetrics = [
   {
-    metric: 'Markdown Requests',
-    good: 'Growing trend (agents consuming content)',
-    bad: 'Zero (no agent adoption)',
-    tool: 'Umami (markdown_request event)',
+    metric: 'Quickstart → validator',
+    good: 'A meaningful share of quickstart readers reach the validator',
+    bad: 'Readers arrive at the quickstart and go no further',
+    tool: 'Cloudflare — page-view ratio, not a funnel',
   },
   {
-    metric: 'Page Views',
+    metric: 'Validator → registry',
+    good: 'Validator visits are followed by registry visits',
+    bad: 'People validate and never appear at the registry',
+    tool: 'Cloudflare — page-view ratio',
+  },
+  {
+    metric: 'Skill page views',
+    good: 'Growing once the pack ships',
+    bad: 'Flat after an announcement',
+    tool: 'Cloudflare',
+  },
+  {
+    metric: 'Agent fetches (.md, llms.txt)',
+    good: 'Growing — agents are reading the protocol',
+    bad: 'Zero: nothing is finding the agent surface',
+    tool: 'Cloudflare — request logs by path, not a custom event',
+  },
+  {
+    metric: 'Page views · unique visitors',
     good: 'Growing trend',
-    bad: 'Declining without changes',
-    tool: 'Umami + Cloudflare',
-  },
-  {
-    metric: 'Unique Visitors',
-    good: 'Growing trend',
-    bad: 'Declining',
-    tool: 'Umami + Cloudflare',
-  },
-  {
-    metric: 'Bounce Rate',
-    good: '<60% for blog posts',
-    bad: '>80%',
-    tool: 'Umami',
-  },
-  {
-    metric: 'CTR (Search)',
-    good: '>3% for target queries',
-    bad: '<1%',
-    tool: 'Google Search Console',
+    bad: 'Declining without a change to explain it',
+    tool: 'Cloudflare',
   },
   {
     metric: 'LCP',
-    good: '<2.5s',
-    bad: '>4.0s',
+    good: '< 2.5 s',
+    bad: '> 4.0 s',
     tool: 'Cloudflare Web Analytics',
   },
   {
     metric: 'CLS',
-    good: '<0.1',
-    bad: '>0.25',
+    good: '< 0.1',
+    bad: '> 0.25',
     tool: 'Cloudflare Web Analytics',
   },
   {
     metric: 'INP',
-    good: '<200ms',
-    bad: '>500ms',
+    good: '< 200 ms',
+    bad: '> 500 ms',
     tool: 'Cloudflare Web Analytics',
   },
 ];
 
+/**
+ * Questions this stack deliberately cannot answer.
+ *
+ * Listed because the alternative — a maintainer assuming the data exists and
+ * quietly adding a tracker to get it — is how a cookieless site stops being
+ * one.
+ */
+const neverMeasured = [
+  'Which URL somebody validated. The endpoint keeps nothing; a counter is the only thing written.',
+  'What was in a feed, or in a contact message.',
+  'Who anybody is. No cookie, no fingerprint, no identifier that survives a page load.',
+  'A per-person path through the site. Page-view ratios are aggregates, and that is all a funnel here can be.',
+  'Anything at all from a fork or a local build: the beacon token is env-gated and absent by default.',
+];
+
 const envVars = [
   {
-    name: 'PUBLIC_UMAMI_WEBSITE_ID',
-    tool: 'Umami',
-    where: 'Umami Cloud dashboard',
+    name: 'PUBLIC_CF_BEACON_TOKEN',
+    tool: 'Cloudflare Web Analytics',
+    where: 'dash.cloudflare.com → Web Analytics → site → JS snippet',
+  },
+  {
+    name: 'PUBLIC_CF_BEACON_ENABLE',
+    tool: 'Cloudflare (local only)',
+    where:
+      'Set to "true" to load the beacon outside production, for verification',
   },
   {
     name: 'PUBLIC_BING_SITE_VERIFICATION',
@@ -275,6 +270,25 @@ const envVars = [
         </tbody>
       </table>
     </div>
+
+    <div
+      class="mt-8 rounded-xl border border-cabuya-border-strong bg-cabuya-bg-elevated p-5"
+    >
+      <h3 class="font-semibold">What this stack cannot answer</h3>
+      <p class="mt-2 text-sm text-cabuya-text-secondary">
+        Listed because the alternative — assuming the data exists and quietly
+        adding a tracker to get it — is how a cookieless site stops being one.
+        If one of these becomes genuinely necessary, it is a decision with a
+        privacy note attached, not a configuration change.
+      </p>
+      <ul
+        class="mt-3 list-disc space-y-1 pl-5 text-sm text-cabuya-text-secondary"
+      >
+        {neverMeasured.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   <!-- Content Performance Analysis -->
@@ -284,16 +298,16 @@ const envVars = [
       <div class="p-4 rounded-xl border border-cabuya-border">
         <h3 class="font-semibold mb-2">Identifying Best-Performing Posts</h3>
         <ol class="list-decimal list-inside space-y-1 text-sm text-cabuya-text-secondary">
-          <li>Check <strong>Umami Top Pages</strong> for highest pageview posts</li>
+          <li>Check <strong>Cloudflare Top Pages</strong> — which parts of the protocol people actually read</li>
           <li>Cross-reference with <strong>GSC queries</strong> to see which search terms drive traffic</li>
-          <li>Check <strong>Umami engagement proxies</strong> (time on page + bounce rate) for post quality signals</li>
+          <li>Compare quickstart and validator page views — the closest thing to a funnel this stack can produce</li>
         </ol>
       </div>
       <div class="p-4 rounded-xl border border-cabuya-border">
         <h3 class="font-semibold mb-2">Identifying Underperforming Posts</h3>
         <ol class="list-decimal list-inside space-y-1 text-sm text-cabuya-text-secondary">
           <li>Check <strong>GSC Performance</strong> for posts with high impressions but low CTR (&lt;1%)</li>
-          <li>Check <strong>Umami bounce rate</strong> and engagement events for weak content patterns</li>
+          <li>Look for pages with traffic and no onward traffic — a page that answers nothing people came for</li>
           <li>Review <strong>Cloudflare Core Web Vitals</strong> for UX issues caused by slow pages</li>
         </ol>
       </div>

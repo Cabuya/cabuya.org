@@ -6,18 +6,24 @@
 # the public face of a project whose whole argument is that it can be trusted.
 #
 # `script-src` needs `unsafe-inline` because Astro emits inline module scripts
-# for every island and the theme/notification bootstraps run before paint to
-# avoid a flash. `cloudflareinsights.com` is injected by the platform;
-# `cloud.umami.is` is only reached when the first-party proxy is disabled.
-# `connect-src` includes the application host so a page may link-check or fetch
-# public API metadata without the browser blocking it.
+# for every island and the theme bootstrap runs before paint to avoid a flash.
+#
+# The only third-party origin allowed anywhere in this policy is
+# `static.cloudflareinsights.com`, which serves the analytics beacon. There is
+# no analytics `connect-src` entry: the beacon posts to Cloudflare's own edge on
+# the same origin as the site, which is one of the reasons it was chosen.
+#
+# `connect-src` is `'self'` and nothing else. The validator, the badge, the
+# registry status endpoint and the contact form are all same-origin; a site that
+# needed a third-party connect entry to work would be a site with a dependency
+# its privacy note did not mention.
 #
 # There is no `frame-src` and no `frame-ancestors 'self'`: nothing on this site
 # embeds a frame, and nothing should embed this site.
 
 /*
   Cache-Control: public, max-age=0, must-revalidate
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://cloud.umami.is; connect-src 'self' https://cloud.umami.is https://ayuda.cabuya.org; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()

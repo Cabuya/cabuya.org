@@ -145,6 +145,8 @@ export const es: SiteTranslations = {
     foundingRecord: 'Registro fundacional',
     languages: 'Idiomas',
     specStatus: 'Especificación 0.1 — borrador en revisión',
+    analytics:
+      'Analítica sin cookies: vistas de página y velocidad de carga, en agregado. Sin cookies, sin identificadores, nada sobre quién eres.',
   },
 
   notFoundPage: {

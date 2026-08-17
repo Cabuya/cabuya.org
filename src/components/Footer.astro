@@ -120,6 +120,14 @@ const languageLinks: Array<{ code: Language; label: string }> = [
         <p>© {year} Cabuya · {t.footer.license}</p>
         <p>{t.footer.specStatus}</p>
       </div>
+
+      <!--
+        The analytics disclosure, in the footer of every page rather than on a
+        policy page nobody opens. It says what is recorded, not that we care —
+        a site whose argument is that unverifiable claims are worthless should
+        not make one about itself.
+      -->
+      <p class="mt-4 text-xs text-cabuya-text-muted">{t.footer.analytics}</p>
     </div>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 ---
 /**
  * Theme toggle FAB — SVG sun/moon morph, Cabuya tokens, no emoji.
- * Persists to localStorage['theme'] and tracks Umami theme_toggle.
+ * Persists to localStorage['theme'].
  */
 ---
 
@@ -48,8 +48,5 @@
     const isDark = html.classList.toggle('dark');
     const newTheme = isDark ? 'dark' : 'light';
     localStorage.setItem('theme', newTheme);
-    if (window.umami) {
-      window.umami.track('theme_toggle', { theme: newTheme });
-    }
   };
 </script>

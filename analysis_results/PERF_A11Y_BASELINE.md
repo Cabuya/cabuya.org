@@ -31,7 +31,7 @@ the page ends up executing it. Erring in that direction is deliberate.
 |---|---|---|
 | Svelte runtime | 16.2 KB | The header is an island; the runtime is the price of one |
 | Header island | 4.3 KB | Navigation, language switch, theme toggle |
-| Analytics | 1.5 KB | Cookieless, loaded on idle |
+| ~~Analytics~~ | ~~1.5 KB~~ | Removed in Task 36 — the custom-event module sent nothing once the provider changed |
 | Theme + preload helpers | 1.6 KB | Theme applied before paint (zero CLS) |
 
 The validator's engine — 60.6 KB gzipped, the largest artefact on the site — is
@@ -53,7 +53,12 @@ CommonJS interop helper in the same chunk as the JSON Schema compiler, so
 importing a dependency-free analytics module pulled 61 KB gzipped onto every
 page. A `manualChunks` rule isolates `validator-engine`.
 
-Together: **~83 KB gzipped removed from every page on the site.**
+**A third fix, from Task 36:** the 299-line tracking module was deleted rather
+than left dormant, taking another 1.5 KB with it. Dead tracking code is a
+privacy claim nobody can verify by reading the page.
+
+Together: **~85 KB gzipped removed from every page on the site**, which is why
+the landing page now measures 20.8 KB against a 40 KB budget.
 
 ## 2. Lighthouse
 

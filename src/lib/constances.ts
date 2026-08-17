@@ -133,29 +133,45 @@ export function getDefaultOgImage(lang: string | undefined): string {
   return lang === 'en' ? DEFAULT_OG_IMAGE_EN : DEFAULT_OG_IMAGE_ES;
 }
 
-const umamiWebsiteId = (import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '').trim();
-const umamiScriptOverride = (
-  import.meta.env.PUBLIC_UMAMI_SCRIPT_URL || ''
+/**
+ * Analytics configuration.
+ *
+ * **Cloudflare Web Analytics, and nothing else.** Cookieless, no consent
+ * banner, no personal data, no identifier that survives a page load — so
+ * there is nothing to disclose beyond the one sentence the footer carries, and
+ * nothing to ask permission for.
+ *
+ * The token is env-gated and absent by default, which means a fork, a preview
+ * and a local build send no beacon at all. That is the correct default for a
+ * project whose contributors will run this on their own machines: nobody's
+ * development traffic should land in our dashboard.
+ *
+ * Never Google Analytics. Not a preference — GA4 sets identifiers, requires a
+ * consent banner in the jurisdictions this project operates in, and would make
+ * the site's own privacy claims false.
+ */
+const cloudflareBeaconToken = (
+  import.meta.env.PUBLIC_CF_BEACON_TOKEN || ''
 ).trim();
-const umamiUseProxy = import.meta.env.PUBLIC_UMAMI_USE_PROXY !== 'false';
 
-// Analytics configuration — scripts load only when IDs are provided
 export const ANALYTICS = {
-  umami: {
-    websiteId: umamiWebsiteId,
-    /** Load tracker in production when website ID is set; opt-in locally via PUBLIC_UMAMI_ENABLE=true */
+  cloudflare: {
+    token: cloudflareBeaconToken,
+    /**
+     * Loaded in production when a token exists; locally only on request.
+     *
+     * The local opt-in is there so somebody can verify the beacon works
+     * without deploying, not so it can be left on.
+     */
     enabled:
-      Boolean(umamiWebsiteId) &&
-      (import.meta.env.PROD || import.meta.env.PUBLIC_UMAMI_ENABLE === 'true'),
-    scriptUrl:
-      umamiScriptOverride ||
-      (umamiUseProxy
-        ? '/api/umami/script.js'
-        : 'https://cloud.umami.is/script.js'),
-    /** Same-origin collect endpoint when first-party proxy is enabled */
-    hostUrl: umamiUseProxy ? '/api/umami' : '',
+      Boolean(cloudflareBeaconToken) &&
+      (import.meta.env.PROD ||
+        import.meta.env.PUBLIC_CF_BEACON_ENABLE === 'true'),
+    scriptUrl: 'https://static.cloudflareinsights.com/beacon.min.js',
   },
   verification: {
+    // Search Console is verified by DNS. A meta tag would be a second, weaker
+    // claim on the same domain, and `seo:check` fails if one appears.
     bing: import.meta.env.PUBLIC_BING_SITE_VERIFICATION || '',
   },
 } as const;
