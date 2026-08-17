@@ -60,6 +60,7 @@ const GROUPS: NavGroup[] = [
 const LABELS = {
   openMenu: 'Open menu',
   closeMenu: 'Close menu',
+  language: 'Language',
   switchToLanguage: 'Cambiar a español',
   toDark: 'Switch to dark mode',
   toLight: 'Switch to light mode',
@@ -148,11 +149,30 @@ describe('header — the mobile drawer', () => {
 });
 
 describe('header — language and active state', () => {
-  it('links to the same route in the other language', () => {
-    mount({ lang: 'en', pathname: '/registry' });
+  it('opens onto the other language, naming the current one', async () => {
+    const { container } = mount({ lang: 'en', pathname: '/registry' });
+    const trigger = screen.getByRole('button', { name: /language: en/i });
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    await fireEvent.click(trigger);
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(container.querySelector('[role="menu"]')).toBeNull();
+
     const link = screen.getByRole('link', { name: /cambiar a español/i });
     expect(link).toHaveAttribute('href', '/es/registry');
     expect(link).toHaveAttribute('hreflang', 'es');
+  });
+
+  /**
+   * `lang:check` reads `data-language-switch` out of the built HTML on every
+   * page. The panel is server-rendered closed, so the link has to be in the
+   * markup while collapsed — an `{#if}` here would fail the gate sitewide.
+   */
+  it('keeps the switch link in the markup while the panel is closed', () => {
+    const { container } = mount({ lang: 'es', pathname: '/es/registry' });
+    const link = container.querySelector('[data-language-switch]');
+    expect(link).toHaveAttribute('href', '/registry');
+    expect(link?.closest('[hidden]')).not.toBeNull();
   });
 
   it('marks the current page, including a nested route', () => {

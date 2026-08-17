@@ -24,6 +24,7 @@ export interface SiteTranslations {
     /** Accessible names for the two repository links in the header. */
     openMenu: string;
     closeMenu: string;
+    language: string; // what the switcher selects, in the page's own language
     switchToLanguage: string; // label for the language switcher target
     skipToContent: string;
   };

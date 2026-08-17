@@ -37,11 +37,30 @@ describe('completeness', () => {
     expect(Object.keys(ES).filter((id) => !ids.has(id))).toEqual([]);
   });
 
-  it('Spanish entries carry both a rule and a fix', () => {
+  it('Spanish entries carry a title, a rule and a fix', () => {
+    /*
+     * `title` joined the other two after the catalogue page was found
+     * rendering Spanish rules and fixes under English headings. Half a
+     * translation reads as a page nobody finished, not as a stated exception.
+     */
     for (const [id, entry] of Object.entries(ES)) {
+      expect(entry.title, `${id} has no Spanish title`).toBeTruthy();
       expect(entry.rule, id).toBeTruthy();
       expect(entry.fix, id).toBeTruthy();
     }
+  });
+
+  it('never leaves a Spanish title identical to the English one', () => {
+    // Identical strings are the shape a paste takes when nobody translated.
+    const pasted = Object.entries(ES).filter(([id, entry]) => {
+      const check = CHECKS.find((c) => c.id === id);
+      // A header name or a media type is the same in both languages.
+      if (/^[A-Za-z-]+: |^Content-Type|^Soft-404/.test(check?.title ?? '')) {
+        return false;
+      }
+      return check?.title === entry.title;
+    });
+    expect(pasted.map(([id]) => id)).toEqual([]);
   });
 });
 

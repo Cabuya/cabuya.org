@@ -58,7 +58,10 @@ const headings = buildToc(
 );
 
 /** Spanish rule and fix come from the package's own table; ids never translate. */
-function localized(id: string, field: 'rule' | 'fix'): string | undefined {
+function localized(
+  id: string,
+  field: 'title' | 'rule' | 'fix'
+): string | undefined {
   if (lang === 'es') return ES[id]?.[field];
   return undefined;
 }
@@ -141,7 +144,7 @@ function localized(id: string, field: 'rule' | 'fix'): string | undefined {
               </header>
 
               <h3 class="mt-2 font-display text-base font-semibold">
-                {check.title}
+                {localized(check.id, 'title') ?? check.title}
               </h3>
 
               <dl class="mt-3 flex flex-col gap-2 text-sm">

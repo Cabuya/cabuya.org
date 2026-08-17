@@ -53,6 +53,8 @@ export let groups: NavGroup[] = liveGroups();
 export let labels: {
   openMenu: string;
   closeMenu: string;
+  /** Names what the switcher selects, in the page's own language. */
+  language: string;
   switchToLanguage: string;
   /** Forwarded to the theme toggle, which is in this island's chunk. */
   toDark: string;
@@ -333,16 +335,84 @@ onMount(() => {
       join it and the pointer is a mouse.
     -->
     <div class="flex items-center gap-2 sm:gap-3 lg:gap-1.5">
-      <a
-        href={switchHref}
-        class="nav-link inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
-        hreflang={other}
-        data-language-switch
-        lang={other}
-        aria-label={labels.switchToLanguage}
+      <!--
+        The language switcher: the same disclosure as the nav groups, so it
+        inherits hover, Escape, pointer-outside and the one-open-at-a-time
+        rule instead of growing a second copy of all four.
+
+        The panel is always in the DOM and hidden with the `hidden` attribute
+        rather than an `{#if}`. `lang:check` reads the built HTML for the
+        `data-language-switch` href on every page — an unmounted panel would
+        make the gate report `no-switcher` for the whole site. Keep display
+        utilities off that element too: `[hidden]` only wins while nothing
+        else sets `display`.
+      -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <div
+        class="relative"
+        data-disclosure
+        on:mouseenter={() => hoverOpen('language')}
+        on:mouseleave={hoverClose}
       >
-        {other.toUpperCase()}
-      </a>
+        <button
+          id="nav-disclosure-language"
+          type="button"
+          class="nav-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+          aria-expanded={openGroup === 'language'}
+          aria-controls="nav-panel-language"
+          on:click={(event) => onTriggerClick(event, 'language')}
+        >
+          <!-- Lucide `globe`, inline: the header island has no icon package. -->
+          <svg
+            class="h-[18px] w-[18px] shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9.5" />
+            <path d="M2.5 12h19" />
+            <path d="M12 2.5a14 14 0 0 1 0 19 14 14 0 0 1 0-19" />
+          </svg>
+          <!--
+            The accessible name reads "Language: EN": the icon is decorative
+            and the bare code alone would announce as a two-letter word with
+            no indication of what it selects.
+          -->
+          <span class="sr-only">{labels.language}:</span>
+          {lang.toUpperCase()}
+          <svg
+            class="h-3 w-3 transition-transform duration-150"
+            class:rotate-180={openGroup === 'language'}
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            aria-hidden="true"
+          >
+            <path d="M2.5 4.5L6 8l3.5-3.5" stroke-linecap="round" />
+          </svg>
+        </button>
+        <div
+          id="nav-panel-language"
+          hidden={openGroup !== 'language'}
+          class="absolute right-0 top-full z-50 mt-1 min-w-full rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-1 shadow-lg"
+        >
+          <a
+            href={switchHref}
+            class="block rounded-lg px-3 py-2 text-center text-sm font-medium text-cabuya-text transition-colors hover:bg-cabuya-bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary"
+            hreflang={other}
+            data-language-switch
+            lang={other}
+            aria-label={labels.switchToLanguage}
+            on:click={closeAll}
+          >
+            {other.toUpperCase()}
+          </a>
+        </div>
+      </div>
       <ThemeToggle
         labels={{ toDark: labels.toDark, toLight: labels.toLight }}
         scope={themeScope}

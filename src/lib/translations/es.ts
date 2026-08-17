@@ -15,6 +15,7 @@ export const es: SiteTranslations = {
     github: 'GitHub',
     openMenu: 'Abrir el menú',
     closeMenu: 'Cerrar el menú',
+    language: 'Idioma',
     switchToLanguage: 'Switch to English',
     skipToContent: 'Saltar al contenido',
   },
