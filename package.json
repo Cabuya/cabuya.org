@@ -84,7 +84,8 @@
     "checks:catalogue": "node scripts/check-checks-catalogue.mjs",
     "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict",
     "postbuild": "node scripts/generate-csp.mjs",
-    "csp:check": "node scripts/generate-csp.mjs --check"
+    "csp:check": "node scripts/generate-csp.mjs --check",
+    "validator:coverage": "pnpm --filter @cabuya/validator exec vitest run --coverage"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

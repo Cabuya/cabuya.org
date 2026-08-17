@@ -67,7 +67,12 @@ export function rfcIndexSections(lang: Language): TwinSection[] {
   return [
     { heading: t.rfcs.title, lines: [t.rfcs.lead, '', t.rfcs.quotedNotice] },
     {
-      heading: t.rfcs.columnRfc,
+      // The index table's own heading. This used to reuse `columnRfc`, a
+      // *column label*, which reads as a heading in English only by accident:
+      // the page title is "RFCs" and the column is "RFC". In Spanish both are
+      // "RFC", so the twin shipped two identically-titled sections and
+      // ambiguous anchors — in the document an agent reads.
+      heading: t.rfcs.indexTitle,
       lines:
         rfcs.length === 0
           ? [t.rfcs.emptyIndex]

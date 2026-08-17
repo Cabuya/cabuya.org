@@ -566,8 +566,15 @@ export async function main(
 }
 
 // Only self-execute when invoked as a binary, so tests can import freely.
+//
+// Excluded from coverage rather than left as a gap: this branch exists
+// *because* the tests import the module, so by construction it cannot run
+// under them. Counting it would mean either a permanently red threshold or a
+// subprocess test that measures node's argv handling rather than this CLI.
+/* v8 ignore start */
 if (process.argv[1] && /cabuya-validator|cli[/\\]index/.test(process.argv[1])) {
   main(process.argv.slice(2)).then((code) => {
     process.exitCode = code;
   });
 }
+/* v8 ignore stop */

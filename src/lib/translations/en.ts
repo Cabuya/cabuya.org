@@ -487,6 +487,7 @@ export const en: SiteTranslations = {
     privacyTitle: 'The section that can decline an RFC on its own',
     privacyBody:
       'Every RFC states what person-level data its change could make reachable, directly or by joining with another source. An RFC that cannot answer that does not proceed, however useful the field would be. It is the only mandatory section that is not about the change itself.',
+    indexTitle: 'The index',
     columnRfc: 'RFC',
     columnTitle: 'Title',
     columnTier: 'Tier',

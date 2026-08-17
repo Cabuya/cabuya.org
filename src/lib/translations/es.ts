@@ -487,6 +487,7 @@ export const es: SiteTranslations = {
     privacyTitle: 'La sección que puede rechazar un RFC por sí sola',
     privacyBody:
       'Cada RFC dice qué datos de personas podría volver alcanzables su cambio, de forma directa o cruzando con otra fuente. Un RFC que no pueda responder eso no avanza, por útil que fuera el campo. Es la única sección obligatoria que no trata del cambio en sí.',
+    indexTitle: 'El índice',
     columnRfc: 'RFC',
     columnTitle: 'Título',
     columnTier: 'Nivel',

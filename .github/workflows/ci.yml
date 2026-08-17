@@ -95,6 +95,16 @@ jobs:
       - name: Agent gate — llms.txt matches the site
         run: pnpm run llms:check
 
+      # Coverage, not just green tests. The thresholds live in the vitest
+      # configs (src/lib 80; the validator package higher, because it is the
+      # enforcement point of the protocol and a defect there is wrong in the
+      # same direction for everyone downstream).
+      - name: Tests with coverage thresholds
+        run: pnpm run test:coverage
+
+      - name: Validator package coverage thresholds
+        run: pnpm run validator:coverage
+
       - name: Build
         run: pnpm run build
 

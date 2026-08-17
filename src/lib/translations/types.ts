@@ -364,6 +364,8 @@ export interface SiteTranslations {
     whoBody: string;
     privacyTitle: string;
     privacyBody: string;
+    /** Heading for the index table in the Markdown twin — not a column label. */
+    indexTitle: string;
     columnRfc: string;
     columnTitle: string;
     columnTier: string;

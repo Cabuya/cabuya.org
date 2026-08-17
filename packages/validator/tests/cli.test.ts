@@ -293,3 +293,107 @@ describe('help', () => {
     expect(await main([], capture().io)).toBe(EXIT.OK);
   });
 });
+
+/**
+ * The error paths.
+ *
+ * Agents branch on the exit code *before* parsing anything, so these are the
+ * codes that decide whether a fix loop edits the feed, edits the deployment, or
+ * stops. Getting one wrong sends a loop to rewrite correct code — which is
+ * exactly the waste the six-code scheme exists to prevent, so each one is
+ * exercised rather than assumed.
+ */
+describe('error paths', () => {
+  it('4 and a readable message for a file that is not there', async () => {
+    const c = capture();
+    const code = await main(
+      ['validate', join(SPEC, 'valid', 'no-such-file.json'), '--no-network'],
+      c.io
+    );
+    expect(code).toBe(EXIT.USAGE);
+    // Named, so the reader can see which path was wrong.
+    expect(c.stderr()).toContain('no-such-file.json');
+    expect(c.stderr()).toContain('no such file');
+  });
+
+  it('4 for an unknown command, and prints the usage', async () => {
+    const c = capture();
+    const code = await main(['frobnicate'], c.io);
+    expect(code).toBe(EXIT.USAGE);
+    expect(c.stderr()).toContain('unknown command');
+    // The help text, so the next attempt can be right.
+    expect(c.stderr()).toContain('validate');
+  });
+
+  it('4 when explain is given no check id', async () => {
+    const c = capture();
+    const code = await main(['explain'], c.io);
+    expect(code).toBe(EXIT.USAGE);
+    expect(c.stderr()).toContain('explain needs a check id');
+  });
+
+  it('3 for a body that is not JSON, as the published table says', async () => {
+    /*
+     * The exit-code table lists "non-JSON body" under transport, so this is
+     * the documented behaviour and the test follows it rather than the other
+     * way round.
+     *
+     * Worth knowing the nuance: exit 3 tells a fix loop "fix deployment, not
+     * the data", which is right for a URL serving HTML and less right for a
+     * local file somebody pointed at by mistake. Changing it would mean
+     * changing a contract published in the spec, the CLI help and the skill —
+     * so it is recorded here rather than adjusted quietly.
+     */
+    const c = capture();
+    const code = await main(
+      ['validate', join(import.meta.dirname, 'cli.test.ts'), '--no-network'],
+      c.io
+    );
+    expect(code).toBe(EXIT.TRANSPORT);
+    expect(c.stderr().length).toBeGreaterThan(0);
+  });
+
+  it('0 and the help text when asked for help', async () => {
+    const c = capture();
+    const code = await main(['--help'], c.io);
+    expect(code).toBe(EXIT.OK);
+    expect(c.stdout()).toContain('validate');
+    expect(c.stdout()).toContain('explain');
+  });
+
+  it('0 and the help text when given nothing at all', async () => {
+    const c = capture();
+    const code = await main([], c.io);
+    expect(code).toBe(EXIT.OK);
+    expect(c.stdout().length).toBeGreaterThan(0);
+  });
+
+  it('lists the checks it can run', async () => {
+    const c = capture();
+    const code = await main(['checks'], c.io);
+    expect(code).toBe(EXIT.OK);
+    // The families an implementer navigates by.
+    for (const family of ['DSC', 'ENV', 'REC', 'PII', 'BEH']) {
+      expect(c.stdout(), family).toContain(family);
+    }
+  });
+
+  it('explains a check by id, including the honest alternative', async () => {
+    const c = capture();
+    const code = await main(['explain', 'REC001'], c.io);
+    expect(code).toBe(EXIT.OK);
+    // The parenthetical that stops an agent inventing a confirmation.
+    expect(c.stdout()).toContain('last_confirmed_at');
+  });
+
+  it('explains in Spanish when asked', async () => {
+    const c = capture();
+    await main(['explain', 'REC001', '--lang', 'es'], c.io);
+    const spanish = c.stdout();
+
+    const other = capture();
+    await main(['explain', 'REC001', '--lang', 'en'], other.io);
+
+    expect(spanish).not.toBe(other.stdout());
+  });
+});
