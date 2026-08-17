@@ -8,10 +8,17 @@
 # /es. Consequences for previously published URLs:
 #   - Old /en/... URLs (English used to live there) → the same path at root.
 #   - Old root URLs served Spanish; their route families are retired, so they
-#     301 to the closest surviving surface (refined per-task as Cabuya pages
-#     land: /registry T28, /join+/governance T30).
+#     301 to the closest surviving surface, refined per-task as Cabuya pages
+#     land.
 #
-# Task 23 removed the /developers rule: the route is now a live English page.
+# Task 23 removed the /developers rule, and Task 30 removed /governance,
+# /conduct and /contributing: those routes are now live English pages, and a
+# redirect to the Spanish home would have shadowed them. `redirects:check`
+# caught it, which is what a shadow check is for — a rule that hides a page is
+# invisible in a diff and total in production.
+#
+# The retired ones point at the surviving surface: /conduct and /contributing
+# are the community files, which now live at /join and on GitHub.
 # An old inbound link that expected Spanish content there lands on the English
 # portal with the language switcher one click away — which is the topology
 # working as designed, not a regression. Redirecting it to /es/ instead would
@@ -30,9 +37,8 @@
 /movement                    /es/    301
 /movement/*                  /es/    301
 /channels                    /es/    301
-/conduct                     /es/    301
-/contributing                /es/    301
-/governance                  /es/    301
+/conduct                     /join   301
+/contributing                /join   301
 /community                   /es/    301
 /blog                        /es/    301
 /blog/*                      /es/    301

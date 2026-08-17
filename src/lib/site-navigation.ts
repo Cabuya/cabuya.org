@@ -72,8 +72,9 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     id: 'protocol',
     label: { en: 'Protocol', es: 'Protocolo' },
-    status: 'planned',
-    ships: 'Task 25',
+    // A group with no path of its own: it is a disclosure that opens onto its
+    // children, and it is live once any child is.
+    status: 'live',
     children: [
       {
         label: { en: 'Specification', es: 'Especificación' },
@@ -96,8 +97,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: { en: 'RFCs', es: 'RFCs' },
         path: '/rfcs',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
         hint: {
           en: 'How the protocol changes',
           es: 'Cómo cambia el protocolo',
@@ -106,8 +106,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: { en: 'Changelog', es: 'Cambios' },
         path: '/changelog',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
         hint: {
           en: 'Spec, validator and skill releases',
           es: 'Versiones de spec, validador y skill',
@@ -131,15 +130,13 @@ export const NAV_GROUPS: NavGroup[] = [
     id: 'governance',
     label: { en: 'Governance', es: 'Gobernanza' },
     path: '/governance',
-    status: 'planned',
-    ships: 'Task 30',
+    status: 'live',
   },
   {
     id: 'join',
     label: { en: 'Join', es: 'Participar' },
     path: '/join',
-    status: 'planned',
-    ships: 'Task 30',
+    status: 'live',
   },
 ];
 
@@ -171,14 +168,12 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'RFCs', es: 'RFCs' },
         path: '/rfcs',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
       },
       {
         label: { en: 'Changelog', es: 'Cambios' },
         path: '/changelog',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
       },
     ],
   },
@@ -204,8 +199,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Agent skill', es: 'Skill para agentes' },
         path: '/developers/skill',
-        status: 'planned',
-        ships: 'Task 29',
+        status: 'live',
       },
     ],
   },
@@ -216,8 +210,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Governance model', es: 'Modelo de gobernanza' },
         path: '/governance',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
       },
       {
         label: {
@@ -225,8 +218,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
           es: 'Política de nombre y sello',
         },
         path: '/trademark',
-        status: 'planned',
-        ships: 'Task 30',
+        status: 'live',
       },
       {
         label: { en: 'Code of conduct', es: 'Código de conducta' },
@@ -244,6 +236,16 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
         label: { en: 'Licensing', es: 'Licencias' },
         path: `${GITHUB_URL}/blob/main/docs/LICENSING.md`,
         external: true,
+        status: 'live',
+      },
+      {
+        label: { en: 'Contribute', es: 'Contribuir' },
+        path: '/join',
+        status: 'live',
+      },
+      {
+        label: { en: 'RFCs', es: 'RFC' },
+        path: '/rfcs',
         status: 'live',
       },
     ],

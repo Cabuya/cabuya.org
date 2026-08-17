@@ -17,6 +17,8 @@
 | Decisions | `docs/DECISIONS.md` (live) · `docs/context/` (frozen founding record) | New decision → append to the live log. **Never edit the founding record** |
 | Feature notes | `docs/features/` | A retained feature's mechanics change |
 | AEO | `docs/aeo/` | The agent-content contract changes |
+| Repository-root governance | `GOVERNANCE(.es).md`, `MAINTAINERS.md`, `TRADEMARK(.es).md`, `CONTRIBUTING(.es).md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` | **These are the source, not the pages.** `/governance`, `/trademark` and `/join` render them through `src/lib/root-docs.ts`; a change to the page is a change to the file. Governance and licensing edits are *breaking* under the decision rules: RFC, majority, 21 days |
+| Generated | `docs/CONTRIBUTING-issues.md` | Never by hand — `pnpm run issues:day-one` regenerates it from the check registry, and a gate fails when it has drifted |
 
 ## 2. Update triggers (MANDATORY)
 

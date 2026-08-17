@@ -444,6 +444,83 @@ export const en: SiteTranslations = {
       'Checks that are catalogued but not yet implemented are shown in English. Their rules are translated when the check ships, so a Spanish reader is never shown a translation of something that does not run yet.',
   },
 
+  changelog: {
+    metaTitle: 'Changelog — Cabuya Protocol',
+    metaDescription:
+      'Every notable change to the Cabuya specification, in one timeline, parsed from the repository so the page cannot drift from the release it describes.',
+    title: 'Changelog',
+    lead: 'Every notable change to the specification, newest first. Parsed from the repository rather than transcribed, so this page and the release it describes cannot disagree.',
+    scopeTitle: 'What this covers',
+    scopeBody:
+      'The specification: its sections, schemas, examples, profiles and vocabulary. Versioning follows SemVer with one extra rule — a release candidate becomes normative only after at least one publisher has shipped it publicly. The specification never outruns its implementers.',
+    unreleased: 'Unreleased',
+    nothingYet: 'Nothing recorded under this version yet.',
+    otherTracksTitle: 'The validator and the skill',
+    otherTracksBody:
+      'They will appear on this timeline as they cut releases. They are not listed as empty tracks in the meantime: a timeline with blank rows reads as a project that stopped rather than one that has not started.',
+    quotedNotice:
+      'Release entries are quoted from the repository, unchanged. The changelog itself is written in English like the rest of the repository, and a translated quotation would not be the record a reader checking a release needs.',
+    groupLabels: {
+      added: 'Added',
+      changed: 'Changed',
+      deprecated: 'Deprecated',
+      removed: 'Removed',
+      fixed: 'Fixed',
+      security: 'Security',
+    },
+  },
+
+  rfcs: {
+    metaTitle: 'RFCs — Cabuya Protocol',
+    metaDescription:
+      'Normative changes to the Cabuya Protocol land only through the RFC process. The index, the status of each proposal, and how to open one yourself.',
+    title: 'RFCs',
+    lead: 'A normative change reaches the specification only through an RFC. This is every one that has been opened, with its status and its decision.',
+    processTitle: 'What needs one',
+    processBody:
+      'Any change to a schema field, cardinality, enum, required or optional status, conformance level, or the meaning of a defined term. Plus governance and licensing. Everything else — typos, examples, documentation, tests, website copy — takes the fast path and needs one approval.',
+    whoTitle: 'Who may open one',
+    whoBody:
+      'Anyone. You do not have to be a maintainer and you do not have to have written any code. The person who has hit a wall implementing the specification is often the person best placed to describe what is wrong with it.',
+    privacyTitle: 'The section that can decline an RFC on its own',
+    privacyBody:
+      'Every RFC states what person-level data its change could make reachable, directly or by joining with another source. An RFC that cannot answer that does not proceed, however useful the field would be. It is the only mandatory section that is not about the change itself.',
+    columnRfc: 'RFC',
+    columnTitle: 'Title',
+    columnTier: 'Tier',
+    columnStatus: 'Status',
+    columnOpened: 'Opened',
+    columnDecided: 'Decided',
+    quotedNotice:
+      'An RFC is rendered exactly as its authors wrote it, in whatever language or languages they used. RFC-0001 is bilingual by design: it is a document people sign, and both halves have to be signable.',
+    statusLabels: {
+      draft: 'Draft',
+      open: 'Open for comment',
+      accepted: 'Accepted',
+      declined: 'Declined',
+      withdrawn: 'Withdrawn',
+      superseded: 'Superseded',
+    },
+    tierLabels: {
+      governance: 'Governance',
+      normative: 'Normative',
+      breaking: 'Breaking',
+    },
+    emptyIndex: 'No RFC has been opened yet.',
+    templateLink: 'The template',
+    backToIndex: 'All RFCs',
+    openedLabel: 'Opened',
+    decidedLabel: 'Decided',
+    notDecided: 'Not decided',
+    sourceLabel: 'The source file',
+  },
+
+  rootDocs: {
+    sourceLinkSuffix: 'on GitHub — the file this page renders',
+    sourceNote:
+      'This page renders a file in the repository. The file is the source: it is what a fork carries, what a pull request changes, and what governs if the two ever disagree.',
+  },
+
   registry: {
     metaTitle: 'Registry — Cabuya Protocol',
     metaDescription:

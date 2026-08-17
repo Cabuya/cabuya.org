@@ -41,10 +41,21 @@ import { isValidLanguage } from '@/lib/i18n';
  * language, so one list serves all languages.
  *
  * Cabuya routes are added here as their tasks land:
- *   'rfcs', 'changelog', 'governance', 'trademark', 'join' (Task 30).
- *   'developers' landed with Task 23; 'registry' with Task 28.
+ *   'developers' landed with Task 23; 'registry' with Task 28; 'governance',
+ *   'trademark', 'join', 'changelog' and 'rfcs' with Task 30.
  */
-const KNOWN_PATHS = new Set(['', 'internal', '404', 'developers', 'registry']);
+const KNOWN_PATHS = new Set([
+  '',
+  'internal',
+  '404',
+  'developers',
+  'registry',
+  'governance',
+  'trademark',
+  'join',
+  'changelog',
+  'rfcs',
+]);
 
 export const onRequest = defineMiddleware((context, next) => {
   const pathname = context.url.pathname;

@@ -1,0 +1,15 @@
+---
+import RfcPage from '@/components/pages/RfcPage.astro';
+import { specRfcs } from '@/lib/spec-loader';
+
+export function getStaticPaths() {
+  return specRfcs().map((rfc) => ({
+    params: { number: rfc.id },
+    props: { rfc },
+  }));
+}
+
+const { rfc } = Astro.props;
+---
+
+<RfcPage lang="en" rfc={rfc} />

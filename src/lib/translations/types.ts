@@ -320,6 +320,70 @@ export interface SiteTranslations {
     untranslatedNote: string;
   };
 
+  /** The specification changelog, one timeline. */
+  changelog: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    scopeTitle: string;
+    scopeBody: string;
+    unreleased: string;
+    nothingYet: string;
+    otherTracksTitle: string;
+    otherTracksBody: string;
+    /**
+     * The notice the language gate requires before a page may render English
+     * on a Spanish route. Without it the exemption does not apply.
+     */
+    quotedNotice: string;
+
+    /** Keep a Changelog group names, lowercased as keys. */
+    groupLabels: Record<string, string>;
+  };
+
+  /** The RFC index and the individual RFC pages. */
+  rfcs: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    processTitle: string;
+    processBody: string;
+    whoTitle: string;
+    whoBody: string;
+    privacyTitle: string;
+    privacyBody: string;
+    columnRfc: string;
+    columnTitle: string;
+    columnTier: string;
+    columnStatus: string;
+    columnOpened: string;
+    columnDecided: string;
+    statusLabels: Record<string, string>;
+    tierLabels: Record<string, string>;
+    emptyIndex: string;
+    templateLink: string;
+    backToIndex: string;
+    openedLabel: string;
+    decidedLabel: string;
+    notDecided: string;
+    sourceLabel: string;
+    /**
+     * The notice the language gate requires before a page may render English
+     * on a Spanish route. Without it the exemption does not apply.
+     */
+    quotedNotice: string;
+  };
+
+  /** Pages that render a repository-root document. */
+  rootDocs: {
+    /** Screen-reader suffix on the link to the source file. */
+    sourceLinkSuffix: string;
+    /** The standing note explaining that the file, not the page, governs. */
+    sourceNote: string;
+  };
+
   /** The public registry: the index, the publisher pages, the badge. */
   registry: {
     metaTitle: string;

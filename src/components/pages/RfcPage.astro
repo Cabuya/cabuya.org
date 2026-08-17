@@ -1,0 +1,183 @@
+---
+/**
+ * `/rfcs/{number}` — one proposal, rendered from its file.
+ *
+ * The URL is the number and nothing else. RFC numbers are cited in commit
+ * messages, in the changelog and in other RFCs, and a URL carrying the title
+ * would break the moment a proposal was retitled during review — which is
+ * exactly when it is most likely to happen.
+ *
+ * The status chip is the load-bearing element. A `draft` RFC is a document
+ * somebody wrote, not a decision anybody made, and a page that renders the two
+ * identically is how a proposal quietly becomes a policy.
+ */
+import { getCollection, render } from 'astro:content';
+import JsonLd from '@/components/JsonLd.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SITE_URL } from '@/lib/constances';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import {
+  DESCRIPTION_MAX,
+  DESCRIPTION_MIN,
+  truncateToBand,
+} from '@/lib/meta-description';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import type { SpecRfc } from '@/lib/spec-loader';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  rfc: SpecRfc;
+}
+
+const { lang, rfc } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const entries = await getCollection('rfcs');
+const entry = entries.find((item) => item.id === rfc.id);
+if (!entry) throw new Error(`No rfcs entry for ${rfc.id}`);
+
+const { Content } = await render(entry);
+
+const canonical = `${SITE_URL}${prefix}/rfcs/${rfc.id}`;
+const statusLabel = t.rfcs.statusLabels[rfc.status] ?? rfc.status;
+const tierLabel = t.rfcs.tierLabels[rfc.tier] ?? rfc.tier;
+
+const STATUS_TONE: Record<string, string> = {
+  draft: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+  open: 'bg-cabuya-info-soft text-cabuya-info',
+  accepted: 'bg-cabuya-success-soft text-cabuya-success',
+  declined: 'bg-cabuya-bg-brand text-cabuya-text-secondary',
+  withdrawn: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+  superseded: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+};
+
+/**
+ * The description names the status first.
+ *
+ * Somebody arriving from a search result for an RFC's subject needs to know
+ * whether it was decided before they need to know what it says.
+ */
+const description = truncateToBand(
+  `${rfc.title} — RFC-${rfc.id}, ${tierLabel.toLowerCase()}, ${statusLabel.toLowerCase()}. ${t.rfcs.lead}`,
+  DESCRIPTION_MAX,
+  DESCRIPTION_MIN
+);
+---
+
+<MainLayout
+  lang={lang}
+  title={`RFC-${rfc.id} — ${rfc.title}`}
+  description={description}
+>
+  <JsonLd
+    data={{
+      '@context': 'https://schema.org',
+      '@type': 'TechArticle',
+      headline: `RFC-${rfc.id} — ${rfc.title}`,
+      url: canonical,
+      datePublished: rfc.opened || undefined,
+      /*
+       * `creativeWorkStatus` rather than a bare article: the status is the
+       * single most important fact about an RFC, and a structured-data
+       * consumer that reads this as a finished document would be reading a
+       * proposal as a decision.
+       */
+      creativeWorkStatus: rfc.status,
+      isPartOf: {
+        '@type': 'CreativeWorkSeries',
+        name: 'Cabuya RFCs',
+        url: `${SITE_URL}${prefix}/rfcs`,
+      },
+    }}
+  />
+
+  <article>
+    <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+      <div class="main-container py-12 md:py-16">
+        <p class="text-sm">
+          <a
+            href={`${prefix}/rfcs`}
+            class="text-white/70 underline underline-offset-2 hover:text-white"
+          >
+            ← {t.rfcs.backToIndex}
+          </a>
+        </p>
+
+        <p class="mt-6 font-mono text-sm text-white/70">RFC-{rfc.id}</p>
+        <h1 class="mt-1 font-display text-2xl font-bold md:text-3xl">
+          {rfc.title}
+        </h1>
+
+        <dl class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
+          <div class="flex items-center gap-2">
+            <dt class="sr-only">{t.rfcs.columnStatus}</dt>
+            <dd>
+              <span
+                class:list={[
+                  'inline-flex rounded px-2 py-0.5 text-xs font-semibold',
+                  STATUS_TONE[rfc.status] ?? STATUS_TONE.draft,
+                ]}
+              >
+                {statusLabel}
+              </span>
+            </dd>
+          </div>
+          <div class="flex items-center gap-2">
+            <dt class="text-white/60">{t.rfcs.columnTier}</dt>
+            <dd class="text-white/90">{tierLabel}</dd>
+          </div>
+          <div class="flex items-center gap-2">
+            <dt class="text-white/60">{t.rfcs.openedLabel}</dt>
+            <dd class="text-white/90">
+              {rfc.opened ? <time datetime={rfc.opened}>{rfc.opened}</time> : '—'}
+            </dd>
+          </div>
+          <div class="flex items-center gap-2">
+            <dt class="text-white/60">{t.rfcs.decidedLabel}</dt>
+            <dd class="text-white/90">
+              {
+                rfc.decided ? (
+                  <time datetime={rfc.decided}>{rfc.decided}</time>
+                ) : (
+                  t.rfcs.notDecided
+                )
+              }
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="bg-cabuya-bg py-12 md:py-16">
+      <div class="main-container">
+        <!--
+          The notice the language gate requires before an RFC may render in a
+          language other than its route's. It is also just true, and the reason
+          it is true is worth a sentence to a reader who expected a translation.
+        -->
+        <p
+          class="mb-8 max-w-3xl rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-4 text-sm text-cabuya-text-secondary"
+        >
+          {t.rfcs.quotedNotice}
+        </p>
+
+        <div class="prose max-w-3xl">
+          <Content />
+        </div>
+
+        <p class="mt-10 text-sm">
+          <a
+            href={`${GITHUB_URL}/blob/main/spec/rfcs/${rfc.slug}.md`}
+            rel="noopener"
+            class="text-cabuya-primary underline underline-offset-2"
+          >
+            {t.rfcs.sourceLabel}: <code class="font-mono">spec/rfcs/{rfc.slug}.md</code> ↗
+          </a>
+        </p>
+      </div>
+    </section>
+  </article>
+</MainLayout>

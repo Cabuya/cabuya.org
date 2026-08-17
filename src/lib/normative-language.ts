@@ -27,6 +27,20 @@ const NORMATIVE_ROUTES = [
   /^developers\/spec(\/|$)/,
   /^developers\/schemas(\/|$)/,
   /^developers\/validator\/checks$/,
+  /*
+   * RFCs are the authors' documents, quoted whole. RFC-0001 is genuinely
+   * bilingual as written — the founding agreement is a thing people sign, and
+   * both halves have to be signable — so it renders as authored on both
+   * language routes rather than being cut in half for either.
+   */
+  /^rfcs(\/|$)/,
+  /*
+   * The changelog's entries are quotations from the specification's own
+   * changelog file, which is English by the repository language rule. A
+   * translated quotation is not the record, and the record is what a reader
+   * checking a release needs.
+   */
+  /^changelog$/,
 ];
 
 /**
@@ -44,6 +58,12 @@ export const NORMATIVE_NOTICE_MARKERS = [
   // the check ships. Narrower than the spec's exemption and stated separately.
   'todavía no implementadas se muestran en inglés',
   'not yet implemented are shown in English',
+  // RFCs, quoted as their authors wrote them.
+  'as its authors wrote it',
+  'como la escribieron sus autores',
+  // The changelog, quoted from the repository.
+  'entries are quoted from the repository',
+  'se citan del repositorio',
 ];
 
 /** Strip a language prefix, so one rule covers every language. */

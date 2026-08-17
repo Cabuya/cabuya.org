@@ -1,0 +1,177 @@
+---
+/**
+ * `/rfcs` — every proposal that has been opened, with its status.
+ *
+ * The index exists so that "the process is open" is checkable rather than
+ * claimed. A governance page saying anyone may propose a change, with no list
+ * of what has been proposed and what happened to it, is a claim about intent;
+ * a table with statuses and dates is a claim about behaviour.
+ *
+ * Fed by the spec loader, so an RFC appears here the moment its file is merged
+ * and nobody has to remember to add a row.
+ */
+import Callout from '@/components/editorial/Callout.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { specRfcs } from '@/lib/spec-loader';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const rfcs = specRfcs();
+
+/**
+ * Status tones, and the one that matters is `draft`.
+ *
+ * A draft RFC is rendered as unfinished rather than as pending approval,
+ * because RFC-0001 is a proposal nobody has agreed to and the index must not
+ * make it look like a decision waiting to be rubber-stamped.
+ */
+const STATUS_TONE: Record<string, string> = {
+  draft: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+  open: 'bg-cabuya-info-soft text-cabuya-info',
+  accepted: 'bg-cabuya-success-soft text-cabuya-success',
+  declined: 'bg-cabuya-bg-brand text-cabuya-text-secondary',
+  withdrawn: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+  superseded: 'bg-cabuya-bg-brand text-cabuya-text-muted',
+};
+---
+
+<MainLayout
+  lang={lang}
+  title={t.rfcs.metaTitle}
+  description={t.rfcs.metaDescription}
+>
+  <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+    <div class="main-container py-14 md:py-20">
+      <h1 class="font-display text-3xl font-bold md:text-4xl">
+        {t.rfcs.title}
+      </h1>
+      <p class="mt-4 max-w-3xl text-base text-white/80 md:text-lg">
+        {t.rfcs.lead}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-cabuya-bg py-12 md:py-16">
+    <div class="main-container">
+      <div class="not-prose overflow-x-auto">
+        {
+          rfcs.length === 0 ? (
+            <p class="text-sm text-cabuya-text-muted">{t.rfcs.emptyIndex}</p>
+          ) : (
+            <table class="w-full min-w-[46rem] border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-cabuya-border-strong text-left">
+                  <th scope="col" class="py-3 pr-4 font-semibold">
+                    {t.rfcs.columnRfc}
+                  </th>
+                  <th scope="col" class="py-3 pr-4 font-semibold">
+                    {t.rfcs.columnTitle}
+                  </th>
+                  <th scope="col" class="py-3 pr-4 font-semibold">
+                    {t.rfcs.columnTier}
+                  </th>
+                  <th scope="col" class="py-3 pr-4 font-semibold">
+                    {t.rfcs.columnStatus}
+                  </th>
+                  <th scope="col" class="py-3 pr-4 font-semibold">
+                    {t.rfcs.columnOpened}
+                  </th>
+                  <th scope="col" class="py-3 font-semibold">
+                    {t.rfcs.columnDecided}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rfcs.map((rfc) => (
+                  <tr class="border-b border-cabuya-border align-top">
+                    <td class="py-3 pr-4 font-mono">
+                      <a
+                        href={`${prefix}/rfcs/${rfc.id}`}
+                        class="font-semibold text-cabuya-primary underline-offset-2 hover:underline"
+                      >
+                        {rfc.id}
+                      </a>
+                    </td>
+                    <td class="py-3 pr-4">{rfc.title}</td>
+                    <td class="py-3 pr-4 text-xs text-cabuya-text-secondary">
+                      {t.rfcs.tierLabels[rfc.tier] ?? rfc.tier}
+                    </td>
+                    <td class="py-3 pr-4">
+                      <span
+                        class:list={[
+                          'inline-flex rounded px-2 py-0.5 text-xs font-semibold whitespace-nowrap',
+                          STATUS_TONE[rfc.status] ?? STATUS_TONE.draft,
+                        ]}
+                      >
+                        {t.rfcs.statusLabels[rfc.status] ?? rfc.status}
+                      </span>
+                    </td>
+                    <td class="py-3 pr-4 text-xs text-cabuya-text-muted">
+                      {rfc.opened ? (
+                        <time datetime={rfc.opened}>{rfc.opened}</time>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
+                    <td class="py-3 text-xs text-cabuya-text-muted">
+                      {rfc.decided ? (
+                        <time datetime={rfc.decided}>{rfc.decided}</time>
+                      ) : (
+                        t.rfcs.notDecided
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        }
+      </div>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:max-w-5xl">
+        <div>
+          <h2 class="font-display text-lg font-bold">{t.rfcs.processTitle}</h2>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">
+            {t.rfcs.processBody}
+          </p>
+        </div>
+        <div>
+          <h2 class="font-display text-lg font-bold">{t.rfcs.whoTitle}</h2>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">{t.rfcs.whoBody}</p>
+        </div>
+      </div>
+
+      <div class="mt-10 max-w-3xl">
+        <Callout tone="limit" label={t.rfcs.privacyTitle}>
+          <p>{t.rfcs.privacyBody}</p>
+        </Callout>
+      </div>
+
+      <p class="mt-8 flex flex-wrap gap-6 text-sm">
+        <a
+          href={`${GITHUB_URL}/blob/main/spec/rfcs/0000-template.md`}
+          rel="noopener"
+          class="text-cabuya-primary underline underline-offset-2"
+        >
+          {t.rfcs.templateLink} ↗
+        </a>
+        <a
+          href={`${prefix}/governance`}
+          class="text-cabuya-primary underline underline-offset-2"
+        >
+          {t.rfcs.tierLabels.governance}
+        </a>
+      </p>
+    </div>
+  </section>
+</MainLayout>

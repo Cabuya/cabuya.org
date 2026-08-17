@@ -15,7 +15,9 @@ import { glob } from 'astro/loaders';
 // Astro 7 deprecates its own `z` re-export; the project depends on zod directly.
 import { z } from 'zod';
 
-import { specSections, specVersions } from '@/lib/spec-loader';
+import type { RootDocId } from '@/lib/root-docs';
+import { rootDoc } from '@/lib/root-docs';
+import { specRfcs, specSections, specVersions } from '@/lib/spec-loader';
 
 /**
  * Portal prose.
@@ -114,4 +116,110 @@ const specSectionsCollection = defineCollection({
   }),
 });
 
-export const collections = { docs, spec: specSectionsCollection };
+/**
+ * Repository-root governance documents, rendered as pages.
+ *
+ * `GOVERNANCE.md`, `TRADEMARK.md` and `CONTRIBUTING.md` are the source of truth
+ * for what the project's rules *are* — a developer evaluating adoption reads
+ * them on GitHub before they visit the site, and a fork carries them. The pages
+ * are a second surface on the same text, never a second text.
+ *
+ * A custom loader rather than `glob()`, for the same reason the spec uses one:
+ * the files are not in `src/content/`, they are where their readers look for
+ * them, and one adapter (`src/lib/root-docs.ts`) is the only thing that knows
+ * where that is.
+ */
+const rootDocsCollection = defineCollection({
+  loader: {
+    name: 'cabuya-root-docs',
+    async load({ store, renderMarkdown, parseData }) {
+      store.clear();
+      const ids: RootDocId[] = ['GOVERNANCE', 'TRADEMARK', 'CONTRIBUTING'];
+      for (const docId of ids) {
+        for (const lang of ['en', 'es'] as const) {
+          const doc = rootDoc(docId, lang);
+          const id = `${lang}/${docId}`;
+          const data = await parseData({
+            id,
+            data: { docId, lang, file: doc.file, title: doc.title },
+          });
+          store.set({
+            id,
+            data,
+            body: doc.body,
+            rendered: await renderMarkdown(doc.body),
+          });
+        }
+      }
+    },
+  },
+  schema: z.object({
+    docId: z.enum(['GOVERNANCE', 'TRADEMARK', 'CONTRIBUTING']),
+    lang: z.enum(['en', 'es']),
+    file: z.string(),
+    title: z.string(),
+  }),
+});
+
+/**
+ * RFCs, read through the spec loader.
+ *
+ * RFC-0001 is genuinely bilingual as authored — the founding agreement puts the
+ * Spanish and the English side by side in one document, because it is a thing
+ * people sign and both halves have to be signable. So the same entry serves
+ * both language routes, and the RFC page carries a notice saying so rather than
+ * pretending a translation exists or hiding the page from Spanish readers.
+ */
+const rfcsCollection = defineCollection({
+  loader: {
+    name: 'cabuya-rfcs',
+    async load({ store, renderMarkdown, parseData }) {
+      store.clear();
+      for (const rfc of specRfcs()) {
+        const data = await parseData({
+          id: rfc.id,
+          data: {
+            id: rfc.id,
+            number: rfc.number,
+            slug: rfc.slug,
+            title: rfc.title,
+            status: rfc.status,
+            tier: rfc.tier,
+            opened: rfc.opened,
+            decided: rfc.decided,
+          },
+        });
+        store.set({
+          id: rfc.id,
+          data,
+          body: rfc.body,
+          rendered: await renderMarkdown(rfc.body),
+        });
+      }
+    },
+  },
+  schema: z.object({
+    id: z.string(),
+    number: z.number(),
+    slug: z.string(),
+    title: z.string(),
+    status: z.enum([
+      'draft',
+      'open',
+      'accepted',
+      'declined',
+      'withdrawn',
+      'superseded',
+    ]),
+    tier: z.string(),
+    opened: z.string(),
+    decided: z.string().nullable(),
+  }),
+});
+
+export const collections = {
+  rootDocs: rootDocsCollection,
+  rfcs: rfcsCollection,
+  docs,
+  spec: specSectionsCollection,
+};

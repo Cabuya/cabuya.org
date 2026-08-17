@@ -82,6 +82,12 @@ jobs:
       - name: Validator — build and test the workspace package
         run: pnpm run validator:build && pnpm run validator:test
 
+      # /join promises a backlog pre-populated with well-specified work. This
+      # is that backlog, generated from the checks that are catalogued and not
+      # yet implemented — it goes stale the moment one of them ships.
+      - name: Contribution gate — the day-one issue list matches the catalogue
+        run: pnpm run issues:day-one:check
+
       - name: Build
         run: pnpm run build
 

@@ -1,0 +1,75 @@
+---
+/**
+ * `/governance`, `/trademark` and `/join` — the repository's own documents.
+ *
+ * One renderer for all three, because all three are the same thing: a
+ * root-level Markdown file that governs how this project works, shown to
+ * someone who arrived from the site rather than from a `git clone`.
+ *
+ * The page adds a header, a link to the file it came from, and nothing else.
+ * The link is not decoration — it is the page telling you where the authority
+ * actually lives, so a reader who wants to check what a fork carries, or open a
+ * pull request against it, can go straight there.
+ */
+import { getCollection, render } from 'astro:content';
+import MainLayout from '@/layouts/MainLayout.astro';
+import type { Language } from '@/lib/i18n';
+import type { RootDocId } from '@/lib/root-docs';
+import { rootDoc, rootDocSummary } from '@/lib/root-docs';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  docId: RootDocId;
+}
+
+const { lang, docId } = Astro.props;
+const t = getTranslations(lang);
+
+const entries = await getCollection('rootDocs');
+const entry = entries.find((item) => item.id === `${lang}/${docId}`);
+if (!entry) throw new Error(`No rootDocs entry for ${lang}/${docId}`);
+
+const { Content } = await render(entry);
+
+/** The adapter is read again for the summary — one source, two consumers. */
+const doc = rootDoc(docId, lang);
+const description = rootDocSummary(doc);
+const sourceUrl = `${GITHUB_URL}/blob/main/${doc.file}`;
+---
+
+<MainLayout lang={lang} title={doc.title} description={description}>
+  <article>
+    <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+      <div class="main-container py-14 md:py-20">
+        <h1 class="font-display text-3xl font-bold md:text-4xl">{doc.title}</h1>
+        <p class="mt-4 max-w-3xl text-base text-white/80">{description}</p>
+        <p class="mt-6 text-sm">
+          <a
+            href={sourceUrl}
+            rel="noopener"
+            class="inline-flex items-center gap-2 text-white/70 underline underline-offset-4 hover:text-white"
+          >
+            <code class="font-mono">{doc.file}</code>
+            <span aria-hidden="true">↗</span>
+            <span class="sr-only">{t.rootDocs.sourceLinkSuffix}</span>
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-cabuya-bg py-12 md:py-16">
+      <div class="main-container">
+        <p
+          class="mb-8 max-w-3xl rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-4 text-sm text-cabuya-text-secondary"
+        >
+          {t.rootDocs.sourceNote}
+        </p>
+        <div class="prose max-w-3xl">
+          <Content />
+        </div>
+      </div>
+    </section>
+  </article>
+</MainLayout>

@@ -39,15 +39,31 @@ const PAGES = join(ROOT, 'src', 'pages');
  * Does a route resolve to something in the build?
  *
  * `/foo` can be served by `src/pages/foo.astro`, `src/pages/foo/index.astro`,
- * or a static file in `public/`. All three count.
+ * a static file in `public/`, or — for the portal's prose — a pair of Markdown
+ * files rendered by `developers/[page].astro`. All four count.
+ *
+ * The prose case requires **both** languages, which is stricter than checking
+ * for a route file: a chrome entry pointing at a page that exists in English
+ * and 404s on `/es` is exactly the defect this test is for.
  */
 function routeExists(path: string): boolean {
   const bare = path.replace(/^\//, '');
   if (bare === '') return existsSync(join(PAGES, 'index.astro'));
-  return (
+  if (
     existsSync(join(PAGES, `${bare}.astro`)) ||
     existsSync(join(PAGES, bare, 'index.astro')) ||
     existsSync(join(ROOT, 'public', bare))
+  ) {
+    return true;
+  }
+
+  if (!bare.startsWith('developers/')) return false;
+  const slug = bare.slice('developers/'.length);
+  const docs = join(ROOT, 'src', 'content', 'docs');
+  return (
+    existsSync(join(PAGES, 'developers', '[page].astro')) &&
+    existsSync(join(docs, 'en', `${slug}.md`)) &&
+    existsSync(join(docs, 'es', `${slug}.md`))
   );
 }
 

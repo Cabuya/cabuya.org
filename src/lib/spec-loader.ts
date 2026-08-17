@@ -319,3 +319,157 @@ export function sectionSummary(section: SpecSection, maxLength = 155): string {
   if (sentence > 90) return window.slice(0, sentence + 1);
   return `${window.slice(0, window.lastIndexOf(' '))}…`;
 }
+
+// ── Changelog ─────────────────────────────────────────────
+
+export interface ChangelogRelease {
+  /** `0.1.0-draft`, or `Unreleased`. */
+  version: string;
+  /** ISO date, or null for the unreleased section. */
+  date: string | null;
+  /** Keep-a-Changelog groups, in the order they appear. */
+  groups: Array<{ kind: string; entries: string[] }>;
+  /** Any prose in the release that is not inside a group — a status line. */
+  notes: string[];
+}
+
+/**
+ * The specification's changelog, parsed from `spec/CHANGELOG.md`.
+ *
+ * Keep a Changelog is a convention, not a format with a parser, so this reads
+ * the three shapes it actually uses: `## [version] — date` headings, `### Kind`
+ * groups, and `- entry` bullets. Anything it does not recognise is carried
+ * through as a note rather than dropped, because the one thing this file
+ * currently says that matters most — *nothing is normative yet* — is a bold
+ * paragraph and not a bullet.
+ *
+ * Parsed rather than hand-copied onto a page for the usual reason: a changelog
+ * transcribed into HTML is a changelog that stops matching the repository, and
+ * the release notes are exactly where that would be least forgivable.
+ */
+export function specChangelog(): ChangelogRelease[] {
+  const path = join(SPEC, 'CHANGELOG.md');
+  if (!existsSync(path)) return [];
+
+  const releases: ChangelogRelease[] = [];
+  let current: ChangelogRelease | null = null;
+  let group: { kind: string; entries: string[] } | null = null;
+
+  for (const line of readFileSync(path, 'utf-8').split('\n')) {
+    const release = line.match(/^##\s+\[([^\]]+)\](?:\s*[—-]\s*(\S+))?/);
+    if (release) {
+      if (current) releases.push(current);
+      current = {
+        version: release[1],
+        date: release[2] ?? null,
+        groups: [],
+        notes: [],
+      };
+      group = null;
+      continue;
+    }
+
+    if (!current) continue;
+
+    const kind = line.match(/^###\s+(.+)$/);
+    if (kind) {
+      group = { kind: kind[1].trim(), entries: [] };
+      current.groups.push(group);
+      continue;
+    }
+
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    if (bullet && group) {
+      group.entries.push(bullet[1].trim());
+      continue;
+    }
+
+    // A continuation line of the previous bullet, wrapped by the formatter.
+    if (group && group.entries.length > 0 && /^\s{2,}\S/.test(line)) {
+      group.entries[group.entries.length - 1] += ` ${line.trim()}`;
+      continue;
+    }
+
+    const prose = line.trim();
+    if (prose.length > 0 && !prose.startsWith('#')) current.notes.push(prose);
+  }
+
+  if (current) releases.push(current);
+  return releases;
+}
+
+// ── RFCs ──────────────────────────────────────────────────
+
+export type RfcStatus =
+  | 'draft'
+  | 'open'
+  | 'accepted'
+  | 'declined'
+  | 'withdrawn'
+  | 'superseded';
+
+export interface SpecRfc {
+  /** Zero-padded as in the filename: `0001`. */
+  id: string;
+  number: number;
+  slug: string;
+  title: string;
+  status: RfcStatus;
+  /** `governance`, `normative`, `breaking`. */
+  tier: string;
+  opened: string;
+  decided: string | null;
+  body: string;
+  raw: string;
+}
+
+function isRfcStatus(value: string | undefined): value is RfcStatus {
+  return (
+    value === 'draft' ||
+    value === 'open' ||
+    value === 'accepted' ||
+    value === 'declined' ||
+    value === 'withdrawn' ||
+    value === 'superseded'
+  );
+}
+
+/**
+ * Every numbered RFC, lowest first.
+ *
+ * `0000-template.md` is excluded: it is the form, not a proposal, and listing
+ * it as RFC-0 would put a document nobody wrote at the top of the index.
+ */
+export function specRfcs(): SpecRfc[] {
+  const dir = join(SPEC, 'rfcs');
+  if (!existsSync(dir)) return [];
+
+  return readdirSync(dir)
+    .filter((file) => /^\d{4}-.+\.md$/.test(file) && !file.startsWith('0000-'))
+    .sort()
+    .map((file) => {
+      const raw = readFileSync(join(dir, file), 'utf-8');
+      const { data, body } = parseFrontmatter(raw);
+      const id = file.slice(0, 4);
+      return {
+        id,
+        number: Number(data.number ?? id),
+        slug: file.replace(/\.md$/, ''),
+        title: data.title ?? file,
+        // An RFC with no declared status is a draft. Defaulting the other way
+        // would let a missing field read as acceptance.
+        status: isRfcStatus(data.status) ? data.status : 'draft',
+        tier: data.tier ?? 'normative',
+        opened: data.opened ?? '',
+        decided: data.decided ?? null,
+        body,
+        raw,
+      };
+    });
+}
+
+export function specRfc(id: string): SpecRfc | undefined {
+  return specRfcs().find(
+    (rfc) => rfc.id === id || rfc.id === id.padStart(4, '0')
+  );
+}

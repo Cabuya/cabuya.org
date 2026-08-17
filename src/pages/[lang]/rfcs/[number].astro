@@ -1,0 +1,26 @@
+---
+import RfcPage from '@/components/pages/RfcPage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+import { specRfcs } from '@/lib/spec-loader';
+
+export function getStaticPaths() {
+  const languages = getSupportedLanguages().filter(
+    (lang) => lang !== DEFAULT_LANGUAGE
+  );
+  return languages.flatMap((lang: Language) =>
+    specRfcs().map((rfc) => ({
+      params: { lang, number: rfc.id },
+      props: { rfc },
+    }))
+  );
+}
+
+const { lang } = Astro.params as { lang: Language };
+const { rfc } = Astro.props;
+---
+
+<RfcPage lang={lang} rfc={rfc} />

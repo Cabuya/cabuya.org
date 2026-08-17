@@ -444,6 +444,83 @@ export const es: SiteTranslations = {
       'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no corre.',
   },
 
+  changelog: {
+    metaTitle: 'Registro de cambios — Protocolo Cabuya',
+    metaDescription:
+      'Todo cambio notable de la especificación de Cabuya, en una sola línea de tiempo, leída del repositorio para que la página no se desfase de la versión que describe.',
+    title: 'Registro de cambios',
+    lead: 'Todo cambio notable de la especificación, del más reciente al más antiguo. Se lee del repositorio en vez de transcribirse, así que esta página y la versión que describe no pueden contradecirse.',
+    scopeTitle: 'Qué cubre',
+    scopeBody:
+      'La especificación: sus secciones, esquemas, ejemplos, perfiles y vocabulario. El versionado sigue SemVer con una regla extra — una candidata a versión se vuelve normativa solo después de que al menos un publicador la haya puesto en producción. La especificación nunca le saca ventaja a quienes la implementan.',
+    unreleased: 'Sin publicar',
+    nothingYet: 'Todavía no hay nada registrado bajo esta versión.',
+    otherTracksTitle: 'El validador y la skill',
+    otherTracksBody:
+      'Van a aparecer en esta línea de tiempo cuando saquen versiones. Mientras tanto no se listan como carriles vacíos: una línea de tiempo con filas en blanco se lee como un proyecto que se detuvo, no como uno que todavía no arranca.',
+    quotedNotice:
+      'Las entradas de cada versión se citan del repositorio, sin cambios. El registro de cambios está escrito en inglés como el resto del repositorio, y una cita traducida no sería el registro que necesita quien viene a comprobar una versión.',
+    groupLabels: {
+      added: 'Agregado',
+      changed: 'Cambiado',
+      deprecated: 'Obsoleto',
+      removed: 'Eliminado',
+      fixed: 'Corregido',
+      security: 'Seguridad',
+    },
+  },
+
+  rfcs: {
+    metaTitle: 'RFC — Protocolo Cabuya',
+    metaDescription:
+      'Los cambios normativos al Protocolo Cabuya solo entran por el proceso de RFC. El índice, el estado de cada propuesta y cómo abrir una tú.',
+    title: 'RFC',
+    lead: 'Un cambio normativo llega a la especificación únicamente por un RFC. Estos son todos los que se han abierto, con su estado y su decisión.',
+    processTitle: 'Qué necesita uno',
+    processBody:
+      'Cualquier cambio a un campo del esquema, su cardinalidad, una enumeración, su obligatoriedad, un nivel de conformidad o el significado de un término definido. Más la gobernanza y las licencias. Todo lo demás — erratas, ejemplos, documentación, tests, texto del sitio — va por la vía rápida y necesita una aprobación.',
+    whoTitle: 'Quién puede abrir uno',
+    whoBody:
+      'Cualquiera. No hace falta ser maintainer y no hace falta haber escrito código. Quien se estrelló contra un muro implementando la especificación suele ser quien mejor puede describir qué tiene de malo.',
+    privacyTitle: 'La sección que puede rechazar un RFC por sí sola',
+    privacyBody:
+      'Cada RFC dice qué datos de personas podría volver alcanzables su cambio, de forma directa o cruzando con otra fuente. Un RFC que no pueda responder eso no avanza, por útil que fuera el campo. Es la única sección obligatoria que no trata del cambio en sí.',
+    columnRfc: 'RFC',
+    columnTitle: 'Título',
+    columnTier: 'Nivel',
+    columnStatus: 'Estado',
+    columnOpened: 'Abierto',
+    columnDecided: 'Decidido',
+    quotedNotice:
+      'Un RFC se muestra tal como la escribieron sus autores, en el idioma o los idiomas que hayan usado. El RFC-0001 es bilingüe a propósito: es un documento que la gente firma, y las dos mitades tienen que poder firmarse.',
+    statusLabels: {
+      draft: 'Borrador',
+      open: 'Abierto a comentarios',
+      accepted: 'Aceptado',
+      declined: 'Rechazado',
+      withdrawn: 'Retirado',
+      superseded: 'Reemplazado',
+    },
+    tierLabels: {
+      governance: 'Gobernanza',
+      normative: 'Normativo',
+      breaking: 'Ruptura',
+    },
+    emptyIndex: 'Todavía no se ha abierto ningún RFC.',
+    templateLink: 'La plantilla',
+    backToIndex: 'Todos los RFC',
+    openedLabel: 'Abierto',
+    decidedLabel: 'Decidido',
+    notDecided: 'Sin decidir',
+    sourceLabel: 'El archivo fuente',
+  },
+
+  rootDocs: {
+    sourceLinkSuffix: 'en GitHub — el archivo que esta página renderiza',
+    sourceNote:
+      'Esta página renderiza un archivo del repositorio. El archivo es la fuente: es lo que se lleva una bifurcación, lo que cambia un pull request y lo que manda si alguna vez los dos no coinciden.',
+  },
+
   registry: {
     metaTitle: 'Registro — Protocolo Cabuya',
     metaDescription:

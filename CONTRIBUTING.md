@@ -1,11 +1,15 @@
 # Contributing to cabuya.org
 
-*(Español más abajo — [ir a la versión en español](#contribuir-a-cabuyaorg).)*
+*(En español: [CONTRIBUTING.es.md](CONTRIBUTING.es.md).)*
 
 Thank you for helping build the Cabuya Protocol. This repository holds the
 website, the normative spec (`spec/`), the publisher registry (`registry/`)
 and the conformance validator (`packages/validator/`). All of it is open
 source and all of it takes contributions.
+
+The contributor this project is built for is a volunteer developer with two
+free hours who already works on one of the aid applications this protocol is
+trying to connect. Everything below is arranged around that person.
 
 ## Ground rules
 
@@ -20,6 +24,59 @@ source and all of it takes contributions.
    by their own organizations are the only exception.
 4. **Conformance is measured, never declared.** Nothing you write may claim a
    conformance level the validator has not measured.
+5. **Never weaken or delete a test to make a gate pass.** If a gate is wrong,
+   fix the gate and say so in the PR. If it is right, it found something.
+
+## Four ways in, roughly by effort
+
+### 1. Open an issue
+
+Something in the spec is ambiguous, a check message is wrong, a page says
+something that is not true. **You do not need a fix to report a problem.** The
+most valuable issues come from people who tried to implement something and hit
+a wall — a wall is evidence about the specification, not only about the reader.
+
+### 2. Publish a feed
+
+The shortest path from reader to participant. The
+[quickstart](https://cabuya.org/developers/quickstart) is two files and a
+validator run — an afternoon for a small application, which is a design
+constraint rather than a boast. You do not need permission and you do not need
+to tell anyone first.
+
+### 3. Open a registry pull request
+
+Once your feed validates, add your entry to `registry/publishers/`. One JSON
+file, reviewed by a human, merged. The measured state arrives afterwards from
+the validator — the entry is a claim about who you are, never about how
+conforming you are.
+
+### 4. Join the working group
+
+Show up to the discussion on normative changes.
+[`GOVERNANCE.md`](GOVERNANCE.md) has the requirements for becoming a
+maintainer; the first is that your application publishes a conforming feed,
+because shipping qualifies and enthusiasm does not.
+
+## Good first issues
+
+The backlog is **pre-populated with well-specified work**, on purpose. An empty
+issue tracker is intimidating in a way that has nothing to do with difficulty:
+it asks a newcomer to invent the work as well as do it.
+
+| Label | What it is | Why it is a good first issue |
+|---|---|---|
+| `good-first-issue:check` | Implement one validator check from the catalogue | Perfectly bounded — id, severity, message and fixture are already specified. One function and two tests. |
+| `good-first-issue:stack` | Write the implementation guide for a stack you know | Needs *your* domain knowledge, not project knowledge. The highest-value thing an outsider can contribute on day one. |
+| `good-first-issue:translation` | Translate a spec section, a check message or a page | Reviewable by anyone, and it keeps the bilingual promise real rather than aspirational. |
+| `good-first-issue:example` | Add a valid or invalid example with a teaching `$comment` | Directly improves how implementable the protocol is by an agent. |
+| `registry` | Add or correct a publisher entry | The lowest-effort path from reader to contributor. |
+| `rfc` | Open or discuss a normative change | The governance on-ramp. |
+| `help-wanted:probe` | Reproduce a behavioural failure against a real stack | Turns a bug report into a fixture, which is what makes it fixable. |
+
+`good-first-issue:check` deserves the emphasis: every catalogued check that is
+not yet implemented ships as an open issue with its id, rule, severity and fix
+text already decided. There is nothing to design.
 
 ## Developer Certificate of Origin (DCO)
 
@@ -36,6 +93,10 @@ not a cryptographic signature and takes no setup — just remember the `-s`. A
 bot checks it on every PR; a missing sign-off is the most common reason a
 first PR fails CI, and it's fixed with `git commit --amend -s && git push -f`.
 
+There is **no CLA**: there is no legal entity to assign rights to, and CLA
+friction measurably deters exactly the drive-by contributions this project
+depends on.
+
 ## Commits and branches
 
 - **Conventional commits:** `type(scope): description` — types `feat`, `fix`,
@@ -43,6 +104,14 @@ first PR fails CI, and it's fixed with `git commit --amend -s && git push -f`.
   English, imperative mood.
 - Branch from `main`, open a PR against `main`. Keep PRs focused — one
   concern per PR.
+
+## Language
+
+Write in Spanish or English, whichever you think in. **Code, comments, commit
+messages, check ids and JSON keys are English**, because the protocol is read
+by people who share no other language. **Public content is both**, natively
+written in each rather than machine-translated from the other. An issue in
+Spanish gets an answer in Spanish.
 
 ## Running the checks locally
 
@@ -57,7 +126,8 @@ pnpm run md:check && pnpm run lang:check && pnpm run seo:check \
   && pnpm run parity:check && pnpm run redirects:check
 ```
 
-The PR template lists which gates apply to which kind of change.
+The PR template lists which gates apply to which kind of change; the full
+command list is in [`docs/DEVELOPMENT_COMMANDS.md`](docs/DEVELOPMENT_COMMANDS.md).
 
 ## Where to contribute
 
@@ -69,54 +139,9 @@ The PR template lists which gates apply to which kind of change.
 | Implement a **validator check** | `good-first-issue:check` issues — each is fully specified (id, severity, message, fixture) |
 | Translate | `good-first-issue:translation` issues |
 
----
+## Code of Conduct
 
-# Contribuir a cabuya.org
-
-Gracias por ayudar a construir el Protocolo Cabuya. Este repositorio contiene
-el sitio web, la especificación normativa (`spec/`), el registro de
-publicadores (`registry/`) y el validador de conformidad
-(`packages/validator/`). Todo es open source y todo recibe contribuciones.
-
-## Reglas de base
-
-1. **Un primer PR recibe una revisión, no un rediseño.** Revisamos lo que
-   enviaste; no reescribimos tu enfoque en los comentarios. El objetivo de
-   primera respuesta es **48 horas**.
-2. **La Regla-0 aplica a todo cambio de contenido:** ninguna cifra sin fuente
-   citable, ningún aval que no podamos sostener, ningún llamado a un canal que
-   no existe. Cuando algo no está listo, el texto lo dice.
-3. **Cero datos personales**, incluso en fixtures, ejemplos y documentación.
-   Los valores de contacto nunca aparecen en este repositorio; la única
-   excepción son direcciones institucionales publicadas por su propia
-   organización.
-4. **La conformidad se mide, nunca se declara.** Nada de lo que escribas puede
-   afirmar un nivel de conformidad que el validador no haya medido.
-
-## Certificado de Origen del Desarrollador (DCO)
-
-Cada commit debe llevar firma:
-
-```bash
-git commit -s -m "type(scope): descripción"
-```
-
-La opción `-s` añade una línea `Signed-off-by:` que certifica que tienes
-derecho a aportar ese trabajo bajo las licencias del repositorio. No es una
-firma criptográfica y no requiere configuración — solo recuerda la `-s`. Un
-bot lo verifica en cada PR; si lo olvidaste:
-`git commit --amend -s && git push -f`.
-
-## Commits, ramas y verificaciones
-
-Commits convencionales en inglés (`type(scope): description`), rama desde
-`main`, PR hacia `main`, un asunto por PR. Los comandos de verificación local
-están en la sección en inglés — son los mismos.
-
-## Dónde contribuir
-
-Cambios **normativos** al protocolo van por el proceso RFC (abre un issue tipo
-`rfc`), nunca por un PR directo a `spec/`. Entradas del **registro**: issue
-`registry entry` o PR a `registry/publishers/`. Los issues
-`good-first-issue:*` están completamente especificados para que tu primera
-contribución sea un buen rato, no una arqueología.
+[The Contributor Covenant 2.1](CODE_OF_CONDUCT.md), plus two additions:
+reports go to a role held by maintainers from two different applications,
+never to an individual, and a maintainer who is the subject of a report takes
+no part in handling it.

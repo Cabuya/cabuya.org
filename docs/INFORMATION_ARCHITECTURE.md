@@ -18,11 +18,11 @@
 | `/` | The landing: story, ladder, network, horizon | `Organization` + `WebSite` | Task 21 |
 | `/registry` | Implementers registry: table + filters, measured states | `Dataset` (CC0, with distribution) — *Task 33* | ✅ live |
 | `/registry/{publisher_id}` | One publisher: claimed vs measured, history | — | ✅ live |
-| `/rfcs`, `/rfcs/{number}` | RFC index + individual RFCs | `TechArticle` | Task 30 |
-| `/changelog` | Spec + validator + skill releases, one timeline | — | Task 30 |
-| `/governance` | The governance model, maintainers, continuity | — | Task 30 |
-| `/trademark` | Badge + name policy (bilingual body) | — | Task 30 |
-| `/join` | Contribution funnel + the contact form | — | Tasks 30–31 |
+| `/rfcs`, `/rfcs/{number}` | RFC index + individual RFCs | `TechArticle` | ✅ live |
+| `/changelog` | Spec + validator + skill releases, one timeline | — | ✅ live |
+| `/governance` | The governance model, maintainers, continuity | — | ✅ live |
+| `/trademark` | Badge + name policy (bilingual body) | — | ✅ live |
+| `/join` | Contribution funnel (the contact form lands in Task 31) | — | ✅ live |
 | `/404` | Bilingual, on-brand | — | Task 18 |
 
 ### The developers portal
