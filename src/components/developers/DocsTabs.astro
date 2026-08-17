@@ -58,37 +58,67 @@ const { name, tabs, legend } = Astro.props;
 
 <style>
   /*
-   * Each panel is `<div data-tab="{id}">`. Only the one whose radio is checked
-   * is shown; the sibling selector walks from the checked input to the panel
-   * carrying the matching id.
+   * Each panel is `<div data-tab="{id}">`; each tab control is a `<span>`
+   * wrapping a radio input. Rule N says: when the Nth span's input is checked,
+   * show the Nth panel.
+   *
+   * The first version of this used `input:nth-of-type(1)`, which matches every
+   * input — each one is the first input inside its own span — so two panels
+   * showed at once. The position has to be counted on the span, not on the
+   * input.
+   *
+   * Eight rules because the largest tab set on the site is seven (the
+   * quickstart's stacks). A ninth tab shows nothing, which is visible
+   * immediately rather than subtly wrong.
    */
-  .docs-tabs__panels > :global([data-tab]) {
+  .docs-tabs__panels > :global(div[data-tab]) {
     display: none;
   }
-  .docs-tabs:has(input:nth-of-type(1):checked)
+
+  .docs-tabs:has(fieldset > span:nth-of-type(1) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-of-type(1)),
-  .docs-tabs:has(span:nth-child(1) input:checked)
+    > :global(div[data-tab]:nth-of-type(1)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(2) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-child(1)),
-  .docs-tabs:has(span:nth-child(2) input:checked)
+    > :global(div[data-tab]:nth-of-type(2)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(3) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-child(2)),
-  .docs-tabs:has(span:nth-child(3) input:checked)
+    > :global(div[data-tab]:nth-of-type(3)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(4) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-child(3)),
-  .docs-tabs:has(span:nth-child(4) input:checked)
+    > :global(div[data-tab]:nth-of-type(4)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(5) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-child(4)),
-  .docs-tabs:has(span:nth-child(5) input:checked)
+    > :global(div[data-tab]:nth-of-type(5)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(6) input:checked)
     .docs-tabs__panels
-    > :global([data-tab]:nth-child(5)) {
+    > :global(div[data-tab]:nth-of-type(6)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(7) input:checked)
+    .docs-tabs__panels
+    > :global(div[data-tab]:nth-of-type(7)) {
+    display: block;
+  }
+  .docs-tabs:has(fieldset > span:nth-of-type(8) input:checked)
+    .docs-tabs__panels
+    > :global(div[data-tab]:nth-of-type(8)) {
     display: block;
   }
 
   /* Without :has(), show every panel rather than none. */
   @supports not selector(:has(*)) {
-    .docs-tabs__panels > :global([data-tab]) {
+    .docs-tabs__panels > :global(div[data-tab]) {
       display: block;
     }
   }

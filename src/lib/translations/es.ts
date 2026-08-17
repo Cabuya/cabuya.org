@@ -219,6 +219,75 @@ export const es: SiteTranslations = {
       'La especificación y el validador ya están en el repositorio. La guía rápida, la especificación renderizada y el validador en vivo se están escribiendo ahora — mientras tanto, el repositorio es la fuente completa.',
   },
 
+  quickstart: {
+    metaTitle: 'Guía rápida — Cabuya',
+    metaDescription:
+      'Publica tu primer feed de Cabuya: dos archivos, una corrida del validador y una entrada en el registro. Copiar y pegar toma cinco minutos.',
+    title: 'Publica tu primer feed',
+    lead: 'Dos archivos y una corrida del validador. Todo lo de abajo está listo para copiar y pegar, y cumple con la especificación que enseña: los bloques de esta página los revisa la suite de pruebas contra el validador real.',
+
+    agentPathTitle: 'Si tienes un agente de código',
+    agentPathBody:
+      'Instala la skill y pídele que publique un feed de Cabuya. La skill incluye la especificación, así que funciona sin conexión y sin adivinar nombres de campo.',
+    handPathTitle: 'Si lo vas a hacer a mano',
+    handPathBody:
+      'Cinco pasos, abajo. El paso 3 es el que agarra a la gente desprevenida — léelo aunque vengas de afán.',
+
+    fileFirstTitle: 'Guarda esto primero',
+    fileFirstBody:
+      'Este es un manifiesto completo y conforme. Cambia las dos URL y el identificador de publicador por los tuyos, y ya terminaste el paso 1.',
+
+    steps: [
+      {
+        title: 'Escribe el manifiesto',
+        body: 'Dice quién eres, qué publicas y bajo qué licencia. Doce líneas son un manifiesto de verdad, no un esqueleto.',
+      },
+      {
+        title: 'Ponlo en /.well-known/cabuya.json',
+        body: 'La ruta es fija. Los consumidores miran ahí y en ningún otro lado, así que no hay descubrimiento que implementar.',
+      },
+      {
+        title: 'Excluye esa ruta de tu catch-all',
+        body: 'No es opcional. Si tu framework sirve index.html en rutas desconocidas, tu manifiesto responde 200 con HTML, y todos los consumidores lo tratan como ausente.',
+      },
+      {
+        title: 'Serializa tus lugares en el sobre',
+        body: 'El sobre lleva cinco campos y un arreglo. Mapea lo que ya tienes; publica null para todo lo que nadie haya confirmado de verdad.',
+      },
+      {
+        title:
+          'Corre el validador hasta que quede limpio y abre una entrada en el registro',
+        body: 'Cada hallazgo nombra el campo y dice cómo arreglarlo. Cuando la corrida sale limpia, un pull request te agrega al registro.',
+      },
+    ],
+
+    spaTitle: 'El paso 3, según tu stack',
+    spaLead:
+      'Busca el tuyo, aplica la línea y después pide la URL y comprueba que lo que vuelve es JSON.',
+    spaWhy:
+      'Cuatro de las veinte aplicaciones del análisis fundacional fallaron aquí, y las cuatro creían haber publicado. El manifiesto se alcanzaba, respondía 200 y contenía su página de inicio.',
+
+    piiTitle: 'Antes de publicar: la única decisión que es tuya',
+    piiLead:
+      'Cabuya lleva lugares, no personas. Mira los campos que estás por mapear y confirma que ninguno guarda el nombre de una persona, un teléfono o correo personal, un caso individual, o una decisión de moderación sobre alguien.',
+    piiKeysLabel: 'Nombres de campo que el validador rechaza de entrada',
+    piiPatternsLabel: 'Formas de valor que marca dondequiera que aparezcan',
+    piiConfirm:
+      'Una persona toma esta decisión una vez, cuando se escribe el mapeo. El validador la verifica en cada corrida posterior, y reporta el campo, nunca el valor que encontró.',
+
+    validatorTitle: 'Córrelo',
+    validatorLead:
+      'Apunta el validador a la URL de tu manifiesto. Sigue los feeds que declara y reporta lo que encontró.',
+    validatorPending:
+      'El validador en el navegador se está construyendo. Mientras tanto, la versión de línea de comandos hace lo mismo y cabe en una línea.',
+
+    honestyTitle: 'Cuánto toma esto de verdad',
+    honestyBody:
+      'Cinco minutos es el número honesto para el camino de arriba: dos archivos estáticos, copiados, editados y subidos. Es un nivel de conformidad real —L2— y les sirve de verdad a los consumidores.',
+    honestyAfternoon:
+      'Mapear una base de datos viva al esquema es una tarde, a veces dos: hay que reconciliar tus estados con el vocabulario compartido, y alguien tiene que decidir qué significan tus datos en realidad. Ese trabajo no se puede evitar y preferimos decirlo aquí y no que lo descubras en el paso 4.',
+  },
+
   markdown: {
     siteNavigation: 'Navegación del Sitio',
     languageNote: 'Esta página también está disponible en inglés.',

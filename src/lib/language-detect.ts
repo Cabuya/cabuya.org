@@ -433,12 +433,24 @@ export function detectLanguage(text: string): LanguageScore {
 /**
  * Strip HTML to visible text while preserving block boundaries as newlines, so
  * a Spanish paragraph inside an English page stays its own analyzable unit.
+ *
+ * `<code>` and `<pre>` are dropped along with scripts and styles. They hold
+ * identifiers, not prose — and protocol vocabulary is deliberately
+ * Spanish-looking in places: the validator's deny-list rejects field names like
+ * `nombre`, `apellidos` and `teléfono`, so an English page that documents that
+ * list scores as Spanish on the strength of the very words it is warning
+ * against. The Markdown path already excludes code fences and inline code
+ * (`markdownToText` below); this makes the two paths agree, which matters
+ * because the audit reads both and should not reach different verdicts about
+ * the same content.
  */
 export function htmlToText(html: string): string {
   return (
     html
       .replace(/<!--[\s\S]*?-->/g, ' ')
       .replace(/<(script|style|svg|noscript|template)[\s\S]*?<\/\1>/gi, ' ')
+      .replace(/<pre[\s\S]*?<\/pre>/gi, ' ')
+      .replace(/<code[\s\S]*?<\/code>/gi, ' ')
       // Block-level boundaries become newlines before tags are dropped.
       .replace(
         /<\/(p|div|li|h[1-6]|section|article|header|footer|nav|td|th|tr|blockquote|figcaption|dd|dt)>/gi,

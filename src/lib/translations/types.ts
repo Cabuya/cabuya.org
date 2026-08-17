@@ -166,6 +166,43 @@ export interface SiteTranslations {
     startBody: string;
   };
 
+  /** The quickstart — the page the adoption case rests on. */
+  quickstart: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+
+    /** The two entry paths, agent first. */
+    agentPathTitle: string;
+    agentPathBody: string;
+    handPathTitle: string;
+    handPathBody: string;
+
+    fileFirstTitle: string;
+    fileFirstBody: string;
+
+    steps: Array<{ title: string; body: string }>;
+
+    spaTitle: string;
+    spaLead: string;
+    spaWhy: string;
+
+    piiTitle: string;
+    piiLead: string;
+    piiKeysLabel: string;
+    piiPatternsLabel: string;
+    piiConfirm: string;
+
+    validatorTitle: string;
+    validatorLead: string;
+    validatorPending: string;
+
+    honestyTitle: string;
+    honestyBody: string;
+    honestyAfternoon: string;
+  };
+
   markdown: {
     /** Heading labels used by the agent-Markdown serializer */
     siteNavigation: string;

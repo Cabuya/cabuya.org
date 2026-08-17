@@ -350,9 +350,9 @@ describe("the shipped contrast helper agrees with this file's own maths", () => 
      * confident wrong answer about a token that is perfectly readable.
      */
     const parsed = parseThemeTokens(CSS);
-    expect(parsed.light['cabuya']).toBe(parsed.light['cabuya-text']);
-    expect(parsed.dark['cabuya']).toBe(parsed.dark['cabuya-text']);
-    expect(parsed.dark['cabuya']).not.toBe(parsed.light['cabuya']);
+    expect(parsed.light.cabuya).toBe(parsed.light['cabuya-text']);
+    expect(parsed.dark.cabuya).toBe(parsed.dark['cabuya-text']);
+    expect(parsed.dark.cabuya).not.toBe(parsed.light.cabuya);
     expect(parsed.dark['cabuya-secondary']).toBe(
       parsed.dark['cabuya-text-secondary']
     );

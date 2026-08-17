@@ -49,8 +49,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Quickstart', es: 'Guía rápida' },
         path: '/developers/quickstart',
-        status: 'planned',
-        ships: 'Task 24',
+        status: 'live',
         blurb: {
           en: 'Publish your first feed. One afternoon for a small application.',
           es: 'Publica tu primer feed. Una tarde para una aplicación pequeña.',

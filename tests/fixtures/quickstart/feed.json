@@ -1,0 +1,33 @@
+{
+  "last_updated": "2026-01-01T00:00:00Z",
+  "ttl": 300,
+  "version": "0.1.0",
+  "publisher_id": "example-app",
+  "license": "CC-BY-4.0",
+  "permitted_use": [
+    "display",
+    "aggregate"
+  ],
+  "attribution": "Your App",
+  "data": {
+    "places": [
+      {
+        "id": "1",
+        "publisher_id": "example-app",
+        "name": "Coliseo Municipal",
+        "place_kind": "shelter",
+        "municipality_code": "66001",
+        "address_text": "Avenida Ejemplo 12-34",
+        "lat": 4.8133,
+        "lon": -75.6961,
+        "lifecycle_status": "active",
+        "service_status": "open",
+        "last_confirmed_at": null,
+        "source": {
+          "source_id": "example-app"
+        },
+        "public_url": "https://example.org/places/1"
+      }
+    ]
+  }
+}

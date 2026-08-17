@@ -194,8 +194,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Quickstart', es: 'Guía rápida' },
         path: '/developers/quickstart',
-        status: 'planned',
-        ships: 'Task 24',
+        status: 'live',
       },
       {
         label: { en: 'Validator', es: 'Validador' },

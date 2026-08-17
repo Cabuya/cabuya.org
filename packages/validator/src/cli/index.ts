@@ -40,6 +40,7 @@ import { schemaPass } from '../passes/schema.js';
 import { semanticPass } from '../passes/semantic.js';
 import type { Level, Profile, Report } from '../report.js';
 import { type Format, render } from '../reporters.js';
+import { SPA_EXCLUSION_IDS, spaExclusion } from '../spa-exclusions.js';
 
 const VERSION = '0.1.0';
 
@@ -460,19 +461,6 @@ export function initOutput(options: Options): string {
     },
   };
 
-  const SPA_EXCLUSIONS: Record<string, string> = {
-    nextjs:
-      'Next.js: place the file at `public/.well-known/cabuya.json` — it is served before the catch-all.',
-    vite: 'Vite/React SPA: place it at `public/.well-known/cabuya.json` and exclude `/.well-known/*` from your rewrite rule.',
-    astro: 'Astro: place it at `public/.well-known/cabuya.json`.',
-    laravel:
-      'Laravel: register the route before the SPA fallback, or place the file under `public/.well-known/`.',
-    django:
-      'Django: add a static route for `/.well-known/` BEFORE the catch-all urlpattern.',
-    static:
-      'Static host: upload the file to `/.well-known/cabuya.json` (some hosts hide dot-directories — verify with a request).',
-  };
-
   const lines = [
     '# 1. Save as public/.well-known/cabuya.json',
     JSON.stringify(manifest, null, 2),
@@ -482,14 +470,25 @@ export function initOutput(options: Options): string {
     '',
     '# 3. Exclude the manifest path from your SPA catch-all',
   ];
-  const hint = options.framework
-    ? SPA_EXCLUSIONS[options.framework.toLowerCase()]
+  /*
+   * The stack notes live in `spa-exclusions.ts` because three surfaces need the
+   * same words — this command, the quickstart page, and the skill's stack
+   * guides. Three copies would be three copies that drift.
+   */
+  const exclusion = options.framework
+    ? spaExclusion(options.framework.toLowerCase())
     : undefined;
-  lines.push(
-    hint
-      ? `#    ${hint}`
-      : `#    Pass --framework <${Object.keys(SPA_EXCLUSIONS).join('|')}> for the one-liner.`
-  );
+  if (exclusion) {
+    lines.push(
+      `#    ${exclusion.label}: ${exclusion.note.en}${
+        exclusion.path ? ` (${exclusion.path})` : ''
+      }`
+    );
+  } else {
+    lines.push(
+      `#    Pass --framework <${SPA_EXCLUSION_IDS.join('|')}> for the one-liner.`
+    );
+  }
   lines.push('');
   lines.push('# 4. Check it');
   lines.push(

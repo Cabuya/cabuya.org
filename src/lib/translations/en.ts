@@ -219,6 +219,75 @@ export const en: SiteTranslations = {
       'The specification and the validator are in the repository today. The quickstart, the rendered spec and the live validator are being written now — until they are up, the repository is the complete source.',
   },
 
+  quickstart: {
+    metaTitle: 'Quickstart — Cabuya',
+    metaDescription:
+      'Publish your first Cabuya feed. Two files, one validator run, and a registry entry. Copy-paste in five minutes; a real mapping is an afternoon.',
+    title: 'Publish your first feed',
+    lead: 'Two files and a validator run. Everything below is copy-paste ready and conforms to the specification it teaches — the blocks on this page are checked by the test suite against the real validator.',
+
+    agentPathTitle: 'If you have a coding agent',
+    agentPathBody:
+      'Install the skill and tell it to publish a Cabuya feed. The skill vendors the specification, so it works without network access and without guessing at field names.',
+    handPathTitle: 'If you are doing it by hand',
+    handPathBody:
+      'Five steps, below. Step 3 is the one that catches people — read it even if you are skimming.',
+
+    fileFirstTitle: 'Save this first',
+    fileFirstBody:
+      'This is a complete, conforming manifest. Change the two URLs and the publisher id to yours, and you have finished step 1.',
+
+    steps: [
+      {
+        title: 'Write the manifest',
+        body: 'It says who you are, what you publish and under which licence. Twelve lines is a real one, not a stub.',
+      },
+      {
+        title: 'Put it at /.well-known/cabuya.json',
+        body: 'The path is fixed. Consumers look there and nowhere else, so there is no discovery step to implement.',
+      },
+      {
+        title: 'Exclude that path from your catch-all',
+        body: 'Not optional. If your framework serves index.html for unknown paths, your manifest returns 200 with HTML, and every consumer treats it as absent.',
+      },
+      {
+        title: 'Serialize your places into the envelope',
+        body: 'The envelope carries five fields and an array. Map what you already have; publish null for anything nobody has actually confirmed.',
+      },
+      {
+        title:
+          'Run the validator until it is green, then open a registry entry',
+        body: 'Every finding names the field and states the fix. When the run is clean, one pull request adds you to the registry.',
+      },
+    ],
+
+    spaTitle: 'Step 3, per stack',
+    spaLead:
+      'Find yours, apply the one line, then request the URL and check that what comes back is JSON.',
+    spaWhy:
+      'Four of the twenty applications in the founding analysis failed here, and all four believed they had published. The manifest was reachable, returned 200, and contained their homepage.',
+
+    piiTitle: 'Before you publish: the one decision that is yours',
+    piiLead:
+      'Cabuya carries places, not people. Look at the fields you are about to map and confirm that none of them holds a person’s name, a personal phone or email, an individual case, or a moderation verdict about somebody.',
+    piiKeysLabel: 'Field names the validator rejects outright',
+    piiPatternsLabel: 'Value shapes it flags wherever they appear',
+    piiConfirm:
+      'A human makes this call once, when the mapping is written. The validator checks it on every run afterwards, and it reports the field, never the value it found.',
+
+    validatorTitle: 'Run it',
+    validatorLead:
+      'Point the validator at your manifest URL. It follows the feeds it declares, and reports what it found.',
+    validatorPending:
+      'The in-browser validator is being built. Until it is up, the command-line version does the same job and takes one line.',
+
+    honestyTitle: 'How long this actually takes',
+    honestyBody:
+      'Five minutes is the honest number for the path above: two static files, copied, edited and uploaded. It is a real conformance level — L2 — and it is genuinely useful to consumers.',
+    honestyAfternoon:
+      'Mapping a live database into the schema is an afternoon, sometimes two: your statuses have to be reconciled with the shared vocabulary, and somebody has to decide what your data actually means. That work is not avoidable and we would rather say so here than have you discover it at step 4.',
+  },
+
   markdown: {
     siteNavigation: 'Site Navigation',
     languageNote: 'This page is also available in Spanish.',

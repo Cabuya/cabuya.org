@@ -96,3 +96,9 @@ export {
 
 /** The spec version this build validates against. */
 export const SPEC_VERSION = '0.1.0';
+
+/**
+ * SPA catch-all guidance, exported because the website's quickstart and the
+ * agent skill's stack guides render the same notes this CLI prints.
+ */
+export * from './spa-exclusions.js';

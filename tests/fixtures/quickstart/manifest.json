@@ -1,0 +1,24 @@
+{
+  "protocol": {
+    "name": "cabuya",
+    "spec_version": "0.1.0"
+  },
+  "publisher": {
+    "publisher_id": "example-app",
+    "canonical_url": "https://example.org"
+  },
+  "conformance_target": "L2",
+  "license": "CC-BY-4.0",
+  "permitted_use": [
+    "display",
+    "aggregate"
+  ],
+  "feeds": [
+    {
+      "name": "places",
+      "url": "https://example.org/feeds/places.json",
+      "entity": "place",
+      "profile": "core"
+    }
+  ]
+}

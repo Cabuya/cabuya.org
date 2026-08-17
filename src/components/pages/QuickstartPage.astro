@@ -1,0 +1,242 @@
+---
+/**
+ * The quickstart. The adoption case rests on this page.
+ *
+ * Seven constraints from the blueprint, each visible in the markup below:
+ *
+ *  1. The first thing after the lead is a file, not prose.
+ *  2. Five steps, each with something to copy, and the ladder as the spine.
+ *  3. Step 3 is a section of its own, above the fold of the steps — the
+ *     discovery trap defeated four of twenty hosts in the founding analysis.
+ *  4. The PII decision is a step with the real deny-list, not a footnote.
+ *  5. The agent path is offered first, because for many readers it is the
+ *     whole integration.
+ *  6. The page ends where the validator begins.
+ *  7. Five minutes and an afternoon are both stated, with the difference named.
+ *
+ * Both JSON blocks are fixture files that `tests/unit/lib/quickstart-fixtures.
+ * test.ts` runs through the real validator — a quickstart that teaches a
+ * non-conforming example is worse than no quickstart, because the reader's
+ * first experience of the protocol is its own documentation being wrong.
+ */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import { DENY_KEYS, DENY_PATTERNS, SPA_EXCLUSIONS } from '@cabuya/validator';
+import CodeBlock from '@/components/developers/CodeBlock.astro';
+import DocsTabs from '@/components/developers/DocsTabs.astro';
+import QuickstartPath from '@/components/diagrams/developers/QuickstartPath.astro';
+import Callout from '@/components/editorial/Callout.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { SKILL_REPO_URL } from '@/lib/site-navigation';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+/** The same files the test validates, read at build. */
+const FIXTURES = join(process.cwd(), 'tests', 'fixtures', 'quickstart');
+const manifest = readFileSync(join(FIXTURES, 'manifest.json'), 'utf-8').trim();
+const feed = readFileSync(join(FIXTURES, 'feed.json'), 'utf-8').trim();
+
+const headings = buildToc([
+  { depth: 2, text: t.quickstart.fileFirstTitle },
+  { depth: 2, text: t.quickstart.spaTitle },
+  { depth: 2, text: t.quickstart.piiTitle },
+  { depth: 2, text: t.quickstart.validatorTitle },
+  { depth: 2, text: t.quickstart.honestyTitle },
+]);
+
+/**
+ * Split a note on backticks so identifiers render as code.
+ *
+ * The shared notes use backticks because a terminal reader expects them; an
+ * HTML page should show `<code>` instead of the character. Odd-indexed
+ * segments are the code spans.
+ */
+function segments(note: string): Array<{ code: boolean; text: string }> {
+  return note
+    .split('`')
+    .map((text, index) => ({ code: index % 2 === 1, text }))
+    .filter((segment) => segment.text.length > 0);
+}
+
+/** The install lines the skill's own README will carry (Task 38). */
+const SKILL_INSTALL = `npx skills add Cabuya/cabuya-skill
+# or, without the installer:
+git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.quickstart.title}
+  description={t.quickstart.metaDescription}
+  trail={[{ label: t.quickstart.title }]}
+  headings={headings}
+  updated="2026-08-17"
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.quickstart.lead}</p>
+
+  <!-- Two paths, agent first -->
+  <div class="not-prose my-8 grid gap-4 md:grid-cols-2">
+    <div class="rounded-cabuya-md border border-cabuya-primary bg-cabuya-primary-soft p-5">
+      <h2 class="font-display text-base font-semibold text-cabuya-primary">
+        {t.quickstart.agentPathTitle}
+      </h2>
+      <p class="mt-2 text-sm leading-relaxed text-cabuya-text-secondary">
+        {t.quickstart.agentPathBody}
+      </p>
+      <CodeBlock code={SKILL_INSTALL} lang="shellscript" uiLang={lang} />
+    </div>
+    <div class="rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <h2 class="font-display text-base font-semibold">
+        {t.quickstart.handPathTitle}
+      </h2>
+      <p class="mt-2 text-sm leading-relaxed text-cabuya-text-secondary">
+        {t.quickstart.handPathBody}
+      </p>
+    </div>
+  </div>
+
+  <!-- 1. The file, before any prose about it -->
+  <h2 id={headings[0].slug}>{t.quickstart.fileFirstTitle}</h2>
+  <p>{t.quickstart.fileFirstBody}</p>
+  <CodeBlock
+    code={manifest}
+    lang="json"
+    title="public/.well-known/cabuya.json"
+    uiLang={lang}
+  />
+
+  <!-- The five steps, with the ladder as the spine -->
+  <QuickstartPath lang={lang} current={1} class="not-prose my-10" />
+
+  <ol class="not-prose my-8 flex flex-col gap-5">
+    {
+      t.quickstart.steps.map((step, index) => (
+        <li class="flex gap-4">
+          <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cabuya-fill font-display text-sm font-bold text-cabuya-on-fill">
+            {index + 1}
+          </span>
+          <div>
+            <h3 class="font-display text-base font-semibold">{step.title}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-cabuya-text-secondary">
+              {step.body}
+            </p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <CodeBlock
+    code={feed}
+    lang="json"
+    title="places.json"
+    uiLang={lang}
+  />
+
+  <!-- 3. The discovery trap, per stack -->
+  <h2 id={headings[1].slug}>{t.quickstart.spaTitle}</h2>
+  <p>{t.quickstart.spaLead}</p>
+
+  <Callout tone="caution" label={t.quickstart.spaTitle}>
+    <p>{t.quickstart.spaWhy}</p>
+  </Callout>
+
+  <DocsTabs
+    name="spa-exclusions"
+    legend={t.quickstart.spaTitle}
+    tabs={SPA_EXCLUSIONS.map((entry) => ({
+      id: entry.id,
+      label: entry.label,
+    }))}
+  >
+    {
+      SPA_EXCLUSIONS.map((entry) => (
+        <div data-tab={entry.id}>
+          <div class="p-4">
+            <p class="text-sm leading-relaxed text-cabuya-text-secondary">
+              {segments(entry.note[lang] ?? entry.note.en).map((segment) =>
+                segment.code ? (
+                  <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5 text-xs">
+                    {segment.text}
+                  </code>
+                ) : (
+                  segment.text
+                )
+              )}
+            </p>
+            {entry.path && (
+              <code class="mt-3 block rounded bg-cabuya-bg-brand-strong px-2 py-1 text-xs">
+                {entry.path}
+              </code>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </DocsTabs>
+
+  <!-- 4. The PII decision, as a step -->
+  <h2 id={headings[2].slug}>{t.quickstart.piiTitle}</h2>
+  <p>{t.quickstart.piiLead}</p>
+
+  <div class="not-prose my-6 grid gap-4 md:grid-cols-2">
+    <div class="rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <h3 class="text-sm font-semibold">{t.quickstart.piiKeysLabel}</h3>
+      <p class="mt-3 flex flex-wrap gap-1.5">
+        {
+          DENY_KEYS.map((key) => (
+            <code class="rounded bg-cabuya-danger-soft px-1.5 py-0.5 text-xs text-cabuya-danger">
+              {key}
+            </code>
+          ))
+        }
+      </p>
+    </div>
+    <div class="rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <h3 class="text-sm font-semibold">{t.quickstart.piiPatternsLabel}</h3>
+      <ul class="mt-3 flex flex-col gap-1.5 text-xs text-cabuya-text-secondary">
+        {
+          DENY_PATTERNS.map((pattern) => (
+            <li>
+              <code class="text-cabuya-danger">{pattern.class}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <Callout tone="note" label={t.quickstart.piiTitle}>
+    <p>{t.quickstart.piiConfirm}</p>
+  </Callout>
+
+  <!-- 6. Where the validator begins -->
+  <h2 id={headings[3].slug}>{t.quickstart.validatorTitle}</h2>
+  <p>{t.quickstart.validatorLead}</p>
+  <CodeBlock
+    code={'npx @cabuya/validator validate https://example.org/.well-known/cabuya.json'}
+    lang="shellscript"
+    uiLang={lang}
+  />
+  <p class="text-sm text-cabuya-text-muted">{t.quickstart.validatorPending}</p>
+
+  <!-- 7. How long this takes, honestly -->
+  <h2 id={headings[4].slug}>{t.quickstart.honestyTitle}</h2>
+  <p>{t.quickstart.honestyBody}</p>
+  <p>{t.quickstart.honestyAfternoon}</p>
+
+  <p class="text-sm">
+    <a href={`${prefix}/developers`}>{t.docs.portal}</a>
+  </p>
+</DocsLayout>
