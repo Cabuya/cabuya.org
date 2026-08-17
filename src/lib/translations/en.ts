@@ -139,7 +139,6 @@ export const en: SiteTranslations = {
     license: 'Apache-2.0 code · CC0 spec & registry',
     sourceCode: 'Source code',
     foundingRecord: 'Founding record',
-    languages: 'Languages',
     specStatus: 'Specification 0.1 — draft under review',
   },
 

@@ -108,7 +108,6 @@ export interface SiteTranslations {
     license: string;
     sourceCode: string;
     foundingRecord: string;
-    languages: string;
     specStatus: string;
   };
 

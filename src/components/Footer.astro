@@ -24,11 +24,6 @@ const language = lang as Language;
 const t = getTranslations(language);
 const columns = liveFooterColumns();
 const year = new Date().getFullYear();
-
-const languageLinks: Array<{ code: Language; label: string }> = [
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' },
-];
 ---
 
 <footer class="mt-24 border-t border-cabuya-border bg-cabuya-bg-elevated">
@@ -79,29 +74,6 @@ const languageLinks: Array<{ code: Language; label: string }> = [
           </nav>
         ))
       }
-
-      <nav aria-label={t.footer.languages}>
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
-          {t.footer.languages}
-        </h2>
-        <ul class="mt-3 flex flex-col gap-2">
-          {
-            languageLinks.map((entry) => (
-              <li>
-                <a
-                  href={getUrlPrefix(entry.code) || '/'}
-                  class="nav-link text-sm"
-                  hreflang={entry.code}
-                  lang={entry.code}
-                  aria-current={entry.code === language ? 'true' : undefined}
-                >
-                  {entry.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
     </div>
 
     <div class="mt-12 border-t border-cabuya-border pt-8">
