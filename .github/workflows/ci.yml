@@ -146,6 +146,26 @@ jobs:
       - name: Accessibility gate — axe across the route matrix
         run: pnpm exec playwright install --with-deps chromium && pnpm run a11y:check
 
+      # The five journeys. Unit tests prove modules; these prove the paths
+      # between them — a copy button that copies the wrong block, a finding
+      # whose id links nowhere, a language switcher that quietly lands on the
+      # home page. Every page can pass its own tests while the walk is broken.
+      #
+      # Blocking, and non-flaky: 109 tests, three consecutive clean runs before
+      # this was wired.
+      - name: Journeys — adoption, verification, language, agents, keyboard
+        run: pnpm run test:e2e
+
+      # Advisory, deliberately. A snapshot diff is a review signal — "this
+      # changed, look at it" — not a verdict, and a layout gate that fails on
+      # an intentional redesign is a gate somebody disables during the
+      # redesign, which is exactly when it was useful. The hard parts of
+      # responsiveness are covered by blocking checks elsewhere: overflow and
+      # touch targets in this same suite, contrast and focus order in a11y.
+      - name: Responsive — layout snapshots across the viewport matrix
+        run: pnpm run test:responsive
+        continue-on-error: true
+
       # Advisory on pull requests, blocking on main: a Lighthouse median swings
       # about 0.03 on a shared runner, and a gate that flakes on a PR is a gate
       # people learn to ignore. The deterministic half of the contract is

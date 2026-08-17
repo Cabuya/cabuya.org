@@ -248,7 +248,7 @@ onMount(() => {
         <button
           bind:this={toggleEl}
           type="button"
-          class="nav-link inline-flex h-9 w-9 items-center justify-center rounded-md lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+          class="nav-link inline-flex h-10 w-10 items-center justify-center rounded-md lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
           aria-expanded={drawerOpen}
           aria-controls="mobile-drawer"
           aria-label={drawerOpen ? labels.closeMenu : labels.openMenu}

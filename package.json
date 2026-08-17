@@ -85,7 +85,9 @@
     "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict",
     "postbuild": "node scripts/generate-csp.mjs",
     "csp:check": "node scripts/generate-csp.mjs --check",
-    "validator:coverage": "pnpm --filter @cabuya/validator exec vitest run --coverage"
+    "validator:coverage": "pnpm --filter @cabuya/validator exec vitest run --coverage",
+    "test:e2e": "playwright test tests/e2e/journeys tests/e2e/security",
+    "test:journeys": "playwright test tests/e2e/journeys"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",
