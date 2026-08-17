@@ -50,10 +50,11 @@ the procedure file IS the spec.
 
 | Skill | Purpose |
 |---|---|
+| `/add-generated-artifact` | Add a file generated from a source of truth, with the `--check` that fails CI when the two drift |
 | `/add-check` | Implement one validator check end-to-end — catalogue entry, logic, fixture pair, agent-optimized message, docs metadata, gates |
 | `/add-component` | Create new Astro or Svelte components with correct patterns |
 | `/add-page` | Create new pages with correct routing and MainLayout usage |
-| `/audit-analytics` | Audit Umami analytics wiring — EVENTS catalog vs docs vs components, privacy lint, proxy config |
+| `/audit-analytics` | Audit what the site measures against what it claims — beacon env gate, no custom events, no cookies, one third-party origin |
 | `/audit-content-parity` | Audit whether the Spanish and English versions of the same entry carry the same content — same sources, same structure, same bilingual fields |
 | `/audit-language-integrity` | Audit the sitewide language integrity of the build — Spanish URLs must render Spanish and English URLs English, in HTML and in the `.md` twin |
 | `/doc-edit` | Update documentation files including README, comments, and inline docs |

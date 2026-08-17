@@ -355,8 +355,10 @@ $CHANGES: Scale the hero heading responsively; colours must come from Cabuya tok
 ```
 
 > Note: never `text-gray-*` for text — the Cabuya token layer
-> (`text-corag`, `text-cabuya-secondary`, on-dark `text-cabuya-on-fill` /
-> `text-cabuya-rosa`) handles dark mode by itself. See `docs/DESIGN.md`.
+> (`text-cabuya-text`, `text-cabuya-text-secondary`, and on a filled surface
+> `text-cabuya-on-fill`) handles dark mode by itself. Fique
+> (`text-cabuya-accent`) fails AA as body text on light: use `-strong`.
+> See `docs/DESIGN.md`.
 
 ### Example 4: Responsive Grid Layout
 

@@ -144,14 +144,82 @@ Run security-auditor agent for full review (docs/SECURITY.md).
 - [ ] Findings listed with severity
 - [ ] Clear recommendation (pass / request changes / escalate)
 
-## Static Site Specific Checks
+## This repository's specific checks
 
-For Astro static sites:
+Four things two review passes actually caught here. Each is cheap to check and
+each was missed by everything else.
 
-1. **Build output** - Ensure `docs/` doesn't contain sensitive data
-2. **API routes** - Check `src/pages/api/` endpoints for data exposure
-3. **Environment variables** - Only `PUBLIC_*` vars available on client
-4. **Content** - Blog posts don't accidentally include sensitive info
+### 1. The SSRF guard, attacked rather than read
+
+`/api/validate` fetches URLs a stranger supplies. The guard is careful and
+well-commented, and a **trailing dot defeated every hostname check in it** —
+`metadata.google.internal.` resolves to the same host and was allowed, because
+every check is a string comparison.
+
+Attack it; do not read it:
+
+```bash
+node --experimental-strip-types -e "
+import { assertAllowedUrl } from './functions/lib/ssrf-guard.ts';
+for (const u of [
+  'https://metadata.google.internal./', 'https://localhost./',
+  'https://127.0.0.1./', 'https://2130706433/', 'https://0x7f000001/',
+  'https://[::1]/', 'https://user@169.254.169.254/', 'https://example.org:6379/',
+]) console.log(assertAllowedUrl(u).allowed ? 'ALLOWED ' + u : 'ok');
+"
+```
+
+The regression cases live in `tests/unit/functions/ssrf-guard.test.ts`. Add any
+new shape you try, whether or not it got through.
+
+### 2. User-agent-conditional content
+
+**Serving different bytes to a crawler, a scanner or a benchmark than to a
+reader is a finding here**, whatever the intent. The middleware once rewrote
+`robots.txt` for Lighthouse to keep an SEO score at 1.00 — cloaking, in a
+repository whose argument is that measurements must be honest.
+
+```bash
+rg -n 'user-agent|userAgent' functions/ | rg -iv 'log|detect.*bot'
+```
+
+Any response that *varies* by user agent is blocking. Logging one is not.
+
+### 3. Published documents describing things that do not exist
+
+An `openapi.json` advertised five endpoints deleted three tasks earlier. A
+manifest for endpoints you do not serve is exactly what this project measures
+other people for.
+
+```bash
+pnpm run build && npx vitest run tests/unit/content/internal-links.test.ts
+```
+
+That walks every rendered `href`. It found twelve dead links the first time,
+all on the agent-facing surface — the half nobody looks at.
+
+### 4. The Functions actually build
+
+Vitest imports Function modules directly and Playwright runs against
+`astro preview`, which does not run Functions at all. **Neither would notice a
+broken import**, and a Functions build failure is a failed deploy.
+
+```bash
+npx wrangler pages dev dist --kv VALIDATE_RATE --kv REGISTRY_STATUS
+```
+
+Run it for anything touching `functions/`. It caught a module deleted by an
+earlier task and still imported by two endpoints.
+
+### And the ordinary ones
+
+1. **Secrets** — including added-then-removed in history, which is leaked:
+   `git log -p <base>..HEAD | rg '^\+.*(api[_-]?key|token|secret)\s*[:=]'`
+2. **Only `PUBLIC_*` reaches the client.** `DAILYBOT_API_KEY` and `CF_KV_*`
+   are Function-environment only.
+3. **Person-level data**, anywhere, including fixtures. Expect hits in the PII
+   detector's own test fixtures; everything else is a finding.
+4. **`no-store`** on anything that echoes user input.
 
 ## Related
 
