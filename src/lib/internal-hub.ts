@@ -141,6 +141,15 @@ export const INTERNAL_PAGES: InternalPage[] = [
     section: 'ui',
   },
   {
+    id: 'ui-diagrams',
+    href: '/internal/ui/diagrams',
+    file: 'internal/ui/diagrams.astro',
+    title: 'Diagram gallery',
+    purpose:
+      'Every diagram component in both languages, where an overflow shows.',
+    section: 'ui',
+  },
+  {
     id: 'ui-colors',
     href: '/internal/ui/colors',
     file: 'internal/ui/colors.astro',

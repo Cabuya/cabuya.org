@@ -1,0 +1,219 @@
+---
+/**
+ * ExclusionBoundary — what crosses the wire and what never does.
+ *
+ * The argument: the exclusion is a **join prohibition**, not a field omission.
+ * Removing a `name` column would still leave a protocol that lets two feeds be
+ * joined into a person's situation, so the rule is about what the network is
+ * permitted to reconstruct, not about which keys are present.
+ *
+ * The door matters as much as the wall. Person-level help is not forbidden —
+ * it lives behind a link to the app that owns it, under that app's own duty of
+ * care. A wall with no door would just describe a protocol nobody could use.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'A wall between two sides. Places, capacities, needs and org-level contacts cross it. Personal names, personal phone numbers, individual cases and moderation verdicts never do. A door in the wall marks the link-out: person-level help stays inside the app that owns it.',
+    caption:
+      'A join prohibition, not a field omission: the network must not be able to reconstruct a person’s situation, whatever fields it carries.',
+    kicker: 'Normative exclusion §7',
+    crossesTitle: 'Crosses the wire',
+    crosses: [
+      'Places and their status',
+      'Capacities and needs',
+      'Organisation-level contact',
+      'Who published it, and when it was confirmed',
+    ],
+    neverTitle: 'Never crosses',
+    never: [
+      'A person’s name',
+      'A personal phone or email',
+      'An individual case or request',
+      'A moderation verdict about someone',
+    ],
+    doorTitle: 'The link-out',
+    // Two lines rather than one string: SVG has no text wrapping, and slicing
+    // a sentence by character count breaks differently in every language.
+    doorBody: [
+      'Person-level help stays inside the app',
+      'that owns it, under its own duty of care.',
+      'Cabuya links; it does not carry.',
+    ],
+  },
+  es: {
+    ariaLabel:
+      'Un muro entre dos lados. Los lugares, capacidades, necesidades y contactos institucionales lo cruzan. Los nombres personales, teléfonos personales, casos individuales y decisiones de moderación nunca lo hacen. Una puerta en el muro marca el enlace: la ayuda a nivel de persona se queda dentro de la app que la administra.',
+    caption:
+      'Una prohibición de cruce, no una omisión de campos: la red no debe poder reconstruir la situación de una persona, con los campos que sea.',
+    kicker: 'Exclusión normativa §7',
+    crossesTitle: 'Cruza el cable',
+    crosses: [
+      'Lugares y su estado',
+      'Capacidades y necesidades',
+      'Contacto institucional',
+      'Quién lo publicó y cuándo se confirmó',
+    ],
+    neverTitle: 'Nunca cruza',
+    never: [
+      'El nombre de una persona',
+      'Un teléfono o correo personal',
+      'Un caso o solicitud individual',
+      'Una decisión de moderación sobre alguien',
+    ],
+    doorTitle: 'El enlace',
+    doorBody: [
+      'La ayuda a nivel de persona se queda',
+      'dentro de la app que la administra.',
+      'Cabuya enlaza; no transporta.',
+    ],
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+const WALL_X = 320;
+const COL_W = 268;
+const TOP = 42;
+const ROW_H = 26;
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- Crossing -->
+    <g>
+      <text x="16" y={TOP} class="cabuya-label">{t.crossesTitle}</text>
+      {
+        t.crosses.map((item, index) => (
+          <g>
+            <line
+              x1={16}
+              y1={TOP + 26 + index * ROW_H}
+              x2={WALL_X - 22}
+              y2={TOP + 26 + index * ROW_H}
+              class="cabuya-line cabuya-line--accent"
+              marker-end="url(#exclusion-arrow)"
+            />
+            <text x={20} y={TOP + 16 + index * ROW_H} class="cabuya-sub">
+              {item}
+            </text>
+          </g>
+        ))
+      }
+    </g>
+
+    <defs>
+      <marker
+        id="exclusion-arrow"
+        viewBox="0 0 10 10"
+        refX="9"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" class="cabuya-arrowhead--accent" />
+      </marker>
+    </defs>
+
+    <!-- The wall -->
+    <rect
+      x={WALL_X - 14}
+      y="26"
+      width="28"
+      height="252"
+      rx="4"
+      class="cabuya-node cabuya-node--dark"
+    />
+
+    <!-- The door in the wall -->
+    <rect
+      x={WALL_X - 14}
+      y="196"
+      width="28"
+      height="60"
+      rx="4"
+      class="cabuya-node cabuya-node--accent"
+    />
+
+    <!-- Never crossing: stopped at the wall, drawn as blunt ends -->
+    <g>
+      <text x={WALL_X + 32} y={TOP} class="cabuya-label">{t.neverTitle}</text>
+      {
+        t.never.map((item, index) => (
+          <g>
+            <line
+              x1={WALL_X + 32}
+              y1={TOP + 26 + index * ROW_H}
+              x2={WALL_X + 32 + COL_W - 40}
+              y2={TOP + 26 + index * ROW_H}
+              class="cabuya-line cabuya-line--dashed"
+            />
+            <text x={WALL_X + 36} y={TOP + 16 + index * ROW_H} class="cabuya-sub">
+              {item}
+            </text>
+            <line
+              x1={WALL_X + 22}
+              y1={TOP + 20 + index * ROW_H}
+              x2={WALL_X + 32}
+              y2={TOP + 32 + index * ROW_H}
+              class="cabuya-line"
+            />
+            <line
+              x1={WALL_X + 32}
+              y1={TOP + 20 + index * ROW_H}
+              x2={WALL_X + 22}
+              y2={TOP + 32 + index * ROW_H}
+              class="cabuya-line"
+            />
+          </g>
+        ))
+      }
+    </g>
+
+    <!-- The door, explained -->
+    <g>
+      <line
+        x1={WALL_X + 14}
+        y1="226"
+        x2={WALL_X + 60}
+        y2="226"
+        class="cabuya-line cabuya-line--accent"
+      />
+      <text x={WALL_X + 68} y="216" class="cabuya-label">{t.doorTitle}</text>
+      {
+        t.doorBody.map((line, index) => (
+          <text
+            x={WALL_X + 68}
+            y={236 + index * 15}
+            class="cabuya-sub"
+            style="font-size: 10.5px"
+          >
+            {line}
+          </text>
+        ))
+      }
+    </g>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

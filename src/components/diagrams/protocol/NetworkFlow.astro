@@ -1,0 +1,197 @@
+---
+/**
+ * NetworkFlow — publishers feed consumers who are also publishers.
+ *
+ * The argument: this is not a hub. Nobody sits in the middle, and every app is
+ * simultaneously a source and a reader. The attribution travels with the
+ * record, which is what makes reading someone else's feed a form of credit
+ * rather than of appropriation — «nos alimentamos», drawn.
+ *
+ * The registry is on the diagram but off the data path: it records who exists
+ * and what was measured, and no record ever passes through it.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'Three applications, each publishing a feed and reading the others. Records carry their publisher_id with them, so attribution survives every hop. The registry sits to one side, recording who exists and what was measured; no data passes through it.',
+    caption:
+      'No hub. Every app is a source and a reader at once, and attribution travels with the record.',
+    kicker: 'The network',
+    apps: ['App A', 'App B', 'App C'],
+    publishes: 'publishes',
+    reads: 'reads',
+    attribution: 'Every record carries its publisher_id',
+    registry: 'Registry',
+    // Short lines: SVG does not wrap, and the box has a fixed width.
+    registrySub: [
+      'Records who exists and',
+      'what was measured.',
+      'Never a data path.',
+    ],
+  },
+  es: {
+    ariaLabel:
+      'Tres aplicaciones, cada una publicando un feed y leyendo las de las otras. Los registros llevan su publisher_id consigo, así que la atribución sobrevive cada salto. El registro está a un lado, anotando quién existe y qué se midió; ningún dato pasa por él.',
+    caption:
+      'Sin centro. Cada app es fuente y lectora a la vez, y la atribución viaja con el registro.',
+    kicker: 'La red',
+    apps: ['App A', 'App B', 'App C'],
+    publishes: 'publica',
+    reads: 'lee',
+    attribution: 'Cada registro lleva su publisher_id',
+    registry: 'Registro',
+    registrySub: [
+      'Anota quién existe y',
+      'qué se midió. Nunca',
+      'una ruta de datos.',
+    ],
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+// Three apps on a triangle, so no position reads as "the middle one".
+const R = 96;
+const CX = 250;
+const CY = 168;
+const BOX_W = 132;
+const BOX_H = 54;
+const apps = t.apps.map((name, index) => {
+  const angle = (-90 + index * 120) * (Math.PI / 180);
+  return {
+    name,
+    cx: CX + R * Math.cos(angle),
+    cy: CY + R * Math.sin(angle),
+  };
+});
+
+/** A shortened chord, so the arrow stops at the panel edge rather than under it. */
+function chord(a: { cx: number; cy: number }, b: { cx: number; cy: number }) {
+  const dx = b.cx - a.cx;
+  const dy = b.cy - a.cy;
+  const len = Math.hypot(dx, dy);
+  const trim = 46;
+  return {
+    x1: a.cx + (dx / len) * trim,
+    y1: a.cy + (dy / len) * trim,
+    x2: b.cx - (dx / len) * trim,
+    y2: b.cy - (dy / len) * trim,
+  };
+}
+
+const edges = [
+  chord(apps[0], apps[1]),
+  chord(apps[1], apps[2]),
+  chord(apps[2], apps[0]),
+];
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <defs>
+      <marker
+        id="networkflow-arrow"
+        viewBox="0 0 10 10"
+        refX="9"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" class="cabuya-arrowhead" />
+      </marker>
+    </defs>
+
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- Each edge is bidirectional: both apps publish and both read. -->
+    {
+      edges.map((edge) => (
+        <line
+          x1={edge.x1}
+          y1={edge.y1}
+          x2={edge.x2}
+          y2={edge.y2}
+          class="cabuya-line"
+          marker-start="url(#networkflow-arrow)"
+          marker-end="url(#networkflow-arrow)"
+        />
+      ))
+    }
+
+    {
+      apps.map((app) => (
+        <g>
+          <rect
+            x={app.cx - BOX_W / 2}
+            y={app.cy - BOX_H / 2}
+            width={BOX_W}
+            height={BOX_H}
+            rx="8"
+            class="cabuya-node"
+          />
+          <text x={app.cx} y={app.cy - 8} text-anchor="middle" class="cabuya-label">
+            {app.name}
+          </text>
+          <text x={app.cx} y={app.cy + 12} text-anchor="middle" class="cabuya-kicker">
+            {`${t.publishes} · ${t.reads}`}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- Attribution, marked on the one edge as the accent -->
+    <text x={CX} y={CY + R + 58} text-anchor="middle" class="cabuya-sub">
+      {t.attribution}
+    </text>
+    <line
+      x1={CX - 120}
+      y1={CY + R + 44}
+      x2={CX + 120}
+      y2={CY + R + 44}
+      class="cabuya-line cabuya-line--accent"
+    />
+
+    <!-- The registry, deliberately off the data path -->
+    <line
+      x1={452}
+      y1={CY}
+      x2={CX + R + 40}
+      y2={CY}
+      class="cabuya-line cabuya-line--dashed"
+    />
+    <rect x="452" y={CY - 50} width="172" height="100" rx="8" class="cabuya-node" />
+    <text x="470" y={CY - 26} class="cabuya-label">{t.registry}</text>
+    {
+      t.registrySub.map((line, index) => (
+        <text
+          x={470}
+          y={CY - 2 + index * 15}
+          class="cabuya-sub"
+          style="font-size: 10.5px"
+        >
+          {line}
+        </text>
+      ))
+    }
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

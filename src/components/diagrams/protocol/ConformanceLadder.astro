@@ -1,0 +1,202 @@
+---
+/**
+ * ConformanceLadder — L0 to L4 as a rising stair, plus the two tiers that stop
+ * at L1 (REFERENCE component for docs/DIAGRAM_COMPONENTS.md).
+ *
+ * The argument: this is a ladder, not a gate. Every rung is a respected
+ * membership class, and the two apps that never climb past L1 are on the
+ * drawing as full members rather than as a footnote — because that is the
+ * political claim the protocol is making, and a diagram that omitted them
+ * would quietly contradict §1.
+ *
+ * Visualises spec §1.1. Effort figures come from that table, not from us.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'A five-rung ladder. L0 Listed takes minutes, L1 Linked under an hour, L2 Publishes one afternoon, L3 Serves and consumes days, L4 Federates varies by app. Two further classes — directory-only and link-out-only — stop at L1 by choice or by rule, and are respected members.',
+    caption:
+      'A ladder, not a gate: every rung is a membership class, and stopping at one is a position, not a failure.',
+    kicker: 'Conformance ladder',
+    levels: [
+      { id: 'L0', name: 'Listed', effort: 'One pull request' },
+      { id: 'L1', name: 'Linked', effort: 'Under an hour' },
+      { id: 'L2', name: 'Publishes', effort: 'One afternoon' },
+      { id: 'L3', name: 'Serves & consumes', effort: 'Days' },
+      { id: 'L4', name: 'Federates', effort: 'Per app' },
+    ],
+    stopKicker: 'Stops at L1 — respected',
+    stops: ['Directory-only — by choice', 'Link-out-only — by rule §7.1'],
+    measured: 'Measured, never declared',
+  },
+  es: {
+    ariaLabel:
+      'Una escalera de cinco peldaños. L0 Listada toma minutos, L1 Enlazada menos de una hora, L2 Publica una tarde, L3 Sirve y consume días, L4 Federa según la app. Otras dos clases —solo directorio y solo enlace— se detienen en L1 por decisión o por regla, y son miembros respetados.',
+    caption:
+      'Una escalera, no una puerta: cada peldaño es una clase de membresía, y quedarse en uno es una posición, no un fracaso.',
+    kicker: 'Escalera de conformidad',
+    levels: [
+      { id: 'L0', name: 'Listada', effort: 'Un pull request' },
+      { id: 'L1', name: 'Enlazada', effort: 'Menos de una hora' },
+      { id: 'L2', name: 'Publica', effort: 'Una tarde' },
+      { id: 'L3', name: 'Sirve y consume', effort: 'Días' },
+      { id: 'L4', name: 'Federa', effort: 'Según la app' },
+    ],
+    stopKicker: 'Se detienen en L1 — respetadas',
+    stops: ['Solo directorio — por decisión', 'Solo enlace — por regla §7.1'],
+    measured: 'Se mide, nunca se declara',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+// Geometry: each rung sits one step right and one step up from the last.
+const STEP_W = 112;
+const STEP_H = 46;
+const RUNG_H = 48;
+
+/**
+ * Level names wrap to two lines when they need to.
+ *
+ * "Serves & consumes" fits an English panel and overflows the Spanish one, and
+ * the next language will break somewhere else again. Splitting on the last
+ * space that keeps the first line short is more robust than tuning the font
+ * size per string, and it is why the gallery renders both languages together.
+ */
+function wrap(name: string): string[] {
+  if (name.length <= 12) return [name];
+  const words = name.split(' ');
+  if (words.length === 1) return [name];
+  const first = words.slice(0, -1).join(' ');
+  return [first, words[words.length - 1]];
+}
+const BASE_X = 40;
+const BASE_Y = 268;
+const rungs = t.levels.map((level, index) => ({
+  ...level,
+  lines: wrap(level.name),
+  x: BASE_X + index * STEP_W,
+  y: BASE_Y - index * STEP_H,
+  // L2 is the rung the whole site is trying to get people to: the one accent.
+  accent: level.id === 'L2',
+}));
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- The rungs -->
+    {
+      rungs.map((rung) => (
+        <g>
+          <rect
+            x={rung.x}
+            y={rung.y}
+            width={STEP_W - 12}
+            height={RUNG_H}
+            rx="6"
+            class:list={['cabuya-node', rung.accent && 'cabuya-node--accent']}
+          />
+          <text x={rung.x + 12} y={rung.y + 16} class="cabuya-label">
+            {rung.id}
+          </text>
+          {rung.lines.map((line, lineIndex) => (
+            <text
+              x={rung.x + 12}
+              y={rung.y + 32 + lineIndex * 13}
+              class="cabuya-sub"
+              style="font-size: 10.5px"
+            >
+              {line}
+            </text>
+          ))}
+          <text
+            x={rung.x + 12}
+            y={rung.y + RUNG_H + 15}
+            class="cabuya-kicker"
+          >
+            {rung.effort}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- The rise, drawn as one continuous hairline behind the rungs -->
+    <path
+      d={`M ${BASE_X} ${BASE_Y + RUNG_H} ${rungs
+        .map((r) => `L ${r.x} ${r.y + RUNG_H} L ${r.x + STEP_W - 12} ${r.y + RUNG_H}`)
+        .join(' ')}`}
+      class="cabuya-line"
+    />
+
+    <!-- The two classes that stop at L1, drawn on the ladder, not beside it -->
+    <line
+      x1={BASE_X + STEP_W}
+      y1={BASE_Y - STEP_H - 30}
+      x2={BASE_X + STEP_W}
+      y2={BASE_Y - STEP_H - 92}
+      class="cabuya-line cabuya-line--dashed"
+    />
+    <g>
+      <text x={BASE_X + STEP_W + 10} y={BASE_Y - STEP_H - 92} class="cabuya-kicker">
+        {t.stopKicker}
+      </text>
+      {
+        t.stops.map((stop, index) => (
+          <text
+            x={BASE_X + STEP_W + 10}
+            y={BASE_Y - STEP_H - 72 + index * 18}
+            class="cabuya-sub"
+          >
+            {stop}
+          </text>
+        ))
+      }
+    </g>
+
+    <!-- The measured claim, at the top of the climb -->
+    <g>
+      <line
+        x1={rungs[4].x + STEP_W - 12}
+        y1={rungs[4].y + RUNG_H / 2}
+        x2="600"
+        y2={rungs[4].y + RUNG_H / 2}
+        class="cabuya-line cabuya-line--accent"
+      />
+      <circle
+        cx="600"
+        cy={rungs[4].y + RUNG_H / 2}
+        r="4"
+        class="cabuya-arrowhead--accent"
+      />
+      <text
+        x="600"
+        y={rungs[4].y + RUNG_H / 2 - 18}
+        text-anchor="end"
+        class="cabuya-kicker"
+      >
+        {t.measured}
+      </text>
+    </g>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

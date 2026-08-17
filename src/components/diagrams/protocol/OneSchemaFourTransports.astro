@@ -1,0 +1,161 @@
+---
+/**
+ * OneSchemaFourTransports — one `place` record, four ways to move it.
+ *
+ * The argument the protocol keeps having to make: the transports are
+ * equivalent. A consumer that reads the static feed and one that calls the
+ * read API receive the same record, so choosing a transport is an operational
+ * decision, never a data-model decision.
+ *
+ * The three transports the validator does not yet measure are drawn dashed
+ * rather than omitted. Hiding them would make the diagram look complete and
+ * the specification look inconsistent — and a reader who later finds §4 would
+ * be right to wonder what else was tidied away.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'One place record at the centre, feeding four equivalent transports: the static feed, which the validator measures today, and the read API, write API and MCP server, which are specified but not measured in version 0.1. All four carry the same schema.',
+    caption:
+      'One schema, four transports. Which one you serve is an operations decision — the record does not change.',
+    kicker: 'Equivalence',
+    center: 'One place record',
+    centerSub: 'place-feed.schema.json',
+    transports: [
+      { name: 'Static feed', sub: 'A JSON file at a URL', level: 'L2' },
+      { name: 'Read API', sub: 'Query and pagination', level: 'L3' },
+      { name: 'Write API', sub: 'Idempotent upserts', level: 'L4' },
+      { name: 'MCP server', sub: 'Agent-native access', level: 'L4' },
+    ],
+    plannedNote: 'Specified · not measured in 0.1',
+  },
+  es: {
+    ariaLabel:
+      'Un registro place en el centro que alimenta cuatro transportes equivalentes: el feed estático, que el validador mide hoy, y la API de lectura, la API de escritura y el servidor MCP, que están especificados pero no se miden en la versión 0.1. Los cuatro llevan el mismo esquema.',
+    caption:
+      'Un esquema, cuatro transportes. Cuál sirves es una decisión de operación — el registro no cambia.',
+    kicker: 'Equivalencia',
+    center: 'Un registro place',
+    centerSub: 'place-feed.schema.json',
+    transports: [
+      { name: 'Feed estático', sub: 'Un archivo JSON en una URL', level: 'L2' },
+      { name: 'API de lectura', sub: 'Consulta y paginación', level: 'L3' },
+      { name: 'API de escritura', sub: 'Altas idempotentes', level: 'L4' },
+      { name: 'Servidor MCP', sub: 'Acceso nativo para agentes', level: 'L4' },
+    ],
+    plannedNote: 'Especificado · no medido en 0.1',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+const BOX_W = 210;
+const BOX_H = 62;
+const positions = [
+  { x: 20, y: 40 },
+  { x: 410, y: 40 },
+  { x: 20, y: 238 },
+  { x: 410, y: 238 },
+];
+const CX = 320;
+const CY = 170;
+
+const nodes = t.transports.map((transport, index) => ({
+  ...transport,
+  ...positions[index],
+  // Solid = the validator measures it today. That is L2 only: L3 and L4 are
+  // fully specified and fully unmeasured, and drawing the read API as
+  // available would contradict the note at the foot of the figure.
+  planned: transport.level !== 'L2',
+}));
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- Connectors first, so the panels sit on top of them -->
+    {
+      nodes.map((node) => (
+        <line
+          x1={node.x < CX ? node.x + BOX_W : node.x}
+          y1={node.y + BOX_H / 2}
+          x2={CX}
+          y2={CY}
+          class:list={[
+            'cabuya-line',
+            node.planned && 'cabuya-line--dashed',
+          ]}
+        />
+      ))
+    }
+
+    <!-- The record every transport carries -->
+    <circle cx={CX} cy={CY} r="62" class="cabuya-node cabuya-node--dark" />
+    <text x={CX} y={CY - 8} text-anchor="middle" class="cabuya-label cabuya-label--on-dark">
+      {t.center}
+    </text>
+    <text
+      x={CX}
+      y={CY + 12}
+      text-anchor="middle"
+      class="cabuya-mono"
+      style="fill: var(--color-cabuya-primary-light); font-size: 9.5px"
+    >
+      {t.centerSub}
+    </text>
+
+    <!-- The four transports -->
+    {
+      nodes.map((node) => (
+        <g>
+          <rect
+            x={node.x}
+            y={node.y}
+            width={BOX_W}
+            height={BOX_H}
+            rx="8"
+            class:list={['cabuya-node', !node.planned && 'cabuya-node--accent']}
+          />
+          <text x={node.x + 16} y={node.y + 22} class="cabuya-label">
+            {node.name}
+          </text>
+          <text x={node.x + 16} y={node.y + 42} class="cabuya-sub">
+            {node.sub}
+          </text>
+          <text
+            x={node.x + BOX_W - 16}
+            y={node.y + 22}
+            text-anchor="end"
+            class="cabuya-kicker"
+          >
+            {node.level}
+          </text>
+        </g>
+      ))
+    }
+
+    <text x="320" y="330" text-anchor="middle" class="cabuya-kicker">
+      {t.plannedNote}
+    </text>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

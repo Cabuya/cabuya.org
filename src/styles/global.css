@@ -415,6 +415,105 @@
     max-width: 34em;
   }
 
+  /*
+   * Diagram primitives.
+   *
+   * Every diagram component under `src/components/diagrams/` is built from
+   * these, so eight figures on eight pages read as one set rather than eight
+   * people's idea of a box. `docs/DIAGRAM_COMPONENTS.md` is the contract.
+   *
+   * Colour comes through `currentColor`: the figure sets it once from the text
+   * token, and every stroke inherits — which is the whole reason these follow
+   * dark mode without a second palette.
+   */
+  .cabuya-figure {
+    color: var(--color-cabuya-text);
+    display: block;
+    margin-inline: auto;
+    border: 1px solid var(--color-cabuya-border);
+    border-radius: var(--radius-cabuya-md);
+    background: var(--color-cabuya-bg-elevated);
+    padding: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+  }
+  .cabuya-figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .cabuya-figure figcaption {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-cabuya-border);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-cabuya-text-secondary);
+  }
+
+  /* Panels, strokes and type inside a diagram. */
+  .cabuya-node {
+    fill: var(--color-cabuya-bg);
+    stroke: var(--color-cabuya-border-strong);
+    stroke-width: 1;
+  }
+  .cabuya-node--accent {
+    fill: var(--color-cabuya-primary-soft);
+    stroke: var(--color-cabuya-primary);
+  }
+  .cabuya-node--dark {
+    fill: var(--color-cabuya-fill);
+    stroke: var(--color-cabuya-fill);
+  }
+  .cabuya-line {
+    fill: none;
+    stroke: var(--color-cabuya-border-strong);
+    stroke-width: 1.25;
+  }
+  .cabuya-line--accent {
+    stroke: var(--color-cabuya-accent);
+    stroke-width: 1.75;
+  }
+  .cabuya-line--dashed {
+    stroke-dasharray: 4 4;
+  }
+  .cabuya-arrowhead {
+    fill: var(--color-cabuya-border-strong);
+  }
+  .cabuya-arrowhead--accent {
+    fill: var(--color-cabuya-accent);
+  }
+  .cabuya-label {
+    fill: currentColor;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    dominant-baseline: middle;
+  }
+  .cabuya-label--on-dark {
+    fill: var(--color-cabuya-on-fill);
+  }
+  .cabuya-sub {
+    fill: var(--color-cabuya-text-secondary);
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    dominant-baseline: middle;
+  }
+  .cabuya-kicker {
+    fill: var(--color-cabuya-text-muted);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    dominant-baseline: middle;
+  }
+  .cabuya-mono {
+    fill: var(--color-cabuya-text-secondary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    dominant-baseline: middle;
+  }
+
   /* Mobile horizontal scroll for wide tables.
    * The !important rules below override Tailwind Typography's `.prose table`
    * styles, which have equal or higher specificity than `.table-responsive`

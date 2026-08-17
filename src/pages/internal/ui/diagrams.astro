@@ -1,0 +1,199 @@
+---
+import QuickstartPath from '@/components/diagrams/developers/QuickstartPath.astro';
+import ValidatorLoop from '@/components/diagrams/developers/ValidatorLoop.astro';
+import ConformanceLadder from '@/components/diagrams/protocol/ConformanceLadder.astro';
+import ExclusionBoundary from '@/components/diagrams/protocol/ExclusionBoundary.astro';
+import FeedAnatomy from '@/components/diagrams/protocol/FeedAnatomy.astro';
+import NetworkFlow from '@/components/diagrams/protocol/NetworkFlow.astro';
+import OneSchemaFourTransports from '@/components/diagrams/protocol/OneSchemaFourTransports.astro';
+import VerificationBlock from '@/components/diagrams/protocol/VerificationBlock.astro';
+import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
+
+/**
+ * The diagram gallery — every figure in both languages, on both grounds.
+ *
+ * This is the human half of the enforcement described in
+ * `docs/DIAGRAM_COMPONENTS.md`. The unit test can tell you a component declares
+ * an i18n map; only looking at it tells you the Spanish label overflows its
+ * panel, which is the failure that actually happens.
+ *
+ * Both languages are rendered side by side on purpose. Checking them on
+ * separate pages means comparing from memory, and Spanish runs 15–25% longer
+ * than English — the overflow is always in the language you did not check.
+ */
+const DIAGRAMS = [
+  {
+    id: 'conformance-ladder',
+    name: 'ConformanceLadder',
+    path: 'protocol/ConformanceLadder.astro',
+    note: 'Reference implementation. Match its spacing and i18n shape.',
+  },
+  {
+    id: 'one-schema-four-transports',
+    name: 'OneSchemaFourTransports',
+    path: 'protocol/OneSchemaFourTransports.astro',
+    note: 'Dashed transports are specified but not measured in 0.1.',
+  },
+  {
+    id: 'feed-anatomy',
+    name: 'FeedAnatomy',
+    path: 'protocol/FeedAnatomy.astro',
+    note: 'Field names stay English in every language.',
+  },
+  {
+    id: 'verification-block',
+    name: 'VerificationBlock',
+    path: 'protocol/VerificationBlock.astro',
+    note: 'The CR-1 lesson, drawn.',
+  },
+  {
+    id: 'network-flow',
+    name: 'NetworkFlow',
+    path: 'protocol/NetworkFlow.astro',
+    note: 'No hub. The registry is deliberately off the data path.',
+  },
+  {
+    id: 'exclusion-boundary',
+    name: 'ExclusionBoundary',
+    path: 'protocol/ExclusionBoundary.astro',
+    note: 'The wall and the door. §7 join prohibition.',
+  },
+  {
+    id: 'quickstart-path',
+    name: 'QuickstartPath',
+    path: 'developers/QuickstartPath.astro',
+    note: 'Takes a `current` step marker — emphasis, not content.',
+  },
+  {
+    id: 'validator-loop',
+    name: 'ValidatorLoop',
+    path: 'developers/ValidatorLoop.astro',
+    note: 'Exit 1 loops; exit 3 stops. That distinction is the safety property.',
+  },
+];
+---
+
+<ShowcaseLayout
+  title="Diagrams"
+  description="Every diagram component, both languages, both grounds — zero JavaScript."
+  section="diagrams"
+>
+  <section class="mb-10 rounded-xl border border-cabuya-border bg-cabuya-bg-brand/50 dark:bg-cabuya-bg-elevated p-5">
+    <p class="text-sm text-cabuya-text-secondary max-w-3xl">
+      Each row renders the same component twice — English then Spanish — and the
+      page theme toggle covers light and dark. Spanish runs noticeably longer
+      than English, so a label that fits in one and overflows in the other is the
+      defect this page exists to catch.
+    </p>
+    <p class="mt-3 text-xs text-cabuya-text-muted">
+      {DIAGRAMS.length} components · the standard is
+      <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">docs/DIAGRAM_COMPONENTS.md</code>
+    </p>
+  </section>
+
+  <div class="space-y-10">
+    <section id={DIAGRAMS[0].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[0].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[0].path}</code> — {DIAGRAMS[0].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <ConformanceLadder lang="en" />
+        <ConformanceLadder lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[1].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[1].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[1].path}</code> — {DIAGRAMS[1].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <OneSchemaFourTransports lang="en" />
+        <OneSchemaFourTransports lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[2].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[2].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[2].path}</code> — {DIAGRAMS[2].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <FeedAnatomy lang="en" />
+        <FeedAnatomy lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[3].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[3].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[3].path}</code> — {DIAGRAMS[3].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <VerificationBlock lang="en" />
+        <VerificationBlock lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[4].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[4].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[4].path}</code> — {DIAGRAMS[4].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <NetworkFlow lang="en" />
+        <NetworkFlow lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[5].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[5].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[5].path}</code> — {DIAGRAMS[5].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <ExclusionBoundary lang="en" />
+        <ExclusionBoundary lang="es" />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[6].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[6].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[6].path}</code> — {DIAGRAMS[6].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <QuickstartPath lang="en" current={3} />
+        <QuickstartPath lang="es" current={3} />
+      </div>
+    </section>
+
+    <section id={DIAGRAMS[7].id}>
+      <header class="mb-3">
+        <h2 class="text-lg font-semibold">{DIAGRAMS[7].name}</h2>
+        <p class="text-xs text-cabuya-text-secondary">
+          <code>{DIAGRAMS[7].path}</code> — {DIAGRAMS[7].note}
+        </p>
+      </header>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <ValidatorLoop lang="en" />
+        <ValidatorLoop lang="es" />
+      </div>
+    </section>
+  </div>
+</ShowcaseLayout>

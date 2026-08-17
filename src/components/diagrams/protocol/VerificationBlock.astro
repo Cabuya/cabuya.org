@@ -1,0 +1,158 @@
+---
+/**
+ * VerificationBlock — why `updated_at` and `last_confirmed_at` are two fields.
+ *
+ * The argument, and the single most expensive lesson in the founding analysis:
+ * editing a record is not the same as confirming it. A shelter whose row was
+ * touched this morning to fix a typo has not been confirmed this morning, and
+ * a consumer that conflates the two will send someone to a closed door.
+ *
+ * `null` is drawn as a first-class value, not an error state — publishing "we
+ * do not know" is the honest answer and the protocol wants it.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'Two timestamps compared. updated_at records when the row was last edited; last_confirmed_at records when a human last verified the place is really open. They answer different questions, and last_confirmed_at may be null, which means nobody has checked — a valid and useful answer.',
+    caption:
+      'Editing a record is not confirming it. When nobody has checked, publish null — it is a real answer, and consumers know what to do with it.',
+    kicker: 'Verification',
+    edited: {
+      field: 'updated_at',
+      title: 'When the row changed',
+      example: 'Someone fixed a typo in the address',
+      question: 'Is my copy stale?',
+    },
+    confirmed: {
+      field: 'last_confirmed_at',
+      title: 'When a human checked',
+      example: 'A volunteer called and the door was open',
+      question: 'Can I send someone there?',
+    },
+    nullTitle: 'null is a valid value',
+    nullBody:
+      'Nobody has confirmed it. Consumers show it with the caveat instead of pretending otherwise.',
+    lesson: 'One field cannot answer both questions',
+  },
+  es: {
+    ariaLabel:
+      'Dos marcas de tiempo comparadas. updated_at registra cuándo se editó la fila por última vez; last_confirmed_at registra cuándo una persona verificó por última vez que el lugar está realmente abierto. Responden preguntas distintas, y last_confirmed_at puede ser null, lo que significa que nadie ha verificado: una respuesta válida y útil.',
+    caption:
+      'Editar un registro no es confirmarlo. Cuando nadie ha verificado, publica null — es una respuesta real, y los consumidores saben qué hacer con ella.',
+    kicker: 'Verificación',
+    edited: {
+      field: 'updated_at',
+      title: 'Cuándo cambió la fila',
+      example: 'Alguien corrigió un error en la dirección',
+      question: '¿Mi copia está desactualizada?',
+    },
+    confirmed: {
+      field: 'last_confirmed_at',
+      title: 'Cuándo verificó una persona',
+      example: 'Un voluntario llamó y la puerta estaba abierta',
+      question: '¿Puedo mandar a alguien allá?',
+    },
+    nullTitle: 'null es un valor válido',
+    nullBody:
+      'Nadie lo ha confirmado. Los consumidores lo muestran con la advertencia en vez de aparentar lo contrario.',
+    lesson: 'Un solo campo no puede responder las dos preguntas',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+const COL_W = 282;
+const LEFT = 16;
+const RIGHT = 342;
+const TOP = 42;
+const BOX_H = 150;
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    {
+      [
+        { x: LEFT, data: t.edited, accent: false },
+        { x: RIGHT, data: t.confirmed, accent: true },
+      ].map((column) => (
+        <g>
+          <rect
+            x={column.x}
+            y={TOP}
+            width={COL_W}
+            height={BOX_H}
+            rx="10"
+            class:list={['cabuya-node', column.accent && 'cabuya-node--accent']}
+          />
+          <text x={column.x + 20} y={TOP + 26} class="cabuya-mono">
+            {column.data.field}
+          </text>
+          <text x={column.x + 20} y={TOP + 52} class="cabuya-label">
+            {column.data.title}
+          </text>
+          <text x={column.x + 20} y={TOP + 78} class="cabuya-sub">
+            {column.data.example}
+          </text>
+          <line
+            x1={column.x + 20}
+            y1={TOP + 100}
+            x2={column.x + COL_W - 20}
+            y2={TOP + 100}
+            class="cabuya-line"
+          />
+          <text x={column.x + 20} y={TOP + 122} class="cabuya-sub">
+            {column.data.question}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- The null case, spanning both columns -->
+    <rect
+      x={LEFT}
+      y={TOP + BOX_H + 22}
+      width={608}
+      height="76"
+      rx="10"
+      class="cabuya-node"
+    />
+    <line
+      x1={RIGHT + 40}
+      y1={TOP + BOX_H}
+      x2={RIGHT + 40}
+      y2={TOP + BOX_H + 22}
+      class="cabuya-line cabuya-line--accent"
+    />
+    <text x={LEFT + 20} y={TOP + BOX_H + 48} class="cabuya-label">
+      {t.nullTitle}
+    </text>
+    <text x={LEFT + 20} y={TOP + BOX_H + 70} class="cabuya-sub">
+      {t.nullBody}
+    </text>
+
+    <text x="320" y="330" text-anchor="middle" class="cabuya-kicker">
+      {t.lesson}
+    </text>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

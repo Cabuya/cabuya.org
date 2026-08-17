@@ -1,0 +1,162 @@
+---
+/**
+ * QuickstartPath — five steps from nothing to a measured badge.
+ *
+ * The argument the adoption case rests on: this is an afternoon, not a
+ * quarter. Each step names what you actually produce, because "integrate the
+ * protocol" is not a task anyone can start on a Tuesday.
+ *
+ * The `current` prop marks where the reader is. It is the one exception to the
+ * no-variants rule in the standard, and a narrow one: it changes emphasis, not
+ * content, and the page that embeds it is the page that knows.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  /** 1-indexed step to mark as "you are here". 0 marks none. */
+  current?: number;
+  class?: string;
+}
+
+const { lang = 'en', current = 0, class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'Five steps: write the manifest, export one feed, run the validator, fix what it reports, then open a registry pull request. The first three are typically under an hour; the whole path is an afternoon for a small application.',
+    caption:
+      'An afternoon, step by step. Each one produces a file or a result you can look at.',
+    kicker: 'Quickstart',
+    steps: [
+      {
+        n: '1',
+        title: 'Publish the manifest',
+        out: 'cabuya.json',
+      },
+      { n: '2', title: 'Export one feed', out: 'places.json' },
+      { n: '3', title: 'Run the validator', out: 'validate <url>' },
+      { n: '4', title: 'Fix what it reports', out: 'one fix each' },
+      { n: '5', title: 'Open a registry PR', out: 'a registry PR' },
+    ],
+    here: 'You are here',
+    total: 'One afternoon for a small application',
+  },
+  es: {
+    ariaLabel:
+      'Cinco pasos: escribir el manifiesto, exportar un feed, correr el validador, arreglar lo que reporte y abrir un pull request al registro. Los primeros tres suelen tomar menos de una hora; el camino completo es una tarde para una aplicación pequeña.',
+    caption:
+      'Una tarde, paso a paso. Cada uno produce un archivo o un resultado que puedes mirar.',
+    kicker: 'Guía rápida',
+    steps: [
+      {
+        n: '1',
+        title: 'Publica el manifiesto',
+        out: 'cabuya.json',
+      },
+      { n: '2', title: 'Exporta un feed', out: 'places.json' },
+      { n: '3', title: 'Corre el validador', out: 'validate <url>' },
+      {
+        n: '4',
+        title: 'Arregla lo que reporte',
+        out: 'uno por hallazgo',
+      },
+      {
+        n: '5',
+        title: 'Abre un PR al registro',
+        out: 'un PR al registro',
+      },
+    ],
+    here: 'Estás aquí',
+    total: 'Una tarde para una aplicación pequeña',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+const STEP_W = 112;
+const GAP = 16;
+const LEFT = 16;
+const TOP = 96;
+const H = 92;
+const steps = t.steps.map((step, index) => ({
+  ...step,
+  x: LEFT + index * (STEP_W + GAP),
+  active: index + 1 === current,
+}));
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 260"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 260"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- The spine -->
+    <line
+      x1={LEFT}
+      y1={TOP + H / 2}
+      x2={LEFT + 5 * STEP_W + 4 * GAP}
+      y2={TOP + H / 2}
+      class="cabuya-line"
+    />
+
+    {
+      steps.map((step) => (
+        <g>
+          <rect
+            x={step.x}
+            y={TOP}
+            width={STEP_W}
+            height={H}
+            rx="8"
+            class:list={['cabuya-node', step.active && 'cabuya-node--accent']}
+          />
+          <text x={step.x + 14} y={TOP + 24} class="cabuya-kicker">
+            {step.n}
+          </text>
+          <text x={step.x + 14} y={TOP + 46} class="cabuya-label" style="font-size: 12.5px">
+            {step.title.split(' ').slice(0, 2).join(' ')}
+          </text>
+          <text x={step.x + 14} y={TOP + 62} class="cabuya-label" style="font-size: 12.5px">
+            {step.title.split(' ').slice(2).join(' ')}
+          </text>
+          <text x={step.x + 14} y={TOP + 82} class="cabuya-mono" style="font-size: 9px">
+            {step.out}
+          </text>
+          {step.active && (
+            <g>
+              <line
+                x1={step.x + STEP_W / 2}
+                y1={TOP - 8}
+                x2={step.x + STEP_W / 2}
+                y2={TOP - 30}
+                class="cabuya-line cabuya-line--accent"
+              />
+              <text
+                x={step.x + STEP_W / 2}
+                y={TOP - 40}
+                text-anchor="middle"
+                class="cabuya-kicker"
+              >
+                {t.here}
+              </text>
+            </g>
+          )}
+        </g>
+      ))
+    }
+
+    <text x="320" y="248" text-anchor="middle" class="cabuya-kicker">
+      {t.total}
+    </text>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

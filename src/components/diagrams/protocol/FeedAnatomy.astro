@@ -1,0 +1,123 @@
+---
+/**
+ * FeedAnatomy — the envelope, field by field, with what each one is for.
+ *
+ * The argument: five envelope fields carry the whole caching and provenance
+ * contract, and each exists because a consumer needs to answer a specific
+ * question — how old is this, how long may I keep it, who published it, what
+ * am I allowed to do with it.
+ *
+ * Field names are English in every language: they are the schema's vocabulary,
+ * and a translated field name would teach a reader a key that does not exist.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'A feed envelope with five required fields — last_updated, ttl, version, publisher_id and license — wrapping an array of place records. Each field answers a question a consumer must be able to answer: how old, how long may I cache, which schema, who published, what may I do with it.',
+    caption:
+      'Five envelope fields and an array. Each field exists because a consumer has to answer a question without asking you.',
+    kicker: 'Feed envelope',
+    fields: [
+      { key: 'last_updated', why: 'How old is this?' },
+      { key: 'ttl', why: 'How long may I cache it?' },
+      { key: 'version', why: 'Which schema version?' },
+      { key: 'publisher_id', why: 'Who published it?' },
+      { key: 'license', why: 'What may I do with it?' },
+    ],
+    dataLabel: 'data.places[]',
+    dataSub: 'The records themselves',
+    transport: 'Served with CORS, so a browser client can read it directly',
+  },
+  es: {
+    ariaLabel:
+      'Un sobre de feed con cinco campos obligatorios —last_updated, ttl, version, publisher_id y license— que envuelve un arreglo de registros place. Cada campo responde una pregunta que un consumidor debe poder responder: qué tan viejo es, cuánto puedo cachearlo, qué esquema, quién lo publicó, qué puedo hacer con él.',
+    caption:
+      'Cinco campos de sobre y un arreglo. Cada campo existe porque un consumidor tiene que responder una pregunta sin preguntarte a ti.',
+    kicker: 'Sobre del feed',
+    fields: [
+      { key: 'last_updated', why: '¿Qué tan viejo es?' },
+      { key: 'ttl', why: '¿Cuánto puedo cachearlo?' },
+      { key: 'version', why: '¿Qué versión del esquema?' },
+      { key: 'publisher_id', why: '¿Quién lo publicó?' },
+      { key: 'license', why: '¿Qué puedo hacer con él?' },
+    ],
+    dataLabel: 'data.places[]',
+    dataSub: 'Los registros en sí',
+    transport:
+      'Servido con CORS, para que un cliente de navegador pueda leerlo directamente',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+const ROW_H = 34;
+const TOP = 52;
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 340"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 340"
+  >
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    <!-- The envelope -->
+    <rect x="16" y="30" width="608" height="272" rx="10" class="cabuya-node" />
+
+    {
+      t.fields.map((field, index) => (
+        <g>
+          <text x={40} y={TOP + index * ROW_H + 14} class="cabuya-mono">
+            {`"${field.key}"`}
+          </text>
+          <line
+            x1={190}
+            y1={TOP + index * ROW_H + 10}
+            x2={300}
+            y2={TOP + index * ROW_H + 10}
+            class="cabuya-line cabuya-line--dashed"
+          />
+          <text x={312} y={TOP + index * ROW_H + 14} class="cabuya-sub">
+            {field.why}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- The records: the one accented panel -->
+    <rect
+      x="40"
+      y={TOP + 5 * ROW_H + 6}
+      width="560"
+      height="58"
+      rx="8"
+      class="cabuya-node cabuya-node--accent"
+    />
+    <text x="60" y={TOP + 5 * ROW_H + 30} class="cabuya-mono">
+      {t.dataLabel}
+    </text>
+    <text x="60" y={TOP + 5 * ROW_H + 50} class="cabuya-sub">
+      {t.dataSub}
+    </text>
+
+    <text x="320" y="326" text-anchor="middle" class="cabuya-kicker">
+      {t.transport}
+    </text>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>

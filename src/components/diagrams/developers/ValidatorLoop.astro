@@ -1,0 +1,220 @@
+---
+/**
+ * ValidatorLoop — the loop an agent closes without a human in it.
+ *
+ * The argument: every finding is machine-actionable, so the loop terminates.
+ * Run, read a finding that locates the problem and states the fix, apply it,
+ * run again. The loop exits to the registry only when the run is clean.
+ *
+ * The two exit codes are on the drawing because they are what makes the loop
+ * safe: an agent that cannot distinguish "your data is wrong" from "the
+ * network failed" will eventually rewrite correct records after a DNS blip.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang?: Language;
+  class?: string;
+}
+
+const { lang = 'en', class: className = '' } = Astro.props;
+
+const i18n = {
+  en: {
+    ariaLabel:
+      'A loop with four stations: run the validator, read a finding, apply the fix, run again. Exit code 1 means the data is wrong and sends the agent back around; exit code 3 means the network failed and stops the loop instead. A clean run exits to the registry pull request.',
+    caption:
+      'The loop terminates because every finding locates the problem and states the fix — and because a transport failure exits instead of looping.',
+    kicker: 'The fix loop',
+    stations: [
+      { title: 'Run', sub: 'validate <url>' },
+      { title: 'Read a finding', sub: 'pointer · rule · fix' },
+      { title: 'Apply the patch', sub: 'One violation, one edit' },
+      { title: 'Run again', sub: 'Same command' },
+    ],
+    exitOk: 'Exit 0 — open the registry PR',
+    exitData: 'Exit 1 — content error, loop',
+    exitNet: 'Exit 3 — transport failure, stop',
+    why: 'Never confuse bad data with a failed request',
+  },
+  es: {
+    ariaLabel:
+      'Un bucle con cuatro estaciones: correr el validador, leer un hallazgo, aplicar el arreglo, correr otra vez. El código de salida 1 significa que el dato está mal y devuelve al agente al bucle; el código 3 significa que la red falló y detiene el bucle. Una corrida limpia sale hacia el pull request del registro.',
+    caption:
+      'El bucle termina porque cada hallazgo ubica el problema y dice cómo arreglarlo — y porque un fallo de transporte sale en vez de reintentar en círculo.',
+    kicker: 'El bucle de arreglo',
+    stations: [
+      { title: 'Correr', sub: 'validate <url>' },
+      { title: 'Leer un hallazgo', sub: 'puntero · regla · arreglo' },
+      { title: 'Aplicar el parche', sub: 'Una violación, una edición' },
+      { title: 'Correr otra vez', sub: 'El mismo comando' },
+    ],
+    exitOk: 'Salida 0 — abre el PR al registro',
+    exitData: 'Salida 1 — error de contenido, sigue',
+    exitNet: 'Salida 3 — fallo de transporte, detente',
+    why: 'Nunca confundas un dato malo con una petición fallida',
+  },
+} as const;
+
+const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+
+/*
+ * Laid out as a line with a return arc, not as a ring.
+ *
+ * The ring version put the two exit codes in the middle, where they collided
+ * with the stations on either side at every text length — and a diagram whose
+ * labels overlap in one language will overlap in all of them once someone adds
+ * a third. A line reads in the direction the loop actually runs, and leaves
+ * the margins free for the two ways out.
+ */
+const BOX_W = 130;
+const BOX_H = 56;
+const GAP = 18;
+const LEFT = 14;
+const ROW_Y = 74;
+const stations = t.stations.map((station, index) => ({
+  ...station,
+  x: LEFT + index * (BOX_W + GAP),
+}));
+const lastX = stations[stations.length - 1].x + BOX_W;
+const RETURN_Y = ROW_Y + BOX_H + 62;
+---
+
+<figure
+  class:list={['cabuya-figure', className]}
+  role="img"
+  aria-label={t.ariaLabel}
+>
+  <svg
+    viewBox="0 0 640 300"
+    aria-hidden="true"
+    focusable="false"
+    style="aspect-ratio: 640 / 300"
+  >
+    <defs>
+      <marker
+        id="validatorloop-arrow"
+        viewBox="0 0 10 10"
+        refX="9"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" class="cabuya-arrowhead" />
+      </marker>
+      <marker
+        id="validatorloop-arrow-accent"
+        viewBox="0 0 10 10"
+        refX="9"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" class="cabuya-arrowhead--accent" />
+      </marker>
+    </defs>
+
+    <text x="0" y="14" class="cabuya-kicker">{t.kicker}</text>
+
+    {/* Forward flow */}
+    {
+      stations.slice(0, -1).map((station) => (
+        <line
+          x1={station.x + BOX_W + 2}
+          y1={ROW_Y + BOX_H / 2}
+          x2={station.x + BOX_W + GAP - 4}
+          y2={ROW_Y + BOX_H / 2}
+          class="cabuya-line"
+          marker-end="url(#validatorloop-arrow)"
+        />
+      ))
+    }
+
+    {
+      stations.map((station) => (
+        <g>
+          <rect
+            x={station.x}
+            y={ROW_Y}
+            width={BOX_W}
+            height={BOX_H}
+            rx="8"
+            class="cabuya-node"
+          />
+          <text
+            x={station.x + BOX_W / 2}
+            y={ROW_Y + 22}
+            text-anchor="middle"
+            class="cabuya-label"
+            style="font-size: 12.5px"
+          >
+            {station.title}
+          </text>
+          <text
+            x={station.x + BOX_W / 2}
+            y={ROW_Y + 40}
+            text-anchor="middle"
+            class="cabuya-mono"
+            style="font-size: 9.5px"
+          >
+            {station.sub}
+          </text>
+        </g>
+      ))
+    }
+
+    {/* Exit 1: back around, under the row */}
+    <path
+      d={`M ${lastX - BOX_W / 2} ${ROW_Y + BOX_H} L ${lastX - BOX_W / 2} ${RETURN_Y} L ${
+        stations[1].x + BOX_W / 2
+      } ${RETURN_Y} L ${stations[1].x + BOX_W / 2} ${ROW_Y + BOX_H + 4}`}
+      class="cabuya-line"
+      marker-end="url(#validatorloop-arrow)"
+    />
+    <text
+      x={(stations[1].x + lastX) / 2 - BOX_W / 4}
+      y={RETURN_Y + 16}
+      text-anchor="middle"
+      class="cabuya-kicker"
+    >
+      {t.exitData}
+    </text>
+
+    {/* Exit 0: out of the loop entirely — the one accent */}
+    <line
+      x1={lastX + 2}
+      y1={ROW_Y + BOX_H / 2}
+      x2="612"
+      y2={ROW_Y + BOX_H / 2}
+      class="cabuya-line cabuya-line--accent"
+      marker-end="url(#validatorloop-arrow-accent)"
+    />
+    <text x="624" y={ROW_Y - 6} text-anchor="end" class="cabuya-kicker">
+      {t.exitOk}
+    </text>
+
+    {/* Exit 3: the loop stops rather than spinning on a network fault */}
+    <line
+      x1={stations[0].x + BOX_W / 2}
+      y1={ROW_Y + BOX_H + 2}
+      x2={stations[0].x + BOX_W / 2}
+      y2={RETURN_Y + 34}
+      class="cabuya-line cabuya-line--dashed"
+    />
+    <line
+      x1={stations[0].x + BOX_W / 2 - 12}
+      y1={RETURN_Y + 34}
+      x2={stations[0].x + BOX_W / 2 + 12}
+      y2={RETURN_Y + 34}
+      class="cabuya-line"
+    />
+    <text x="0" y={RETURN_Y + 52} class="cabuya-kicker">{t.exitNet}</text>
+
+    <text x="624" y="292" text-anchor="end" class="cabuya-kicker">
+      {t.why}
+    </text>
+  </svg>
+  <figcaption>{t.caption}</figcaption>
+</figure>
