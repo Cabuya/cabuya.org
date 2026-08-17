@@ -45,7 +45,7 @@ Rules:
 - The isologo works single-asset on both light and dark grounds (it carries its
   own forest outline) — that is why the favicon set derives from it.
 - Favicons and PWA icons are **generated** from the isologo (see Task 3 of the
-  migration plan; regeneration commands live in the commit that produced them).
+  plan that produced them; regeneration commands live in that commit).
 
 ## 3. Palette — measured, not asserted
 

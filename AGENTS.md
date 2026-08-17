@@ -4,9 +4,9 @@
 Cursor AI, OpenAI Codex, Google Gemini, GitHub Copilot, and others) operating
 on the `cabuya.org` codebase.
 
-> **Status.** The migration is complete. Every artifact this document
-> describes exists: `spec/`, `registry/`, `packages/validator/`, the `[lang]`
-> tree, and the gates that enforce them. No Corag-era surface remains.
+> **Status.** Every artifact this document describes exists: `spec/`,
+> `registry/`, `packages/validator/`, the `[lang]` tree, and the gates that
+> enforce them.
 >
 > Anything not yet built is listed under **Deferred** at the end of this file,
 > with what it is waiting on — never as a forward reference inside a section
@@ -226,8 +226,9 @@ retention). No secrets in the repo, ever; env names documented in
 1. **Adding a top-level route without updating `src/middleware.ts`** — the
    allowlist returns 404 in production for unknown paths. Update it in the
    same commit.
-2. Extending any Corag-era surface (blog, ecosystem, channels, institutional
-   pages) — they are scheduled for deletion.
+2. Adding a surface the protocol does not need (a blog, a channels page, an
+   institutional section) — the site is the specification, the registry and
+   the validator, and nothing else earns a route.
 3. `bg-cabuya-primary text-white` (breaks in dark mode — use the fill pair).
 4. `text-cabuya-accent` for text on light (fique fails AA — use
    `-strong`).

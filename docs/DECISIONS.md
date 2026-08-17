@@ -3,13 +3,13 @@
 > The **live** decision log for this repository. The founding, ratified
 > decisions live in [`docs/context/DECISIONS.md`](./context/DECISIONS.md)
 > (historical record — do not edit); this file records decisions made **after**
-> founding, during and beyond the migration. Newest last. Each entry states
+> founding and since. Newest last. Each entry states
 > what changed, why, and what it overrides (if anything).
 
 | # | Date | Decision | Overrides |
 |---|---|---|---|
 | D-W1 | 2026-08-16 | Site language topology: **EN canonical at `/`, ES at `/es`**, via a `[lang]` dynamic tree | `docs/context/KICKOFF_WEBSITE.md` §3 (ES at `/`, EN at `/en`) — on this one point only |
-| D-W2 | 2026-08-16 | The migration runs as **one direct multi-project plan**, not an orchestrator plan | — |
+| D-W2 | 2026-08-16 | Cross-repository work runs as **one direct multi-project plan**, not an orchestrator plan | — |
 | D-W3 | 2026-08-16 | Site forms connect to **DailyBot Forms** (one contact/join form) | `docs/context/PRODUCTS_BLUEPRINT.md` §2.3's mailto-and-issues-only default |
 | D-W4 | 2026-08-16 | npm package name is **`@cabuya/validator`** | The naming doc's earlier `cabuya-validator` sketch (`docs/context/BRAND_AND_NAMING.md` §7.1) — `docs/context/DECISIONS.md` P6 already ratified the scoped name |
 | D-W5 | 2026-08-17 | Registry free text is **bilingual by schema**: `notes` is `{en, es}`, and `official_source.authority` carries a required `authority_lang` | The registry schemas' original single-string `notes` |
@@ -47,13 +47,12 @@ is one translations file plus content folders — no routing changes.
 
 **Consequences.** Old `/en/*` URLs 301 to `/*`; indexed Spanish URLs 301 to
 `/es/*`; hreflang pairs emit `en` ↔ `es` with `x-default` → EN; all five
-content gates retargeted to the new topology (migration Task 8).
+content gates retargeted to the new topology.
 
 ## D-W2 — Direct multi-project plan, not an orchestrator
 
-**Decision.** The migration plan (`PLAN_cabuya_website_and_skill`) executes
-both repositories directly, committing separately in each, rather than
-spawning child DWPs.
+**Decision.** Work spanning both repositories is executed directly, with
+separate commits in each, rather than by spawning child plans.
 
 **Why.** The skill **vendors this repo's `spec/`** with checksums — a hard,
 one-directional artifact dependency, not two independent feature streams; the

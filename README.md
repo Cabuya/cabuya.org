@@ -31,11 +31,6 @@ is the project's founding argument.
 > **This repository is not an aid application.** It never holds a real
 > person's situation, case, name or phone number. Person-level data is
 > excluded from the protocol by a join prohibition, not a field omission.
->
-> **Migration note:** this repo is mid-migration from the imported Corag
-> website baseline (`72395f2`); the *(lands in Task N)* markers above track
-> the [migration plan](docs/context/KICKOFF_WEBSITE.md) and disappear as the
-> artifacts ship.
 
 The companion repository **[`Cabuya/cabuya-skill`](https://github.com/Cabuya/cabuya-skill)**
 packages the protocol as an installable agent skill: any coding agent that
@@ -53,9 +48,9 @@ pnpm run biome:check  # lint + format
 ```
 
 Quality gates (all run in CI): `md:check`, `lang:check`, `seo:check`,
-`parity:check`, `redirects:check` — plus, as the migration lands them,
-`spec:check`, `spec:boundary`, `registry:check`, `checks:catalogue` and
-`a11y:check`. Full command reference: [`docs/DEVELOPMENT_COMMANDS.md`](docs/DEVELOPMENT_COMMANDS.md).
+`parity:check`, `redirects:check`, `langlinks:check`, `mdblocks:check`,
+`voice:check`, `spec:check`, `spec:boundary`, `registry:check`,
+`checks:catalogue` and `a11y:check`. Full command reference: [`docs/DEVELOPMENT_COMMANDS.md`](docs/DEVELOPMENT_COMMANDS.md).
 
 ## Documentation
 
@@ -71,5 +66,5 @@ not a redesign.
 
 ## License
 
-Apache-2.0 for code (see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE));
+Apache-2.0 for code (see [`LICENSE`](LICENSE));
 `spec/` and `registry/` are CC0-1.0. Details: [`docs/LICENSING.md`](docs/LICENSING.md).

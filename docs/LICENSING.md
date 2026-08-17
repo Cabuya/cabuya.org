@@ -14,19 +14,12 @@ This repository deliberately carries **two licenses**, scoped by directory.
 directory. The root `LICENSE` (Apache-2.0) governs everything not covered by a
 more specific one.
 
-## Attribution for the imported baseline
-
-This repository began as an import of the Corag institutional website
-(MIT-licensed, © 2026 Corag) at commit `72395f2`. Per the MIT license's terms,
-its copyright and permission notice is preserved in [`NOTICE`](../NOTICE). New
-work is Apache-2.0.
-
 ## What this means in practice
 
 - **Implementing the protocol** requires no permission and no attribution — the
   spec and schemas are CC0.
 - **Reusing site or validator code** follows Apache-2.0: keep the license and
-  NOTICE attributions.
+  the attribution it requires.
 - **Reusing registry data** requires nothing — it is CC0 — though each *feed*
   a publisher serves declares its own data license in its envelope (`license`
   is a required envelope field; see the spec).

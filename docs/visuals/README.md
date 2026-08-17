@@ -18,7 +18,4 @@ component instead: `docs/DIAGRAM_COMPONENTS.md`.
 self-contained: hand it to an image agent with no other context and the result
 should be usable.
 
-A mirror of this pack lives at
-`.dwp/plans/PLAN_cabuya_website_and_skill/analysis_results/illustrations/`,
-where the migration plan's deliverables are collected. `docs/visuals/` is the
-permanent home; the mirror is a snapshot.
+`docs/visuals/` is the permanent home for this pack.

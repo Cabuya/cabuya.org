@@ -4,8 +4,7 @@
 > site. Language topology: **English canonical at `/`, Spanish at `/es`**
 > (decision D-W1 — see [`docs/DECISIONS.md`](./DECISIONS.md)). Route slugs are
 > **English in both languages**; every route has an `/es/{route}` twin unless
-> marked otherwise. Status column tracks the migration plan
-> (PLAN_cabuya_website_and_skill).
+> marked otherwise.
 
 ---
 
