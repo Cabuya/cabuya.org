@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 8
 order: 8
 title: Versioning and conformance

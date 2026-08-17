@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 4
 order: 4
 title: The standard API surface

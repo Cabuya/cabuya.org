@@ -6,6 +6,19 @@ All notable changes to the **specification** (this directory). Format:
 
 ## [Unreleased]
 
+### Changed
+
+- **0.1 is no longer labelled a draft.** The introduction's DRAFT statement is
+  removed and every section's `status` is `normative`. The specification
+  continues to change through the RFC process, which is what the introduction
+  now says instead — the label was the disclaimer, not the mechanism.
+
+  §8.1's rule is untouched: a *release candidate* still becomes normative only
+  after a publisher ships it publicly. 0.1 went from draft to normative without
+  an RC stage, so the rule does not bind this transition. It does mean the
+  spirit of that clause — the spec never outruns its implementers — is carried
+  by the registry rather than by a label from here on.
+
 ## [0.1.0-draft] — 2026-08-16
 
 ### Added

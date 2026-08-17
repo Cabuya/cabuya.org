@@ -23,6 +23,7 @@ import {
   specSectionMarkdown,
   specVersionMarkdown,
 } from '@/lib/spec-markdown';
+import { getTranslations } from '@/lib/translations';
 
 const LANGUAGES: Language[] = ['en', 'es'];
 const VERSION = '0.1';
@@ -62,12 +63,20 @@ describe('specSectionMarkdown', () => {
     expect(markdown).not.toContain('/es/developers/spec/');
   });
 
-  it('says the version is a draft, in both languages', () => {
-    // The assertion that matters most here. An agent implementing 0.1 as
-    // settled is the failure this line prevents.
+  it('states the version status, in both languages', () => {
+    /*
+     * This used to assert the word "draft". It was the right assertion while
+     * 0.1 was one, and the wrong shape: an agent needs to know *which* status
+     * the version carries, not that it carries one particular status. Reading
+     * the label from the translations keeps the guarantee — the twin never
+     * leaves an agent guessing whether a requirement is settled — through
+     * every status the version will have.
+     */
     for (const lang of LANGUAGES) {
       const markdown = specSectionMarkdown(sections[0], lang);
-      expect(markdown.toLowerCase(), lang).toMatch(/draft|borrador/);
+      const label = getTranslations(lang).spec.statusLabels[sections[0].status];
+      expect(label, `no label for status "${sections[0].status}"`).toBeTruthy();
+      expect(markdown, lang).toContain(label);
     }
   });
 });

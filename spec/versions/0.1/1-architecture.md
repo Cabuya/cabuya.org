@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 1
 order: 1
 title: Architecture — the conformance ladder

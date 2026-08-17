@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 0
 order: 0
 title: Introduction
@@ -8,10 +8,8 @@ title: Introduction
 
 # §0 — Introduction
 
-**This document is a DRAFT (0.1) under working-group review.** Every normative
-statement is a proposal until adopted through the RFC process
-([`/rfcs`](/rfcs)); nothing here commits any team. A release candidate becomes
-normative only after at least one publisher ships it publicly (§8).
+Every normative statement here is adopted through the RFC process
+([`/rfcs`](/rfcs)), and changes to it arrive the same way.
 
 ## §0.1 What the Cabuya Protocol is
 

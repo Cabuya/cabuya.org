@@ -28,13 +28,6 @@ export interface SiteTranslations {
     skipToContent: string;
   };
 
-  /** The one standing banner: the spec is a draft under review. */
-  specBanner: {
-    label: string;
-    text: string;
-    linkLabel: string;
-  };
-
   theme: {
     toLight: string;
     toDark: string;

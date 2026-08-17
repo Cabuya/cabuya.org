@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 5
 order: 5
 title: Identifiers

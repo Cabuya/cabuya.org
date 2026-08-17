@@ -19,12 +19,6 @@ export const es: SiteTranslations = {
     skipToContent: 'Saltar al contenido',
   },
 
-  specBanner: {
-    label: 'Borrador',
-    text: 'La especificación 0.1 es un borrador en revisión. Los anclajes y los nombres de campo todavía pueden cambiar.',
-    linkLabel: 'Cómo cambia el protocolo',
-  },
-
   theme: {
     toLight: 'Cambiar a modo claro',
     toDark: 'Cambiar a modo oscuro',
@@ -140,7 +134,7 @@ export const es: SiteTranslations = {
     license: 'Código Apache-2.0 · spec y registro CC0',
     sourceCode: 'Código fuente',
     foundingRecord: 'Registro fundacional',
-    specStatus: 'Especificación 0.1 — borrador en revisión',
+    specStatus: 'Especificación 0.1',
   },
 
   notFoundPage: {

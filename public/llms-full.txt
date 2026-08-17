@@ -1,6 +1,6 @@
 # Cabuya Protocol — everything, in one file
 
-Specification 0.1 (draft), the consumption rules, and every
+Specification 0.1, the consumption rules, and every
 validator check with its rule and remedy. Generated from the repository;
 nothing here is a summary.
 
@@ -14,10 +14,8 @@ Map of the site: https://cabuya.org/llms.txt
 
 # §0 — Introduction
 
-**This document is a DRAFT (0.1) under working-group review.** Every normative
-statement is a proposal until adopted through the RFC process
-([`/rfcs`](/rfcs)); nothing here commits any team. A release candidate becomes
-normative only after at least one publisher ships it publicly (§8).
+Every normative statement here is adopted through the RFC process
+([`/rfcs`](/rfcs)), and changes to it arrive the same way.
 
 ## §0.1 What the Cabuya Protocol is
 

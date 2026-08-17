@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 3
 order: 3
 title: The feed (L2) — envelope and records

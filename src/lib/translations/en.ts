@@ -19,12 +19,6 @@ export const en: SiteTranslations = {
     skipToContent: 'Skip to content',
   },
 
-  specBanner: {
-    label: 'Draft',
-    text: 'Specification 0.1 is a draft under review. Anchors and field names may still change.',
-    linkLabel: 'How the protocol changes',
-  },
-
   theme: {
     toLight: 'Switch to light mode',
     toDark: 'Switch to dark mode',
@@ -139,7 +133,7 @@ export const en: SiteTranslations = {
     license: 'Apache-2.0 code · CC0 spec & registry',
     sourceCode: 'Source code',
     foundingRecord: 'Founding record',
-    specStatus: 'Specification 0.1 — draft under review',
+    specStatus: 'Specification 0.1',
   },
 
   notFoundPage: {

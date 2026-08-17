@@ -5,8 +5,9 @@
 > and an MCP surface — that carry byte-identical records. Conformance is
 > **measured by a published validator, never self-declared**.
 
-The specification is at version 0.1, status draft. Nothing in it is
-normative yet, and every artefact says so. This file is generated from the
+The specification is at version 0.1 and it is normative. It changes
+through the RFC process, and nothing here is self-declared: conformance is
+whatever the published validator measured. This file is generated from the
 same modules the site renders from.
 
 ## Read this first if you are an agent
@@ -79,8 +80,8 @@ there, including when the consumer is an AI system.
 
 ## Schemas
 
-- [manifest](https://cabuya.org/schemas/0.1/manifest.schema.json) — Cabuya publisher manifest (v0.1 DRAFT — working-group proposal)
-- [place-feed](https://cabuya.org/schemas/0.1/place-feed.schema.json) — Cabuya place feed (v0.1 DRAFT — working-group proposal)
+- [manifest](https://cabuya.org/schemas/0.1/manifest.schema.json) — Cabuya publisher manifest (v0.1)
+- [place-feed](https://cabuya.org/schemas/0.1/place-feed.schema.json) — Cabuya place feed (v0.1)
 
 ## Registry
 

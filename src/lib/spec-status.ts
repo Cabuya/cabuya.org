@@ -10,8 +10,14 @@
 /** The version whose text the site currently renders. */
 export const SPEC_VERSION = '0.1';
 
-/** True while that version is a draft under review. */
-export const SPEC_IS_DRAFT = true;
+/**
+ * Whether the rendered version is still a draft.
+ *
+ * False since 0.1 was declared normative. The specification still changes —
+ * through the RFC process, which is what its introduction says — but it is no
+ * longer labelled a proposal, and nothing on the site announces one.
+ */
+export const SPEC_IS_DRAFT = false;
 
 /**
  * Whether the draft state gets its own bar above the header.

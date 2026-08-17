@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 2
 order: 2
 title: Discovery — manifest and registry

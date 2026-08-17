@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 7
 order: 7
 title: Normative exclusions — the lines that don't move

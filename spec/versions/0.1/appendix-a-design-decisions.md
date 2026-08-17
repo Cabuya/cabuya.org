@@ -1,6 +1,6 @@
 ---
 version: "0.1"
-status: draft
+status: normative
 section: 9
 order: 9
 title: "Appendix A — design decisions and the implementability walkthrough (non-normative)"
