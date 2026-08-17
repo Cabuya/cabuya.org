@@ -1,6 +1,6 @@
 ---
 title: Preguntas frecuentes
-description: Las cuatro preguntas que de verdad frenan la adopción — licencias, datos de personas, identificadores y qué pasa si cierran — cada una respondida contra su ancla normativa.
+description: Las cuatro preguntas que frenan la adopción — licencias, datos de personas, identificadores y el cierre — cada una respondida contra su ancla normativa.
 section: consuming
 order: 2
 jsonld: faq
@@ -54,7 +54,7 @@ En concreto, para una app en esa situación:
   de personas.
 - Quita los datos personales del texto libre antes de publicar. `description` y
   `warning_text` son el tercer canal de fuga y el que la gente olvida; el
-  validador corre una lista de rechazo sobre ellos.
+  validador ejecuta una lista de rechazo sobre ellos.
 - Los valores de contacto no viajan en absoluto
   ([§7.2](/es/developers/spec/0.1/7-normative-exclusions#7-2)). `public_url` más
   un enlace hacia afuera es el mecanismo, y `contact_available` lleva el *hecho*

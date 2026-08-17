@@ -85,7 +85,7 @@ El camino es deliberadamente lento al principio y rápido al final.
 1. **Los publicadores convergen en la práctica.** La gente publica extensiones
    `x_` porque las necesita. Todavía no se propone nada.
 2. **Dos o más publicadores publican la misma forma.** Este es el umbral, y es
-   un umbral sobre código corriendo, no sobre acuerdos en una reunión. Un
+   un umbral sobre código en ejecución, no sobre acuerdos en una reunión. Un
    publicador con una extensión tiene una necesidad local; dos con la misma
    extensión encontraron algo que al protocolo le falta.
 3. **Un RFC lo propone** como perfil con nombre en una URI pública versionada, y

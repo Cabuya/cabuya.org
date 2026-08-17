@@ -55,6 +55,8 @@
     "test:responsive:update": "playwright test tests/e2e/responsive/ --update-snapshots",
     "release": "bash .github/scripts/prepare_release.sh",
     "responsive:audit": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777",
+    "voice:check": "node scripts/audit-content-voice.mjs",
+    "voice:check:strict": "node scripts/audit-content-voice.mjs --strict",
     "mdblocks:check": "node scripts/audit-md-blocks.mjs",
     "mdblocks:check:strict": "node scripts/audit-md-blocks.mjs --strict",
     "langlinks:check": "node scripts/audit-language-links.mjs",

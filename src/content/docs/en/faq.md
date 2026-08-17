@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: The four questions that actually block adoption — licensing, person-level data, identifiers, and what happens if you shut down — each answered against its normative anchor.
+description: The four questions that block adoption — licensing, person-level data, identifiers and shutting down — each answered against its normative anchor.
 section: consuming
 order: 2
 jsonld: faq

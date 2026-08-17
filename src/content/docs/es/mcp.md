@@ -1,6 +1,6 @@
 ---
 title: Servidor MCP
-description: El servidor MCP de referencia está especificado y todavía no desplegado. Qué va a exponer, la frontera que no debe cruzar y la condición de dos feeds que lo habilita.
+description: El servidor MCP de referencia está especificado y no desplegado. Qué expondrá, la frontera que no debe cruzar y la condición de dos feeds que lo habilita.
 section: consuming
 order: 1
 updated: 2026-08-17
@@ -9,14 +9,14 @@ updated: 2026-08-17
 > **Estado: especificado, no desplegado.** Todavía no existe ningún endpoint.
 > Sale cuando existan al menos dos feeds conformes en vivo sobre los cuales
 > federar, y no antes — [por qué, más abajo](#por-que-todavia-no-esta-construido).
-> Nada en esta página describe software corriendo. Describe un contrato al que
+> Nada en esta página describe software en ejecución. Describe un contrato al que
 > nos comprometimos, para que cualquiera que construya sobre el protocolo pueda
 > ver hacia dónde va la superficie para agentes.
 
 MCP es una **capa opcional por encima del protocolo, nunca el piso de
 conformidad** ([§4.5](/es/developers/spec/0.1/4-api-surface#4-5)). Una
 aplicación en L2 es conforme tenga o no algo que ver con MCP; el servidor de
-referencia es una comodidad que corre la iniciativa sobre la red, no una quinta
+referencia es una comodidad que la iniciativa ejecuta sobre la red, no una quinta
 cosa que implementar.
 
 ## La frontera que no debe cruzar
@@ -71,7 +71,7 @@ pequeña y más fresca de lo que es, que es la misma deshonestidad que las regla
 de frescura existen para evitar, cometida por la capa que debía hacerlas
 cumplir.
 
-**El consentimiento se verifica antes de traer nada.** A un publicador cuyo
+**El consentimiento se verifica antes de descargar nada.** A un publicador cuyo
 `permitted_use` excluye `ai_answer` no se le consulta para un agente, y la
 respuesta lo dice en `excluded_by_policy[]` en vez de fingir que no existe.
 Excluido es un hecho sobre permisos; ausente es un hecho sobre existencia, y un
@@ -96,7 +96,7 @@ Tres garantías estructurales en vez de tres políticas:
    de código que pueda emitir un campo de persona porque no existe un tipo para
    uno.
 2. No acepta ninguna consulta que pueda funcionar como búsqueda de personas. La
-   búsqueda de texto libre corre solo contra `name` y `description` de lugares, y
+   búsqueda de texto libre se ejecuta solo contra `name` y `description` de lugares, y
    `q` tiene límite de longitud.
 3. No guarda ninguna credencial de escritura. `publish_place` pasa la credencial
    de quien llama por petición y no almacena nada — la iniciativa nunca debe
@@ -130,7 +130,7 @@ de que cambiarlos salga caro.
 
 Un agente no necesita este servidor para trabajar con el protocolo. Necesita el
 protocolo, que es un documento, y la [skill para agentes](/es/developers/skill)
-lo trae adentro — la skill funciona sin nada de red, porque una especificación
+la incluye — la skill funciona sin nada de red, porque una especificación
 es texto y un esquema es un archivo.
 
 Para leer datos en vivo hoy: los feeds son JSON estático en URLs estables y la

@@ -34,7 +34,7 @@ Verificable por máquina a través de `source.source_id`, y
 **Qué protege.** Un teléfono que no contesta, una dirección equivocada, un
 albergue que rechazó a alguien — son cosas que la gente necesita reportarle a
 *alguien*, y ese alguien es quien publicó el registro, no quien lo mostró. Un
-agregado sin atribución convierte cada error en tuyo y en arreglable por nadie.
+agregado sin atribución convierte cada error en tuyo y en corregible por nadie.
 
 También protege a los publicadores. Un equipo que ve sus datos acreditados en
 la app de otro tiene un motivo para seguir publicando. Un equipo que ve su
@@ -130,7 +130,7 @@ y así queda documentado en la cabecera del código generado.
 
 ### 6. Respetar las exclusiones
 
-> Nunca cruzar datos de lugares con fuentes de personas. Nunca traer datos de un
+> Nunca cruzar datos de lugares con fuentes de personas. Nunca descargar datos de un
 > publicador cuya política declarada se reserva la reutilización.
 
 **Qué protege.** Las dos mitades hablan de lo que el protocolo se niega a
@@ -148,12 +148,12 @@ separado.
 
 La mitad de la reutilización es más simple y igual de firme. `permitted_use` en
 un manifiesto es la respuesta del publicador a *qué se puede hacer con esto*, y
-quien lo trae de todos modos decidió que su uso importa más que el
+quien los descarga de todos modos decidió que su uso importa más que el
 consentimiento del publicador. Construye el rechazo dentro de la capa de red,
 no dentro de un documento de políticas: la petición debería ser imposible de
 hacer, no meramente desaconsejada.
 
-**Autoprueba.** La capa que trae datos rechaza esos hosts por construcción.
+**Autoprueba.** La capa que descarga datos rechaza esos hosts por construcción.
 
 ## Cómo se ve consumir bien
 
@@ -185,7 +185,7 @@ cero.
 
 ## Dónde te deja esto
 
-Si estás construyendo un consumidor, el camino honesto más corto es: traer los
+Si estás construyendo un consumidor, el camino honesto más corto es: descargar los
 datos por una capa que sepa de `permitted_use` y de política de rastreo,
 guardar los registros ajenos de forma inmutable, dibujar fuente y edad en cada
 tarjeta, y tratar tus fusiones como opiniones tuyas.

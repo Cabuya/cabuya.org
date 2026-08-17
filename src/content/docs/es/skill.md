@@ -1,6 +1,6 @@
 ---
 title: Skill para agentes
-description: Instala el protocolo dentro de un agente de código. Trae la especificación adentro, así que funciona sin red, y hay cinco reglas que no va a razonar para saltarse.
+description: Instala el protocolo dentro de un agente de código. Incluye la especificación, así que funciona sin red, y hay cinco reglas que no va a razonar para saltarse.
 section: tools
 order: 3
 updated: 2026-08-17
@@ -16,7 +16,7 @@ protocolo a un agente de código. La instalas y tu agente conoce el esquema, los
 niveles, las exclusiones y los identificadores de verificación del validador,
 sin tener que buscar nada.
 
-La propiedad más importante de todas: **trae `spec/` adentro y funciona sin nada
+La propiedad más importante de todas: **incluye `spec/` y funciona sin nada
 de red.** Un agente que tiene que ir a buscar una especificación se la va a
 inventar cuando la petición falle, y se la va a inventar con seguridad. Una
 especificación en disco no se puede alucinar.
@@ -26,7 +26,7 @@ especificación en disco no se puede alucinar.
 Cinco sub-skills, cada una alcanzable directamente, con un enrutador pequeño que
 no hace nada por sí mismo:
 
-| Tú dices | Corre |
+| Tú dices | Ejecuta |
 |---|---|
 | «implementa Cabuya», «publica un feed», «llévanos a L2» | **implement** — de tu modelo de datos a un feed conforme |
 | «consume a los pares», «lee los feeds de las otras apps» | **consume** — las seis [reglas de consumo](/es/developers/consume) como código generado con pruebas |
@@ -36,7 +36,7 @@ no hace nada por sí mismo:
 
 Vale la pena describir el flujo de `implement`, por dónde se detiene. Lee tu
 modelo de datos, arma la correspondencia de campos, **te muestra la tabla de
-mapeo antes de escribir una sola línea de código**, y después corre la lista de
+mapeo antes de escribir una sola línea de código**, y después ejecuta la lista de
 rechazo de datos de personas sobre cada columna candidata y cada campo de texto
 libre — y **se detiene y pregunta**. Esa pausa es la única decisión humana
 obligatoria de todo el flujo. El agente no puede seguir por su propio criterio
@@ -54,15 +54,15 @@ porque son las que un agente no debe razonar para saltarse:
 3. **Nada de scraping.** No consigue los datos de otro publicador por ningún
    medio que ese publicador no haya dispuesto para eso.
 4. **Respetar la política de rastreo.** El `permitted_use` declarado y el
-   `robots.txt` se respetan en la capa que trae los datos, no en un comentario.
+   `robots.txt` se respetan en la capa que descarga los datos, no en un comentario.
 5. **Nunca afirmar una conformidad que el validador no midió.** No va a escribir
-   «compatible con Cabuya» en tu README. Va a correr el validador y a mostrarte
+   «compatible con Cabuya» en tu README. Va a ejecutar el validador y a mostrarte
    lo que encontró.
 
 Más allá de esas: cada escritura en tu repositorio, cada petición a un feed de
-terceros y cada decisión sobre datos de personas pregunta antes. El paquete trae
+terceros y cada decisión sobre datos de personas pregunta antes. El paquete incluye
 un `TRUST.md` que describe exactamente qué toca, con una autoauditoría que
-puedes correr.
+puedes ejecutar.
 
 ## Cómo instalarla
 
@@ -128,17 +128,17 @@ también, por su nombre.
 | Especificación incluida | `0.1.0`, con sumas de verificación |
 | Agentes | Claude Code, OpenAI Codex, Cursor, Gemini CLI, GitHub Copilot, Cline, Windsurf, OpenClaw |
 | Requiere | `node` y `git` en la ruta |
-| Red | No hace falta para nada, salvo traer el feed de un tercero |
+| Red | No hace falta para nada, salvo descargar el feed de un tercero |
 
 Esta tabla se genera desde el frontmatter de la propia skill una vez que el
-paquete salga, y una verificación de consistencia falla la construcción si las
+paquete salga, y una verificación de consistencia falla la compilación si las
 dos no coinciden — una matriz de compatibilidad mantenida a mano es una matriz
 que tarde o temprano miente.
 
 ## Si prefieres no usar un agente
 
 Nada de esto es obligatorio. La [guía rápida](/es/developers/quickstart) es
-copiar y pegar para una persona, el [validador](/es/developers/validator) corre
+copiar y pegar para una persona, el [validador](/es/developers/validator) se ejecuta
 en tu navegador y la [especificación](/es/developers/spec) son veinte minutos de
 lectura. La skill existe porque la mayoría de los equipos de este ecosistema ya
 trabajan con un agente, y entregarle el protocolo a ese agente es más rápido que

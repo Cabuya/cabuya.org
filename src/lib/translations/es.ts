@@ -70,7 +70,7 @@ export const es: SiteTranslations = {
           body: 'Tus lugares, en el esquema compartido. Basta con un archivo estático en una URL estable — no hace falta una API.',
         },
         {
-          title: 'Corre el validador',
+          title: 'Ejecuta el validador',
           body: 'Descarga lo que publicaste y reporta lo que encontró. Cada hallazgo ubica el problema y dice cómo corregirlo.',
         },
         {
@@ -340,7 +340,7 @@ export const es: SiteTranslations = {
       'Apúntalo a tu manifiesto o a un feed. El validador descarga lo que está publicado y reporta lo que encontró, incluido el comportamiento de transporte que un archivo en disco no puede mostrar.',
     urlLabel: 'URL del manifiesto o del feed',
     urlPlaceholder: 'https://ejemplo.org/.well-known/cabuya.json',
-    run: 'Correr el validador',
+    run: 'Ejecutar el validador',
     running: 'Corriendo…',
     pasteModeTitle: 'Revisar un documento que todavía no publicaste',
     pasteModeLead:
@@ -374,7 +374,7 @@ export const es: SiteTranslations = {
     parseErrorBody:
       'El documento no se pudo interpretar, así que no corrió ninguna verificación. Arregla la sintaxis e inténtalo otra vez.',
     degradedNote:
-      'Válido contra el esquema; conformidad no medida. Correr sin red significa que las verificaciones de transporte no corrieron, así que no se puede medir ningún nivel — eso es distinto de aprobarlas.',
+      'Válido contra el esquema; conformidad no medida. Ejecutar sin red significa que las verificaciones de transporte no corrieron, así que no se puede medir ningún nivel — eso es distinto de aprobarlas.',
   },
 
   probe: {
@@ -407,13 +407,13 @@ export const es: SiteTranslations = {
       'Nada. El documento se descarga, se revisa y se descarta con la petición. No se guarda ningún cuerpo de feed, nosotros no registramos ninguna URL, y ningún evento de analítica lleva nada que un publicador haya enviado. Lo único que se escribe en alguna parte es un contador anónimo para aplicar los límites de arriba.',
     optOutTitle: 'Cómo detenerlo',
     optOutBody:
-      'Prohíbe el agente en tu robots.txt y no te traerá nada. Preferiríamos que primero nos contaras qué salió mal —un validador que se volvió una molestia es un error nuestro— pero la decisión es tuya y no necesita nuestro acuerdo.',
+      'Prohíbe el agente en tu robots.txt y no descargará nada de tu sitio. Preferiríamos que primero nos contaras qué salió mal —un validador que se volvió una molestia es un error nuestro— pero la decisión es tuya y no necesita nuestro acuerdo.',
   },
 
   checks: {
     metaTitle: 'Verificaciones — validador de Cabuya',
     metaDescription:
-      'Cada verificación que ejecuta el validador de Cabuya: su identificador, severidad, nivel, la regla que aplica y cómo corregir un documento que la incumple. Los anclajes son estables.',
+      'Cada verificación del validador de Cabuya: identificador, severidad, nivel, la regla que aplica y cómo corregir un documento que falla. Anclajes estables.',
     title: 'Verificaciones',
     lead: 'Cada verificación que el validador puede reportar, con un anclaje estable. Los mensajes de error enlazan aquí, así que estas URL no se mueven.',
     stableNote:
@@ -444,7 +444,7 @@ export const es: SiteTranslations = {
   changelog: {
     metaTitle: 'Registro de cambios — Protocolo Cabuya',
     metaDescription:
-      'Todo cambio notable de la especificación de Cabuya, en una sola línea de tiempo, leída del repositorio para que la página no se desfase de la versión que describe.',
+      'Todo cambio notable de la especificación de Cabuya en una línea de tiempo, leída del repositorio para que la página no se desfase de la versión que describe.',
     title: 'Registro de cambios',
     lead: 'Todo cambio notable de la especificación, del más reciente al más antiguo. Se lee del repositorio en vez de transcribirse, así que esta página y la versión que describe no pueden contradecirse.',
     scopeTitle: 'Qué cubre',
