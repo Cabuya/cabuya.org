@@ -88,14 +88,6 @@ function localized(
   </Callout>
 
   {
-    lang !== 'en' && (
-      <Callout tone="limit" label={t.checks.plannedLabel}>
-        <p>{t.checks.untranslatedNote}</p>
-      </Callout>
-    )
-  }
-
-  {
     families.map((group, groupIndex) => (
       <section class="not-prose mt-12">
         <h2

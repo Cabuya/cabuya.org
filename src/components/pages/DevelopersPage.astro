@@ -36,6 +36,34 @@ const headings = buildToc([
   { depth: 2, text: t.portal.pathsTitle },
   { depth: 2, text: t.portal.startTitle },
 ]);
+
+/**
+ * `DV-01` — the loom, beside the intro.
+ *
+ * Transparent, one file for both themes: composited against `#FAF9F6` and
+ * `#082A24` before shipping, which is the only check that matters for an
+ * alpha asset — legality is not legibility.
+ *
+ * The entry specifies 720 × 480 displayed, written for a full-width portal
+ * header. This page renders inside the docs article column, between the
+ * sidebar and the contents rail, so the slot is ~360 px: the pair is a 360
+ * `1x` and a 720 `2x`, and a 1440 file would be three quarters of a megabyte
+ * nobody sees. Weight was the constraint — the hatching in this drawing costs
+ * far more per pixel than the home-page cordage.
+ *
+ * `present` keeps the placeholder policy visible in the code: the grid
+ * collapses to the prose column when the art is absent, and no layout in this
+ * repo reserves space for a file that does not exist.
+ */
+const PORTAL_ART = {
+  src: '/images/visuals/developers/portal-loom.webp',
+  srcset:
+    '/images/visuals/developers/portal-loom.webp 360w, /images/visuals/developers/portal-loom-2x.webp 720w',
+  sizes: '(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 88vw',
+  width: 360,
+  height: 240,
+  present: true,
+};
 ---
 
 <DocsLayout
@@ -44,7 +72,28 @@ const headings = buildToc([
   description={t.portal.metaDescription}
   headings={headings}
 >
-  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.portal.lead}</p>
+  <div
+    class="not-prose mb-10 grid items-center gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]"
+  >
+    <p class="text-lg leading-relaxed text-cabuya-text-secondary">
+      {t.portal.lead}
+    </p>
+    {
+      PORTAL_ART.present && (
+        <img
+          src={PORTAL_ART.src}
+          srcset={PORTAL_ART.srcset}
+          sizes={PORTAL_ART.sizes}
+          alt=""
+          width={PORTAL_ART.width}
+          height={PORTAL_ART.height}
+          loading="eager"
+          decoding="async"
+          class="mx-auto w-full max-w-sm lg:max-w-none"
+        />
+      )
+    }
+  </div>
 
   <h2 id={headings[0].slug}>{t.portal.promiseTitle}</h2>
   <p>{t.portal.promiseBody}</p>

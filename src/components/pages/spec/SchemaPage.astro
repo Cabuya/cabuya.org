@@ -20,7 +20,11 @@ import { checkHref, checksForField } from '@/lib/field-checks';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
 import { exampleValueFor, schemaFields } from '@/lib/schema-reference';
-import { type SpecSchema, specExamples } from '@/lib/spec-loader';
+import {
+  type SpecSchema,
+  schemaDescriptions,
+  specExamples,
+} from '@/lib/spec-loader';
 import { buildToc } from '@/lib/toc';
 import { getTranslations } from '@/lib/translations';
 
@@ -33,7 +37,12 @@ const { lang, schema } = Astro.props;
 const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
 
-const fields = schemaFields(schema.schema);
+const fields = schemaFields(schema.schema, { lang }).map((field) => ({
+  ...field,
+  description:
+    schemaDescriptions(schema.version, lang)[schema.name]?.[field.path] ??
+    field.description,
+}));
 
 /**
  * Built from what the schema actually contains, so it is unique per schema and
@@ -41,9 +50,20 @@ const fields = schemaFields(schema.schema);
  * per schema would be two strings to keep in step with files that change.
  */
 const requiredCount = fields.filter((field) => field.required).length;
+/*
+ * The second sentence was English on the Spanish page too — a meta
+ * description sits in `<head>`, so the language audit, which reads the
+ * rendered body, could not see it. It also came out at 128 characters for
+ * `place-feed`, two short of the SEO gate's floor, because it stopped at the
+ * check count.
+ */
+const metaSummary =
+  lang === 'es'
+    ? `${fields.length} campos, ${requiredCount} obligatorios, cada uno con su tipo, un valor de ejemplo y las comprobaciones del validador que se disparan en él. Generada desde el esquema.`
+    : `${fields.length} fields, ${requiredCount} required, each with its type, an example value and the validator checks that fire on it. Generated from the schema.`;
 const metaDescription = [
   schema.description ?? `${schema.title ?? schema.name}.`,
-  `${fields.length} fields, ${requiredCount} required, each with its type, an example value and the validator checks that fire on it.`,
+  metaSummary,
 ]
   .join(' ')
   .slice(0, 158);

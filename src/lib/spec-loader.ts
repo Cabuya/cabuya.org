@@ -104,8 +104,36 @@ export function sectionNumber(slug: string): string {
   return slug.match(/^(\d+)-/)?.[1] ?? slug;
 }
 
-export function specSections(version: string): SpecSection[] {
-  const dir = join(SPEC, 'versions', version);
+/**
+ * Where a language's sections live.
+ *
+ * English is the normative text and sits at the version root. A translation
+ * lives one level down, in a directory named for its language — informative,
+ * versioned alongside the text it translates, and inside the bounded CC0
+ * directory so an extracted copy carries it.
+ *
+ * `readdirSync(...).filter(endsWith('.md'))` at the root skips the directory
+ * itself, so adding a translation cannot change what the English build reads.
+ */
+export function sectionsDir(version: string, lang = 'en'): string {
+  const root = join(SPEC, 'versions', version);
+  return lang === 'en' ? root : join(root, lang);
+}
+
+/** True when a translation of this version exists and is complete enough to serve. */
+export function hasTranslation(version: string, lang: string): boolean {
+  if (lang === 'en') return true;
+  const translated = sectionsDir(version, lang);
+  if (!existsSync(translated)) return false;
+  const count = (dir: string) =>
+    readdirSync(dir).filter((file) => file.endsWith('.md')).length;
+  return count(translated) === count(sectionsDir(version));
+}
+
+export function specSections(version: string, lang = 'en'): SpecSection[] {
+  const dir = hasTranslation(version, lang)
+    ? sectionsDir(version, lang)
+    : sectionsDir(version);
   if (!existsSync(dir)) return [];
 
   return readdirSync(dir)
@@ -153,13 +181,16 @@ export function specSectionForRender(section: SpecSection): string {
 
 export function specSection(
   version: string,
-  slug: string
+  slug: string,
+  lang = 'en'
 ): SpecSection | undefined {
-  return specSections(version).find((section) => section.slug === slug);
+  return specSections(version, lang).find((section) => section.slug === slug);
 }
 
-export function specVersionSummary(version: string): SpecVersion {
-  const sections = specSections(version);
+export function specVersionSummary(version: string, lang = 'en'): SpecVersion {
+  // The index lists section titles, so it follows the reader like the
+  // sections themselves do.
+  const sections = specSections(version, lang);
   return {
     version,
     // The version's status is the status its sections carry. They are written
@@ -172,9 +203,13 @@ export function specVersionSummary(version: string): SpecVersion {
 /** Previous and next section within a version, for the page footer. */
 export function sectionNeighbours(
   version: string,
-  slug: string
+  slug: string,
+  lang = 'en'
 ): { previous: SpecSection | null; next: SpecSection | null } {
-  const sections = specSections(version);
+  // The neighbour cards print section titles, so they follow the reader's
+  // language: «Anterior · §1 Architecture — the conformance ladder» was the
+  // page telling a Spanish reader where to go next, in English.
+  const sections = specSections(version, lang);
   const index = sections.findIndex((section) => section.slug === slug);
   if (index === -1) return { previous: null, next: null };
   return {
@@ -224,6 +259,39 @@ export function specSchema(
   name: string
 ): SpecSchema | undefined {
   return specSchemas(version).find((entry) => entry.name === name);
+}
+
+/**
+ * Spanish for the schema field descriptions.
+ *
+ * The descriptions live inside the JSON Schemas, which are normative and
+ * machine-read; JSON Schema has no localization convention and inventing one
+ * inside a normative artifact would make every consumer parse our dialect. So
+ * the translation sits beside the schemas instead, keyed by the field path the
+ * reference page builds — a renamed field loses its translation loudly.
+ *
+ * Informative, like the section translations: where the two differ, the
+ * English in the schema governs.
+ */
+export function schemaDescriptions(
+  version: string,
+  lang: string
+): Record<string, Record<string, string>> {
+  if (lang === 'en') return {};
+  const file = join(SPEC, 'schemas', version, lang, 'descriptions.json');
+  if (!existsSync(file)) return {};
+  const parsed = JSON.parse(readFileSync(file, 'utf-8')) as Record<
+    string,
+    unknown
+  >;
+  const out: Record<string, Record<string, string>> = {};
+  for (const [schemaName, fields] of Object.entries(parsed)) {
+    if (schemaName.startsWith('$') || typeof fields !== 'object' || !fields) {
+      continue;
+    }
+    out[schemaName] = fields as Record<string, string>;
+  }
+  return out;
 }
 
 // ── Examples ──────────────────────────────────────────────
@@ -333,10 +401,18 @@ export function sectionSummary(section: SpecSection, maxLength = 155): string {
   if (full.length <= maxLength) return full;
   const prose2 = full;
 
-  // Cut at a sentence boundary when there is one in range, else at a word.
+  /*
+   * Cut at a sentence boundary when one lands inside the band, else at a word.
+   *
+   * The boundary has to clear 130, not merely 90: this took the *last* period
+   * within the window, and when a section opened with one short sentence
+   * followed by a long one, that period was the first one — producing a
+   * 112-character description on a page whose floor is 130. Three sections
+   * failed the SEO gate that way, and the text was not the problem.
+   */
   const window = prose2.slice(0, maxLength);
   const sentence = window.lastIndexOf('. ');
-  if (sentence > 90) return window.slice(0, sentence + 1);
+  if (sentence + 1 >= 130) return window.slice(0, sentence + 1);
   return `${window.slice(0, window.lastIndexOf(' '))}…`;
 }
 

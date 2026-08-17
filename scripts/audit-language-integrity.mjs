@@ -27,13 +27,13 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { join } from 'node:path';
-
 import {
   analyzeDocument,
   CONFIDENT_MISMATCH_CONFIDENCE,
   htmlToText,
   markdownToText,
 } from '../src/lib/language-detect.ts';
+import { isInherentlyBilingual } from './lib/bilingual-pages.mjs';
 import {
   checkMdExists,
   collectPages,
@@ -41,8 +41,6 @@ import {
   expectedLanguageFor,
   htmlPathFor,
 } from './lib/dist-pages.mjs';
-
-import { allowsEnglishBody } from './lib/normative-language.mjs';
 
 const argv = process.argv.slice(2);
 const JSON_OUT = argv.includes('--json');
@@ -69,6 +67,7 @@ function sizeOf(path) {
 }
 
 /** Keep report excerpts readable without losing the identifying phrase. */
+
 function excerpt(text, max = 160) {
   const clean = text.replace(/\s+/g, ' ').trim();
   return clean.length > max ? `${clean.slice(0, max)}…` : clean;
@@ -88,15 +87,21 @@ const results = checkable.map((pagePath) => {
 
   const html = readFileSync(htmlPath, 'utf-8');
   const htmlText = htmlToText(html);
+
   /*
-   * The spec and schema routes render the English normative text on Spanish
-   * pages, with a notice saying so. Conditional on the notice being present —
-   * a Spanish page that silently served English still flags.
+   * Beyond those two, there is no exemption.
+   *
+   * The spec and schema routes used to serve the English normative text on
+   * Spanish pages, excused by a notice, and eleven pages sat that way with the
+   * gate green. They are translated now — `spec/versions/0.1/es/` and
+   * `spec/schemas/0.1/es/descriptions.json`, both informative, both with the
+   * English governing — so a Spanish page serving English is a defect again
+   * rather than a declared exception.
    */
-  const normativeExempt = allowsEnglishBody(pagePath, htmlText);
+  const bilingual = isInherentlyBilingual(pagePath);
   const rawHtmlVerdict = analyzeDocument(htmlText, expected);
-  const htmlVerdict = normativeExempt
-    ? { ...rawHtmlVerdict, flagged: false, exempt: 'normative-english' }
+  const htmlVerdict = bilingual
+    ? { ...rawHtmlVerdict, flagged: false, exempt: 'inherently-bilingual' }
     : rawHtmlVerdict;
 
   let mdVerdict = null;
@@ -106,8 +111,8 @@ const results = checkable.map((pagePath) => {
     mdBytes = sizeOf(mdFull);
     const mdText = markdownToText(readFileSync(mdFull, 'utf-8'));
     const rawMdVerdict = analyzeDocument(mdText, expected);
-    mdVerdict = allowsEnglishBody(pagePath, mdText)
-      ? { ...rawMdVerdict, flagged: false, exempt: 'normative-english' }
+    mdVerdict = bilingual
+      ? { ...rawMdVerdict, flagged: false, exempt: 'inherently-bilingual' }
       : rawMdVerdict;
   }
 

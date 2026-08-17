@@ -55,6 +55,11 @@ export function validatorSections(lang: Language): TwinSection[] {
 export function checksSections(lang: Language): TwinSection[] {
   const t = getTranslations(lang);
   const implemented = CHECKS.filter((check) => check.implemented).length;
+  /** Spanish title, rule and fix from the package's own table; ids never translate. */
+  const localized = (
+    id: string,
+    field: 'title' | 'rule' | 'fix'
+  ): string | undefined => (lang === 'es' ? ES[id]?.[field] : undefined);
 
   const sections: TwinSection[] = [
     {
@@ -65,7 +70,6 @@ export function checksSections(lang: Language): TwinSection[] {
         `${CHECKS.length} ${t.checks.countSummary} · ${implemented} ${t.checks.implementedLabel}.`,
         '',
         t.checks.stableNote,
-        ...(lang === 'en' ? [] : ['', t.checks.untranslatedNote]),
       ],
     },
   ];
@@ -76,19 +80,15 @@ export function checksSections(lang: Language): TwinSection[] {
     sections.push({
       heading: t.checks.familyLabels[family] ?? family,
       lines: group.flatMap((check) => [
-        `### ${check.id} — ${check.title}`,
+        `### ${check.id} — ${localized(check.id, 'title') ?? check.title}`,
         '',
         `- ${t.checks.severityLabel}: ${check.severity} · ${t.checks.levelLabel}: ${check.level} · ${
           check.implemented
             ? t.checks.implementedLabel
             : `${t.checks.plannedLabel}${check.plannedIn ? ` (${check.plannedIn})` : ''}`
         }`,
-        `- ${t.checks.ruleLabel}: ${
-          (lang === 'es' ? ES[check.id]?.rule : undefined) ?? check.rule
-        }`,
-        `- ${t.checks.fixLabel}: ${
-          (lang === 'es' ? ES[check.id]?.fix : undefined) ?? check.fix
-        }`,
+        `- ${t.checks.ruleLabel}: ${localized(check.id, 'rule') ?? check.rule}`,
+        `- ${t.checks.fixLabel}: ${localized(check.id, 'fix') ?? check.fix}`,
         `- ${t.checks.specLabel}: ${check.specAnchor}`,
         '',
       ]),

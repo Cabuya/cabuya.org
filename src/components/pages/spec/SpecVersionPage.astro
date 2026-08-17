@@ -17,7 +17,7 @@ interface Props {
 const { lang, version } = Astro.props;
 const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
-const summary = specVersionSummary(version);
+const summary = specVersionSummary(version, lang);
 const metaDescription =
   `Cabuya ${version}: ${summary.sections.length} normative sections with stable anchors — ${summary.sections
     .slice(1, 5)

@@ -308,7 +308,7 @@ export const en: SiteTranslations = {
     sectionsTitle: 'Sections',
     sectionsCountLabel: 'sections',
     normativeLanguageNotice:
-      'The normative text is published in English. This page shows it unchanged; the navigation around it is in Spanish. A translation, when one exists, will be informative — the English remains the text that governs.',
+      'This page is the Spanish translation, and it is informative: where the two differ, the English text governs. It is versioned alongside the section it translates, so a change to one without the other is visible in review.',
     schemasTitle: 'Schemas',
     schemasDescription:
       'The JSON Schemas the validator enforces. Every field with its type, constraints, an example value, and the check ids that fire on it — generated from the schema files themselves.',
@@ -437,8 +437,6 @@ export const en: SiteTranslations = {
     fixLabel: 'Fix',
     specLabel: 'Specification',
     countSummary: 'checks catalogued',
-    untranslatedNote:
-      'Checks that are catalogued but not yet implemented are shown in English. Their rules are translated when the check ships, so a Spanish reader is never shown a translation of something that does not run yet.',
   },
 
   changelog: {

@@ -19,7 +19,7 @@ export const GET: APIRoute = ({ params }) =>
     specIndexMarkdown(
       params.lang as Language,
       specVersions().map((version) => {
-        const summary = specVersionSummary(version);
+        const summary = specVersionSummary(version, params.lang as string);
         return {
           version,
           status: summary.status,

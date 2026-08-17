@@ -60,21 +60,76 @@ function resolveRef(root: Json, node: Json): Json {
   return isObject(current) ? { ...current, ...node, $ref: undefined } : node;
 }
 
-function collectNotes(node: Json): string[] {
+/**
+ * The notes this file writes itself, in both languages.
+ *
+ * These are not schema content — they are the reference page describing a
+ * constraint the schema expresses structurally. They were English on every
+ * page, which is how «One of several shapes — see the schema source.» ended
+ * up as the last untranslated string on the Spanish schema reference.
+ *
+ * They live here rather than in the translation modules because they are
+ * emitted from this file's own branches: a note added below without its
+ * Spanish is a compile error rather than a silent English string.
+ */
+const NOTES = {
+  oneOf: {
+    en: 'One of several shapes — see the schema source.',
+    es: 'Una de varias formas — ver la fuente del esquema.',
+  },
+  anyOf: {
+    en: 'Any of several shapes — see the schema source.',
+    es: 'Cualquiera de varias formas — ver la fuente del esquema.',
+  },
+  allOf: {
+    en: 'Composed of several schemas.',
+    es: 'Compuesto por varios esquemas.',
+  },
+  conditional: {
+    en: 'Conditional: constraints depend on other fields.',
+    es: 'Condicional: las restricciones dependen de otros campos.',
+  },
+  sealed: {
+    en: 'No additional properties: unknown keys are rejected.',
+    es: 'Sin propiedades adicionales: las claves desconocidas se rechazan.',
+  },
+  nested: {
+    en: 'Nested further — see the schema source.',
+    es: 'Anida más adentro — ver la fuente del esquema.',
+  },
+} as const satisfies Record<string, { en: string; es: string }>;
+
+type NoteKey = keyof typeof NOTES;
+
+const note = (key: NoteKey, lang: string): string =>
+  NOTES[key][lang === 'es' ? 'es' : 'en'];
+
+function collectNotes(node: Json, lang: string): string[] {
   const notes: string[] = [];
-  if (node.oneOf) notes.push('One of several shapes — see the schema source.');
-  if (node.anyOf) notes.push('Any of several shapes — see the schema source.');
-  if (node.allOf) notes.push('Composed of several schemas.');
-  if (node.if || node.then)
-    notes.push('Conditional: constraints depend on other fields.');
-  if (node.additionalProperties === false) {
-    notes.push('No additional properties: unknown keys are rejected.');
+  if (node.oneOf) notes.push(note('oneOf', lang));
+  if (node.anyOf) notes.push(note('anyOf', lang));
+  if (node.allOf) notes.push(note('allOf', lang));
+  if (node.if || node.then) notes.push(note('conditional', lang));
+  if (node.additionalProperties === false) notes.push(note('sealed', lang));
+  if (typeof node.minimum === 'number') {
+    notes.push(
+      lang === 'es' ? `Mínimo ${node.minimum}.` : `Minimum ${node.minimum}.`
+    );
   }
-  if (typeof node.minimum === 'number') notes.push(`Minimum ${node.minimum}.`);
-  if (typeof node.maxItems === 'number')
-    notes.push(`At most ${node.maxItems} items.`);
-  if (typeof node.minItems === 'number')
-    notes.push(`At least ${node.minItems} items.`);
+  if (typeof node.maxItems === 'number') {
+    notes.push(
+      lang === 'es'
+        ? `Como máximo ${node.maxItems} elementos.`
+        : `At most ${node.maxItems} items.`
+    );
+  }
+  if (typeof node.minItems === 'number') {
+    notes.push(
+      lang === 'es'
+        ? `Al menos ${node.minItems} elementos.`
+        : `At least ${node.minItems} items.`
+    );
+  }
   return notes;
 }
 
@@ -86,7 +141,7 @@ function collectNotes(node: Json): string[] {
  */
 export function schemaFields(
   schema: Json,
-  { maxDepth = 3 }: { maxDepth?: number } = {}
+  { maxDepth = 3, lang = 'en' }: { maxDepth?: number; lang?: string } = {}
 ): SchemaField[] {
   const out: SchemaField[] = [];
 
@@ -110,12 +165,12 @@ export function schemaFields(
       const childPath = path ? `${path}.${name}` : name;
       const isRequired = required.has(name);
 
-      const notes = collectNotes(child);
+      const notes = collectNotes(child, lang);
       const goesDeeper =
         isObject(child.properties) ||
         (child.type === 'array' && isObject(child.items));
       if (goesDeeper && depth + 1 > maxDepth) {
-        notes.push('Nested further — see the schema source.');
+        notes.push(note('nested', lang));
       }
 
       out.push({

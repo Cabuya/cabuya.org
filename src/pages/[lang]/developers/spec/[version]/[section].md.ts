@@ -23,7 +23,8 @@ export function getStaticPaths() {
 export const GET: APIRoute = ({ params }) => {
   const section = specSection(
     params.version as string,
-    params.section as string
+    params.section as string,
+    params.lang as string
   );
   if (!section) return new Response('Not found', { status: 404 });
 

@@ -11,18 +11,25 @@ import { specSection } from '@/lib/spec-loader';
 
 export async function getStaticPaths() {
   const entries = await getCollection('spec');
+  const english = entries.filter((entry) => entry.data.lang === 'en');
   return getSupportedLanguages()
     .filter((lang) => lang !== DEFAULT_LANGUAGE)
-    .flatMap((lang) =>
-      entries.map((entry) => ({
+    .flatMap((lang) => {
+      const translated = entries.filter((entry) => entry.data.lang === lang);
+      // A language with no translation still gets every section — in English,
+      // with the page's notice saying so. A missing page is worse than an
+      // untranslated one.
+      const forLang =
+        translated.length === english.length ? translated : english;
+      return forLang.map((entry) => ({
         params: {
           lang,
           version: entry.data.version,
           section: entry.data.slug,
         },
         props: { entry },
-      }))
-    );
+      }));
+    });
 }
 
 const {
@@ -36,7 +43,7 @@ const {
 };
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
-const section = specSection(version, slug);
+const section = specSection(version, slug, lang);
 ---
 
 {

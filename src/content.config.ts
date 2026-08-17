@@ -15,9 +15,11 @@ import { glob } from 'astro/loaders';
 // Astro 7 deprecates its own `z` re-export; the project depends on zod directly.
 import { z } from 'zod';
 
+import { LANGUAGE_CODES } from '@/lib/language-codes';
 import type { RootDocId } from '@/lib/root-docs';
 import { rootDoc } from '@/lib/root-docs';
 import {
+  hasTranslation,
   specRfcs,
   specSectionForRender,
   specSections,
@@ -88,32 +90,43 @@ const specSectionsCollection = defineCollection({
     async load({ store, renderMarkdown, parseData }) {
       store.clear();
       for (const version of specVersions()) {
-        for (const section of specSections(version)) {
-          const id = `${version}/${section.slug}`;
-          const data = await parseData({
-            id,
-            data: {
-              version: section.version,
-              slug: section.slug,
-              number: section.number,
-              title: section.title,
-              status: section.status,
-              order: section.order,
-            },
-          });
-          store.set({
-            id,
-            data,
-            // The stored body is the source; the rendered one drops the
-            // duplicate title. The twin serves the former, the page the latter.
-            body: section.body,
-            rendered: await renderMarkdown(specSectionForRender(section)),
-          });
+        /*
+         * One entry per language. English is the normative text; a language
+         * with a complete translation gets its own entries, and one without
+         * gets none — the route falls back to English rather than serving a
+         * half-translated section.
+         */
+        for (const lang of LANGUAGE_CODES) {
+          if (!hasTranslation(version, lang)) continue;
+          for (const section of specSections(version, lang)) {
+            const id = `${lang}/${version}/${section.slug}`;
+            const data = await parseData({
+              id,
+              data: {
+                lang,
+                version: section.version,
+                slug: section.slug,
+                number: section.number,
+                title: section.title,
+                status: section.status,
+                order: section.order,
+              },
+            });
+            store.set({
+              id,
+              data,
+              // The stored body is the source; the rendered one drops the
+              // duplicate title. The twin serves the former, the page the latter.
+              body: section.body,
+              rendered: await renderMarkdown(specSectionForRender(section)),
+            });
+          }
         }
       }
     },
   },
   schema: z.object({
+    lang: z.string(),
     version: z.string(),
     slug: z.string(),
     number: z.string(),

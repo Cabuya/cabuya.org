@@ -1,0 +1,37 @@
+{
+  "$comment": "Spanish for the field descriptions in the schemas one level up. Informative: where the two differ, the English in the schema governs, exactly as for the normative sections. Keyed by the field path the reference page builds, so a renamed field loses its translation loudly rather than silently keeping the old one. `spec:check` asserts every described field has an entry here.",
+  "manifest": {
+    "protocol.name": "El nombre del protocolo: cabuya (decidido el 2026-08-16; dominios cabuya.org y cabuyaprotocol.org).",
+    "publisher.publisher_id": "Asignado por el registro, legible por personas, asignado una sola vez y nunca reasignado (R12).",
+    "publisher.canonical_url": "La clave del registro es la URL canónica más los alias, nunca un slug.",
+    "publisher.contact": "Solo contacto institucional (dirección de rol). MUST NOT ser una dirección personal.",
+    "feeds[].entity": "En 0.1: solo place. Las entidades a nivel de persona MUST NOT aparecer (§7.1).",
+    "feeds[].municipality_code": "DIVIPOLA, cuando el feed es un fragmento por municipio.",
+    "api.base_url": "Forma RECOMMENDED: {origin}/api/public/v1/ (convención emergente del ecosistema).",
+    "mcp.tools_language": "Etiqueta BCP 47 de los identificadores de las herramientas (el registro no debe asumir inglés).",
+    "license": "Identificador SPDX de los datos publicados. REQUIRED — hoy 1 de 20 aplicaciones declara uno, y su ausencia bloquea la revisión legal de cualquier consumidor.",
+    "permitted_use": "El consentimiento de reutilización va en el sobre, no en dialectos de robots.txt.",
+    "events": "Identificadores de eventos del registro que se sirven, por ejemplo sismos-co-2026. Registro acotado por evento, registros con evento opcional (Q10).",
+    "languages": "BCP 47. es es la base requerida del ecosistema.",
+    "sunset_at": "Declaración de cierre ordenado (§7.4)."
+  },
+  "place-feed": {
+    "last_updated": "Marca de tiempo de generación del feed, obligatoria (RFC 3339 en UTC). MUST NOT calcularse por petición (el antipatrón de siempre-ahora).",
+    "ttl": "Segundos que un consumidor puede cachear antes de volver a consultar. El contrato de caché.",
+    "data.places[].id": "Identificador local estable del publicador (entero, uuid o hexadecimal, todos aceptables, R3). Opaco; MUST NOT incrustar datos personales (R6).",
+    "data.places[].name": "CR-2: MUST NOT codificar estado operativo («(cerrado ahora)» va en service_status, no en el nombre).",
+    "data.places[].origin_category": "El valor de categoría propio del publicador, literal y sin traducir. Mantiene auditable toda la tabla de equivalencias.",
+    "data.places[].description": "Los publicadores MUST retirar los datos personales antes de publicar (el texto libre es el tercer canal de fuga).",
+    "data.places[].municipality_code": "DIVIPOLA. null se permite SOLO con municipality_text presente (advertencia del validador, no error — Q3).",
+    "data.places[].last_confirmed_at": "La clave MUST estar presente. null = nunca se confirmó (honesto). Omitirla = no cumple.",
+    "data.places[].confirmed_by": "Token de ROL o actor, acotado al publicador (team, volunteer, official_source, partner:{publisher_id}). MUST NOT ser el nombre de una persona.",
+    "data.places[].contradictions_active": "La confirmación negativa es una señal de primera clase.",
+    "data.places[].updated_at": "CR-1: nunca sustituye a last_confirmed_at — editar no es confirmar.",
+    "data.places[].source": "Procedencia estructurada, nunca prosa (se ha observado que el campo libre «fuente» filtra nombres de personas). Los agregadores MUST preservar la cadena original.",
+    "data.places[].public_url": "REQUIRED. El enlace saliente es la forma en que el contacto, los medios y el detalle llegan a las personas SIN viajar en el feed.",
+    "data.places[].contact_available": "Lleva el hecho, nunca el valor.",
+    "data.places[].same_as": "Afirmaciones {publisher_id}:{id} absolutas. Un solo salto, no transitivas, nunca autoridad (Q5).",
+    "data.places[].merged_into": "Puntero de sustitución dentro del mismo publicador (precedente: alluda ciudades.fusionada_en).",
+    "next_cursor": "Solo en respuestas de la API de lectura. Cursor opaco de secuencia del servidor — nunca una marca de tiempo de registro."
+  }
+}

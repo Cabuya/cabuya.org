@@ -36,7 +36,11 @@ interface Props {
 const { lang, section, headings } = Astro.props;
 const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
-const { previous, next } = sectionNeighbours(section.version, section.slug);
+const { previous, next } = sectionNeighbours(
+  section.version,
+  section.slug,
+  lang
+);
 const canonical = `${SITE_URL}${prefix}/developers/spec/${section.version}/${section.slug}`;
 
 /*

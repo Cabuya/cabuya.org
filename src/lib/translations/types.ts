@@ -314,8 +314,6 @@ export interface SiteTranslations {
     fixLabel: string;
     specLabel: string;
     countSummary: string;
-    /** Shown on non-English pages: which entries are still English, and why. */
-    untranslatedNote: string;
   };
 
   /** The specification changelog, one timeline. */

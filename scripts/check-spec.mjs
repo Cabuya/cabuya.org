@@ -16,7 +16,11 @@
  */
 import { join } from 'node:path';
 
-import { checkSpecVersion, specVersions } from './lib/spec-checks.mjs';
+import {
+  checkSpecVersion,
+  checkTranslations,
+  specVersions,
+} from './lib/spec-checks.mjs';
 
 const STRICT = process.argv.includes('--strict');
 const SPEC_DIR = join(process.cwd(), 'spec');
@@ -31,7 +35,10 @@ if (versions.length === 0) {
 
 let total = 0;
 for (const version of versions) {
-  const findings = checkSpecVersion(SPEC_DIR, version);
+  const findings = [
+    ...checkSpecVersion(SPEC_DIR, version),
+    ...checkTranslations(SPEC_DIR, version),
+  ];
   total += findings.length;
   console.log(
     `  ${version}: ${findings.length === 0 ? '✅ clean' : `❌ ${findings.length} finding(s)`}`

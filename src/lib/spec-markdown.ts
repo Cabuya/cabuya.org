@@ -20,6 +20,7 @@ import { exampleValueFor, schemaFields } from '@/lib/schema-reference';
 import {
   type SpecSchema,
   type SpecSection,
+  schemaDescriptions,
   specExamples,
 } from '@/lib/spec-loader';
 import { getTranslations } from '@/lib/translations';
@@ -80,7 +81,12 @@ export function specSectionMarkdown(
 export function schemaMarkdown(schema: SpecSchema, lang: Language): string {
   const t = getTranslations(lang);
   const prefix = getUrlPrefix(lang);
-  const fields = schemaFields(schema.schema);
+  const fields = schemaFields(schema.schema, { lang }).map((field) => ({
+    ...field,
+    description:
+      schemaDescriptions(schema.version, lang)[schema.name]?.[field.path] ??
+      field.description,
+  }));
 
   const example = (() => {
     const source = specExamples(schema.version).find(

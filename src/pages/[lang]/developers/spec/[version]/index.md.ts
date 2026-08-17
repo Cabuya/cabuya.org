@@ -17,7 +17,10 @@ export function getStaticPaths() {
 }
 
 export const GET: APIRoute = ({ params }) => {
-  const summary = specVersionSummary(params.version as string);
+  const summary = specVersionSummary(
+    params.version as string,
+    params.lang as string
+  );
   return new Response(
     specVersionMarkdown(
       params.lang as Language,

@@ -79,6 +79,29 @@ function segments(note: string): Array<{ code: boolean; text: string }> {
 const SKILL_INSTALL = `npx skills add Cabuya/cabuya-skill
 # or, without the installer:
 git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
+
+/**
+ * `DV-02` — one thread drawn from a bundle, above the five steps.
+ *
+ * Transparent, one file for both themes; composited against `#FAF9F6` and
+ * `#082A24` before shipping. Small on purpose: the entry asks for calm, and
+ * the promise on this page is one small thing today, not a network.
+ *
+ * `loading="lazy"`, against the entry's `eager`. The entry assumed the steps
+ * sat near the top; they arrive after the lead, the two path cards and the
+ * manifest, which is below the fold on every viewport this page was measured
+ * at. The integration guide's rule — eager above the fold, lazy below it —
+ * is the one that describes the page as built.
+ */
+const THREAD_ART = {
+  src: '/images/visuals/developers/quickstart-first-thread.webp',
+  srcset:
+    '/images/visuals/developers/quickstart-first-thread.webp 360w, /images/visuals/developers/quickstart-first-thread-2x.webp 720w',
+  sizes: '(min-width: 640px) 384px, 88vw',
+  width: 360,
+  height: 240,
+  present: true,
+};
 ---
 
 <DocsLayout
@@ -129,6 +152,21 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   />
 
   <!-- The five steps, with the ladder as the spine -->
+  {
+    THREAD_ART.present && (
+      <img
+        src={THREAD_ART.src}
+        srcset={THREAD_ART.srcset}
+        sizes={THREAD_ART.sizes}
+        alt=""
+        width={THREAD_ART.width}
+        height={THREAD_ART.height}
+        loading="lazy"
+        decoding="async"
+        class="not-prose mx-auto mt-10 w-full max-w-sm"
+      />
+    )
+  }
   <QuickstartPath lang={lang} current={1} class="not-prose my-10" />
 
   <ol class="not-prose my-8 flex flex-col gap-5">

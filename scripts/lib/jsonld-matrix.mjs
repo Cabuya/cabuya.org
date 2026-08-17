@@ -2,7 +2,7 @@
  * Which JSON-LD types each kind of page must emit — the gate's copy.
  *
  * A mirror of `JSONLD_MATRIX` in `src/lib/structured-data.ts`, for the same
- * reason `normative-language.mjs` mirrors its module: the gate runs under plain
+ * reason other gate helpers mirror their modules: the gate runs under plain
  * Node against `dist/`, and the site's copy is TypeScript that imports Astro's
  * environment. A test asserts the two agree, which is what makes duplicating
  * them safe rather than merely convenient.

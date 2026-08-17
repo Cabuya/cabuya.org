@@ -308,7 +308,7 @@ export const es: SiteTranslations = {
     sectionsTitle: 'Secciones',
     sectionsCountLabel: 'secciones',
     normativeLanguageNotice:
-      'El texto normativo se publica en inglés. Esta página lo muestra sin cambios; la navegación alrededor está en español. Una traducción, cuando exista, será informativa — el inglés sigue siendo el texto que rige.',
+      'Esta página es la traducción al español, y es informativa: donde las dos difieran, rige el texto en inglés. Está versionada junto a la sección que traduce, así que cambiar una sin la otra se ve en la revisión.',
     schemasTitle: 'Esquemas',
     schemasDescription:
       'Los esquemas JSON que el validador aplica. Cada campo con su tipo, restricciones, un valor de ejemplo y los identificadores de verificación que se disparan en él.',
@@ -437,8 +437,6 @@ export const es: SiteTranslations = {
     fixLabel: 'Arreglo',
     specLabel: 'Especificación',
     countSummary: 'verificaciones catalogadas',
-    untranslatedNote:
-      'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no se ejecuta.',
   },
 
   changelog: {

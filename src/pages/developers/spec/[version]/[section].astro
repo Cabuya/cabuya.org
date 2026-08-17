@@ -5,7 +5,10 @@ import SpecSectionPage from '@/components/pages/spec/SpecSectionPage.astro';
 import { specSection } from '@/lib/spec-loader';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('spec');
+  const entries = await getCollection(
+    'spec',
+    (entry) => entry.data.lang === 'en'
+  );
   return entries.map((entry) => ({
     params: { version: entry.data.version, section: entry.data.slug },
     props: { entry },

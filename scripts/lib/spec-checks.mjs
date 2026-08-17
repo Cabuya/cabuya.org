@@ -42,6 +42,91 @@ export function schemaKeyForExample(example) {
  * Validate one spec version directory. Returns a findings array; empty means
  * green. Pure with respect to process state — paths in, findings out.
  */
+/**
+ * A translation is complete, or it is not served — and either way it is not
+ * half a document.
+ *
+ * The Spanish sections and schema descriptions are informative translations
+ * that live beside the normative English. The loader already refuses to serve
+ * a partial set, falling back to English rather than mixing languages on one
+ * page — which is safe and silent. This makes it loud: a section added without
+ * its translation, or a field description added without one, fails the gate
+ * instead of quietly reverting eleven pages to English the way they were
+ * before anyone noticed.
+ */
+export function checkTranslations(specDir, version) {
+  const findings = [];
+  const sectionsDir = join(specDir, 'versions', version);
+  if (!existsSync(sectionsDir)) return findings;
+
+  const mdIn = (dir) =>
+    existsSync(dir)
+      ? readdirSync(dir)
+          .filter((f) => f.endsWith('.md'))
+          .sort()
+      : [];
+
+  const english = mdIn(sectionsDir);
+  for (const entry of readdirSync(sectionsDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const lang = entry.name;
+    const translated = mdIn(join(sectionsDir, lang));
+    for (const slug of english) {
+      if (!translated.includes(slug)) {
+        findings.push({
+          check: 'translation-section',
+          file: join(sectionsDir, lang, slug),
+          message: `no ${lang} translation — the ${lang} pages would fall back to English`,
+        });
+      }
+    }
+    for (const slug of translated) {
+      if (!english.includes(slug)) {
+        findings.push({
+          check: 'translation-orphan',
+          file: join(sectionsDir, lang, slug),
+          message: `translates a section that no longer exists in English`,
+        });
+      }
+    }
+  }
+
+  // Schema field descriptions, keyed by the path the reference page builds.
+  const schemaDir = join(specDir, 'schemas', version);
+  for (const entry of existsSync(schemaDir)
+    ? readdirSync(schemaDir, { withFileTypes: true })
+    : []) {
+    if (!entry.isDirectory()) continue;
+    const file = join(schemaDir, entry.name, 'descriptions.json');
+    if (!existsSync(file)) continue;
+    let table;
+    try {
+      table = JSON.parse(readFileSync(file, 'utf-8'));
+    } catch (error) {
+      findings.push({
+        check: 'translation-parse',
+        file,
+        message: `does not parse: ${error.message}`,
+      });
+      continue;
+    }
+    for (const name of readdirSync(schemaDir).filter((f) =>
+      f.endsWith('.schema.json')
+    )) {
+      const key = name.replace(/\.schema\.json$/, '');
+      if (!table[key]) {
+        findings.push({
+          check: 'translation-schema',
+          file,
+          message: `no ${entry.name} descriptions for "${key}"`,
+        });
+      }
+    }
+  }
+
+  return findings;
+}
+
 export function checkSpecVersion(specDir, version) {
   const findings = [];
   const schemaDir = join(specDir, 'schemas', version);

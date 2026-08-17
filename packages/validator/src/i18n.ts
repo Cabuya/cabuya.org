@@ -261,6 +261,113 @@ export const ES: Record<string, CheckTranslation> = {
     rule: 'La atribución es un MUST de consumo; una cadena explícita facilita cumplirlo.',
     fix: 'Agrega "attribution" con el crédito que quieres que se muestre.',
   },
+  DSC001: {
+    title: 'Manifiesto alcanzable por HTTPS como JSON',
+    rule: 'El manifiesto MUST servirse por HTTPS con Content-Type: application/json.',
+    fix: 'Sirve el manifiesto por HTTPS con un tipo de contenido JSON, y compruébalo desde fuera de tu red.',
+  },
+  DSC003: {
+    title: 'robots.txt devuelve 200 text/plain',
+    rule: 'Las precondiciones de L2 y superiores incluyen un robots.txt real.',
+    fix: 'Sirve un robots.txt real en la raíz, con tipo de contenido text/plain.',
+  },
+  DSC004: {
+    title: 'Manifiesto en la ruta RECOMMENDED, o anunciado con <link rel>',
+    rule: 'El manifiesto SHOULD vivir en /.well-known/cabuya.json, o anunciarse con <link rel="cabuya">.',
+    fix: 'Mueve el manifiesto a /.well-known/cabuya.json, o anuncia su ubicación con un <link rel="cabuya-manifest">.',
+  },
+  DSC006: {
+    title: 'publisher.canonical_url coincide con la entrada del registro',
+    rule: 'El manifiesto de un publicador registrado MUST coincidir con su entrada del registro en la URL canónica.',
+    fix: 'Haz que la URL canónica del manifiesto coincida con la de tu entrada en el registro, o abre un pull request para cambiar la entrada.',
+  },
+  DSC007: {
+    title: 'Toda feeds[].url es HTTPS absoluta y alcanzable',
+    rule: 'Los feeds declarados MUST resolver.',
+    fix: 'Dale a cada feed una URL https absoluta que resuelva desde fuera de tu red.',
+  },
+  DSC008: {
+    title: 'crawl_policy_url resuelve',
+    rule: 'La política declarada de rastreo y reutilización SHOULD poder descargarse — los consumidores tienen que respetarla.',
+    fix: 'Apunta crawl_policy_url a una página que exista, o quita el campo.',
+  },
+  DSC009: {
+    title: 'conformance_target no excede el nivel medido',
+    rule: 'conformance_target es una declaración; MUST NOT afirmar más de lo que esta ejecución mide. Se reporta como discrepancia, nunca como el nivel.',
+    fix: 'Baja conformance_target al nivel que realmente alcanzas, o corrige lo que bloquea el nivel que declaras. El objetivo es una intención, no una afirmación.',
+  },
+  BEH004: {
+    title:
+      'lastmod por fragmento presente (el patrón de sincronización incremental)',
+    rule: 'Un lastmod por fragmento es sincronización incremental funcionando a costo cero.',
+    fix: 'Publica un lastmod por fragmento para que los consumidores descarguen solo lo que cambió.',
+  },
+  BEH005: {
+    title:
+      'Los fragmentos declarados son alcanzables y consistentes con el sobre',
+    rule: 'Un fragmento declarado que no concuerda con sus hermanos rompe a todo consumidor que confíe en el manifiesto.',
+    fix: 'Haz que todos los fragmentos declarados sean alcanzables y consistentes con el sobre que los declara.',
+  },
+  API001: {
+    title:
+      'La base de la API de lectura es alcanzable; la forma del sobre es idéntica a la del feed',
+    rule: 'Un esquema, cuatro transportes.',
+    fix: 'Sirve la API de lectura en la base declarada, con la misma forma de sobre que el feed estático.',
+  },
+  API002: {
+    title:
+      'Estático ≡ API: el mismo registro es compatible byte a byte desde ambas superficies',
+    rule: 'La regla de equivalencia es lo que permite que un esquema sirva cuatro transportes.',
+    fix: 'Devuelve registros compatibles byte a byte desde la API y desde el feed. Un consumidor no debe tener que saber cuál de los dos leyó.',
+  },
+  API003: {
+    title:
+      'Paginación por cursor ordenada sobre una secuencia del servidor, no sobre una marca de tiempo',
+    rule: 'Los cursores por marca de tiempo descartan en silencio los registros compuestos sin conexión que llegan tarde.',
+    fix: 'Pagina sobre una secuencia del lado del servidor en vez de una marca de tiempo. Las marcas de tiempo colisionan y se saltan registros.',
+  },
+  API004: {
+    title: 'Se aceptan los parámetros de consulta documentados',
+    rule: 'municipality, kind, bbox, updated_since, limit, cursor.',
+    fix: 'Acepta los parámetros de consulta documentados, o quítalos de la documentación.',
+  },
+  API005: {
+    title: 'CORS * en la API; sin autenticación para lecturas',
+    rule: 'Las lecturas son públicas por diseño.',
+    fix: 'Sirve la API con CORS * y sin autenticación para lecturas. Datos de interés público detrás de una llave no son públicos.',
+  },
+  API006: {
+    title: 'Consume al menos un feed de un par (en parte autodeclarado)',
+    rule: 'L3 exige consumir además de servir — el único requisito que un sondeo no puede medir del todo, así que se reporta como info con la limitación declarada.',
+    fix: 'Consume al menos un feed de un par. El nivel trata de interoperar, no solo de publicar.',
+  },
+  WRT001: {
+    title: 'POST acepta el sobre {source, external_id, place}',
+    rule: 'El sobre de escritura es fijo.',
+    fix: 'Acepta el sobre {source, external_id, place} en el POST.',
+  },
+  WRT002: {
+    title: 'Idempotencia en (source, external_id): un reenvío no duplica',
+    rule: 'Reenviar es un upsert de la contribución del propio emisor, nunca un duplicado.',
+    fix: 'Haz las escrituras idempotentes en (source, external_id). Un reenvío tras un tiempo agotado no debe crear un segundo registro.',
+  },
+  WRT003: {
+    title: '409 ante un conflicto de id fuera del espacio del emisor',
+    rule: 'La disciplina de espacios de nombres se aplica en la frontera de escritura.',
+    fix: 'Devuelve 409 cuando un emisor intente escribir un id fuera de su propio espacio de nombres.',
+  },
+  WRT004: {
+    title:
+      'En modo auth:none se devuelve el estado de moderación y el límite de tasa es observable',
+    rule: 'Las escrituras abiertas REQUIRE mitigaciones: límite de tasa, cola de moderación y un estado devuelto en eco.',
+    fix: 'Devuelve en eco el estado de moderación y haz observable el límite de tasa, para que un emisor sin autenticar sepa qué pasó con su escritura.',
+  },
+  WRT005: {
+    title:
+      'Los registros republicados llevan source.source_id = el emisor original',
+    rule: 'La identidad del emisor viaja con el registro para siempre.',
+    fix: 'Conserva source.source_id como el emisor original al republicar. La atribución es lo que tiene que sobrevivir al salto.',
+  },
 };
 
 /** Message fragments that recur across generated messages. */

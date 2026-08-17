@@ -41,8 +41,8 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-
 import { analyzeDocument, markdownToText } from '../src/lib/language-detect.ts';
+import { isInherentlyBilingual } from './lib/bilingual-pages.mjs';
 import {
   checkMdExists,
   collectPages,
@@ -51,7 +51,6 @@ import {
   htmlPathFor,
 } from './lib/dist-pages.mjs';
 import { CONTRACT_TARGET, evaluatePage } from './lib/md-completeness.mjs';
-import { allowsEnglishBody } from './lib/normative-language.mjs';
 
 const STRICT = process.argv.includes('--strict');
 const EXISTENCE_ONLY = process.argv.includes('--existence-only');
@@ -134,14 +133,13 @@ if (!EXISTENCE_ONLY) {
     // untranslated proper noun and is never failed on — the same split the
     // audit script reports.
     /*
-     * The specification and the schema reference render the English normative
-     * text on Spanish routes, with a notice saying so. That is a decision, not
-     * a gap — see `scripts/lib/normative-language.mjs` — and the exemption is
-     * conditional on the notice actually being present, so a Spanish page that
-     * silently served English still fails here.
+     * No exemption. The specification and the schema reference used to serve
+     * English on Spanish routes behind a notice; they are translated now
+     * (`spec/versions/0.1/es/`, `spec/schemas/0.1/es/descriptions.json`), so a
+     * Spanish twin classifying as English is a defect again.
      */
     const language = analyzeDocument(markdownToText(markdown), expected);
-    if (language.flagged && !allowsEnglishBody(result.pagePath, markdown)) {
+    if (language.flagged && !isInherentlyBilingual(result.pagePath)) {
       const worst = language.confident[0];
       verdict.errors.push(
         `body classifies as "${worst.score.lang}" on a "${expected}" page: ` +
