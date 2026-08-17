@@ -6,7 +6,7 @@ const metaTags = [
     tag: 'title',
     source: 'BaseHead.astro',
     description:
-      'Page title with site name suffix. Format: "Page Title | Corag"',
+      'Page title with site name suffix. Format: "Page Title | Cabuya"',
   },
   {
     tag: 'meta description',
@@ -202,25 +202,25 @@ const keywordsRules = [
   <!-- Meta Tags -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Meta Tags</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+    <p class="text-sm text-cabuya-text-secondary mb-4">
       All meta tags are rendered by <code class="text-xs">BaseHead.astro</code> inside <code class="text-xs">MainLayout</code>. Blog posts and pages pass title, description, and image props.
     </p>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Tag</th>
               <th class="text-left py-3 px-4 font-semibold">Source</th>
               <th class="text-left py-3 px-4 font-semibold">Description</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {metaTags.map((m) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{m.tag}</code></td>
                 <td class="py-3 px-4"><code class="text-xs">{m.source}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{m.description}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{m.description}</td>
               </tr>
             ))}
           </tbody>
@@ -232,23 +232,23 @@ const keywordsRules = [
   <!-- JSON-LD -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">JSON-LD Structured Data</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Type</th>
               <th class="text-left py-3 px-4 font-semibold">Used On</th>
               <th class="text-left py-3 px-4 font-semibold">Description</th>
               <th class="text-left py-3 px-4 font-semibold">Schema</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {jsonLdTypes.map((j) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{j.type}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{j.usedOn}</td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{j.description}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{j.usedOn}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{j.description}</td>
                 <td class="py-3 px-4"><code class="text-xs">{j.schema}</code></td>
               </tr>
             ))}
@@ -261,32 +261,32 @@ const keywordsRules = [
   <!-- Markdown Twins (AEO) -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Markdown Twins (AEO)</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+    <p class="text-sm text-cabuya-text-secondary mb-4">
       Every HTML page has a <code class="text-xs">.md</code> counterpart for AI agents (Answer Engine Optimization). AI crawlers get clean Markdown instead of parsing HTML.
     </p>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">HTML Path</th>
               <th class="text-left py-3 px-4 font-semibold">Markdown Path</th>
               <th class="text-left py-3 px-4 font-semibold">Content Source</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {markdownTwins.map((m) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{m.htmlPath}</code></td>
                 <td class="py-3 px-4"><code class="text-xs">{m.mdPath}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{m.contentPath}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{m.contentPath}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     </div>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mt-3">
+    <p class="text-sm text-cabuya-text-secondary mt-3">
       Validate with <code class="text-xs">npm run md:check</code> (warnings) or <code class="text-xs">npm run md:check:strict</code> (errors for CI).
     </p>
   </section>
@@ -296,9 +296,9 @@ const keywordsRules = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Sitemap</h2>
     <div class="space-y-4">
       {sitemapRules.map((s) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <h3 class="font-semibold mb-1">{s.rule}</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{s.description}</p>
+          <p class="text-sm text-cabuya-text-secondary">{s.description}</p>
         </div>
       ))}
     </div>
@@ -309,9 +309,9 @@ const keywordsRules = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Keywords</h2>
     <div class="space-y-4">
       {keywordsRules.map((k) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <h3 class="font-semibold mb-1">{k.rule}</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{k.description}</p>
+          <p class="text-sm text-cabuya-text-secondary">{k.description}</p>
         </div>
       ))}
     </div>
@@ -320,20 +320,20 @@ const keywordsRules = [
   <!-- Canonical URLs -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Canonical URLs & hreflang</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Feature</th>
               <th class="text-left py-3 px-4 font-semibold">Description</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {canonicalRules.map((c) => (
               <tr>
                 <td class="py-3 px-4 font-medium">{c.feature}</td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{c.description}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{c.description}</td>
               </tr>
             ))}
           </tbody>
@@ -345,22 +345,22 @@ const keywordsRules = [
   <!-- Verification -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Verification</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Service</th>
               <th class="text-left py-3 px-4 font-semibold">Method</th>
               <th class="text-left py-3 px-4 font-semibold">Notes</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {verificationRules.map((v) => (
               <tr>
                 <td class="py-3 px-4 font-medium">{v.service}</td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{v.method}</td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{v.notes}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{v.method}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{v.notes}</td>
               </tr>
             ))}
           </tbody>

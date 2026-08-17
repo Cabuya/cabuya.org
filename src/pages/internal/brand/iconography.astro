@@ -3,50 +3,43 @@ import InternalLayout from '@/layouts/InternalLayout.astro';
 ---
 
 <InternalLayout
-  title="Brand Book — Iconography"
-  description="Corag v3.0.0 icon pack, sizes, stroke widths, and accessibility rules."
+  title="Iconography"
+  description="The Lucide pack, the sizes it is used at, and when an icon needs a text label."
   section="brand"
-  subsection="iconography"
+  subsection="brand-iconography"
 >
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-        <a href="/internal/brand" class="hover:underline">Brand</a> / Iconography
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Iconography</h1>
-      <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl">
-        Corag standardizes on the
-        <a href="https://lucide.dev/" class="underline">Lucide</a> icon pack
-        via <code>@lucide/astro</code>: broad coverage, consistent geometric
-        language, ISC licensed, easy to tree-shake, and well-supported in
-        Astro/Svelte islands.
-      </p>
-    </header>
+  <div class="space-y-10">
+    <p class="text-base text-cabuya-text-secondary max-w-3xl">
+      Cabuya standardises on the
+      <a href="https://lucide.dev/" class="text-cabuya-primary underline underline-offset-2">Lucide</a>
+      pack via <code>@lucide/astro</code>: consistent geometry, ISC licensed,
+      tree-shakeable, and no runtime cost in an Astro island.
+    </p>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Sizes</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+      <h2 class="text-2xl font-bold text-cabuya-text">Sizes</h2>
+      <div class="overflow-x-auto rounded-lg border border-cabuya-border">
         <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
+          <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
             <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Size</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Pixel</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Use</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Size</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Pixel</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Use</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <tr><td class="px-4 py-3 font-mono text-xs">sm</td><td class="px-4 py-3 font-mono text-xs">16px</td><td class="px-4 py-3 text-gray-600 dark:text-gray-300">Inline meta · table cells · compact UI</td></tr>
-            <tr><td class="px-4 py-3 font-mono text-xs">md</td><td class="px-4 py-3 font-mono text-xs">20px</td><td class="px-4 py-3 text-gray-600 dark:text-gray-300">Buttons · inline links · headers</td></tr>
-            <tr><td class="px-4 py-3 font-mono text-xs">lg</td><td class="px-4 py-3 font-mono text-xs">24px</td><td class="px-4 py-3 text-gray-600 dark:text-gray-300">Default — most UI</td></tr>
-            <tr><td class="px-4 py-3 font-mono text-xs">xl</td><td class="px-4 py-3 font-mono text-xs">32px</td><td class="px-4 py-3 text-gray-600 dark:text-gray-300">Hero / feature panels · empty-state illustrations</td></tr>
+          <tbody class="divide-y divide-cabuya-border">
+            <tr><td class="px-4 py-3 font-mono text-xs">sm</td><td class="px-4 py-3 font-mono text-xs">16px</td><td class="px-4 py-3 text-cabuya-text-secondary">Inline meta · table cells · compact UI</td></tr>
+            <tr><td class="px-4 py-3 font-mono text-xs">md</td><td class="px-4 py-3 font-mono text-xs">20px</td><td class="px-4 py-3 text-cabuya-text-secondary">Buttons · inline links · headers</td></tr>
+            <tr><td class="px-4 py-3 font-mono text-xs">lg</td><td class="px-4 py-3 font-mono text-xs">24px</td><td class="px-4 py-3 text-cabuya-text-secondary">Default — most UI</td></tr>
+            <tr><td class="px-4 py-3 font-mono text-xs">xl</td><td class="px-4 py-3 font-mono text-xs">32px</td><td class="px-4 py-3 text-cabuya-text-secondary">Hero / feature panels · empty-state illustrations</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Stroke width</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+      <h2 class="text-2xl font-bold text-cabuya-text">Stroke width</h2>
+      <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
         <li><code>1.5</code> — default. Quiet, editorial.</li>
         <li><code>2</code> — emphasis. Use sparingly (CTAs, alerts).</li>
         <li>Never below <code>1.25</code> — poor legibility on dark mode.</li>
@@ -54,8 +47,8 @@ import InternalLayout from '@/layouts/InternalLayout.astro';
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Color</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+      <h2 class="text-2xl font-bold text-cabuya-text">Color</h2>
+      <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
         <li>Use <code>currentColor</code> by default — inherits the surrounding text token.</li>
         <li>Decorative-only icons can use <code>--cabuya-accent</code> if accompanied by visible text.</li>
         <li>Never use <code>--cabuya-accent</code> as the only visual signal of meaning (color alone fails accessibility).</li>
@@ -63,8 +56,8 @@ import InternalLayout from '@/layouts/InternalLayout.astro';
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Accessibility</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+      <h2 class="text-2xl font-bold text-cabuya-text">Accessibility</h2>
+      <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
         <li>Decorative icons next to visible text: <code>aria-hidden=&quot;true&quot;</code>.</li>
         <li>Icon-only buttons / links: <code>aria-label</code> is mandatory and localized via <code>getTranslations(lang)</code>.</li>
         <li>Status icons (success/warning/error) must include a screen-reader label, not just color.</li>
@@ -73,47 +66,51 @@ import InternalLayout from '@/layouts/InternalLayout.astro';
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Astro / Svelte usage</h2>
-      <pre class="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 overflow-x-auto text-xs text-gray-800 dark:text-gray-100"><code>{`---
+      <h2 class="text-2xl font-bold text-cabuya-text">Astro / Svelte usage</h2>
+      <pre class="rounded-lg bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand p-4 overflow-x-auto text-xs text-cabuya-text"><code>{`---
 // Astro: import only the icons you use; tree-shaking strips the rest.
 import { Calendar, Mic, Users } from '@lucide/astro';
 ---
 
 <button class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-cabuya-fill text-cabuya-on-fill">
-  <Calendar size={20} aria-hidden="true" stroke-width={1.5} />
-  <span>Next meetup</span>
+  <ShieldCheck size={20} aria-hidden="true" stroke-width={1.5} />
+  <span>Validate a feed</span>
 </button>
 
-<a href="/contact" aria-label="Contact Corag" class="p-2 rounded-md hover:bg-cabuya-primary-soft">
-  <Mic size={20} aria-hidden="true" stroke-width={1.5} />
+<a href="/registry" aria-label="Open the registry" class="p-2 rounded-md hover:bg-cabuya-primary-soft">
+  <BookOpen size={20} aria-hidden="true" stroke-width={1.5} />
 </a>`}</code></pre>
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Reserved icons (community lexicon)</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-300">
+      <h2 class="text-2xl font-bold text-cabuya-text">Reserved icons (community lexicon)</h2>
+      <p class="text-sm text-cabuya-text-secondary">
         Pin one icon per concept site-wide so users build mental shortcuts:
       </p>
-      <div class="grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Calendar</code> — events, meetups, dates</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Mic</code> — speakers, talks, CFS</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Users</code> — community, contributors</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>BookOpen</code> — La Biblioteca del Mañana</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>GraduationCap</code> — Speaker School</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Sparkles</code> — impacto e iniciativas</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Hash</code> — tags · channels</div>
-        <div class="rounded-md border border-gray-200 dark:border-gray-700 p-3"><code>Globe</code> — international, multi-language</div>
+      <div class="grid sm:grid-cols-2 gap-3 text-sm text-cabuya-text">
+        <div class="rounded-md border border-cabuya-border p-3"><code>ShieldCheck</code> — conformance, a measured level</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>FileJson</code> — a feed, a manifest, a schema</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>MapPin</code> — a place record</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>Radio</code> — a transport, a live probe</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>BookOpen</code> — the specification, the registry</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>Users</code> — publishers, the working group</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>Terminal</code> — the CLI and the skill</div>
+        <div class="rounded-md border border-cabuya-border p-3"><code>Globe</code> — adoption beyond one city</div>
       </div>
+      <p class="text-xs text-cabuya-text-muted">
+        One icon per concept, site-wide. A reader who learns that the shield
+        means &ldquo;measured&rdquo; should never meet it standing for something else.
+      </p>
     </section>
 
     <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Don't</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+      <h2 class="text-2xl font-bold text-cabuya-text">Don't</h2>
+      <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
         <li>Mix icon packs (no Heroicons, Material, or Phosphor — Lucide only).</li>
         <li>Use emoji as functional icons in chrome (only allowed in user-generated content).</li>
         <li>Apply drop shadows or gradients to icons.</li>
         <li>Animate icons by default — opt-in only and respect <code>prefers-reduced-motion</code>.</li>
       </ul>
     </section>
-  </main>
+  </div>
 </InternalLayout>

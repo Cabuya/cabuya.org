@@ -1,200 +1,247 @@
 ---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import InternalLayout from '@/layouts/InternalLayout.astro';
 
-interface Row {
+/**
+ * Brand book — typography.
+ *
+ * The family names are read out of `global.css` rather than typed here. The
+ * previous version documented "Inter Variable" for nine roles; the site has
+ * never loaded Inter. A page about type that names the wrong typeface is worse
+ * than no page, because it gets quoted.
+ */
+
+const CSS = readFileSync(join(process.cwd(), 'src/styles/global.css'), 'utf-8');
+
+const stackFor = (token: string): string =>
+  CSS.match(new RegExp(`--font-${token}:\\s*([^;]+);`))?.[1]
+    .replace(/\s+/g, ' ')
+    .trim() ?? '(not declared)';
+
+const sansStack = stackFor('sans');
+const displayStack = stackFor('display');
+const firstOf = (stack: string): string =>
+  stack.split(',')[0].replace(/"/g, '').trim();
+
+const displayFace = firstOf(displayStack);
+const bodyFace = firstOf(sansStack);
+
+/** Self-hosted files, read from disk so the weight list cannot drift. */
+const faces = [
+  ...CSS.matchAll(/font-family:\s*"([^"]+)"[\s\S]*?src:\s*url\("([^"]+)"/g),
+].map((match) => ({ family: match[1], file: match[2] }));
+const uniqueFiles = [...new Map(faces.map((f) => [f.file, f])).values()];
+
+interface Role {
   role: string;
-  family: string;
-  weight: string;
+  face: 'display' | 'body';
   size: string;
+  weight: string;
   tracking: string;
-  notes: string;
+  note: string;
 }
 
-const scale: Row[] = [
+const scale: Role[] = [
   {
-    role: 'Display (hero)',
-    family: 'Inter Variable',
-    weight: '700',
+    role: 'Display',
+    face: 'display',
     size: 'clamp(2.5rem, 6vw, 4rem)',
+    weight: '700',
     tracking: '-0.02em',
-    notes: 'Reserved for hero / landing pages.',
+    note: 'Hero statements only. One per page, at most.',
   },
   {
     role: 'H1',
-    family: 'Inter Variable',
+    face: 'display',
+    size: '2.25rem → 3rem',
     weight: '700',
-    size: 'clamp(2rem, 5vw, 3.25rem)',
-    tracking: '-0.01em',
-    notes: 'One per page.',
+    tracking: '-0.02em',
+    note: 'The page subject. Exactly one.',
   },
   {
     role: 'H2',
-    family: 'Inter Variable',
+    face: 'display',
+    size: '1.5rem → 1.875rem',
     weight: '700',
-    size: 'clamp(1.5rem, 3.5vw, 2.25rem)',
-    tracking: '-0.005em',
-    notes: 'Section heads.',
+    tracking: '-0.01em',
+    note: 'Section boundaries.',
   },
   {
     role: 'H3',
-    family: 'Inter Variable',
+    face: 'display',
+    size: '1.125rem → 1.25rem',
     weight: '600',
-    size: '1.5rem',
-    tracking: '0',
-    notes: 'Sub-section.',
+    tracking: 'normal',
+    note: 'Sub-sections. Never skipped to from H1.',
   },
   {
-    role: 'H4',
-    family: 'Inter Variable',
-    weight: '600',
-    size: '1.25rem',
-    tracking: '0',
-    notes: 'Card / list group titles.',
+    role: 'Lead',
+    face: 'body',
+    size: '1.125rem',
+    weight: '400',
+    tracking: 'normal',
+    note: 'The paragraph under a heading that frames the section.',
   },
   {
     role: 'Body',
-    family: 'Inter Variable',
-    weight: '400',
+    face: 'body',
     size: '1rem',
-    tracking: '0',
-    notes: 'Default running text. Line-height 1.65.',
-  },
-  {
-    role: 'Body large',
-    family: 'Inter Variable',
     weight: '400',
-    size: '1.125rem',
-    tracking: '0',
-    notes: 'Lead paragraphs.',
+    tracking: 'normal',
+    note: 'Line height 1.65. Measure capped near 70 characters.',
   },
   {
     role: 'Small',
-    family: 'Inter Variable',
-    weight: '400',
+    face: 'body',
     size: '0.875rem',
-    tracking: '0',
-    notes: 'Meta text · captions.',
+    weight: '400',
+    tracking: 'normal',
+    note: 'Captions, table cells, metadata.',
   },
   {
-    role: 'Caption',
-    family: 'Inter Variable',
-    weight: '500',
+    role: 'Eyebrow',
+    face: 'body',
     size: '0.75rem',
-    tracking: '0.04em',
-    notes: 'Labels, eyebrows, uppercase optional.',
+    weight: '600',
+    tracking: '0.1em, uppercase',
+    note: 'Section label above a heading. Never a link on its own.',
   },
   {
-    role: 'Mono',
-    family: 'system mono',
+    role: 'Code',
+    face: 'body',
+    size: '0.875em',
     weight: '400',
-    size: '0.875rem',
-    tracking: '0',
-    notes: 'Code, frontmatter snippets.',
+    tracking: 'normal',
+    note: 'Monospace stack; inline code sits on a brand-strong chip.',
   },
 ];
 ---
 
 <InternalLayout
-  title="Brand Book — Typography"
-  description="Corag v3.0.0 type scale, weights, tracking, and loading rules."
+  title="Typography"
+  description={`${displayFace} for display, ${bodyFace} for body — read from the stylesheet, not restated here.`}
   section="brand"
-  subsection="typography"
+  subsection="brand-typography"
 >
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-        <a href="/internal/brand" class="hover:underline">Brand</a> / Typography
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Typography</h1>
-      <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl">
-        Corag uses the two families named in the
-        <strong>Manual de Identidad Visual</strong> (p. 17): <strong>Outfit</strong>
-        for the logo and display headings, <strong>Poppins</strong> for body copy.
-        Both are SIL OFL and self-hosted from <code>/public/fonts</code> — there is
-        no external font request. Outfit ships as a single variable file covering
-        weights 400–800, so the display family costs one request rather than five.
-      </p>
-    </header>
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">The two faces</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Both are geometric sans faces in the family of the wordmark's letterforms,
+      both are already subset to latin and latin-ext, self-hosted, and loaded
+      with <code>font-display: swap</code>. Shipping a third face would spend
+      performance budget for a marginal gain — this is recorded as an interim
+      decision, revisited only if a bespoke brand face is ever commissioned.
+    </p>
 
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Type scale</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Role</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Family</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Weight</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Size</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Tracking</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Notes</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            {scale.map((row) => (
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6">
+        <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">Display</p>
+        <p class="font-display text-5xl font-bold tracking-tight">{displayFace}</p>
+        <p class="font-display text-2xl mt-2">Crecemos juntos</p>
+        <p class="mt-4 text-xs text-cabuya-text-secondary break-words">
+          <code>--font-display</code>: {displayStack}
+        </p>
+      </div>
+      <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6">
+        <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">Body</p>
+        <p class="font-sans text-5xl font-semibold tracking-tight">{bodyFace}</p>
+        <p class="font-sans text-base mt-3 leading-relaxed">
+          Cada app es un hilo; el protocolo es la cuerda. Ñ, á, é, í, ó, ú, ü, ¿?, ¡!
+        </p>
+        <p class="mt-4 text-xs text-cabuya-text-secondary break-words">
+          <code>--font-sans</code>: {sansStack}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-4">The scale</h2>
+    <div class="overflow-x-auto rounded-xl border border-cabuya-border">
+      <table class="w-full text-sm min-w-[46rem]">
+        <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Role</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Face</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Size</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Weight</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Tracking</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Use</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+          {
+            scale.map((row) => (
               <tr>
-                <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{row.role}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.family}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.weight}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.size}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.tracking}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{row.notes}</td>
+                <td class="px-4 py-3 font-medium">{row.role}</td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">
+                  {row.face === 'display' ? displayFace : bodyFace}
+                </td>
+                <td class="px-4 py-3"><code class="text-xs">{row.size}</code></td>
+                <td class="px-4 py-3"><code class="text-xs">{row.weight}</code></td>
+                <td class="px-4 py-3"><code class="text-xs">{row.tracking}</code></td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">{row.note}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Live preview</h2>
-      <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-6 space-y-4 bg-white dark:bg-gray-900">
-        <p style="font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: -0.02em; line-height: 1.1; font-weight: 700;" class="text-gray-900 dark:text-gray-100">
-          Display — Corag
-        </p>
-        <p style="font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.01em; line-height: 1.15; font-weight: 700;" class="text-gray-900 dark:text-gray-100">
-          H1 — Una comunidad técnica
-        </p>
-        <p style="font-size: clamp(1.5rem, 3.5vw, 2.25rem); letter-spacing: -0.005em; line-height: 1.2; font-weight: 700;" class="text-gray-900 dark:text-gray-100">
-          H2 — Section heading example
-        </p>
-        <p style="font-size: 1.5rem; line-height: 1.3; font-weight: 600;" class="text-gray-900 dark:text-gray-100">H3 — Sub-section heading</p>
-        <p style="font-size: 1.125rem; line-height: 1.65;" class="text-gray-700 dark:text-gray-200">
-          Body large — A pull paragraph that reads slightly larger than running text.
-        </p>
-        <p style="font-size: 1rem; line-height: 1.65;" class="text-gray-700 dark:text-gray-200">
-          Body — Default running text. The cycle of meetups, talks, and contributors
-          you see across the site uses this size on a 1.65 line-height for sustained reading.
-        </p>
-        <p style="font-size: 0.875rem;" class="text-gray-600 dark:text-gray-300">Small — meta · timestamps · captions.</p>
-        <p style="font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 500; text-transform: uppercase;" class="text-gray-500 dark:text-gray-400">
-          Caption · eyebrow · category
-        </p>
-        <pre class="rounded-md bg-gray-50 dark:bg-gray-800 p-3 text-xs text-gray-800 dark:text-gray-100 overflow-x-auto"><code>// Mono — code, frontmatter snippets.
-const organization = "Corag";</code></pre>
-      </div>
-    </section>
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-4">Specimen</h2>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6 sm:p-8">
+      <p class="text-xs uppercase tracking-[0.1em] font-semibold text-cabuya-text-muted">
+        Conformance
+      </p>
+      <h3 class="mt-2 font-display text-4xl sm:text-5xl font-bold tracking-tight">
+        Measured, never declared
+      </h3>
+      <p class="mt-4 text-lg text-cabuya-text-secondary max-w-2xl">
+        A publisher does not tell the registry which level it reaches. The
+        validator fetches what is published and reports what it found.
+      </p>
+      <p class="mt-4 text-base leading-relaxed max-w-2xl">
+        That distinction is the whole design. A declared badge is a claim about
+        the past; a measured one is a statement about a document that was
+        readable at a specific time, by anyone who cares to check. When a feed
+        stops resolving, the badge goes with it — which is the point.
+      </p>
+      <p class="mt-4 text-sm text-cabuya-text-secondary max-w-2xl">
+        Bodies of running text are capped near a 70-character measure. Beyond
+        that the eye loses the line return, and a specification that is hard to
+        read is a specification that gets skimmed.
+      </p>
+      <p class="mt-4 text-sm">
+        Inline code such as
+        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">last_confirmed_at</code>
+        keeps its own chip so it never blends into prose.
+      </p>
+    </div>
+  </section>
 
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Loading strategy</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Variable font via <code>@fontsource-variable/inter</code> (preferred) or self-hosted woff2.</li>
-        <li><code>font-display: swap</code> always — never <code>block</code>.</li>
-        <li>Preload the latin subset only; load the latin-ext subset on demand.</li>
-        <li>System fallback stack: <code>-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif</code>.</li>
-        <li>Mono fallback: <code>ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace</code>.</li>
+  <section>
+    <h2 class="text-xl font-display font-bold mb-4">Loading</h2>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <p class="text-sm text-cabuya-text-secondary mb-4">
+        {uniqueFiles.length} self-hosted files, all woff2, all subset. Nothing is
+        fetched from a third-party font host — a webfont CDN is a request to
+        someone else's server on every page load, and it is not one this project
+        needs to make.
+      </p>
+      <ul class="text-xs space-y-1">
+        {
+          uniqueFiles.map((face) => (
+            <li>
+              <code>{face.file}</code>
+              <span class="text-cabuya-text-muted"> · {face.family}</span>
+            </li>
+          ))
+        }
       </ul>
-    </section>
-
-
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Hard rules</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Never skip heading levels — h1 → h2 → h3, no jumps.</li>
-        <li>One <code>h1</code> per page.</li>
-        <li>Tabular numbers (<code>font-variant-numeric: tabular-nums</code>) for stats and event metrics.</li>
-        <li>Body text never below <code>0.875rem</code> on desktop or <code>1rem</code> on mobile.</li>
-      </ul>
-    </section>
-  </main>
+    </div>
+  </section>
 </InternalLayout>

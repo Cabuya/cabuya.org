@@ -1,200 +1,158 @@
 ---
+import Badge from '@/components/ui/Badge.astro';
+import Pill from '@/components/ui/Pill.astro';
 import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
 
-const semanticBadges = [
-  {
-    name: 'Success',
-    classes:
-      'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-  },
-  {
-    name: 'Warning',
-    classes:
-      'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
-  },
-  {
-    name: 'Error',
-    classes: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
-  },
-  {
-    name: 'Info',
-    classes: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
-  },
-  {
-    name: 'Neutral',
-    classes: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
-  },
-  { name: 'Brand', classes: 'bg-cabuya-fill/10 text-cabuya-primary' },
-];
+/**
+ * Design system — badges and pills.
+ *
+ * Rewritten around the real `Badge` component. The previous version documented
+ * `SkillBadge.astro` (deleted), blog-post lifecycle states (gone with the
+ * blog), and a set of raw Tailwind palette classes that bypassed the token
+ * layer entirely — three ways for a showcase page to teach the wrong thing.
+ *
+ * The rule this page exists to enforce: **a badge's colour is a second signal,
+ * never the only one.** Every specimen below is legible with colour removed,
+ * which you can verify by reading it in greyscale.
+ */
 
-const skillVariants = [
+const states = [
   {
-    name: 'Primary',
-    classes: 'bg-cabuya-bg-dark text-white hover:bg-cabuya-bg-dark/80',
+    variant: 'measured' as const,
+    label: 'Conforming at L2',
+    when: 'The validator fetched the document and every check at that level passed.',
   },
   {
-    name: 'Secondary',
-    classes: 'bg-cabuya-fill/10 text-cabuya-primary hover:bg-cabuya-fill/20',
+    variant: 'unmeasured' as const,
+    label: 'Conformance unmeasured',
+    when: 'Schema-valid, but the transport checks did not run. Never shown as "conforming".',
   },
   {
-    name: 'Neutral',
-    classes:
-      'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
-  },
-];
-
-const statusBadges = [
-  {
-    name: 'Draft',
-    classes:
-      'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
+    variant: 'non-conformant' as const,
+    label: '3 errors',
+    when: 'Errors found. The count is part of the label because a bare colour tells you nothing actionable.',
   },
   {
-    name: 'Scheduled',
-    classes: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
+    variant: 'planned' as const,
+    label: 'Planned for v0.2',
+    when: 'Catalogued and specified, not implemented. Used on checks and on levels this build cannot measure.',
   },
   {
-    name: 'Demo',
-    classes:
-      'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300',
+    variant: 'proposed' as const,
+    label: 'Proposed entry',
+    when: 'In the registry, awaiting confirmation from the team that owns the application. Dashed, because it is provisional.',
   },
   {
-    name: 'Published',
-    classes:
-      'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
+    variant: 'draft' as const,
+    label: 'Draft 0.1',
+    when: 'A specification stage. The version is always part of the label.',
+  },
+  {
+    variant: 'neutral' as const,
+    label: 'JSON Feed',
+    when: 'A plain category with no state meaning at all.',
   },
 ];
 ---
 
-<ShowcaseLayout title="Badges" description="Badge and chip styles across semantic colors" section="badges">
-
-  <!-- Semantic Badges -->
-  <section class="mb-12" data-component="semantic-badges">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Semantic Badges</h2>
-    <div class="flex flex-wrap gap-3">
-      {semanticBadges.map((b) => (
-        <span class:list={['inline-block px-3 py-1 rounded-full text-xs font-medium', b.classes]}>
-          {b.name}
-        </span>
-      ))}
-    </div>
-  </section>
-
-  <!-- Sizes -->
-  <section class="mb-12" data-component="badge-sizes">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Sizes</h2>
-    <div class="flex items-center gap-3">
-      <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-        Small (text-xs)
-      </span>
-      <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-        Regular (text-sm)
-      </span>
-    </div>
-  </section>
-
-  <!-- Skill Badges -->
-  <section class="mb-12" data-component="skill-badges">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Skill Badges</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-      From <code class="text-xs">SkillBadge.astro</code> — interactive pills with hover states.
+<ShowcaseLayout
+  title="Badges"
+  description="State labels where colour reinforces the text and never replaces it."
+  section="badges"
+>
+  <section class="mb-12" data-component="badge-states">
+    <h2 class="text-xl md:text-2xl font-bold mb-1">States</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Seven variants, each tied to something the system can actually determine.
+      There is no "gold" or "premium" — Cabuya has no tiers to sell.
     </p>
-    <div class="flex flex-wrap gap-3">
-      {skillVariants.map((v) => (
-        <span class:list={['inline-block px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 cursor-default', v.classes]}>
-          {v.name} Skill
-        </span>
-      ))}
-    </div>
-    <div class="mt-4 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-      <div class="text-sm font-medium mb-2">Common classes</div>
-      <code class="text-xs text-gray-600 dark:text-gray-300">inline-block px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200</code>
-    </div>
-  </section>
 
-  <!-- Blog Tag Badges -->
-  <section class="mb-12" data-component="tag-badges">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Blog Tag Badges</h2>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        tech
-      </a>
-      <a href="#" class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        personal
-      </a>
-      <a href="#" class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary hover:bg-cabuya-fill/20 transition-colors">
-        active tag
-      </a>
-    </div>
-  </section>
-
-  <!-- Status Badges -->
-  <section class="mb-12" data-component="status-badges">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Content Status Badges</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-      Used in blog content lifecycle to show post status.
-    </p>
-    <div class="flex flex-wrap gap-3">
-      {statusBadges.map((b) => (
-        <span class:list={['inline-block px-3 py-1 rounded-full text-xs font-medium', b.classes]}>
-          {b.name}
-        </span>
-      ))}
-    </div>
-  </section>
-
-  <!-- Code Example -->
-  <section class="mb-12">
-    <details class="rounded-lg border border-gray-200 dark:border-gray-700">
-      <summary class="px-4 py-3 cursor-pointer text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800">
-        Show code
-      </summary>
-      <pre class="p-4 text-xs overflow-x-auto bg-gray-50 dark:bg-gray-800"><code>&lt;!-- Semantic badge --&gt;
-&lt;span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"&gt;
-  Success
-&lt;/span&gt;
-
-&lt;!-- Skill badge (interactive) --&gt;
-&lt;span class="px-3 py-1.5 rounded-full text-sm font-medium bg-cabuya-fill/10 text-cabuya-primary hover:bg-cabuya-fill/20 transition-colors"&gt;
-  Skill Name
-&lt;/span&gt;
-
-&lt;!-- Tag badge (link) --&gt;
-&lt;a href="/blog/tag/tech" class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"&gt;
-  tech
-&lt;/a&gt;</code></pre>
-    </details>
-  </section>
-
-  <!-- Agent Reference -->
-  <section class="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8" data-agent-reference="true">
-    <h2 class="text-lg font-bold mb-4">Agent Reference</h2>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm border-collapse">
-        <thead>
-          <tr class="border-b border-gray-200 dark:border-gray-700 text-left">
-            <th class="py-2 pr-4 font-semibold">Type</th>
-            <th class="py-2 pr-4 font-semibold">Classes</th>
-            <th class="py-2 font-semibold">Context</th>
+    <div class="overflow-x-auto rounded-xl border border-cabuya-border">
+      <table class="w-full text-sm min-w-[42rem]">
+        <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Specimen</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">Variant</th>
+            <th scope="col" class="px-4 py-2.5 font-semibold">When it applies</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-          {semanticBadges.map((b) => (
-            <tr>
-              <td class="py-2 pr-4 font-medium">{b.name}</td>
-              <td class="py-2 pr-4"><code class="text-xs">{b.classes}</code></td>
-              <td class="py-2 text-gray-600 dark:text-gray-300">Semantic</td>
-            </tr>
-          ))}
-          {skillVariants.map((v) => (
-            <tr>
-              <td class="py-2 pr-4 font-medium">Skill: {v.name}</td>
-              <td class="py-2 pr-4"><code class="text-xs">{v.classes}</code></td>
-              <td class="py-2 text-gray-600 dark:text-gray-300">SkillBadge</td>
-            </tr>
-          ))}
+        <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+          {
+            states.map((state) => (
+              <tr>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <Badge variant={state.variant}>{state.label}</Badge>
+                </td>
+                <td class="px-4 py-3"><code class="text-xs">{state.variant}</code></td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">{state.when}</td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="mb-12" data-component="badge-sizes">
+    <h2 class="text-xl md:text-2xl font-bold mb-4">Sizes</h2>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6 flex flex-wrap items-center gap-3">
+      <Badge variant="measured" size="sm">Small — inside a table row</Badge>
+      <Badge variant="measured" size="md">Medium — beside a heading</Badge>
+    </div>
+  </section>
+
+  <section class="mb-12" data-component="pills">
+    <h2 class="text-xl md:text-2xl font-bold mb-1">Pills</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
+      A pill is a category or a filter; a badge is a claim about state. When you
+      are unsure which you want, ask whether the label could ever be wrong — if
+      it could, it is a badge.
+    </p>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6 space-y-4">
+      <div class="flex flex-wrap gap-2">
+        <Pill>Default</Pill>
+        <Pill variant="primary">Primary</Pill>
+        <Pill variant="accent">Accent</Pill>
+        <Pill variant="outline">Outline</Pill>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <Pill href="#" active>L0</Pill>
+        <Pill href="#">L1</Pill>
+        <Pill href="#">L2</Pill>
+        <Pill href="#">L3</Pill>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12" data-component="badge-greyscale">
+    <h2 class="text-xl md:text-2xl font-bold mb-1">The colour-blind check</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
+      The same row, desaturated. If a specimen becomes ambiguous here, its label
+      is doing too little work and needs rewriting — not a stronger colour.
+    </p>
+    <div
+      class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6 flex flex-wrap gap-3"
+      style="filter: grayscale(1)"
+    >
+      {states.map((state) => <Badge variant={state.variant}>{state.label}</Badge>)}
+    </div>
+  </section>
+
+  <section class="mt-16 border-t border-cabuya-border pt-8" data-agent-reference="true">
+    <h2 class="text-lg font-bold mb-4">Agent reference</h2>
+    <pre
+      class="rounded-lg bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand p-4 overflow-x-auto text-xs text-cabuya-text"><code>{`import Badge from '@/components/ui/Badge.astro';
+
+<Badge variant="measured">Conforming at L2</Badge>
+<Badge variant="unmeasured">Conformance unmeasured</Badge>
+<Badge variant="non-conformant">3 errors</Badge>
+<Badge variant="planned" size="md">Planned for v0.2</Badge>
+
+// A pill is a category, not a state.
+<Pill href="/registry?level=L2" active>L2</Pill>`}</code></pre>
+    <p class="mt-3 text-xs text-cabuya-text-muted">
+      Do not hand-roll a badge with palette utilities. If a state is missing,
+      add a variant to <code>Badge.astro</code> so every instance moves together.
+    </p>
   </section>
 </ShowcaseLayout>

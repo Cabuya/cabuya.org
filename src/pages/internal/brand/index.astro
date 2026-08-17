@@ -1,70 +1,212 @@
 ---
 import InternalLayout from '@/layouts/InternalLayout.astro';
+import { pagesIn } from '@/lib/internal-hub';
+
+/**
+ * The brand book landing: the narrative, then the rules that fall out of it.
+ *
+ * Source of truth is `docs/BRAND_GUIDE.md`, which is itself derived from the
+ * founding delivery in `docs/context/brand/`. This page exists so the identity
+ * can be *seen* — a rule about the fique hue is far more convincing next to the
+ * swatch that fails on white.
+ */
+
+const sub = pagesIn('brand').filter((page) => !page.topLevel);
 ---
 
 <InternalLayout
   title="Brand Book"
-  description="The Corag brand & design system."
+  description="Cabuya's identity as it is actually implemented — story, mark, palette, type, voice."
   section="brand"
 >
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">Internal · Brand</p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Corag Brand Book</h1>
-      <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl">
-        The single source of truth for the Corag visual
-        identity. This is a developer-facing companion to
-        <code class="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800">docs/BRAND_GUIDE.md</code>
-        and
-        <code class="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800">analysis_results/BRAND_PALETTE.md</code>.
-      </p>
-    </header>
+  <!-- ── The story ──────────────────────────────────────── -->
+  <section class="mb-14">
+    <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">01 · The story</p>
 
-    <section class="grid sm:grid-cols-2 gap-4">
-      <a href="/internal/brand/colors" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">01</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Colors</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Light + dark token tables with HEX, contrast, and usage rules.</p>
-      </a>
-      <a href="/internal/brand/typography" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">02</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Typography</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Type scale, line-heights, tracking. Default Inter Variable.</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Pending — see follow-ups</p>
-      </a>
-      <a href="/internal/brand/spacing-radius-motion" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">03</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Spacing · Radius · Motion</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">4-base scales, radius tokens, motion durations.</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Pending — see follow-ups</p>
-      </a>
-      <a href="/internal/brand/iconography" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">04</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Iconography</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Lucide pack, sizes, stroke widths, accessibility rules.</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Pending — see follow-ups</p>
-      </a>
-      <a href="/internal/brand/voice-and-tone" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">05</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Voice &amp; Tone</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">EN + ES voice with do/don't tables and orthography rules.</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Pending — see follow-ups</p>
-      </a>
-      <a href="/internal/brand/logo-usage" class="block p-5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition">
-        <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">06</p>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Logo usage</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Variants, clear-space, downloads, do/don't.</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Pending — see follow-ups</p>
-      </a>
-    </section>
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
+      <div class="bg-cabuya-fill text-cabuya-on-fill p-6 sm:p-10">
+        <p class="font-display text-2xl sm:text-3xl leading-snug max-w-3xl">
+          Cabuya is the fibre you tie things with. A single thread holds
+          nothing. Twisted together, they carry anything.
+        </p>
+        <p class="mt-5 text-base sm:text-lg text-cabuya-primary-light max-w-3xl">
+          That is the network, stated literally: <strong class="font-semibold">each app is a
+          thread; the protocol is the rope.</strong>
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-cabuya-border bg-cabuya-bg-elevated">
+        <div class="p-5">
+          <h3 class="text-sm font-semibold mb-1.5">Common property</h3>
+          <p class="text-sm text-cabuya-text-secondary">
+            The word is Colombian and belongs to no single app. It does not
+            expire when an emergency ends.
+          </p>
+        </div>
+        <div class="p-5">
+          <h3 class="text-sm font-semibold mb-1.5">Grounded in something real</h3>
+          <p class="text-sm text-cabuya-text-secondary">
+            Colombia is one of the world's largest producers of fique, the plant
+            the fibre comes from — a checkable fact, not a metaphor we invented.
+          </p>
+        </div>
+        <div class="p-5">
+          <h3 class="text-sm font-semibold mb-1.5">The founding line</h3>
+          <p class="text-sm text-cabuya-text-secondary">
+            <em>«Crecemos juntos: no competimos, nos alimentamos.»</em>{' '}
+            Printed wherever the brand speaks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="space-y-3">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending follow-ups</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Type scale, spacing, motion, iconography, voice-and-tone, and logo-usage sub-pages — built atomically off <code>BRAND_PALETTE.md</code> in a follow-up turn.</li>
-        <li>Run automated WCAG contrast verification once <code>pnpm</code> is available (deferred).</li>
-        <li>Spot-check the global primary against the actual logo files when <code>tmp/assets_brand/</code> is available.</li>
-      </ul>
-    </section>
-  </main>
+  <!-- ── The mark ───────────────────────────────────────── -->
+  <section class="mb-14">
+    <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">02 · The mark</p>
+    <h2 class="text-2xl font-display font-bold mb-3">A rope braided into a C</h2>
+    <p class="text-base text-cabuya-text-secondary max-w-3xl mb-6">
+      The thesis made visual: many fibres, one cordage. Three strands — white,
+      fique gold, and the forest outline that binds them. The isologo carries
+      its own outline, which is why one asset works on both grounds and why the
+      whole favicon set derives from it.
+    </p>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+        <div class="bg-cabuya-bg-elevated p-8 flex items-center justify-center min-h-[180px]">
+          <img
+            src="/images/brand/cabuya-lockup.webp"
+            alt="Cabuya lockup on a light ground"
+            width="320"
+            height="107"
+            class="w-full max-w-[280px] h-auto"
+          />
+        </div>
+        <figcaption class="border-t border-cabuya-border px-4 py-3 text-xs text-cabuya-text-secondary">
+          Lockup, light grounds — <code>cabuya-lockup.webp</code>
+        </figcaption>
+      </figure>
+
+      <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+        <div class="bg-cabuya-bg-dark p-8 flex items-center justify-center min-h-[180px]">
+          <img
+            src="/images/brand/cabuya-lockup-dark.webp"
+            alt="Cabuya lockup on a dark ground"
+            width="320"
+            height="107"
+            class="w-full max-w-[280px] h-auto"
+          />
+        </div>
+        <figcaption class="border-t border-cabuya-border px-4 py-3 text-xs text-cabuya-text-secondary">
+          Lockup, dark grounds — <code>cabuya-lockup-dark.webp</code>
+        </figcaption>
+      </figure>
+    </div>
+
+    <p class="mt-4 text-sm text-cabuya-text-secondary">
+      Sizes, clear space and the misuse cases are on
+      <a href="/internal/brand/logo-usage" class="text-cabuya-primary underline underline-offset-2">Logo usage</a>;
+      the generated icon set is verified on
+      <a href="/internal/brand/assets" class="text-cabuya-primary underline underline-offset-2">Icons &amp; assets</a>.
+    </p>
+  </section>
+
+  <!-- ── The two rules ──────────────────────────────────── -->
+  <section class="mb-14">
+    <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">03 · The two rules</p>
+    <h2 class="text-2xl font-display font-bold mb-3">What the measurements decided for us</h2>
+    <p class="text-base text-cabuya-text-secondary max-w-3xl mb-6">
+      Both rules below are consequences of contrast ratios, not taste. They are
+      re-computed on every test run, so if a hex changes and a rule stops
+      holding, the suite says so before a reviewer has to notice.
+    </p>
+
+    <div class="space-y-4">
+      <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+        <h3 class="text-base font-semibold mb-2">
+          1. Fique never carries text on a light ground
+        </h3>
+        <p class="text-sm text-cabuya-text-secondary mb-4">
+          The golden strand measures 2.45:1 on white — it fails AA by a wide
+          margin. It is for icons, strands, large display type and the logo. Any
+          <em>text</em> use of the hue on light goes through
+          <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">--color-cabuya-accent-strong</code>.
+        </p>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="rounded-lg border border-cabuya-border bg-white p-4">
+            <p class="text-sm font-semibold" style="color: #c79a4a">
+              Aa — raw fique as body text
+            </p>
+            <p class="mt-1 text-xs text-cabuya-danger font-medium">
+              ✗ 2.45:1 — never do this
+            </p>
+          </div>
+          <div class="rounded-lg border border-cabuya-border bg-white p-4">
+            <p class="text-sm font-semibold" style="color: #8a672c">
+              Aa — fique-strong as body text
+            </p>
+            <p class="mt-1 text-xs text-cabuya-success font-medium">
+              ✓ 4.92:1 — the text-safe darkening
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+        <h3 class="text-base font-semibold mb-2">
+          2. The brand foreground flips; the fill pair does not
+        </h3>
+        <p class="text-sm text-cabuya-text-secondary mb-4">
+          Forest is unreadable on Night at roughly 1.9:1, so
+          <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">--color-cabuya-primary</code>
+          becomes fique in dark mode. A <em>filled</em> brand surface stays
+          forest-with-ivory in both themes — that pair is measured at 10.97:1 and
+          has no reason to move. Pairing <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">bg-cabuya-primary</code>
+          with <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">text-white</code> is
+          precisely the bug this split exists to prevent.
+        </p>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="rounded-lg bg-cabuya-fill text-cabuya-on-fill p-4">
+            <p class="text-sm font-semibold">Filled brand surface</p>
+            <p class="mt-1 text-xs opacity-90">Identical in light and dark. 10.97:1.</p>
+          </div>
+          <div class="rounded-lg border border-cabuya-border p-4">
+            <p class="text-sm font-semibold text-cabuya-primary">Brand foreground</p>
+            <p class="mt-1 text-xs text-cabuya-text-secondary">
+              Forest here, fique in dark mode. Toggle the theme above to watch it flip.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The rest of the book ───────────────────────────── -->
+  <section>
+    <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">04 · The rest of the book</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        sub.map((page, index) => (
+          <a
+            href={page.href}
+            class="group rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5 hover:border-cabuya-primary hover:shadow-sm transition-all"
+          >
+            <p class="text-xs font-mono text-cabuya-text-muted mb-1">
+              {String(index + 1).padStart(2, '0')}
+            </p>
+            <h3 class="text-base font-semibold mb-1.5 group-hover:text-cabuya-primary transition-colors">
+              {page.title}
+            </h3>
+            <p class="text-sm text-cabuya-text-secondary leading-relaxed">{page.purpose}</p>
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="mt-6 text-sm text-cabuya-text-muted">
+      Prose source of truth: <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">docs/BRAND_GUIDE.md</code>
+      · engineering contract: <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">docs/DESIGN.md</code>
+      · founding delivery: <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">docs/context/brand/</code>.
+    </p>
+  </section>
 </InternalLayout>

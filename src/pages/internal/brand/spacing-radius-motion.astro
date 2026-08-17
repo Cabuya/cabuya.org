@@ -94,41 +94,35 @@ const motion: Row[] = [
 ---
 
 <InternalLayout
-  title="Brand Book — Spacing · Radius · Motion"
-  description="Corag v3.0.0 spacing scale, radius tokens, and motion durations."
+  title="Spacing · Radius · Motion"
+  description="A short 4px scale, the radius tokens, and the reduced-motion contract."
   section="brand"
-  subsection="spacing-radius-motion"
+  subsection="brand-spacing"
 >
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-12">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-        <a href="/internal/brand" class="hover:underline">Brand</a> / Spacing · Radius · Motion
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Spacing · Radius · Motion</h1>
-      <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl">
-        Layout primitives that keep Corag pages calm and predictable. Built on a
-        4-pixel base, the scale is intentionally short so designers and AI
-        agents reach the same composition decisions.
-      </p>
-    </header>
+  <div class="space-y-12">
+    <p class="text-base text-cabuya-text-secondary max-w-3xl">
+      Layout primitives built on a 4-pixel base. The scale is deliberately short:
+      a small vocabulary is what makes two people — or a person and an agent —
+      reach the same composition decision without discussing it.
+    </p>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Spacing scale</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+      <h2 class="text-2xl font-bold text-cabuya-text">Spacing scale</h2>
+      <div class="overflow-x-auto rounded-lg border border-cabuya-border">
         <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
+          <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
             <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Token</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Value</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Usage</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Token</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Value</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Usage</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody class="divide-y divide-cabuya-border">
             {spacing.map((row) => (
               <tr>
-                <td class="px-4 py-3 font-mono text-xs text-gray-700 dark:text-gray-200">{row.token}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.value}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{row.usage}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text">{row.token}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text-secondary">{row.value}</td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">{row.usage}</td>
               </tr>
             ))}
           </tbody>
@@ -137,22 +131,22 @@ const motion: Row[] = [
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Radius tokens</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+      <h2 class="text-2xl font-bold text-cabuya-text">Radius tokens</h2>
+      <div class="overflow-x-auto rounded-lg border border-cabuya-border">
         <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
+          <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
             <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Token</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Value</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Usage</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Token</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Value</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Usage</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody class="divide-y divide-cabuya-border">
             {radius.map((row) => (
               <tr>
-                <td class="px-4 py-3 font-mono text-xs text-gray-700 dark:text-gray-200">{row.token}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.value}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{row.usage}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text">{row.token}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text-secondary">{row.value}</td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">{row.usage}</td>
               </tr>
             ))}
           </tbody>
@@ -161,22 +155,22 @@ const motion: Row[] = [
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Motion tokens</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+      <h2 class="text-2xl font-bold text-cabuya-text">Motion tokens</h2>
+      <div class="overflow-x-auto rounded-lg border border-cabuya-border">
         <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
+          <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
             <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Token</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Value</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Usage</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Token</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Value</th>
+              <th class="px-4 py-2 font-semibold text-cabuya-text">Usage</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody class="divide-y divide-cabuya-border">
             {motion.map((row) => (
               <tr>
-                <td class="px-4 py-3 font-mono text-xs text-gray-700 dark:text-gray-200">{row.token}</td>
-                <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{row.value}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{row.usage}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text">{row.token}</td>
+                <td class="px-4 py-3 font-mono text-xs text-cabuya-text-secondary">{row.value}</td>
+                <td class="px-4 py-3 text-cabuya-text-secondary">{row.usage}</td>
               </tr>
             ))}
           </tbody>
@@ -185,14 +179,14 @@ const motion: Row[] = [
     </section>
 
     <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Reduced-motion contract</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-300">
+      <h2 class="text-2xl font-bold text-cabuya-text">Reduced-motion contract</h2>
+      <p class="text-sm text-cabuya-text-secondary">
         All animations and non-essential transitions MUST honor
         <code>@media (prefers-reduced-motion: reduce)</code> and degrade to
         instant changes. This is enforced by Task 19's a11y audit and by the
         global stylesheet:
       </p>
-      <pre class="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 overflow-x-auto text-xs text-gray-800 dark:text-gray-100"><code>{`@media (prefers-reduced-motion: reduce) {
+      <pre class="rounded-lg bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand p-4 overflow-x-auto text-xs text-cabuya-text"><code>{`@media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -203,13 +197,13 @@ const motion: Row[] = [
     </section>
 
     <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Layout shells</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+      <h2 class="text-2xl font-bold text-cabuya-text">Layout shells</h2>
+      <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
         <li><code>max-w-5xl mx-auto px-4 sm:px-6</code> — content pages.</li>
         <li><code>max-w-6xl mx-auto px-4 sm:px-6</code> — listings (blog, meetups).</li>
         <li><code>max-w-7xl mx-auto px-4 md:px-6</code> — site shell (`.main-container`).</li>
         <li>Vertical rhythm between major sections: <code>py-16</code> mobile / <code>py-24</code> desktop.</li>
       </ul>
     </section>
-  </main>
+  </div>
 </InternalLayout>

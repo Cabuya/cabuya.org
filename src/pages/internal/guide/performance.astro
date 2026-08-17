@@ -52,14 +52,14 @@ const pipelineSteps = [
 <InternalLayout title="Performance & PageSpeed" description="PageSpeed optimizations and image pipeline" section="guide">
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">PageSpeed Optimizations</h2>
-    <p class="text-gray-600 dark:text-gray-300 mb-6">
-      These mitigations address Lighthouse diagnostics. See <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1 rounded">docs/PERFORMANCE.md</code> for full details.
+    <p class="text-cabuya-text-secondary mb-6">
+      These mitigations address Lighthouse diagnostics. See <code class="text-sm bg-cabuya-bg-brand-strong px-1 rounded">docs/PERFORMANCE.md</code> for full details.
     </p>
     <div class="space-y-6">
       {pageSpeedOptimizations.map((item) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <h3 class="font-semibold mb-2">{item.area}</h3>
-          <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
+          <ul class="list-disc list-inside text-sm text-cabuya-text-secondary space-y-1">
             {item.mitigations.map((m) => (
               <li>{m}</li>
             ))}
@@ -71,22 +71,22 @@ const pipelineSteps = [
 
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Image WebP Pipeline</h2>
-    <p class="text-gray-600 dark:text-gray-300 mb-4">
+    <p class="text-cabuya-text-secondary mb-4">
       WebP generation runs automatically. Scripts skip images that already have a valid .webp (same or newer mtime).
     </p>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <table class="w-full text-sm">
         <thead>
-          <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
             <th class="text-left py-3 px-4 font-semibold">When</th>
             <th class="text-left py-3 px-4 font-semibold">Description</th>
           </tr>
         </thead>
         <tbody>
           {pipelineSteps.map((row) => (
-            <tr class="border-b border-gray-200 dark:border-gray-700 last:border-0">
+            <tr class="border-b border-cabuya-border last:border-0">
               <td class="py-3 px-4 font-mono text-xs">{row.step}</td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{row.desc}</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">{row.desc}</td>
             </tr>
           ))}
         </tbody>
@@ -96,10 +96,10 @@ const pipelineSteps = [
 
   <section>
     <h2 class="text-xl md:text-2xl font-bold mb-4">Deployment</h2>
-    <p class="text-gray-600 dark:text-gray-300">
-      Cloudflare Pages deploys on push to <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1 rounded">main</code>.
-      Build command: <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1 rounded">npm run build</code>.
-      Output: <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1 rounded">dist/</code>.
+    <p class="text-cabuya-text-secondary">
+      Cloudflare Pages deploys on push to <code class="text-sm bg-cabuya-bg-brand-strong px-1 rounded">main</code>.
+      Build command: <code class="text-sm bg-cabuya-bg-brand-strong px-1 rounded">npm run build</code>.
+      Output: <code class="text-sm bg-cabuya-bg-brand-strong px-1 rounded">dist/</code>.
     </p>
   </section>
 </InternalLayout>

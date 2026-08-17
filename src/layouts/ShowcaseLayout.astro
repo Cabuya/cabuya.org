@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { title, description, section } = Astro.props;
-const fullTitle = `${title} — Corag Design System`;
+const fullTitle = `${title} — Cabuya Design System`;
 
 const navItems: NavItem[] = [
   { id: 'hub', label: 'Hub', href: '/internal/ui', icon: '⬡' },
@@ -34,6 +34,12 @@ const navItems: NavItem[] = [
   { id: 'forms', label: 'Forms', href: '/internal/ui/forms', icon: '✎' },
   { id: 'layouts', label: 'Layouts', href: '/internal/ui/layouts', icon: '▦' },
   { id: 'brand', label: 'Brand', href: '/internal/ui/brand', icon: '◉' },
+  {
+    id: 'components',
+    label: 'Contact sheet',
+    href: '/internal/ui/components',
+    icon: '▤',
+  },
 ];
 
 const activeId = section;
@@ -55,21 +61,23 @@ const nextItem =
   (function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');})();
 </script>
   </head>
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+  <body class="min-h-screen bg-cabuya-bg-elevated text-cabuya-text font-sans antialiased transition-colors duration-300">
 
-    <!-- Sticky amber warning banner with breadcrumb -->
-    <div class="sticky top-0 z-50 flex items-center justify-between gap-3 px-3 sm:px-4 py-2 text-sm font-semibold bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-100 border-b border-amber-300 dark:border-amber-700">
+    <!-- Dev-only banner. Amber is intentional: it is not a brand surface, it
+         is a warning, and it should never be mistaken for one. Matches the
+         banner in InternalLayout so the two halves of the hub read as one. -->
+    <div class="sticky top-0 z-50 flex items-center justify-between gap-3 px-3 sm:px-4 py-2 text-sm font-semibold bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-100 border-b border-amber-400 dark:border-amber-800">
       <div class="flex items-center gap-2 min-w-0">
-        <a href="/internal" class="text-xs hover:underline text-amber-700 dark:text-amber-300 shrink-0">Internal Hub</a>
-        <span class="text-amber-400 dark:text-amber-600 shrink-0" aria-hidden="true">/</span>
-        <span class="inline-flex items-center rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wide shrink-0">
-          DEV
+        <span class="inline-flex items-center rounded-full bg-amber-900 dark:bg-amber-200 px-2 py-0.5 text-xs font-bold text-amber-50 dark:text-amber-950 uppercase tracking-wide shrink-0">
+          Internal
         </span>
-        <span class="text-xs sm:text-sm truncate">Corag Design System</span>
+        <a href="/internal" class="text-xs hover:underline shrink-0">Hub</a>
+        <span class="shrink-0" aria-hidden="true">/</span>
+        <span class="text-xs sm:text-sm truncate">Cabuya Design System</span>
       </div>
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <span class="hidden md:inline text-xs text-amber-700 dark:text-amber-300">
-          Not included in production
+        <span class="hidden md:inline text-xs">
+          Never shipped to production
         </span>
         <button
           id="showcase-theme-toggle"
@@ -95,7 +103,7 @@ const nextItem =
     </div>
 
     <!-- Mobile horizontal navigation -->
-    <div class="lg:hidden sticky top-[41px] z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <div class="lg:hidden sticky top-[41px] z-40 bg-cabuya-bg-elevated border-b border-cabuya-border">
       <div class="flex items-center gap-1 px-2 py-2 overflow-x-auto scrollbar-hide">
         {navItems.map((item) => (
           <a
@@ -103,8 +111,8 @@ const nextItem =
             class:list={[
               'shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap',
               activeId === item.id
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
+                ? 'bg-cabuya-fill text-cabuya-on-fill'
+                : 'bg-cabuya-bg-brand-strong text-cabuya-text-secondary hover:bg-cabuya-bg-brand-strong',
             ]}
             aria-current={activeId === item.id ? 'page' : undefined}
           >
@@ -119,15 +127,15 @@ const nextItem =
 
       <!-- Desktop sidebar -->
       <nav
-        class="hidden lg:flex flex-col w-60 shrink-0 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 sticky top-[41px] h-[calc(100vh-41px)]"
+        class="hidden lg:flex flex-col w-60 shrink-0 border-r border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated sticky top-[41px] h-[calc(100vh-41px)]"
       >
         <div class="flex-1 overflow-y-auto py-4 px-3">
-          <a href="/internal" class="flex items-center gap-2 px-3 py-2 mb-3 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          <a href="/internal" class="flex items-center gap-2 px-3 py-2 mb-3 text-xs font-medium text-cabuya-text-secondary hover:text-cabuya-primary transition-colors">
             <span aria-hidden="true">&larr;</span>
             <span>Back to Internal Hub</span>
           </a>
           <div class="mb-4 px-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <span class="text-xs font-bold uppercase tracking-wider text-cabuya-text-muted">
               Design System
             </span>
           </div>
@@ -139,8 +147,8 @@ const nextItem =
                   class:list={[
                     'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                     activeId === item.id
-                      ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
+                      ? 'bg-cabuya-fill text-cabuya-on-fill'
+                      : 'text-cabuya-text-secondary hover:bg-cabuya-bg-brand-strong',
                   ]}
                   aria-current={activeId === item.id ? 'page' : undefined}
                 >
@@ -159,22 +167,22 @@ const nextItem =
           <div class="mb-8 sm:mb-10">
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">{title}</h1>
             {description && (
-              <p class="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-300">{description}</p>
+              <p class="mt-2 text-base sm:text-lg text-cabuya-text-secondary">{description}</p>
             )}
           </div>
 
           <slot />
 
           <!-- Mobile prev/next navigation -->
-          <div class="lg:hidden flex items-center justify-between mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div class="lg:hidden flex items-center justify-between mt-12 pt-6 border-t border-cabuya-border">
             {prevItem ? (
-              <a href={prevItem.href} class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <a href={prevItem.href} class="flex items-center gap-2 text-sm font-medium text-cabuya-text-secondary hover:text-cabuya-primary transition-colors">
                 <span aria-hidden="true">&larr;</span>
                 <span>{prevItem.label}</span>
               </a>
             ) : <span />}
             {nextItem && (
-              <a href={nextItem.href} class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <a href={nextItem.href} class="flex items-center gap-2 text-sm font-medium text-cabuya-text-secondary hover:text-cabuya-primary transition-colors">
                 <span>{nextItem.label}</span>
                 <span aria-hidden="true">&rarr;</span>
               </a>
@@ -182,8 +190,8 @@ const nextItem =
           </div>
         </div>
 
-        <footer class="border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 text-center text-xs text-gray-600 dark:text-gray-300">
-          Corag Design System &middot; Dev Only
+        <footer class="border-t border-cabuya-border px-4 sm:px-6 py-4 text-center text-xs text-cabuya-text-secondary">
+          Cabuya Design System &middot; Dev Only
         </footer>
       </main>
     </div>

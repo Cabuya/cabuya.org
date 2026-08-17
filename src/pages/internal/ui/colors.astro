@@ -36,7 +36,7 @@ const groups: Group[] = [
   {
     title: 'Brand — foreground',
     blurb:
-      'Flips between themes: wine in light, rosa in dark. Text, icons, borders, focus rings.',
+      'Flips between themes: forest in light, fique in dark. Text, icons, borders, focus rings.',
     tokens: [
       {
         name: 'Primary',
@@ -101,20 +101,20 @@ const groups: Group[] = [
     ],
   },
   {
-    title: 'Rosa & accent',
+    title: 'Seedling & fique',
     blurb:
-      'Rosa is an official brand color, not a tint of the wine. The accent is decorative only.',
+      'Seedling is the pale green that carries display text on dark canvases. Raw fique is decorative only.',
     tokens: [
       {
-        name: 'Rosa',
+        name: 'Seedling',
         cssVar: '--color-cabuya-seedling',
         bgClass: 'bg-cabuya-seedling',
         textOnClass: 'text-cabuya-fill',
-        usage: 'Warm brand surfaces and accents',
+        usage: 'Display text on Night; pale brand surfaces',
         flag: 'no-flip',
       },
       {
-        name: 'Rosa soft',
+        name: 'Seedling soft',
         cssVar: '--color-cabuya-seedling-soft',
         bgClass: 'bg-cabuya-seedling-soft',
         textOnClass: 'text-cabuya-fill',
@@ -239,7 +239,7 @@ const groups: Group[] = [
   {
     title: 'Status',
     blurb:
-      'These sit on page or soft-chip grounds — never on the rosa brand surfaces.',
+      'These sit on page or soft-chip grounds — never on a filled brand surface.',
     tokens: [
       {
         name: 'Success',
@@ -318,7 +318,7 @@ const totalTokens = groups.reduce((n, g) => n + g.tokens.length, 0);
 
 <ShowcaseLayout
   title="Color"
-  description="Every Corag design token, rendered live. Hex values are read from the computed styles, so they cannot go stale."
+  description="Every design token, rendered live. Hex values are read from the computed styles, so they cannot go stale."
   section="ui"
 >
   <div class="space-y-12">
@@ -346,9 +346,9 @@ const totalTokens = groups.reduce((n, g) => n + g.tokens.length, 0);
         Toggle the theme while you read this page
       </h2>
       <p class="mt-2 text-sm text-cabuya-secondary">
-        In light mode the brand is <strong>wine</strong>; in dark mode it becomes
-        <strong>rosa</strong>, because wine on a dark ground measures 1.52:1 and is
-        unusable. Both are official colors. Every value below re-reads itself when
+        In light mode the brand foreground is <strong>forest</strong>; in dark mode it
+        becomes <strong>fique</strong>, because forest on Night measures about 1.9:1
+        and is unreadable. Both are official colours. Every value below re-reads itself when
         the theme changes, so you can watch the whole system flip and confirm
         nothing breaks.
       </p>
@@ -449,13 +449,13 @@ const totalTokens = groups.reduce((n, g) => n + g.tokens.length, 0);
             ❌ <code>bg-cabuya-primary</code> + <code>text-white</code>
           </p>
           <p class="mt-2 text-sm text-cabuya-secondary">
-            Fine in light mode, ~1.5:1 in dark — because primary becomes rosa and
-            white sits on top of it. Toggle the theme and watch it fail.
+            Fine in light mode, and roughly 2:1 in dark — because primary becomes
+            fique and white sits on top of it. Toggle the theme and watch it fail.
           </p>
           <span
             class="mt-3 inline-flex rounded-full bg-cabuya-primary px-4 py-2 text-sm font-semibold text-white"
           >
-            Quiero ayudar
+            Publicar un feed
           </span>
         </div>
         <div
@@ -470,7 +470,7 @@ const totalTokens = groups.reduce((n, g) => n + g.tokens.length, 0);
           <span
             class="mt-3 inline-flex rounded-full bg-cabuya-fill px-4 py-2 text-sm font-semibold text-cabuya-on-fill"
           >
-            Quiero ayudar
+            Publicar un feed
           </span>
         </div>
       </div>
@@ -506,7 +506,7 @@ const totalTokens = groups.reduce((n, g) => n + g.tokens.length, 0);
             Always-dark canvas
           </p>
           <p class="text-cabuya-seedling">
-            Identical in both themes, so a hero can keep the wine-black identity
+            Identical in both themes, so a hero can keep the forest identity
             regardless of the reader's preference.
           </p>
           <label class="block text-sm font-medium text-cabuya-on-fill" for="demo-input">

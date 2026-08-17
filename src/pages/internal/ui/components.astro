@@ -1,0 +1,337 @@
+---
+import Badge from '@/components/ui/Badge.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import LinkArrow from '@/components/ui/LinkArrow.astro';
+import Pill from '@/components/ui/Pill.astro';
+import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
+
+/**
+ * The contact sheet: every primitive on one page, light beside dark.
+ *
+ * The per-primitive pages show one component in depth. This page answers a
+ * different question — "does the set still look like one system?" — which you
+ * can only see with everything adjacent. Contrast bugs and inconsistent radii
+ * hide well on a page dedicated to a single component.
+ *
+ * Adding a specimen is one <Specimen> block. The dark half is rendered inside a
+ * `.dark` scope, so both themes are on screen at once regardless of what the
+ * page-level toggle is set to — nobody has to remember to check the other one.
+ */
+
+const specimens = [
+  'Eyebrow',
+  'Badge',
+  'Pill',
+  'LinkArrow',
+  'Buttons',
+  'Cards',
+  'Form controls',
+  'Breadcrumbs',
+  'Empty state',
+  'Status messaging',
+  'Conformance badge',
+];
+---
+
+<ShowcaseLayout
+  title="Component contact sheet"
+  description="Every primitive on one page, both themes side by side."
+  section="components"
+>
+  <section class="mb-8 rounded-xl border border-cabuya-border bg-cabuya-bg-brand/50 dark:bg-cabuya-bg-elevated p-5">
+    <p class="text-sm text-cabuya-text-secondary max-w-3xl">
+      Each row renders the same markup twice: the left panel inherits the page
+      theme, the right one is forced dark. If a specimen looks right on the left
+      and wrong on the right, the component is reaching past the token layer.
+    </p>
+    <p class="mt-3 text-xs text-cabuya-text-muted">
+      {specimens.length} specimens · in-depth pages for each are in the sidebar.
+    </p>
+  </section>
+
+  <!-- Each specimen: a titled row with two panels. -->
+  <div class="space-y-6">
+    <!-- ── Eyebrow ─────────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Eyebrow
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        <div class="bg-cabuya-bg-elevated p-6">
+          <Eyebrow>Conformance</Eyebrow>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">Section label above a heading.</p>
+        </div>
+        <div class="dark bg-cabuya-bg-elevated p-6 text-cabuya-text">
+          <Eyebrow>Conformance</Eyebrow>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">Section label above a heading.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Badge / Pill ────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Badge &amp; Pill
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <Badge variant="draft">Draft 0.1</Badge>
+                <Badge variant="measured">Conforming at L2</Badge>
+                <Badge variant="unmeasured">Unmeasured</Badge>
+                <Badge variant="non-conformant">3 errors</Badge>
+                <Badge variant="proposed">Proposed</Badge>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <Pill>L0</Pill>
+                <Pill>L1</Pill>
+                <Pill>L2</Pill>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Link arrow ──────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Link with arrow
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <LinkArrow href="/developers/spec">Read the specification</LinkArrow>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Buttons ─────────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Buttons
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <div class="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  class="rounded-full bg-cabuya-fill text-cabuya-on-fill px-5 py-2.5 text-sm font-semibold hover:bg-cabuya-fill-strong transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+                >
+                  Validate a feed
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full border border-cabuya-border-interactive bg-cabuya-bg-elevated text-cabuya-text px-5 py-2.5 text-sm font-semibold hover:border-cabuya-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+                >
+                  Read the spec
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full px-5 py-2.5 text-sm font-semibold text-cabuya-primary hover:bg-cabuya-primary-soft transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+                >
+                  Ghost
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  class="rounded-full bg-cabuya-fill/40 text-cabuya-on-fill px-5 py-2.5 text-sm font-semibold cursor-not-allowed"
+                >
+                  Disabled
+                </button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Cards ───────────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Cards
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg p-6 text-cabuya-text']}>
+              <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+                <h3 class="font-semibold mb-1">Aquí Ayuda</h3>
+                <p class="text-sm text-cabuya-text-secondary mb-3">
+                  Publishes shelters and collection points for its city.
+                </p>
+                <span class="inline-flex items-center gap-1.5 text-xs text-cabuya-text-muted">
+                  <span class="inline-block w-1.5 h-1.5 rounded-full bg-cabuya-accent" aria-hidden="true" />
+                  Entry proposed — not yet confirmed by the team
+                </span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Form controls ───────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Form controls
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark, index) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text space-y-4']}>
+              <div>
+                <label class="block text-sm font-medium mb-1.5" for={`feed-url-${index}`}>
+                  Feed URL
+                </label>
+                <input
+                  id={`feed-url-${index}`}
+                  type="url"
+                  placeholder="https://example.org/cabuya/places.json"
+                  class="w-full rounded-lg border border-cabuya-border-interactive bg-cabuya-bg px-3 py-2 text-sm text-cabuya-text placeholder:text-cabuya-text-muted focus:outline-2 focus:outline-offset-1 focus:outline-cabuya-primary"
+                />
+                <p class="mt-1.5 text-xs text-cabuya-text-muted">
+                  The document the validator will fetch.
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5" for={`level-${index}`}>
+                  Target level
+                </label>
+                <select
+                  id={`level-${index}`}
+                  class="w-full rounded-lg border border-cabuya-border-interactive bg-cabuya-bg px-3 py-2 text-sm text-cabuya-text focus:outline-2 focus:outline-offset-1 focus:outline-cabuya-primary"
+                >
+                  <option>L0 — discoverable</option>
+                  <option>L1 — schema-valid</option>
+                  <option>L2 — behaviourally sound</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5 text-cabuya-danger" for={`bad-${index}`}>
+                  A field in error
+                </label>
+                <input
+                  id={`bad-${index}`}
+                  type="text"
+                  value="not a url"
+                  aria-invalid="true"
+                  aria-describedby={`bad-error-${index}`}
+                  class="w-full rounded-lg border-2 border-cabuya-danger bg-cabuya-bg px-3 py-2 text-sm text-cabuya-text"
+                />
+                <p id={`bad-error-${index}`} class="mt-1.5 text-xs text-cabuya-danger">
+                  Enter an absolute https URL — the validator cannot fetch a relative path.
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Breadcrumbs ─────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Breadcrumbs
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <Breadcrumbs
+                items={[
+                  { label: 'Developers', href: '/developers' },
+                  { label: 'Validator', href: '/developers/validator' },
+                  { label: 'Checks' },
+                ]}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Empty state ─────────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Empty state
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <EmptyState
+                title="No publishers at this level yet"
+                description="Nothing has been measured at L3. That is a statement about today, not a judgement about anyone."
+              />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Status messaging ────────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Status messaging
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text space-y-3']}>
+              {[
+                { tone: 'success', label: 'Conforming at L2', body: 'Measured 14 March 2026.' },
+                { tone: 'warning', label: 'Schema-valid; conformance unmeasured', body: 'The transport checks did not run.' },
+                { tone: 'danger', label: 'Non-conformant: 3 errors', body: 'REC001 blocks the next level.' },
+                { tone: 'info', label: 'Not measured by this version', body: 'L3 and L4 ship in v0.2.' },
+              ].map((note) => (
+                <div class={`rounded-lg bg-cabuya-${note.tone}-soft border border-cabuya-${note.tone}/40 px-4 py-3`}>
+                  <p class={`text-sm font-semibold text-cabuya-${note.tone}`}>{note.label}</p>
+                  <p class="text-xs text-cabuya-text-secondary mt-0.5">{note.body}</p>
+                </div>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Conformance badge ───────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Conformance badge
+      </h2>
+      <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border">
+        {
+          [false, true].map((isDark) => (
+            <div class:list={[isDark && 'dark', 'bg-cabuya-bg-elevated p-6 text-cabuya-text']}>
+              <div class="flex flex-wrap gap-3">
+                <span class="inline-flex items-center gap-2 rounded-full bg-cabuya-fill text-cabuya-on-fill px-3.5 py-1.5 text-sm font-medium">
+                  <span class="inline-block w-2 h-2 rounded-full bg-cabuya-accent" aria-hidden="true" />
+                  Compatible con Cabuya 1.0
+                </span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-cabuya-on-fill text-cabuya-fill border border-cabuya-fill px-3.5 py-1.5 text-sm font-medium">
+                  <span class="inline-block w-2 h-2 rounded-full bg-cabuya-accent-strong" aria-hidden="true" />
+                  Cabuya 1.0 compatible
+                </span>
+              </div>
+              <p class="mt-3 text-xs text-cabuya-text-secondary">
+                The fill pair does not flip — this badge is byte-identical in both themes,
+                which is what lets a publisher embed it once.
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</ShowcaseLayout>

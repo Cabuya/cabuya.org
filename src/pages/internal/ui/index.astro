@@ -82,7 +82,7 @@ const sections = [
 ];
 ---
 
-<ShowcaseLayout title="Design System Showcase" description="Complete visual reference for the Corag design system" section="hub">
+<ShowcaseLayout title="Design System Showcase" description="Live specimens of every primitive, painted by the utilities the site actually ships" section="hub">
   <!-- Brand book pointer -->
   <div class="rounded-2xl border border-cabuya-border bg-cabuya-primary-soft p-5 mb-8">
     <div class="flex items-start gap-3">
@@ -90,7 +90,7 @@ const sections = [
       <div class="flex-1">
         <h2 class="text-base font-bold text-cabuya-text">Brand Book is the source of truth</h2>
         <p class="mt-1 text-sm text-cabuya-text-secondary">
-          The Corag brand contract (palette, typography, voice, per-edition kits) lives in the
+          The brand contract (mark, palette, typography, voice) lives in the
           <a href="/internal/brand" class="underline text-cabuya-primary">Brand Book</a>. This UI
           showcase renders <em>working examples</em> of those tokens — when they disagree,
           the Brand Book wins.
@@ -100,59 +100,59 @@ const sections = [
   </div>
   <!-- Quick Stats -->
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+    <div class="rounded-2xl border border-cabuya-border p-4 text-center">
       <div class="text-2xl font-bold">20+</div>
-      <div class="text-sm text-gray-600 dark:text-gray-300">Color Tokens</div>
+      <div class="text-sm text-cabuya-text-secondary">Color Tokens</div>
     </div>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+    <div class="rounded-2xl border border-cabuya-border p-4 text-center">
       <div class="text-2xl font-bold">6</div>
-      <div class="text-sm text-gray-600 dark:text-gray-300">Heading Levels</div>
+      <div class="text-sm text-cabuya-text-secondary">Heading Levels</div>
     </div>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+    <div class="rounded-2xl border border-cabuya-border p-4 text-center">
       <div class="text-2xl font-bold">11</div>
-      <div class="text-sm text-gray-600 dark:text-gray-300">Categories</div>
+      <div class="text-sm text-cabuya-text-secondary">Categories</div>
     </div>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+    <div class="rounded-2xl border border-cabuya-border p-4 text-center">
       <div class="text-2xl font-bold">2</div>
-      <div class="text-sm text-gray-600 dark:text-gray-300">Font Weights</div>
+      <div class="text-sm text-cabuya-text-secondary">Font Weights</div>
     </div>
   </div>
 
   <!-- Sections Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {sections.map((s) => (
-      <a href={s.href} class="group block rounded-2xl border border-gray-200 dark:border-gray-700 p-5 transition-all hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md">
+      <a href={s.href} class="group block rounded-2xl border border-cabuya-border p-5 transition-all hover:border-cabuya-primary hover:shadow-md">
         <div class="flex items-start justify-between mb-3">
           <span class="text-2xl" aria-hidden="true">{s.icon}</span>
-          <span class="text-xs font-medium text-gray-600 dark:text-gray-300">{s.count}</span>
+          <span class="text-xs font-medium text-cabuya-text-secondary">{s.count}</span>
         </div>
         <h2 class="text-lg font-semibold mb-1 group-hover:underline">{s.title}</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{s.description}</p>
+        <p class="text-sm text-cabuya-text-secondary leading-relaxed">{s.description}</p>
       </a>
     ))}
   </div>
 
   <!-- Agent Reference -->
-  <section class="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8" data-agent-reference="true">
+  <section class="mt-16 border-t border-cabuya-border pt-8" data-agent-reference="true">
     <h2 class="text-lg font-bold mb-4">Agent Reference</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-      Each page includes <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">data-component</code> attributes for structured AI parsing.
+    <p class="text-sm text-cabuya-text-secondary mb-4">
+      Each page includes <code class="text-xs bg-cabuya-bg-brand-strong px-1 py-0.5 rounded">data-component</code> attributes for structured AI parsing.
     </p>
     <div class="overflow-x-auto">
       <table class="w-full text-sm border-collapse">
         <thead>
-          <tr class="border-b border-gray-200 dark:border-gray-700 text-left">
+          <tr class="border-b border-cabuya-border text-left">
             <th class="py-2 pr-4 font-semibold">Page</th>
             <th class="py-2 pr-4 font-semibold">URL</th>
             <th class="py-2 font-semibold">Key Tokens</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+        <tbody class="divide-y divide-cabuya-border">
           {sections.map((s) => (
             <tr>
               <td class="py-2 pr-4 font-medium">{s.title}</td>
-              <td class="py-2 pr-4"><code class="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">{s.href}</code></td>
-              <td class="py-2 text-gray-600 dark:text-gray-300">{s.description}</td>
+              <td class="py-2 pr-4"><code class="text-xs bg-cabuya-bg-brand-strong px-1 py-0.5 rounded">{s.href}</code></td>
+              <td class="py-2 text-cabuya-text-secondary">{s.description}</td>
             </tr>
           ))}
         </tbody>

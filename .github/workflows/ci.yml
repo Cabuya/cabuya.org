@@ -78,6 +78,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Content gate — /internal never reaches production (strict)
+        run: pnpm run internal:check:strict
+
       # Runs AFTER the site build on purpose: the gate's last assertion
       # cross-checks every check id against the anchors on the built
       # /developers/validator/checks page. That page arrives in Task 26, and

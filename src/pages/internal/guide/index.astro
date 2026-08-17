@@ -1,249 +1,228 @@
 ---
 import InternalLayout from '@/layouts/InternalLayout.astro';
+import { pagesIn } from '@/lib/internal-hub';
+
+/**
+ * Contributor guide — the landing page.
+ *
+ * The sub-page list comes from the hub registry, so a deleted guide page cannot
+ * leave a dead card behind. The previous version linked to a blog guide that
+ * had been removed two tasks earlier.
+ */
 
 const principles = [
   {
-    title: 'Performance First',
-    description:
-      'Static over dynamic, lightest hydration directive, minimal JavaScript. Prefer CSS-only solutions.',
+    title: 'Never publish a claim you cannot back',
+    body: 'Rule-0, and it outranks the rest. No invented figure, no endorsement we cannot maintain, no conformance claim the validator has not measured.',
   },
   {
-    title: 'Accessibility (WCAG AA)',
-    description:
-      '4.5:1 contrast ratio for text, semantic HTML, keyboard navigable, Lighthouse 100 target.',
+    title: 'Conformance is measured, never declared',
+    body: 'Nothing in this codebase lets a publisher assert a level. The validator fetches what is published and reports what it found.',
   },
   {
-    title: 'English Code Only',
-    description:
-      'All code, comments, documentation, and commits must be in English. Content is multilingual (en/es).',
+    title: 'Both languages are first drafts',
+    body: 'English at /, Spanish at /es. Neither is a translation of the other, and parity:check holds them to the same content.',
   },
   {
-    title: 'Page Wrapper Pattern',
-    description:
-      'Thin 3-line wrappers in src/pages/, all logic in src/components/pages/*Page.astro.',
+    title: 'Static over dynamic',
+    body: '.astro for anything non-interactive, the laziest client: directive when it is. Docs routes ship zero JavaScript.',
   },
   {
-    title: 'Biome Only',
-    description:
-      'Use Biome for linting and formatting. Never use ESLint or Prettier in this project.',
+    title: 'WCAG AA, measured',
+    body: '4.5:1 for body text and 3:1 for non-text UI, re-computed by the token tests rather than trusted from a comment.',
   },
   {
-    title: 'Content Collections',
-    description:
-      'Structured content with Zod schemas. Blog posts, slides, tags, series, and pages use Astro Content Collections.',
+    title: 'Biome only',
+    body: 'One toolchain for lint and format. ESLint and Prettier are not used here.',
+  },
+  {
+    title: 'Tokens live in one file',
+    body: 'Every colour comes from a --color-cabuya-* token declared in src/styles/global.css. Nowhere else declares one.',
+  },
+  {
+    title: 'The bounded directories stay bounded',
+    body: 'The spec/ and registry/ trees are CC0, import nothing, and are read only through their loader modules. They are the part of this repository another organisation can lift whole.',
   },
 ];
 
 const commands = [
-  { cmd: 'npm run dev', desc: 'Start dev server (localhost:7777)' },
-  { cmd: 'npm run build', desc: 'Production build with type check' },
-  { cmd: 'npm run biome:check', desc: 'Check linting and formatting' },
-  { cmd: 'npm run biome:fix', desc: 'Auto-fix lint/format issues' },
-  { cmd: 'npm run astro:check', desc: 'TypeScript type checking' },
-  { cmd: 'npm run images:optimize', desc: 'Process staged images' },
   {
-    cmd: 'npm run images:webp',
-    desc: 'Generate WebP variants (skips if up to date)',
+    cmd: 'pnpm run dev',
+    desc: 'Dev server on localhost:7777 — /internal is reachable here and only here',
+  },
+  {
+    cmd: 'pnpm run build',
+    desc: 'Type check, then build. /internal is deleted from the output',
+  },
+  { cmd: 'pnpm run test', desc: 'Unit tests' },
+  { cmd: 'pnpm run biome:check', desc: 'Lint and format' },
+  { cmd: 'pnpm run astro:check', desc: 'TypeScript across .astro files' },
+];
+
+const gates = [
+  {
+    cmd: 'spec:check',
+    asks: 'Do the schemas lint, and do the examples behave the way they claim?',
+  },
+  {
+    cmd: 'spec:boundary',
+    asks: 'Has anything reached into spec/ or registry/ that should not?',
+  },
+  {
+    cmd: 'registry:check',
+    asks: 'Does every registry entry validate, with no hand-written measurement?',
+  },
+  {
+    cmd: 'checks:catalogue',
+    asks: 'Is every validator check documented, in both directions and both languages?',
+  },
+  {
+    cmd: 'md:check',
+    asks: 'Does every page have a complete Markdown twin — not a summary?',
+  },
+  {
+    cmd: 'lang:check',
+    asks: 'Is every page in the language its URL promises?',
+  },
+  {
+    cmd: 'seo:check',
+    asks: 'Does every URL carry the metadata and structured data it should?',
+  },
+  {
+    cmd: 'parity:check',
+    asks: 'Do the two languages carry the same content, not merely correct content each?',
+  },
+  {
+    cmd: 'redirects:check',
+    asks: 'Does every redirect resolve, and does none shadow a live page?',
   },
 ];
 
-const guidePages = [
-  {
-    title: 'Tech Stack',
-    href: '/internal/guide/tech-stack',
-    description:
-      'Core technologies, versions, architecture patterns, and key libraries.',
-  },
-  {
-    title: 'File Structure',
-    href: '/internal/guide/file-structure',
-    description:
-      'Repository layout, key directories, important files, and naming conventions.',
-  },
-  {
-    title: 'Performance & PageSpeed',
-    href: '/internal/guide/performance',
-    description:
-      'PageSpeed optimizations, WebP image pipeline, and deployment flow.',
-  },
-  {
-    title: 'Content Collections',
-    href: '/internal/guide/content-collections',
-    description:
-      'Schemas and structure for blog, slides, tags, series, and pages.',
-  },
-  {
-    title: 'Blog System',
-    href: '/internal/guide/blog',
-    description:
-      'Blog authoring workflow, frontmatter, hero layouts, tags, and writing rules.',
-  },
-  {
-    title: 'Internationalization',
-    href: '/internal/guide/i18n',
-    description:
-      'Multilingual content system — routing, translations, Spanish rules.',
-  },
-  {
-    title: 'SEO & AEO',
-    href: '/internal/guide/seo',
-    description:
-      'Meta tags, JSON-LD, Markdown twins for AI agents, sitemap, and keywords.',
-  },
-  {
-    title: 'AI Skills & Agents',
-    href: '/internal/guide/ai-skills',
-    description:
-      'AI-powered development tools — skills catalog, agents, mandatory policies.',
-  },
-];
+const guidePages = pagesIn('guide').filter((page) => !page.topLevel);
 ---
 
 <InternalLayout
-  title="Staff Guide"
-  description="Development documentation and key procedures"
+  title="Contributor Guide"
+  description="How this repository is put together, and which command answers which question."
   section="guide"
 >
-  <!-- About This Repository -->
   <section class="mb-12">
-    <div
-      class="rounded-3xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-900"
-    >
-      <h2 class="text-xl md:text-2xl font-bold mb-3">About This Repository</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-4">
-        <strong>Corag</strong> — the institutional site for <em>el ecosistema
-        de impacto social</em>. The Ayuda Directa application lives at
-        <code>ayuda.cabuya.org</code>.
+    <div class="rounded-2xl border border-cabuya-border bg-cabuya-bg-brand/50 dark:bg-cabuya-bg-elevated p-6 sm:p-8">
+      <h2 class="text-xl md:text-2xl font-display font-bold mb-3">What this repository is</h2>
+      <p class="text-cabuya-text-secondary mb-4 max-w-3xl">
+        <strong class="text-cabuya-text">cabuya.org</strong> — the site that explains
+        the Cabuya Protocol, plus the protocol's own artefacts: the CC0
+        specification in <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">spec/</code>,
+        the publisher registry in <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">registry/</code>,
+        and the conformance validator in
+        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">packages/validator/</code>.
+        It is not an aid application, and it holds no information about any real
+        person's situation.
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div
-          class="rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 text-center"
-        >
-          <div class="text-sm font-bold">Astro 6</div>
-          <div class="text-xs text-gray-600 dark:text-gray-300">
-            Static Site Gen
-          </div>
-        </div>
-        <div
-          class="rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 text-center"
-        >
-          <div class="text-sm font-bold">Svelte 5</div>
-          <div class="text-xs text-gray-600 dark:text-gray-300">
-            Interactive UI
-          </div>
-        </div>
-        <div
-          class="rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 text-center"
-        >
-          <div class="text-sm font-bold">Tailwind 4</div>
-          <div class="text-xs text-gray-600 dark:text-gray-300">Styling</div>
-        </div>
-        <div
-          class="rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 text-center"
-        >
-          <div class="text-sm font-bold">TypeScript</div>
-          <div class="text-xs text-gray-600 dark:text-gray-300">
-            Type Safety
-          </div>
-        </div>
-      </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >Cloudflare Pages</span
-        >
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >Multilingual (en/es)</span
-        >
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >Dark Mode</span
-        >
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >RSS Feed</span
-        >
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >Reveal.js Slides</span
-        >
-        <span
-          class="text-xs px-3 py-1 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium"
-          >AI Skills & Agents</span
-        >
+        {
+          [
+            ['Astro 7', 'Static site, islands'],
+            ['Svelte 5', 'The few interactive parts'],
+            ['Tailwind 4', 'Tokens via @theme'],
+            ['TypeScript 6', 'Pinned — 7 breaks astro check'],
+          ].map(([name, note]) => (
+            <div class="rounded-lg bg-cabuya-bg-elevated border border-cabuya-border p-3 text-center">
+              <div class="text-sm font-bold">{name}</div>
+              <div class="text-xs text-cabuya-text-secondary">{note}</div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <!-- Key Principles -->
   <section class="mb-12">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Key Principles</h2>
+    <h2 class="text-xl md:text-2xl font-display font-bold mb-4">Principles</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {
         principles.map((p) => (
-          <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <div class="rounded-xl border border-cabuya-border p-4">
             <h3 class="font-semibold mb-1">{p.title}</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">
-              {p.description}
-            </p>
+            <p class="text-sm text-cabuya-text-secondary">{p.body}</p>
           </div>
         ))
       }
     </div>
   </section>
 
-  <!-- Quick Commands -->
   <section class="mb-12">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Quick Commands</h2>
-    <div
-      class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
-    >
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr
-              class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
-            >
-              <th class="text-left py-3 px-4 font-semibold">Command</th>
-              <th class="text-left py-3 px-4 font-semibold">Description</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-            {
-              commands.map((c) => (
-                <tr>
-                  <td class="py-3 px-4">
-                    <code class="text-xs font-medium">{c.cmd}</code>
-                  </td>
-                  <td class="py-3 px-4 text-gray-600 dark:text-gray-300">
-                    {c.desc}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
+    <h2 class="text-xl md:text-2xl font-display font-bold mb-1">The gates, as questions</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
+      Each gate exists because something specific went wrong once. Reading them
+      as questions is usually faster than reading their output: find the
+      question that matches your doubt, then run that one.
+    </p>
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
+            <th scope="col" class="text-left py-2.5 px-4 font-semibold">Gate</th>
+            <th scope="col" class="text-left py-2.5 px-4 font-semibold">Answers</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+          {
+            gates.map((gate) => (
+              <tr>
+                <td class="py-2.5 px-4 whitespace-nowrap">
+                  <code class="text-xs font-medium">pnpm run {gate.cmd}</code>
+                </td>
+                <td class="py-2.5 px-4 text-cabuya-text-secondary">{gate.asks}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-xs text-cabuya-text-muted">
+      Each has a <code>:strict</code> twin that exits non-zero. CI runs the strict
+      form; run the plain one locally to read the findings without failing your shell.
+    </p>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-xl md:text-2xl font-display font-bold mb-4">Everyday commands</h2>
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
+            <th scope="col" class="text-left py-2.5 px-4 font-semibold">Command</th>
+            <th scope="col" class="text-left py-2.5 px-4 font-semibold">What it does</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+          {
+            commands.map((c) => (
+              <tr>
+                <td class="py-2.5 px-4 whitespace-nowrap"><code class="text-xs font-medium">{c.cmd}</code></td>
+                <td class="py-2.5 px-4 text-cabuya-text-secondary">{c.desc}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- Guide Pages -->
-  <section class="mb-12">
-    <h2 class="text-xl md:text-2xl font-bold mb-4">Guide Pages</h2>
+  <section>
+    <h2 class="text-xl md:text-2xl font-display font-bold mb-4">Guide pages</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {
         guidePages.map((page) => (
           <a
             href={page.href}
-            class="group block rounded-2xl border border-gray-200 dark:border-gray-700 p-5 transition-all hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md"
+            class="group block rounded-2xl border border-cabuya-border p-5 transition-all hover:border-cabuya-primary hover:shadow-sm"
           >
             <h3 class="text-lg font-semibold mb-1 group-hover:text-cabuya-primary transition-colors">
               {page.title}
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">
-              {page.description}
-            </p>
+            <p class="text-sm text-cabuya-text-secondary">{page.purpose}</p>
           </a>
         ))
       }

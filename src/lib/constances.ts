@@ -66,29 +66,45 @@ export const HELP_CATEGORIES = [
   'otro',
 ] as const;
 
-export const SITE_TITLE: string = 'Corag — El ecosistema de impacto social';
+/**
+ * Site identity.
+ *
+ * The description is the ratified elevator pitch from `docs/MESSAGING.md`,
+ * trimmed to a meta-description length. The full verbatim pitch belongs on the
+ * landing page; this is the version a search result has room for.
+ *
+ * These are language-neutral defaults. Per-page and per-language titles come
+ * from `getTranslations(lang)`; a page that falls back to this constant is a
+ * page that has not been given its own title yet.
+ */
+export const SITE_TITLE: string =
+  'Cabuya — the open aid interoperability protocol';
 export const SITE_DESCRIPTION: string =
-  'Conectamos a quienes quieren ayudar con quienes más lo necesitan. Corag une gobiernos, organizaciones y personas para que la ayuda sea transparente, medible y constante.';
+  'An open format that lets aid apps publish and read the same data: collection points, needs, capacities and deliveries. Conformance is measured, never declared.';
 
-/** Legal entity behind the project. */
-export const ORGANIZATION_NAME = 'Corag';
+/** The project behind the protocol. Not a legal entity — there is no company. */
+export const ORGANIZATION_NAME = 'Cabuya';
 
 /**
  * Public contact address.
  *
  * Deliberately empty until a real mailbox is confirmed — an invented address
- * silently drops messages from people asking for help. While empty, every
- * consumer must fall back to the contact form at `/contacto`.
+ * silently drops messages. While empty, every consumer must fall back to the
+ * contact form.
  */
 export const CONTACT_EMAIL = '';
 
 /**
- * Official Corag accounts, in one place. The footer, the contact section and the
- * Organization JSON-LD `sameAs` all render from this list, so an account is
- * added or removed once.
+ * Accounts that represent the project.
  *
- * Only confirmed accounts belong here — a fabricated `sameAs` is a
- * structured-data error, not a placeholder.
+ * Only confirmed accounts belong here. The previous entries were the *other*
+ * project's Facebook, Instagram and WhatsApp group — publishing those on
+ * cabuya.org would have pointed readers at an organisation this one does not
+ * speak for, and put them in a structured-data `sameAs` claiming they are the
+ * same entity. Rule-0 covers accounts as much as it covers figures.
+ *
+ * Cabuya runs no social accounts today. The GitHub organisation is the only
+ * confirmed presence; add others here as they are actually created.
  */
 export interface SocialLink {
   /** Human label, also used as the accessible name. */
@@ -102,27 +118,12 @@ export interface SocialLink {
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    label: 'Facebook',
-    href: 'https://www.facebook.com/appcorag',
-    icon: 'facebook',
+    label: 'GitHub',
+    href: 'https://github.com/Cabuya',
+    icon: 'github',
     sameAs: true,
-  },
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/app.corag/',
-    icon: 'instagram',
-    sameAs: true,
-  },
-  {
-    // A group invite, not a profile — useful to link, but not an identity for
-    // `sameAs`, which is meant for pages that represent the organization.
-    label: 'WhatsApp',
-    href: 'https://chat.whatsapp.com/LtP2Cb1oS99BWNf1CFEtV5?s=cl&p=i&ilr=2',
-    icon: 'whatsapp',
-    sameAs: false,
   },
 ];
-export const BLOG_PAGE_SIZE: number = 30;
 
 /** Default Open Graph / Twitter share image (1200×630), by language. */
 export const DEFAULT_OG_IMAGE_ES = '/images/og-default.jpg';

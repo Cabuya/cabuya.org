@@ -2,283 +2,314 @@
 import InternalLayout from '@/layouts/InternalLayout.astro';
 
 /**
- * Brand book — Voice & Tone.
+ * Brand book — voice, banned vocabulary, and what the badge may say.
  *
- * The five principles come verbatim from the official Manual de Identidad
- * Visual (p. 8). The good/bad pairs are ours, written to make each principle
- * checkable rather than aspirational.
+ * The examples are the content. A rule like "be precise" is unactionable; a
+ * pair showing the same sentence written badly and then written honestly is
+ * something a contributor can copy.
+ *
+ * Source: docs/BRAND_GUIDE.md §5–6, itself derived from the founding
+ * verbal-identity analysis.
  */
 
-interface Principle {
-  name: string;
-  definition: string;
-  meaning: string;
-}
-
-const principles: Principle[] = [
-  {
-    name: 'Cálido y humano',
-    definition: 'como un amigo que inspira a ayudar',
-    meaning:
-      'Write to one person, not to an audience. Second person, active voice, no institutional distance.',
-  },
-  {
-    name: 'Inspirador y movilizador',
-    definition: 'invita a la acción y al cambio',
-    meaning:
-      'Every section earns its place by making the next step obvious. A paragraph that inspires nothing to do is decoration.',
-  },
-  {
-    name: 'Claro y sencillo',
-    definition: 'sin tecnicismos, directo al corazón',
-    meaning:
-      'Short sentences. Concrete nouns. If a term needs explaining, explain it inline or drop it.',
-  },
-  {
-    name: 'Juvenil y fresco',
-    definition: 'cercano a la gente, con energía positiva',
-    meaning:
-      'Contemporary, unstuffy Spanish. Never slang for its own sake, never corporate register.',
-  },
-  {
-    name: 'Esperanzador',
-    definition: 'siempre transmitiendo que sí se puede transformar vidas',
-    meaning:
-      'The frame is what people can do together, not how bad things are. Never leverage despair.',
-  },
-];
-
 interface Pair {
+  topic: string;
   bad: string;
   good: string;
   why: string;
 }
 
-const pairsEn: Pair[] = [
+const pairs: Pair[] = [
   {
-    bad: 'We revolutionize humanitarian aid with cutting-edge technology.',
-    good: 'We connect people who want to help with those who need it most.',
-    why: 'Says what we do instead of how important we think it is.',
+    topic: 'Describing conformance',
+    bad: 'Certified Cabuya-compatible platform.',
+    good: 'Measured at L2 on 14 March 2026. The report is on the registry page.',
+    why: 'Nobody certifies anything here. A measurement has a date, a method and a link; a certificate has an authority we do not have and would not want.',
   },
   {
-    bad: 'Our platform guarantees your donation arrives.',
-    good: 'You can see what your contribution was used for, and the evidence behind it.',
-    why: 'Claims only what the product actually delivers.',
+    topic: 'Describing adoption',
+    bad: 'The leading interoperability standard for aid in Latin America.',
+    good: 'Four applications publish feeds today. Their entries are in the registry.',
+    why: 'A count you can check beats a superlative you cannot. And the count grows on its own.',
   },
   {
-    bad: 'Empowering vulnerable communities.',
-    good: 'Communities organize their own aid. We make it visible.',
-    why: 'No savior framing. People receiving aid are neighbours, not beneficiaries of our virtue.',
+    topic: 'Describing what is missing',
+    bad: 'Advanced write capabilities coming soon!',
+    good: 'L4 (write) is specified but not implemented. The checks exist and are marked unimplemented.',
+    why: 'State the limit. A reader who finds the gap themselves stops trusting everything else on the page.',
+  },
+  {
+    topic: 'Asking someone to adopt',
+    bad: 'Join the revolution in humanitarian coordination.',
+    good: 'Publishing a feed takes one JSON file at a known URL. Here is the smallest one that validates.',
+    why: 'The reader is an engineer deciding how much of their week this costs. Answer that question.',
+  },
+  {
+    topic: 'Talking about the other apps',
+    bad: 'Fragmented, siloed tools that fail communities.',
+    good: 'Each team built what their city needed, quickly. The cost is that the data cannot travel.',
+    why: 'Everyone in this network shipped something under pressure. Contempt for their work is both wrong and a bad way to ask for their cooperation.',
+  },
+  {
+    topic: 'An error message',
+    bad: 'Invalid feed. Fix your data.',
+    good: '/data/places/0 is missing last_confirmed_at. If nobody has confirmed it, publish null — that is a valid answer.',
+    why: 'Locate it, name the rule, give the imperative fix. Never blame. The message is read by an agent as often as by a person.',
   },
 ];
 
-const pairsEs: Pair[] = [
+const banned = [
   {
-    bad: 'Únete a la revolución solidaria.',
-    good: 'Ayuda donde más se necesita.',
-    why: 'Una acción concreta en lugar de un eslogan.',
+    word: 'revolucionario · revolutionary',
+    note: 'Nothing here is a revolution. It is a JSON schema.',
   },
   {
-    bad: 'Millones de vidas impactadas.',
-    good: 'Cada aporte queda registrado, con su destino y su evidencia.',
-    why: 'Una cifra que podemos sostener en vez de una que suena bien.',
+    word: 'disruptivo · disruptive',
+    note: 'Disruption is what an emergency does. We are the opposite.',
+  },
+  { word: 'líder · leading', note: 'Unverifiable and unnecessary.' },
+  { word: 'el mejor · the best', note: 'Compared with what, measured how?' },
+  {
+    word: 'único · unique in the world',
+    note: 'Usually false, always unfalsifiable.',
   },
   {
-    bad: 'Nuestra plataforma garantiza transparencia total.',
-    good: 'Publicamos cuánto se recibió y cuánto se usó con evidencia verificada.',
-    why: '“Transparencia total” no significa nada. Los dos números sí.',
+    word: 'certificado · certified',
+    note: 'Doubly banned. Conformance is measured; the validator never says this either.',
+  },
+  {
+    word: 'garantizado · guaranteed',
+    note: 'We guarantee nothing about a third party’s data.',
+  },
+  { word: '"Powered by"', note: 'Implies a dependency that does not exist.' },
+  {
+    word: 'impacto exponencial',
+    note: 'A number-shaped phrase with no number in it.',
+  },
+  { word: 'game-changer · cutting-edge', note: 'Marketing filler.' },
+  { word: 'world-class (about ourselves)', note: 'Let someone else say it.' },
+  {
+    word: 'seamless',
+    note: 'Integration work is never seamless, and engineers know it.',
+  },
+  {
+    word: 'innovador as filler',
+    note: 'Fine as a fact, meaningless as an adjective.',
   },
 ];
 
-const blocklist = [
-  'revolucionario',
-  'disruptivo',
-  'la mejor plataforma',
-  'líder indiscutible',
-  'cambiamos el mundo',
-  'salvamos vidas',
-  'empoderar',
-  'sinergia',
-  'solución integral',
-  'game changer',
-  'simplemente',
-  'obviamente',
-  'sumérgete',
-  'desbloquea',
-];
-
-const slop = [
-  'En un mundo donde…',
-  'No es solo X, es Y',
-  'Ya sea que… o…',
-  'la clave está en',
-  'en resumen',
+const badges = [
+  {
+    text: 'Compatible con Cabuya 1.0',
+    ok: true,
+    why: 'Version-scoped, backed by a measurement, links to where the measurement is visible.',
+  },
+  {
+    text: 'Cabuya 1.0 compatible',
+    ok: true,
+    why: 'The English rendition. Same three properties.',
+  },
+  {
+    text: 'Compatible con Cabuya',
+    ok: false,
+    why: 'Unversioned. The claim rots silently when the spec moves.',
+  },
+  {
+    text: 'Powered by Cabuya',
+    ok: false,
+    why: 'There is nothing to be powered by. Cabuya is a document, not a service.',
+  },
+  {
+    text: 'Certificado Cabuya',
+    ok: false,
+    why: 'Banned word, and it implies an authority granting certification. Measurement is what actually happens.',
+  },
 ];
 ---
 
 <InternalLayout
-  title="Voice & Tone — Brand Book"
-  description="How Corag writes: the five official principles, with checkable examples."
+  title="Voice & badge language"
+  description="A serious technical standard that anyone can read — with the examples that make that actionable."
   section="brand"
-  subsection="voice-and-tone"
+  subsection="brand-voice"
 >
-  <div class="space-y-10">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-        <a href="/internal/brand" class="hover:underline">Brand</a> / Voice &amp; Tone
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Voice &amp; Tone</h1>
-      <p class="max-w-3xl text-base text-gray-600 dark:text-gray-300">
-        Corag writes the way a friend who has been through it writes: warm, plain,
-        hopeful, and specific. The five principles below are quoted from the
-        official <strong>Manual de Identidad Visual</strong> (p. 8). They are not
-        suggestions — copy that fails them is off-brand.
-      </p>
-    </header>
+  <!-- ── The register ───────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">The register</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Calm, concrete, humble, precise. The model is the way a good methodology
+      site explains itself to engineers — never the way a startup announces a
+      launch. Assume the reader is competent, busy, and skeptical, because they
+      are.
+    </p>
 
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">The five principles</h2>
-      <div class="grid gap-4 sm:grid-cols-2">
-        {principles.map((p) => (
-          <div class="rounded-xl border border-gray-200 p-5 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{p.name}</h3>
-            <p class="mt-1 text-sm italic text-cabuya-primary">{p.definition}</p>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{p.meaning}</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {
+        [
+          {
+            title: 'Both languages are first drafts',
+            body: 'Spanish is written natively, with ñ, tildes and interrogative accents. English is not a translation of it, nor the reverse.',
+          },
+          {
+            title: 'Normative words stay in spec/',
+            body: 'MUST, SHOULD and MAY carry legal weight in a standard. Outside spec/ they are just emphasis, so they are not used.',
+          },
+          {
+            title: 'State the limit',
+            body: '"The specification is a draft under review" is better copy than a sentence engineered to avoid saying so.',
+          },
+          {
+            title: 'Rule-0 outranks everything',
+            body: 'No invented figures, no endorsement we cannot maintain, no CTA to a channel we do not run, no conformance claim the validator has not measured.',
+          },
+        ].map((rule) => (
+          <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-4">
+            <h3 class="text-sm font-semibold mb-1.5">{rule.title}</h3>
+            <p class="text-xs text-cabuya-text-secondary leading-relaxed">{rule.body}</p>
           </div>
-        ))}
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Paired examples ────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">The same thing, said twice</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Left is what the sentence wants to become on its own. Right is what it
+      should say.
+    </p>
+
+    <div class="space-y-4">
+      {
+        pairs.map((pair) => (
+          <div class="rounded-xl border border-cabuya-border overflow-hidden">
+            <div class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-xs font-semibold uppercase tracking-wide">
+              {pair.topic}
+            </div>
+            <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-cabuya-border bg-cabuya-bg-elevated">
+              <div class="p-4">
+                <p class="text-xs font-semibold text-cabuya-danger mb-1.5">✗ Not this</p>
+                <p class="text-sm text-cabuya-text-secondary italic">{pair.bad}</p>
+              </div>
+              <div class="p-4">
+                <p class="text-xs font-semibold text-cabuya-success mb-1.5">✓ This</p>
+                <p class="text-sm">{pair.good}</p>
+              </div>
+            </div>
+            <p class="border-t border-cabuya-border px-4 py-3 text-xs text-cabuya-text-secondary">
+              {pair.why}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Banned vocabulary ──────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Banned vocabulary</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      These are not stylistic preferences. They are the specific words with
+      which aid-tech marketing has spent other people's credibility, and they do
+      not appear in Cabuya copy in any language.
+    </p>
+    <div class="rounded-xl border border-cabuya-border overflow-hidden">
+      <ul class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+        {
+          banned.map((entry) => (
+            <li class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 px-4 py-2.5">
+              <span class="text-sm font-semibold text-cabuya-danger sm:w-72 shrink-0 line-through decoration-cabuya-danger/50">
+                {entry.word}
+              </span>
+              <span class="text-xs text-cabuya-text-secondary">{entry.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Badge language ─────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Badge language</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      The badge is the one piece of Cabuya copy that appears on somebody else's
+      site, where we cannot correct it. It must be version-scoped, backed by a
+      measurement, and linked to the page where that measurement is visible.
+    </p>
+
+    <div class="mb-6 rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6">
+      <p class="text-xs uppercase tracking-widest text-cabuya-text-muted mb-3">Specimen</p>
+      <div class="flex flex-wrap gap-3">
+        <span class="inline-flex items-center gap-2 rounded-full bg-cabuya-fill text-cabuya-on-fill px-3.5 py-1.5 text-sm font-medium">
+          <span class="inline-block w-2 h-2 rounded-full bg-cabuya-accent" aria-hidden="true"></span>
+          Compatible con Cabuya 1.0
+        </span>
+        <span class="inline-flex items-center gap-2 rounded-full bg-cabuya-on-fill text-cabuya-fill border border-cabuya-fill px-3.5 py-1.5 text-sm font-medium">
+          <span class="inline-block w-2 h-2 rounded-full bg-cabuya-accent-strong" aria-hidden="true"></span>
+          Cabuya 1.0 compatible
+        </span>
       </div>
-    </section>
+      <p class="mt-4 text-xs text-cabuya-text-secondary">
+        Forest-on-ivory or ivory-on-forest. The fique strand is the graphic
+        element — a dot, a rule, a strand — and never the type colour on a light
+        ground.
+      </p>
+    </div>
 
-    <section class="space-y-3 rounded-2xl border border-cabuya-border bg-cabuya-bg-brand p-6">
-      <h2 class="text-xl font-bold text-cabuya">Two registers, one brand</h2>
-      <p class="text-sm text-cabuya-secondary">
-        <strong class="text-cabuya">cabuya.org</strong> — this site — is warm, human and
-        hopeful. It is where someone decides whether to trust Corag.
-      </p>
-      <p class="text-sm text-cabuya-secondary">
-        <strong class="text-cabuya">ayuda.cabuya.org</strong> during a live emergency is
-        operationally direct. When someone needs help right now, clarity beats warmth:
-        <em>“Necesito ayuda”</em>, <em>“Quiero ayudar”</em>, <em>“Seguir mi aporte”</em> —
-        three words, no adjectives.
-      </p>
-      <p class="text-sm text-cabuya-secondary">
-        Both are Corag. Do not import the app's clipped register into marketing copy,
-        and do not import marketing warmth into an emergency flow.
-      </p>
-    </section>
+    <div class="space-y-2">
+      {
+        badges.map((badge) => (
+          <div
+            class:list={[
+              'flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 rounded-lg border px-4 py-3',
+              badge.ok ? 'border-cabuya-success' : 'border-cabuya-danger',
+            ]}
+          >
+            <span
+              class:list={[
+                'text-sm font-semibold shrink-0 sm:w-64',
+                badge.ok ? 'text-cabuya-success' : 'text-cabuya-danger',
+              ]}
+            >
+              {badge.ok ? '✓' : '✗'} {badge.text}
+            </span>
+            <span class="text-xs text-cabuya-text-secondary">{badge.why}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Spanish is the source language</h2>
-      <ul class="list-inside list-disc space-y-1 text-sm text-gray-600 dark:text-gray-300">
-        <li>Write Spanish first. English is a real translation of it, never the reverse.</li>
+  <!-- ── Naming ─────────────────────────────────────────── -->
+  <section>
+    <h2 class="text-xl font-display font-bold mb-4">Naming</h2>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <ul class="text-sm text-cabuya-text-secondary space-y-2 list-disc list-inside">
         <li>
-          <strong>Diacritics are mandatory</strong> — ñ, á/é/í/ó/ú, ¿…?, ¡…!, and
-          interrogative accents (<code>cómo</code>, <code>qué</code>, <code>cuál</code>,
-          <code>dónde</code>, <code>cuándo</code>).
+          <strong class="text-cabuya-text">Cabuya</strong> — capitalised in running
+          text, never "CABUYA". The lowercase form belongs to the wordmark only.
         </li>
-        <li>Sentence case for headings and UI labels; title case only for proper nouns.</li>
-        <li>Colombian Spanish, but avoid regionalisms a reader outside Colombia would miss.</li>
+        <li>
+          <strong class="text-cabuya-text">the Cabuya Protocol</strong> when the
+          document is meant; <strong class="text-cabuya-text">Cabuya</strong> alone
+          when the project or the community is meant. Not interchangeable with a
+          publisher's product name.
+        </li>
+        <li>
+          Versions are written <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">Cabuya 1.0</code>,
+          never "v1" or "Cabuya One".
+        </li>
+        <li>
+          <em>cabuya</em> lowercase and italic when the plant fibre itself is
+          meant — the word predates us by centuries and the copy should show that.
+        </li>
+        <li>
+          Publishers are <strong class="text-cabuya-text">publishers</strong>, not
+          "partners" — partnership implies an agreement nobody signed.
+        </li>
       </ul>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Examples — English</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Don't</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Do</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Why</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-            {pairsEn.map((p) => (
-              <tr>
-                <td class="px-4 py-3 text-gray-500 line-through dark:text-gray-400">{p.bad}</td>
-                <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{p.good}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{p.why}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Ejemplos — Español</h2>
-      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr class="text-left">
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Evita</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Escribe</th>
-              <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Por qué</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-            {pairsEs.map((p) => (
-              <tr>
-                <td class="px-4 py-3 text-gray-500 line-through dark:text-gray-400">{p.bad}</td>
-                <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{p.good}</td>
-                <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{p.why}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="space-y-3 rounded-2xl border border-cabuya-danger/30 bg-cabuya-danger-soft p-6">
-      <h2 class="text-xl font-bold text-cabuya-danger">What warmth does not license</h2>
-      <p class="text-sm text-gray-700 dark:text-gray-200">
-        Corag handles real aid, real money and real people in bad situations.
-        <strong>Confianza</strong> and <strong>Transparencia</strong> are official values.
-      </p>
-      <ul class="list-inside list-disc space-y-1 text-sm text-gray-700 dark:text-gray-200">
-        <li>Never promise what the platform does not guarantee. “Verificado” and “con evidencia” mean specific things — do not blur them.</li>
-        <li>Never sensationalize suffering. No disaster imagery, no misery as leverage, no urgency theatre.</li>
-        <li>Never publish a live figure this static site cannot verify — link to the app instead.</li>
-        <li>Never write savior framing.</li>
-      </ul>
-    </section>
-
-    <section class="grid gap-6 sm:grid-cols-2">
-      <div class="space-y-2">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Word blocklist</h2>
-        <div class="flex flex-wrap gap-2">
-          {blocklist.map((w) => (
-            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 line-through dark:bg-gray-800 dark:text-gray-300">
-              {w}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div class="space-y-2">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">AI-slop scaffolding</h2>
-        <div class="flex flex-wrap gap-2">
-          {slop.map((w) => (
-            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 line-through dark:bg-gray-800 dark:text-gray-300">
-              {w}
-            </span>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Naming</h2>
-      <ul class="list-inside list-disc space-y-1 text-sm text-gray-600 dark:text-gray-300">
-        <li><strong>Corag</strong> — always capitalized, never “CORAG” in running text. The wordmark itself is lowercase.</li>
-        <li><strong>Ayuda Directa</strong> — the flagship product, title case. It lives at <code>ayuda.cabuya.org</code>.</li>
-        <li>Corag is <em>el ecosistema de impacto social</em>; Ayuda Directa is one product inside it. Do not use them interchangeably.</li>
-        <li>Refer to people who contribute as <strong>colaboradores</strong>, to those coordinating as <strong>líderes</strong>, and to organizations as <strong>aliados</strong>.</li>
-      </ul>
-    </section>
-
-    <footer class="border-t border-gray-200 pt-6 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
-      Full guidance in <code>docs/BRAND_GUIDE.md</code> §5 and
-      <code>docs/WRITING_VOICE_GUIDE.md</code>.
-    </footer>
-  </div>
+    </div>
+  </section>
 </InternalLayout>

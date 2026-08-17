@@ -1,7 +1,7 @@
 {
   "name": "cabuya.org",
   "description": "cabuya.org — the home of the Cabuya Protocol: an open interoperability standard that lets emergency-aid applications publish and consume the same data. Site, CC0 spec, publisher registry and the @cabuya/validator.",
-  "author": "Corag",
+  "author": "Cabuya",
   "license": "Apache-2.0",
   "homepage": "https://cabuya.org",
   "repository": {
@@ -33,6 +33,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "images:optimize": "node scripts/optimize-images.mjs",
+    "og:interim": "node scripts/generate-og-interim.mjs",
     "images:webp": "echo 'All images are natively WebP — no generation needed'",
     "md:check": "node scripts/check-md-parity.mjs",
     "md:check:strict": "node scripts/check-md-parity.mjs --strict",
@@ -63,6 +64,8 @@
     "validator:build": "pnpm --filter @cabuya/validator build",
     "validator:test": "pnpm --filter @cabuya/validator test",
     "validator:pack": "pnpm --filter @cabuya/validator exec npm pack --dry-run",
+    "internal:check": "node scripts/check-internal-excluded.mjs",
+    "internal:check:strict": "node scripts/check-internal-excluded.mjs --strict",
     "checks:catalogue": "node scripts/check-checks-catalogue.mjs",
     "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict"
   },

@@ -23,6 +23,8 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { contrastRatio, parseThemeTokens } from '@/lib/contrast';
+
 const ROOT = process.cwd();
 const CSS = readFileSync(join(ROOT, 'src/styles/global.css'), 'utf-8');
 
@@ -234,38 +236,126 @@ describe('design tokens — fique is never light-ground text', () => {
 });
 
 describe('design tokens — the internal colour pages cannot go stale', () => {
-  const PAGES = [
-    'src/pages/internal/ui/colors.astro',
-    'src/pages/internal/brand/colors.astro',
-  ];
+  /**
+   * The two pages defend against staleness in different ways, so they are
+   * checked differently.
+   *
+   * `ui/colors.astro` names every token and reads its value with
+   * `getComputedStyle` in the browser. `brand/colors.astro` derives everything
+   * from `global.css` at build time.
+   *
+   * The brand page used to be a hand-written table, and it lied for months:
+   * it printed the pre-migration wine and rosa hexes while the site rendered
+   * forest and fique. The old version of this test passed throughout, because
+   * it only compared token *names*. Hence the no-hex-literals rule below,
+   * which is what would actually have caught it.
+   */
 
-  for (const page of PAGES) {
-    const source = readFileSync(join(ROOT, page), 'utf-8');
+  const SHOWCASE = 'src/pages/internal/ui/colors.astro';
+  const BRAND = 'src/pages/internal/brand/colors.astro';
+
+  describe(SHOWCASE, () => {
+    const source = readFileSync(join(ROOT, SHOWCASE), 'utf-8');
     const referenced = new Set(
       [...source.matchAll(/--color-(cabuya[a-z0-9-]*)/g)].map((m) => m[1])
     );
 
-    it(`${page} documents every declared token`, () => {
+    it('documents every declared token', () => {
       const missing = [...DECLARED].filter((t) => !referenced.has(t)).sort();
       expect(missing).toEqual([]);
     });
 
-    it(`${page} references no token that does not exist`, () => {
+    it('references no token that does not exist', () => {
       const bogus = [...referenced].filter((t) => !DECLARED.has(t)).sort();
       expect(bogus).toEqual([]);
     });
-  }
 
-  it('the showcase reads computed values instead of hardcoding hexes', () => {
-    const source = readFileSync(
-      join(ROOT, 'src/pages/internal/ui/colors.astro'),
-      'utf-8'
+    it('reads computed values instead of hardcoding hexes', () => {
+      expect(source).toContain('getComputedStyle');
+      expect(source).toContain('data-swatch-value');
+      expect(source.match(/#[0-9a-fA-F]{6}\b/g) ?? []).toEqual([]);
+    });
+  });
+
+  describe(BRAND, () => {
+    const source = readFileSync(join(ROOT, BRAND), 'utf-8');
+    // The page's group table: `token: 'cabuya-…'`.
+    const grouped = new Set(
+      [...source.matchAll(/token:\s*'(cabuya[a-z0-9-]*)'/g)].map((m) => m[1])
     );
-    expect(source).toContain('getComputedStyle');
-    expect(source).toContain('data-swatch-value');
-    // The failure mode this replaced: hex literals typed into the page.
-    const hexes = source.match(/#[0-9a-fA-F]{6}\b/g) ?? [];
-    expect(hexes).toEqual([]);
+
+    it('derives its values from global.css rather than restating them', () => {
+      expect(source).toContain("from '@/lib/contrast'");
+      expect(source).toContain('parseThemeTokens');
+      expect(source).toContain('src/styles/global.css');
+    });
+
+    it('contains no colour literal of its own', () => {
+      expect(source.match(/#[0-9a-fA-F]{6}\b/g) ?? []).toEqual([]);
+    });
+
+    it('groups every declared token, and invents none', () => {
+      expect([...DECLARED].filter((t) => !grouped.has(t)).sort()).toEqual([]);
+      expect([...grouped].filter((t) => !DECLARED.has(t)).sort()).toEqual([]);
+    });
+  });
+});
+
+describe("the shipped contrast helper agrees with this file's own maths", () => {
+  /**
+   * The guard above re-implements the WCAG formula on purpose: if it imported
+   * the same helper the pages use, a bug in that helper would make the test
+   * agree with the page about a wrong number. This cross-check keeps the two
+   * implementations honest about each other without merging them.
+   */
+  it('matches on the pairs the brand guide quotes', () => {
+    const pairs: Array<[string, string]> = [
+      ['#8a672c', '#faf9f6'],
+      ['#8a672c', '#f6f3ed'],
+      ['#c79a4a', '#faf9f6'],
+      ['#c79a4a', '#082a24'],
+      ['#f6f3ed', '#0b3d32'],
+      ['#0b3d32', '#faf9f6'],
+    ];
+    for (const [a, b] of pairs) {
+      expect(contrastRatio(a, b), `${a} on ${b}`).toBeCloseTo(
+        contrast(a, b),
+        10
+      );
+    }
+  });
+
+  it('refuses a malformed colour instead of returning a plausible number', () => {
+    expect(() => contrastRatio('#xyz', '#ffffff')).toThrow();
+    expect(() => contrastRatio('forest', '#ffffff')).toThrow();
+  });
+
+  it('reads the same token values out of the stylesheet that this file does', () => {
+    const parsed = parseThemeTokens(CSS);
+    expect(parsed.light['cabuya-primary']).toBe(
+      tokenValue(themeBlock, 'cabuya-primary')
+    );
+    expect(parsed.dark['cabuya-primary']).toBe(
+      tokenValue(darkBlock, 'cabuya-primary')
+    );
+    // Dark inherits every token the .dark block does not override.
+    expect(parsed.dark['cabuya-fill']).toBe(parsed.light['cabuya-fill']);
+  });
+
+  it('resolves a var() alias per theme, not once against light', () => {
+    /*
+     * `--color-cabuya: var(--color-cabuya-text)` is declared once, in the light
+     * block, and evaluates late. Freezing it to the light value made the brand
+     * page report the text alias as 1.02:1 against the dark surface — a
+     * confident wrong answer about a token that is perfectly readable.
+     */
+    const parsed = parseThemeTokens(CSS);
+    expect(parsed.light['cabuya']).toBe(parsed.light['cabuya-text']);
+    expect(parsed.dark['cabuya']).toBe(parsed.dark['cabuya-text']);
+    expect(parsed.dark['cabuya']).not.toBe(parsed.light['cabuya']);
+    expect(parsed.dark['cabuya-secondary']).toBe(
+      parsed.dark['cabuya-text-secondary']
+    );
   });
 });
 

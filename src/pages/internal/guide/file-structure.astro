@@ -100,7 +100,7 @@ const namingConventions = [
   <!-- Repository Overview -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Repository Overview</h2>
-    <pre class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 text-sm overflow-x-auto bg-gray-50 dark:bg-gray-800"><code>src/
+    <pre class="rounded-2xl border border-cabuya-border p-5 text-sm overflow-x-auto bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand"><code>src/
 ├── components/              # Reusable UI components
 │   ├── BaseHead.astro       # SEO meta tags, Open Graph
 │   ├── Footer.astro         # Site footer
@@ -155,11 +155,11 @@ public/                      # Static assets
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Key Directories</h2>
     <div class="space-y-3">
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700">
-        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+      <details class="rounded-xl border border-cabuya-border">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-cabuya-bg-brand/60">
           src/components/
         </summary>
-        <div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <div class="px-4 pb-4 text-sm text-cabuya-text-secondary space-y-2">
           <p><code class="text-xs">blog/</code> — BlogCard.svelte, BlogGrid.svelte, BlogPagination.svelte, StaticBlogSearch.svelte</p>
           <p><code class="text-xs">slides/</code> — RevealDeck.svelte, SlideCard.astro, SlidesCatalog.astro, TypeBadge.astro, ExternalView.astro</p>
           <p><code class="text-xs">home/</code> — HeroSection/, BlogPreviewSection, ContactSection, ProjectsSection, and other homepage sections</p>
@@ -169,11 +169,11 @@ public/                      # Static assets
         </div>
       </details>
 
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700">
-        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+      <details class="rounded-xl border border-cabuya-border">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-cabuya-bg-brand/60">
           src/content/
         </summary>
-        <div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <div class="px-4 pb-4 text-sm text-cabuya-text-secondary space-y-2">
           <p><code class="text-xs">blog/{'{en,es}'}/</code> — Blog posts by language, date-prefix naming (YYYY-MM-DD_slug.md)</p>
           <p><code class="text-xs">blog/{'{lang}'}/_demo/</code> — Demo posts (dev-only, never in production)</p>
           <p><code class="text-xs">slides/{'{en,es}'}/</code> — Slide decks by language, same naming convention</p>
@@ -185,11 +185,11 @@ public/                      # Static assets
         </div>
       </details>
 
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700">
-        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+      <details class="rounded-xl border border-cabuya-border">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-cabuya-bg-brand/60">
           src/pages/
         </summary>
-        <div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <div class="px-4 pb-4 text-sm text-cabuya-text-secondary space-y-2">
           <p>Root: EN page wrappers (index.astro, about.astro, contact.astro, etc.)</p>
           <p><code class="text-xs">es/</code> — Spanish page wrappers (same structure, <code class="text-xs">lang="es"</code>)</p>
           <p><code class="text-xs">blog/</code> — Blog listing, dynamic [...slug].astro, pagination, tag routes</p>
@@ -200,11 +200,11 @@ public/                      # Static assets
         </div>
       </details>
 
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700">
-        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+      <details class="rounded-xl border border-cabuya-border">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-cabuya-bg-brand/60">
           src/lib/
         </summary>
-        <div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <div class="px-4 pb-4 text-sm text-cabuya-text-secondary space-y-2">
           <p><code class="text-xs">blog.ts</code> — getBlogPosts(), getPostSlug(), pagination utilities</p>
           <p><code class="text-xs">slides.ts</code> — getSlideDecks(), getDeckSlug(), type guards (isNativeDeck, isExternalDeck)</p>
           <p><code class="text-xs">i18n.ts</code> — Language type, LANGUAGES registry, getUrlPrefix()</p>
@@ -214,11 +214,11 @@ public/                      # Static assets
         </div>
       </details>
 
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700">
-        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+      <details class="rounded-xl border border-cabuya-border">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold hover:bg-cabuya-bg-brand/60">
           public/
         </summary>
-        <div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <div class="px-4 pb-4 text-sm text-cabuya-text-secondary space-y-2">
           <p><code class="text-xs">images/blog/posts/{'{slug}'}/</code> — Per-post image folders (hero.webp, inline images)</p>
           <p><code class="text-xs">images/blog/_staging/</code> — Incoming blog images for optimization</p>
           <p><code class="text-xs">images/slides/{'{slug}'}/</code> — Per-deck image folders (hero.webp)</p>
@@ -234,20 +234,20 @@ public/                      # Static assets
   <!-- Important Files -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Important Files</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">File</th>
               <th class="text-left py-3 px-4 font-semibold">Purpose</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {importantFiles.map((f) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{f.file}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{f.purpose}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{f.purpose}</td>
               </tr>
             ))}
           </tbody>
@@ -259,22 +259,22 @@ public/                      # Static assets
   <!-- Naming Conventions -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Naming Conventions</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Context</th>
               <th class="text-left py-3 px-4 font-semibold">Pattern</th>
               <th class="text-left py-3 px-4 font-semibold">Example</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {namingConventions.map((n) => (
               <tr>
                 <td class="py-3 px-4 font-medium">{n.context}</td>
                 <td class="py-3 px-4"><code class="text-xs">{n.pattern}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300"><code class="text-xs">{n.example}</code></td>
+                <td class="py-3 px-4 text-cabuya-text-secondary"><code class="text-xs">{n.example}</code></td>
               </tr>
             ))}
           </tbody>

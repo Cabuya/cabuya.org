@@ -1,122 +1,282 @@
 ---
 import InternalLayout from '@/layouts/InternalLayout.astro';
+
+/**
+ * Brand book — logo usage.
+ *
+ * Every asset named here is rendered from the file it names, so a rule about a
+ * file that no longer exists shows up as a broken image rather than as prose
+ * nobody checks. The previous version of this page documented three SVGs that
+ * were never delivered.
+ */
+
+const LOCKUP_RATIO = 1086 / 362; // the delivered lockup, measured
+const lockupHeight = (width: number): number =>
+  Math.round(width / LOCKUP_RATIO);
 ---
 
 <InternalLayout
-  title="Brand Book — Logo usage"
-  description="Corag v3.0.0 logo variants, clear-space, downloads, and do/don't rules."
+  title="Logo usage"
+  description="The delivered assets, rendered at real sizes on real grounds, with the rules that constrain them."
   section="brand"
-  subsection="logo-usage"
+  subsection="brand-logo"
 >
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
-    <header class="space-y-3">
-      <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-        <a href="/internal/brand" class="hover:underline">Brand</a> / Logo usage
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">Logo usage</h1>
-      <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl">
-        Corag ships a single wordmark with light and dark variants
-        lockups (full and compact) and one isolated badge. The mark renders
-        cleanly on the petroleum-teal background of the dark theme and on the
-        ivory background of the light theme.
-      </p>
-    </header>
+  <!-- ── Variants ───────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Two assets, three files each way</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      There is no compact lockup and no separate monochrome mark. The isologo
+      carries its own forest outline, so it holds on any ground; the lockup
+      ships in a light and a dark variant because its wordmark does not.
+    </p>
 
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Variants</h2>
-      <div class="grid sm:grid-cols-3 gap-4 text-sm">
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-2">
-          <h3 class="font-semibold text-gray-900 dark:text-gray-100">Full lockup</h3>
-          <p class="text-gray-600 dark:text-gray-300">The "corag" wordmark, where the o is a heart. Use in headers, hero areas, footers, social cards.</p>
-          <code class="text-xs text-gray-500 dark:text-gray-400 block">/public/images/brand/logo-full.svg</code>
+    <div class="grid gap-4 lg:grid-cols-3">
+      <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+        <div class="bg-cabuya-bg-elevated p-8 flex items-center justify-center min-h-[160px]">
+          <img
+            src="/images/brand/cabuya-isologo.webp"
+            alt="The Cabuya isologo: a rope braided into a C"
+            width="96"
+            height="96"
+          />
         </div>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-2">
-          <h3 class="font-semibold text-gray-900 dark:text-gray-100">Compact lockup</h3>
-          <p class="text-gray-600 dark:text-gray-300">Mark + "Corag" abbreviation. Use in narrow chrome (mobile header, dense lists).</p>
-          <code class="text-xs text-gray-500 dark:text-gray-400 block">/public/images/brand/logo-compact.svg</code>
+        <figcaption class="border-t border-cabuya-border p-4">
+          <h3 class="text-sm font-semibold mb-1">Isologo</h3>
+          <p class="text-xs text-cabuya-text-secondary mb-2">
+            Favicons, app icons, avatars, bullets, watermarks. The whole
+            generated icon set derives from this one file.
+          </p>
+          <code class="text-[0.7rem] break-all">/images/brand/cabuya-isologo.webp</code>
+          <p class="mt-1 text-[0.7rem] text-cabuya-text-muted">512 × 512</p>
+        </figcaption>
+      </figure>
+
+      <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+        <div class="bg-cabuya-bg-elevated p-8 flex items-center justify-center min-h-[160px]">
+          <img
+            src="/images/brand/cabuya-lockup.webp"
+            alt="Cabuya lockup for light grounds"
+            width="240"
+            height={lockupHeight(240)}
+          />
         </div>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-2">
-          <h3 class="font-semibold text-gray-900 dark:text-gray-100">Mark</h3>
-          <p class="text-gray-600 dark:text-gray-300">Isolated symbol. Use in favicons, app icons, avatars, watermarks.</p>
-          <code class="text-xs text-gray-500 dark:text-gray-400 block">/public/images/brand/mark.svg</code>
+        <figcaption class="border-t border-cabuya-border p-4">
+          <h3 class="text-sm font-semibold mb-1">Lockup — light</h3>
+          <p class="text-xs text-cabuya-text-secondary mb-2">
+            Header, documents, and anything sitting on White or Ivory.
+          </p>
+          <code class="text-[0.7rem] break-all">/images/brand/cabuya-lockup.webp</code>
+          <p class="mt-1 text-[0.7rem] text-cabuya-text-muted">1086 × 362 · PNG fallback at 640</p>
+        </figcaption>
+      </figure>
+
+      <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+        <div class="bg-cabuya-bg-dark p-8 flex items-center justify-center min-h-[160px]">
+          <img
+            src="/images/brand/cabuya-lockup-dark.webp"
+            alt="Cabuya lockup for dark grounds"
+            width="240"
+            height={lockupHeight(240)}
+          />
         </div>
+        <figcaption class="border-t border-cabuya-border p-4">
+          <h3 class="text-sm font-semibold mb-1">Lockup — dark</h3>
+          <p class="text-xs text-cabuya-text-secondary mb-2">
+            Dark mode header and any Night canvas. Not interchangeable with the
+            light variant.
+          </p>
+          <code class="text-[0.7rem] break-all">/images/brand/cabuya-lockup-dark.webp</code>
+          <p class="mt-1 text-[0.7rem] text-cabuya-text-muted">1086 × 362 · PNG fallback at 640</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── Sizes ──────────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Sizes</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Rendered here at the exact heights they are used at, so the minimum can be
+      judged rather than asserted. Below the smallest of these the braid stops
+      reading as a braid and the mark just looks like a smudge.
+    </p>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-6">
+      <div class="flex flex-wrap items-end gap-8">
+        {
+          [
+            { width: 160, label: 'Header · desktop' },
+            { width: 128, label: 'Header · mobile' },
+            { width: 112, label: 'Footer' },
+            { width: 96, label: 'Minimum — do not go below' },
+          ].map((size) => (
+            <figure class="text-center">
+              <img
+                src="/images/brand/cabuya-lockup.webp"
+                alt={`Lockup at ${size.width} pixels wide`}
+                width={size.width}
+                height={lockupHeight(size.width)}
+              />
+              <figcaption class="mt-2 text-[0.7rem] text-cabuya-text-secondary">
+                {size.width}px — {size.label}
+              </figcaption>
+            </figure>
+          ))
+        }
       </div>
-    </section>
-
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Sizes</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Header (desktop): <strong>height 32px</strong> — full lockup.</li>
-        <li>Header (mobile): <strong>height 28px</strong> — compact lockup or mark.</li>
-        <li>Footer: <strong>height 24px</strong> — full lockup, low contrast text.</li>
-        <li>Social card: <strong>height 64px</strong> — full lockup.</li>
-        <li>Favicon: <strong>32×32, 16×16</strong> + <strong>180×180 apple-touch-icon</strong>, <strong>192/512 maskable</strong>.</li>
-        <li>Minimum size: full lockup <strong>120px</strong> wide; mark <strong>20px</strong>.</li>
-      </ul>
-    </section>
-
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Clear space</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-300">
-        Maintain at least <strong>X = the height of the mark</strong> as
-        margin around any logo lockup. Nothing else may enter the clear-space
-        rectangle (text, other logos, dividers, decorations).
-      </p>
-      <div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 p-8 bg-gray-50 dark:bg-gray-800">
-        <div class="mx-auto w-fit p-6 border border-gray-300 dark:border-gray-600 rounded-md">
-          <span class="text-gray-700 dark:text-gray-200 font-bold tracking-wide">corag</span>
-        </div>
-        <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-3">Reserved padding around lockup = X</p>
+      <div class="mt-8 pt-6 border-t border-cabuya-border flex flex-wrap items-end gap-8">
+        {
+          [64, 40, 24, 16].map((size) => (
+            <figure class="text-center">
+              <img
+                src="/images/brand/cabuya-isologo.webp"
+                alt={`Isologo at ${size} pixels`}
+                width={size}
+                height={size}
+              />
+              <figcaption class="mt-2 text-[0.7rem] text-cabuya-text-secondary">{size}px</figcaption>
+            </figure>
+          ))
+        }
+        <p class="text-xs text-cabuya-text-muted max-w-xs">
+          At 16px the braid is carried by the outline alone — which is exactly
+          why the generated favicons come from this asset and not from the
+          lockup.
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Backgrounds</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Light backgrounds (<code>#FAFBFB</code>, <code>#FFFFFF</code>): use the dark mark.</li>
-        <li>Dark backgrounds (<code>#08191A</code>, <code>#0F2A2C</code>): use the light mark.</li>
-        <li>Brand color background (<code>--cabuya-primary</code>): use the white mark.</li>
-        <li>Photographs / busy backgrounds: place a 16-radius shape with <code>--cabuya-bg</code> behind the lockup, or use the white mark on a dark gradient overlay.</li>
-        <li>Per-edition pages: prefer the global Corag mark in chrome (header/footer) so the umbrella brand stays visible regardless of the edition's identity.</li>
-      </ul>
-    </section>
-
-    <section class="space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Don't</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>Recolor the mark outside the approved palette (<code>--cabuya-primary</code>, white, ivory, deep teal).</li>
-        <li>Add drop shadows, gradients, glows, or strokes.</li>
-        <li>Rotate, skew, or warp.</li>
-        <li>Place on insufficient-contrast backgrounds (less than 3:1 to the mark).</li>
-        <li>Recreate the wordmark in a different typeface.</li>
-        <li>Combine with another logo on a single background without dividers.</li>
-      </ul>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Downloads</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-300">
-        Optimized SVGs ship with the build under
-        <code>/public/images/brand/</code>. Source files (Figma, Illustrator)
-        live in the <code>tmp/assets_brand/</code> directory and are not
-        deployed. PNG fallbacks are generated on demand by the
-        <code>images:optimize</code> script.
+  <!-- ── Clear space ────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Clear space</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      At least the height of the C's stroke on all sides. Nothing enters that
+      rectangle — no text, no divider, no second logo, no decoration.
+    </p>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-8">
+      <div class="mx-auto w-fit border-2 border-dashed border-cabuya-accent-strong p-6">
+        <img
+          src="/images/brand/cabuya-lockup.webp"
+          alt="Lockup with its clear-space margin marked"
+          width="200"
+          height={lockupHeight(200)}
+        />
+      </div>
+      <p class="mt-3 text-center text-xs text-cabuya-text-secondary">
+        The dashed rule marks the minimum margin, not a frame to draw.
       </p>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li><code>/public/images/brand/logo-full.svg</code></li>
-        <li><code>/public/images/brand/logo-compact.svg</code></li>
-        <li><code>/public/images/brand/mark.svg</code></li>
-        <li><code>/public/images/brand/favicon.ico</code> · <code>/public/images/brand/apple-touch-icon.png</code></li>
-        <li><code>/public/images/og-default.jpg</code> (open-graph 1200×630, Spanish)</li>
-        <li><code>/public/images/og-default-en.jpg</code> (open-graph 1200×630, English)</li>
-      </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="space-y-3">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Pending</h2>
-      <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
-        <li>A true vector master (SVG/AI) is still pending from the designer. <code>favicon.svg</code> currently wraps a 512px raster — replace it when the vector arrives.</li>
-      </ul>
-    </section>
-  </main>
+  <!-- ── Grounds ────────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Grounds</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {
+        [
+          { cls: 'bg-cabuya-bg', label: 'Warm White', asset: 'light', ok: true },
+          { cls: 'bg-cabuya-on-fill', label: 'Natural Ivory', asset: 'light', ok: true },
+          { cls: 'bg-cabuya-bg-dark', label: 'Cabuya Night', asset: 'dark', ok: true },
+          { cls: 'bg-cabuya-fill', label: 'Forest fill', asset: 'dark', ok: true },
+        ].map((ground) => (
+          <div class="rounded-xl border border-cabuya-border overflow-hidden">
+            <div class={`${ground.cls} p-6 flex items-center justify-center min-h-[110px]`}>
+              <img
+                src={`/images/brand/cabuya-lockup${ground.asset === 'dark' ? '-dark' : ''}.webp`}
+                alt={`Lockup on ${ground.label}`}
+                width="150"
+                height={lockupHeight(150)}
+              />
+            </div>
+            <p class="border-t border-cabuya-border px-3 py-2 text-xs text-cabuya-text-secondary">
+              {ground.label} — {ground.asset} variant
+            </p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="mt-4 text-sm text-cabuya-text-secondary max-w-3xl">
+      On photographs or any busy ground, put the lockup on a solid brand panel
+      first. Compositing the mark directly over an image is the fastest way to
+      end up below the 3:1 the outline needs to hold.
+    </p>
+  </section>
+
+  <!-- ── Misuse ─────────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Misuse</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Shown, not just listed — a rule you can see broken is a rule people
+      remember.
+    </p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {
+        [
+          {
+            label: 'Light lockup on a dark ground',
+            why: 'The wordmark disappears. Use the dark variant.',
+            wrapper: 'bg-cabuya-bg-dark',
+            style: '',
+          },
+          {
+            label: 'Rotated',
+            why: 'The braid reads as a C only upright.',
+            wrapper: 'bg-cabuya-bg-elevated',
+            style: 'transform: rotate(-12deg)',
+          },
+          {
+            label: 'Stretched',
+            why: 'The strand weights stop matching each other.',
+            wrapper: 'bg-cabuya-bg-elevated',
+            style: 'transform: scaleX(1.45)',
+          },
+          {
+            label: 'Recoloured',
+            why: 'The three strands are the mark. Tinting collapses them.',
+            wrapper: 'bg-cabuya-bg-elevated',
+            style: 'filter: hue-rotate(150deg) saturate(2)',
+          },
+        ].map((bad) => (
+          <div class="rounded-xl border border-cabuya-danger overflow-hidden">
+            <div class={`${bad.wrapper} p-6 flex items-center justify-center min-h-[110px] overflow-hidden`}>
+              <img
+                src="/images/brand/cabuya-lockup.webp"
+                alt={`Incorrect use: ${bad.label}`}
+                width="150"
+                height={lockupHeight(150)}
+                style={bad.style}
+              />
+            </div>
+            <div class="border-t border-cabuya-danger/40 px-3 py-2">
+              <p class="text-xs font-semibold text-cabuya-danger">✗ {bad.label}</p>
+              <p class="text-xs text-cabuya-text-secondary">{bad.why}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Provenance ─────────────────────────────────────── -->
+  <section>
+    <h2 class="text-xl font-display font-bold mb-1">Provenance and what is still missing</h2>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5 space-y-3 text-sm">
+      <p class="text-cabuya-text-secondary">
+        Masters live in <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">docs/context/brand/assets/</code>
+        and are never served. Everything under
+        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">public/images/brand/</code>
+        is derived from them; regenerate rather than edit in place.
+      </p>
+      <p class="text-cabuya-warning">
+        <strong>Open limitation:</strong> no true vector master has been
+        delivered. <code>favicon.svg</code> wraps a 512px raster, which works at
+        every size we currently render but is not what an SVG should be. Replace
+        it — and regenerate the icon set — when the vector arrives.
+      </p>
+      <p class="text-cabuya-text-secondary">
+        The generated icon set and its verification live on
+        <a href="/internal/brand/assets" class="text-cabuya-primary underline underline-offset-2">Icons &amp; assets</a>.
+      </p>
+    </div>
+  </section>
 </InternalLayout>

@@ -1,0 +1,434 @@
+---
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+
+import InternalLayout from '@/layouts/InternalLayout.astro';
+
+/**
+ * Brand book — the generated asset set, rendered so a broken one is visible.
+ *
+ * A favicon is the one asset nobody checks: it is 16 pixels in a browser tab,
+ * on a page you have open all day, and a stale or mis-scaled one survives for
+ * months. This page renders every size at its true dimensions on both grounds,
+ * and reconciles what `site.webmanifest` and `<head>` claim exists against what
+ * is actually on disk.
+ *
+ * The rendering here is the human check. The machine check lives in
+ * `tests/unit/lib/brand-assets.test.ts`, which fails the suite on a missing or
+ * mis-sized file — this page can only show you a broken image, it cannot stop a
+ * release.
+ */
+
+const PUBLIC = join(process.cwd(), 'public');
+
+interface Asset {
+  path: string;
+  purpose: string;
+  expected?: string;
+}
+
+/**
+ * WebP canvas size, straight from the RIFF header.
+ *
+ * Three container variants keep the size in three different places. Reading
+ * them here rather than reaching for an image library keeps this page a pure
+ * build-time read — and the alternative, leaving WebP unread, made the page
+ * report every delivered logo as the wrong size. A false alarm is worse than
+ * no alarm: it teaches people to ignore the banner.
+ */
+function webpSize(buffer: Buffer): string | undefined {
+  if (buffer.subarray(0, 4).toString('ascii') !== 'RIFF') return undefined;
+  const chunk = buffer.subarray(12, 16).toString('ascii');
+  if (chunk === 'VP8X') {
+    // Extended: canvas width-1 and height-1, 24-bit little-endian.
+    return `${buffer.readUIntLE(24, 3) + 1}×${buffer.readUIntLE(27, 3) + 1}`;
+  }
+  if (chunk === 'VP8 ') {
+    // Lossy: 14-bit dimensions following the 3-byte sync code.
+    return `${buffer.readUInt16LE(26) & 0x3fff}×${buffer.readUInt16LE(28) & 0x3fff}`;
+  }
+  if (chunk === 'VP8L') {
+    // Lossless: 14 bits each, packed into the 4 bytes after the signature.
+    const bits = buffer.readUInt32LE(21);
+    return `${(bits & 0x3fff) + 1}×${((bits >> 14) & 0x3fff) + 1}`;
+  }
+  return undefined;
+}
+
+function inspect(asset: Asset): Asset & {
+  exists: boolean;
+  bytes: number;
+  dimensions: string;
+} {
+  const full = join(PUBLIC, asset.path.replace(/^\//, ''));
+  if (!existsSync(full)) {
+    return { ...asset, exists: false, bytes: 0, dimensions: '—' };
+  }
+  const bytes = statSync(full).size;
+  let dimensions = '—';
+  const buffer = readFileSync(full);
+  if (asset.path.endsWith('.png')) {
+    dimensions = `${buffer.readUInt32BE(16)}×${buffer.readUInt32BE(20)}`;
+  } else if (asset.path.endsWith('.ico')) {
+    const count = buffer.readUInt16LE(4);
+    const sizes: string[] = [];
+    for (let i = 0; i < count; i += 1) {
+      const entry = 6 + i * 16;
+      sizes.push(`${buffer[entry] || 256}×${buffer[entry + 1] || 256}`);
+    }
+    dimensions = sizes.join(', ');
+  } else if (asset.path.endsWith('.svg')) {
+    dimensions =
+      buffer.toString('utf-8').match(/viewBox="([^"]+)"/)?.[1] ?? 'no viewBox';
+  } else if (asset.path.endsWith('.webp')) {
+    dimensions = webpSize(buffer) ?? 'unreadable';
+  }
+  return { ...asset, exists: true, bytes, dimensions };
+}
+
+const icons = [
+  {
+    path: '/favicon.ico',
+    purpose: 'Legacy tab icon; the fallback every browser understands',
+  },
+  { path: '/favicon.svg', purpose: 'Modern tab icon — scales to any density' },
+  {
+    path: '/icons/apple-touch-icon.png',
+    purpose: 'iOS home screen',
+    expected: '180×180',
+  },
+  {
+    path: '/icons/icon-192x192.png',
+    purpose: 'PWA install prompt',
+    expected: '192×192',
+  },
+  {
+    path: '/icons/icon-512x512.png',
+    purpose: 'PWA splash',
+    expected: '512×512',
+  },
+  {
+    path: '/icons/icon-maskable-512x512.png',
+    purpose: 'Adaptive icon — the mark must survive a circular crop',
+    expected: '512×512',
+  },
+].map(inspect);
+
+const logos = [
+  {
+    path: '/images/brand/cabuya-isologo.webp',
+    purpose: 'The braided C alone — source of the icon set',
+    expected: '512×512',
+  },
+  {
+    path: '/images/brand/cabuya-lockup.webp',
+    purpose: 'Lockup for light grounds',
+    expected: '1086×362',
+  },
+  {
+    path: '/images/brand/cabuya-lockup-dark.webp',
+    purpose: 'Lockup for dark grounds',
+    expected: '1086×362',
+  },
+  {
+    path: '/images/brand/cabuya-lockup.png',
+    purpose: 'PNG fallback, light',
+    expected: '640×213',
+  },
+  {
+    path: '/images/brand/cabuya-lockup-dark.png',
+    purpose: 'PNG fallback, dark',
+    expected: '640×213',
+  },
+].map(inspect);
+
+// ── The manifest, reconciled against disk ────────────────
+const manifestPath = join(PUBLIC, 'site.webmanifest');
+const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8')) as {
+  name: string;
+  short_name: string;
+  theme_color: string;
+  background_color: string;
+  icons: Array<{ src: string; sizes: string; type: string; purpose?: string }>;
+};
+const manifestIcons = manifest.icons.map((icon) => ({
+  ...icon,
+  resolves: existsSync(join(PUBLIC, icon.src.replace(/^\//, ''))),
+}));
+
+const kb = (bytes: number): string => `${(bytes / 1024).toFixed(1)} KB`;
+const sizeOk = (asset: { expected?: string; dimensions: string }): boolean =>
+  !asset.expected || asset.dimensions === asset.expected;
+
+const allResolve =
+  icons.every((i) => i.exists && sizeOk(i)) &&
+  logos.every((l) => l.exists && sizeOk(l)) &&
+  manifestIcons.every((i) => i.resolves);
+---
+
+<InternalLayout
+  title="Icons & assets"
+  description="Every generated icon at true size on both grounds, reconciled against the manifest and the filesystem."
+  section="brand"
+  subsection="brand-assets"
+>
+  <section
+    class:list={[
+      'mb-10 rounded-xl border p-5',
+      allResolve
+        ? 'border-cabuya-success bg-cabuya-success-soft'
+        : 'border-cabuya-danger bg-cabuya-danger-soft',
+    ]}
+  >
+    <h2 class="text-base font-semibold mb-1">
+      {allResolve
+        ? 'Every declared asset resolves at its expected size.'
+        : 'Something declared does not resolve — see the marked rows below.'}
+    </h2>
+    <p class="text-sm text-cabuya-text-secondary">
+      Checked at build time against <code>public/</code>: {icons.length} icons,{' '}
+      {logos.length} logo files, {manifestIcons.length} manifest entries.
+    </p>
+  </section>
+
+  <!-- ── True-size rendering ─────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">At the sizes they are actually used</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Rendered at true dimensions, on both grounds. The isologo carries its own
+      forest outline, which is why one source asset serves both — if the mark
+      ever disappears into one of these panels, that assumption has broken.
+    </p>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {
+        [
+          { label: 'Light ground', cls: 'bg-cabuya-bg-elevated' },
+          { label: 'Dark ground', cls: 'bg-cabuya-bg-dark' },
+        ].map((ground) => (
+          <div class="rounded-xl border border-cabuya-border overflow-hidden">
+            <div class={`${ground.cls} p-6 flex flex-wrap items-end gap-6`}>
+              <figure class="text-center">
+                <img src="/favicon.svg" alt="Favicon at 16 pixels" width="16" height="16" />
+                <figcaption class="mt-2 text-[0.6rem] text-cabuya-text-muted">16</figcaption>
+              </figure>
+              <figure class="text-center">
+                <img src="/favicon.svg" alt="Favicon at 32 pixels" width="32" height="32" />
+                <figcaption class="mt-2 text-[0.6rem] text-cabuya-text-muted">32</figcaption>
+              </figure>
+              <figure class="text-center">
+                <img src="/favicon.svg" alt="Favicon at 64 pixels" width="64" height="64" />
+                <figcaption class="mt-2 text-[0.6rem] text-cabuya-text-muted">64</figcaption>
+              </figure>
+              <figure class="text-center">
+                <img
+                  src="/icons/apple-touch-icon.png"
+                  alt="Apple touch icon at 180 pixels"
+                  width="90"
+                  height="90"
+                  class="rounded-[20%]"
+                />
+                <figcaption class="mt-2 text-[0.6rem] text-cabuya-text-muted">180 @½</figcaption>
+              </figure>
+              <figure class="text-center">
+                <img
+                  src="/icons/icon-192x192.png"
+                  alt="PWA icon at 192 pixels"
+                  width="96"
+                  height="96"
+                />
+                <figcaption class="mt-2 text-[0.6rem] text-cabuya-text-muted">192 @½</figcaption>
+              </figure>
+            </div>
+            <div class="border-t border-cabuya-border px-4 py-2.5 text-xs text-cabuya-text-secondary">
+              {ground.label}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Maskable safe zone ──────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">The maskable icon, cropped</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-5 max-w-3xl">
+      Android applies its own mask. Anything outside the inner 80% circle can be
+      cut, so the braided C has to survive the tightest crop a launcher might
+      apply — the overlay marks the safe zone.
+    </p>
+    <div class="flex flex-wrap gap-6">
+      <figure class="text-center">
+        <div class="relative w-[128px] h-[128px]">
+          <img
+            src="/icons/icon-maskable-512x512.png"
+            alt="Maskable icon, full square"
+            width="128"
+            height="128"
+            class="rounded-md"
+          />
+          <span
+            class="absolute inset-[10%] rounded-full border-2 border-dashed border-cabuya-danger pointer-events-none"
+            aria-hidden="true"
+          ></span>
+        </div>
+        <figcaption class="mt-2 text-xs text-cabuya-text-secondary">Full square + safe zone</figcaption>
+      </figure>
+      <figure class="text-center">
+        <img
+          src="/icons/icon-maskable-512x512.png"
+          alt="Maskable icon under a circular mask"
+          width="128"
+          height="128"
+          class="rounded-full"
+        />
+        <figcaption class="mt-2 text-xs text-cabuya-text-secondary">Circle mask</figcaption>
+      </figure>
+      <figure class="text-center">
+        <img
+          src="/icons/icon-maskable-512x512.png"
+          alt="Maskable icon under a squircle mask"
+          width="128"
+          height="128"
+          class="rounded-[28%]"
+        />
+        <figcaption class="mt-2 text-xs text-cabuya-text-secondary">Squircle mask</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── Inventory ───────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-4">Inventory</h2>
+
+    {
+      [
+        { title: 'Icon set', rows: icons },
+        { title: 'Logo files', rows: logos },
+      ].map((table) => (
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-cabuya-text-muted mb-2">
+            {table.title}
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-cabuya-border">
+            <table class="w-full text-sm min-w-[48rem]">
+              <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
+                <tr>
+                  <th scope="col" class="px-4 py-2.5 font-semibold">File</th>
+                  <th scope="col" class="px-4 py-2.5 font-semibold">Purpose</th>
+                  <th scope="col" class="px-4 py-2.5 font-semibold">Dimensions</th>
+                  <th scope="col" class="px-4 py-2.5 font-semibold">Size</th>
+                  <th scope="col" class="px-4 py-2.5 font-semibold">State</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+                {table.rows.map((row) => (
+                  <tr>
+                    <td class="px-4 py-3"><code class="text-xs">{row.path}</code></td>
+                    <td class="px-4 py-3 text-cabuya-text-secondary">{row.purpose}</td>
+                    <td class="px-4 py-3">
+                      <code class="text-xs">{row.dimensions}</code>
+                      {row.expected && !sizeOk(row) && (
+                        <p class="text-xs text-cabuya-danger">expected {row.expected}</p>
+                      )}
+                    </td>
+                    <td class="px-4 py-3 text-cabuya-text-secondary">{row.exists ? kb(row.bytes) : '—'}</td>
+                    <td class="px-4 py-3">
+                      {row.exists && sizeOk(row) ? (
+                        <span class="text-cabuya-success font-semibold">OK</span>
+                      ) : (
+                        <span class="text-cabuya-danger font-semibold">
+                          {row.exists ? 'WRONG SIZE' : 'MISSING'}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <!-- ── Manifest ────────────────────────────────────────── -->
+  <section class="mb-12">
+    <h2 class="text-xl font-display font-bold mb-1">Web app manifest</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
+      <code>public/site.webmanifest</code>, read at build time. The theme colour
+      is what a browser paints around the app shell, so it is a brand surface
+      like any other.
+    </p>
+    <div class="rounded-xl border border-cabuya-border bg-cabuya-bg-elevated p-5">
+      <dl class="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm mb-5">
+        <div>
+          <dt class="text-cabuya-text-muted text-xs uppercase tracking-wide">Name</dt>
+          <dd>{manifest.name}</dd>
+        </div>
+        <div>
+          <dt class="text-cabuya-text-muted text-xs uppercase tracking-wide">Short name</dt>
+          <dd>{manifest.short_name}</dd>
+        </div>
+        <div>
+          <dt class="text-cabuya-text-muted text-xs uppercase tracking-wide">Theme colour</dt>
+          <dd class="flex items-center gap-2">
+            <span
+              class="inline-block w-4 h-4 rounded border border-cabuya-border"
+              style={`background:${manifest.theme_color}`}
+              aria-hidden="true"
+            ></span>
+            <code class="text-xs">{manifest.theme_color}</code>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-cabuya-text-muted text-xs uppercase tracking-wide">Background</dt>
+          <dd class="flex items-center gap-2">
+            <span
+              class="inline-block w-4 h-4 rounded border border-cabuya-border"
+              style={`background:${manifest.background_color}`}
+              aria-hidden="true"
+            ></span>
+            <code class="text-xs">{manifest.background_color}</code>
+          </dd>
+        </div>
+      </dl>
+
+      <ul class="space-y-1.5 text-sm">
+        {
+          manifestIcons.map((icon) => (
+            <li class="flex items-center gap-2">
+              <span class={icon.resolves ? 'text-cabuya-success' : 'text-cabuya-danger'}>
+                {icon.resolves ? '✓' : '✗'}
+              </span>
+              <code class="text-xs">{icon.src}</code>
+              <span class="text-cabuya-text-muted text-xs">
+                {icon.sizes} · {icon.type}
+                {icon.purpose ? ` · ${icon.purpose}` : ''}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── OG image slot ───────────────────────────────────── -->
+  <section>
+    <h2 class="text-xl font-display font-bold mb-1">Open Graph image</h2>
+    <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
+      The share card is generated in a later task; the frame below reserves the
+      exact dimensions so the layout that consumes it can be built against a
+      real box rather than a guess.
+    </p>
+    <div
+      class="rounded-xl border-2 border-dashed border-cabuya-border-strong bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated w-full max-w-[600px] aspect-[1200/630] flex flex-col items-center justify-center text-center px-6"
+    >
+      <p class="text-sm font-semibold">1200 × 630</p>
+      <p class="mt-1 text-xs text-cabuya-text-secondary max-w-xs">
+        Reserved for the Open Graph card. Generated in Task 22 of the migration
+        plan, together with the per-section variants.
+      </p>
+    </div>
+  </section>
+</InternalLayout>

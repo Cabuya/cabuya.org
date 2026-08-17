@@ -26,6 +26,7 @@
 | `pnpm run seo:check` | Per-URL SEO + structured data (+ OG image existence *(Task 22)*, JSON-LD matrix *(Task 33)*) |
 | `pnpm run parity:check` | EN and ES carry the SAME content |
 | `pnpm run redirects:check` | Every redirect resolves; no live page shadowed |
+| `pnpm run internal:check(:strict)` | The dev-only hub stayed out of the deployed artefact: no `dist/internal`, no internal route in any sitemap, no deployed page linking into it. Runs against `dist/`, so build first; skips itself (exit 0, with a message) when `INCLUDE_INTERNAL=true` marks a staging build |
 
 ## Protocol gates
 

@@ -99,7 +99,7 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
@@ -185,12 +185,12 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
-<meta name="keywords" content={keywords && keywords.length > 0 ? keywords.join(', ') : "Corag, ayuda directa, impacto social, ayuda humanitaria, transparencia, evidencia, donaciones verificadas, emergencias, Colombia, coordinación de ayuda, social impact, verified aid"} />
-<meta name="author" content="Corag" />
+<meta name="keywords" content={keywords && keywords.length > 0 ? keywords.join(', ') : "Cabuya, aid interoperability, open protocol, emergency response, shelters, collection points, JSON Schema, conformance, Colombia, interoperabilidad, protocolo abierto, ayuda humanitaria"} />
+<meta name="author" content="Cabuya" />
 
 <!-- Theme color for browser chrome -->
-<meta name="theme-color" content="#fbf8f5" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#231518" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#082a24" media="(prefers-color-scheme: dark)" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={ogType} />
@@ -235,21 +235,22 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
   }}
 />
 
-<!-- JSON-LD: Organization (Corag) -->
+<!-- JSON-LD: Organization (Cabuya) -->
 <JsonLd
   data={{
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Corag',
-    alternateName: 'Corag Ayuda Directa',
+    name: 'Cabuya',
+    alternateName: 'Cabuya Protocol',
     url: Astro.site?.href,
     logo: new URL('/images/brand/cabuya-lockup.png', Astro.site).href,
     description:
-      'Corag connects people who need help with people who can give it, and publishes the evidence of every delivery. Requests, contributions and proof live in one place.',
+      'Cabuya is an open interoperability protocol for emergency-aid applications: one schema for places, four transports, and conformance that is measured rather than declared.',
     /*
-     * Country-level only. Corag operates across territories rather than from a
-     * single office, and claiming a city we cannot back would be exactly the
-     * kind of unverifiable detail the project exists to avoid.
+     * Country-level only. The working group formed in Colombia; the protocol
+     * itself is designed to be adopted anywhere, and naming a city we cannot
+     * back would be exactly the kind of unverifiable detail the project exists
+     * to avoid.
      */
     foundingLocation: {
       '@type': 'Place',
@@ -262,14 +263,14 @@ const rssHref = new URL(`${langPrefix}/rss.xml`.replace(/^\//, ''), Astro.site);
       '@type': 'Country',
       name: 'Colombia',
     },
-    knowsLanguage: ['es', 'en'],
+    knowsLanguage: ['en', 'es'],
     knowsAbout: [
+      'Data Interoperability',
+      'Open Standards',
+      'Emergency Response',
       'Humanitarian Aid Coordination',
-      'Disaster Response',
-      'Donation Transparency',
+      'JSON Schema',
       'Civic Technology',
-      'Community Organizing',
-      'Social Impact',
     ],
     /*
      * Only accounts that represent the organization. A WhatsApp group invite is

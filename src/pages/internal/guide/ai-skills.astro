@@ -265,12 +265,12 @@ const keyFiles = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Overview</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {overview.map((o) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold">{o.concept}</h3>
             <span class="text-xs px-2 py-0.5 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium">{o.icon}</span>
           </div>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{o.description}</p>
+          <p class="text-sm text-cabuya-text-secondary">{o.description}</p>
         </div>
       ))}
     </div>
@@ -281,13 +281,13 @@ const keyFiles = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Tier System</h2>
     <div class="space-y-4">
       {tiers.map((t) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold">{t.tier}</h3>
             <span class="text-xs px-2 py-0.5 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium">{t.model}</span>
           </div>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">{t.description}</p>
-          <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
+          <p class="text-sm text-cabuya-text-secondary mb-2">{t.description}</p>
+          <div class="rounded-lg bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand p-2">
             <code class="text-xs">{t.examples}</code>
           </div>
         </div>
@@ -298,26 +298,26 @@ const keyFiles = [
   <!-- Skills Catalog -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Skills Catalog</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Skill</th>
               <th class="text-left py-3 px-4 font-semibold">Tier</th>
               <th class="text-left py-3 px-4 font-semibold">Command</th>
               <th class="text-left py-3 px-4 font-semibold">Description</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {skills.map((s) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{s.name}</code></td>
                 <td class="py-3 px-4">
-                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${s.tier === 1 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : s.tier === 2 ? 'bg-cabuya-fill/10 text-cabuya-primary' : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'}`}>{s.tier}</span>
+                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${s.tier === 1 ? 'bg-cabuya-success-soft text-cabuya-success' : s.tier === 2 ? 'bg-cabuya-fill/10 text-cabuya-primary' : 'bg-cabuya-info-soft text-cabuya-info'}`}>{s.tier}</span>
                 </td>
                 <td class="py-3 px-4"><code class="text-xs">{s.command}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{s.description}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{s.description}</td>
               </tr>
             ))}
           </tbody>
@@ -329,24 +329,24 @@ const keyFiles = [
   <!-- Agents Catalog -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Agents Catalog</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Agent</th>
               <th class="text-left py-3 px-4 font-semibold">Tier</th>
               <th class="text-left py-3 px-4 font-semibold">Scope</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {agents.map((a) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{a.name}</code></td>
                 <td class="py-3 px-4">
-                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${a.tier === 2 ? 'bg-cabuya-fill/10 text-cabuya-primary' : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'}`}>{a.tier}</span>
+                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${a.tier === 2 ? 'bg-cabuya-fill/10 text-cabuya-primary' : 'bg-cabuya-info-soft text-cabuya-info'}`}>{a.tier}</span>
                 </td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{a.scope}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{a.scope}</td>
               </tr>
             ))}
           </tbody>
@@ -360,12 +360,12 @@ const keyFiles = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Mandatory Policies</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {mandatoryPolicies.map((m) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold">{m.skill}</h3>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium">{m.severity}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-cabuya-danger-soft text-cabuya-danger font-medium">{m.severity}</span>
           </div>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{m.policy}</p>
+          <p class="text-sm text-cabuya-text-secondary">{m.policy}</p>
         </div>
       ))}
     </div>
@@ -374,24 +374,24 @@ const keyFiles = [
   <!-- Invocation -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Invocation</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Agent</th>
               <th class="text-left py-3 px-4 font-semibold">Prefix</th>
               <th class="text-left py-3 px-4 font-semibold">Example</th>
               <th class="text-left py-3 px-4 font-semibold">Notes</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {invocations.map((i) => (
               <tr>
                 <td class="py-3 px-4 font-medium">{i.agent}</td>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{i.prefix}</code></td>
                 <td class="py-3 px-4"><code class="text-xs">{i.example}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{i.notes}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{i.notes}</td>
               </tr>
             ))}
           </tbody>
@@ -403,20 +403,20 @@ const keyFiles = [
   <!-- Key Files -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Key Files</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Path</th>
               <th class="text-left py-3 px-4 font-semibold">Description</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {keyFiles.map((f) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{f.path}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{f.description}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{f.description}</td>
               </tr>
             ))}
           </tbody>

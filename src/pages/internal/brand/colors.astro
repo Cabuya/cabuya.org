@@ -1,465 +1,488 @@
 ---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import InternalLayout from '@/layouts/InternalLayout.astro';
+import { measure, parseThemeTokens } from '@/lib/contrast';
 
 /**
- * Brand book — Color.
+ * Brand book — the palette, derived and measured.
  *
- * The live reference for the Corag palette. Values mirror `src/styles/global.css`
- * exactly; ratios are the measured results recorded in the migration's contrast
- * audit. If a swatch here looks wrong against a real page, the token changed and
- * this page is stale — fix it.
+ * The previous version of this page listed hexes and ratios by hand and
+ * described itself as mirroring `global.css`. It was not: it still printed the
+ * pre-migration wine and rosa values months after the tokens changed, and the
+ * guard test passed the whole time because it only checked token *names*.
+ *
+ * So this page no longer holds any colour of its own. It reads
+ * `src/styles/global.css` at build time, computes every ratio with
+ * `src/lib/contrast.ts`, and prints what it finds. To make an omission
+ * impossible rather than unlikely, the group table below is checked for
+ * completeness against the stylesheet — a new token with no home **fails the
+ * build**, and the error names it.
  */
 
-interface Token {
+const CSS = readFileSync(join(process.cwd(), 'src/styles/global.css'), 'utf-8');
+const { light, dark } = parseThemeTokens(CSS);
+
+/** How a token earns its contrast number. */
+type Kind =
+  | 'text' // carries text on the page grounds
+  | 'ground' // text sits on it — measure body text against it
+  | 'fill' // a filled surface with its own paired foreground
+  | 'ui' // borders and non-text UI — the 3:1 threshold
+  | 'decor'; // deliberately not text-safe; the number is the warning
+
+interface Entry {
+  token: string;
   role: string;
-  cssVar: string;
-  light: string;
-  dark: string;
-  usage: string;
-  /** Measured minimum contrast across every ground the token appears on. */
-  minRatio?: { light: number; dark: number };
-  note?: 'restricted' | 'no-flip';
+  kind: Kind;
 }
 
-const brand: Token[] = [
-  {
-    role: 'Primary',
-    cssVar: '--color-cabuya-primary',
-    light: '#78020E',
-    dark: '#FFC7D5',
-    usage: 'Foreground brand — text, links, icons, borders, focus rings',
-    minRatio: { light: 7.93, dark: 10.67 },
-  },
-  {
-    role: 'Primary strong',
-    cssVar: '--color-cabuya-primary-strong',
-    light: '#5A0109',
-    dark: '#FFE2E9',
-    usage: 'Hover · active · pressed',
-    minRatio: { light: 9.97, dark: 12.83 },
-  },
-  {
-    role: 'Primary soft',
-    cssVar: '--color-cabuya-primary-soft',
-    light: '#FFE2E9',
-    dark: '#3A1A20',
-    usage: 'Tinted surface behind primary content',
-  },
-  {
-    role: 'Primary light',
-    cssVar: '--color-cabuya-primary-light',
-    light: '#FFC7D5',
-    dark: '#FFC7D5',
-    usage:
-      'The dark-mode primary, available in both themes — for content on an intentionally dark canvas',
-    note: 'no-flip',
-  },
-];
+interface Group {
+  title: string;
+  blurb: string;
+  entries: Entry[];
+}
 
-const fill: Token[] = [
+const GROUPS: Group[] = [
   {
-    role: 'Fill',
-    cssVar: '--color-cabuya-fill',
-    light: '#78020E',
-    dark: '#78020E',
-    usage: 'Background of a filled brand surface (buttons, solid chips)',
-    note: 'no-flip',
-  },
-  {
-    role: 'Fill strong',
-    cssVar: '--color-cabuya-fill-strong',
-    light: '#5A0109',
-    dark: '#5A0109',
-    usage: 'Its hover state',
-    note: 'no-flip',
-  },
-  {
-    role: 'On fill',
-    cssVar: '--color-cabuya-on-fill',
-    light: '#FFE2E9',
-    dark: '#FFE2E9',
-    usage: 'The label on that surface — 9.54:1 in both themes',
-    note: 'no-flip',
-  },
-];
-
-const rosa: Token[] = [
-  {
-    role: 'Rosa',
-    cssVar: '--color-cabuya-seedling',
-    light: '#FFC7D5',
-    dark: '#FFC7D5',
-    usage: 'Official brand color — warm surfaces, accents',
-    note: 'no-flip',
-  },
-  {
-    role: 'Rosa soft',
-    cssVar: '--color-cabuya-seedling-soft',
-    light: '#FFE2E9',
-    dark: '#FFE2E9',
-    usage: 'Lighter brand surface',
-    note: 'no-flip',
-  },
-  {
-    role: 'Accent',
-    cssVar: '--color-cabuya-accent',
-    light: '#BC727C',
-    dark: '#BC727C',
-    usage:
-      'Decorative only — hairlines, shapes, large display type, icon fills',
-    minRatio: { light: 2.46, dark: 4.51 },
-    note: 'restricted',
-  },
-  {
-    role: 'Accent strong',
-    cssVar: '--color-cabuya-accent-strong',
-    light: '#A34F5A',
-    dark: '#D8A3AA',
-    usage: 'The accent when it must carry readable text',
-    minRatio: { light: 4.53, dark: 7.22 },
-  },
-];
-
-const surfaces: Token[] = [
-  {
-    role: 'Bg',
-    cssVar: '--color-cabuya-bg',
-    light: '#FBF8F5',
-    dark: '#231518',
-    usage: 'Page background',
-  },
-  {
-    role: 'Bg elevated',
-    cssVar: '--color-cabuya-bg-elevated',
-    light: '#FFFFFF',
-    dark: '#2E1B1F',
-    usage: 'Cards, panels, header',
-  },
-  {
-    role: 'Bg brand',
-    cssVar: '--color-cabuya-bg-brand',
-    light: '#FFE2E9',
-    dark: '#3A1A20',
-    usage: 'Brand-tinted section',
-  },
-  {
-    role: 'Bg brand strong',
-    cssVar: '--color-cabuya-bg-brand-strong',
-    light: '#FFC7D5',
-    dark: '#4A2128',
-    usage: 'Stronger brand section',
-  },
-  {
-    role: 'Bg dark',
-    cssVar: '--color-cabuya-bg-dark',
-    light: '#231518',
-    dark: '#231518',
-    usage: 'Always-dark canvas',
-    note: 'no-flip',
-  },
-];
-
-const text: Token[] = [
-  {
-    role: 'Text',
-    cssVar: '--color-cabuya-text',
-    light: '#251F20',
-    dark: '#F0E3E4',
-    usage: 'Body copy',
-    minRatio: { light: 11.1, dark: 12.47 },
-  },
-  {
-    role: 'Text secondary',
-    cssVar: '--color-cabuya-text-secondary',
-    light: '#574F51',
-    dark: '#D6C4C7',
-    usage: 'Supporting copy',
-    minRatio: { light: 5.44, dark: 9.33 },
-  },
-  {
-    role: 'Text muted',
-    cssVar: '--color-cabuya-text-muted',
-    light: '#635B5D',
-    dark: '#92888A',
-    usage: 'The lightest permitted body text',
-    minRatio: { light: 4.52, dark: 4.53 },
-  },
-];
-
-const borders: Token[] = [
-  {
-    role: 'Border',
-    cssVar: '--color-cabuya-border',
-    light: '#E8E0DC',
-    dark: '#3E2A2E',
-    usage: 'Decorative hairlines, dividers',
-  },
-  {
-    role: 'Border strong',
-    cssVar: '--color-cabuya-border-strong',
-    light: '#C9B9B5',
-    dark: '#5C4247',
-    usage: 'Decorative emphasis',
-  },
-  {
-    role: 'Border interactive',
-    cssVar: '--color-cabuya-border-interactive',
-    light: '#968F8D',
-    dark: '#7F6C6F',
-    usage: 'Inputs, selects, control edges — the only one clearing 3:1',
-  },
-];
-
-const status: Token[] = [
-  {
-    role: 'Success',
-    cssVar: '--color-cabuya-success',
-    light: '#24735D',
-    dark: '#559381',
-    usage: 'entregado · con evidencia · completado',
-    minRatio: { light: 5.01, dark: 4.55 },
-  },
-  {
-    role: 'Success soft',
-    cssVar: '--color-cabuya-success-soft',
-    light: '#E7F3EE',
-    dark: '#16302A',
-    usage: 'Its chip background',
-  },
-  {
-    role: 'Warning',
-    cssVar: '--color-cabuya-warning',
-    light: '#995D30',
-    dark: '#B37B4F',
-    usage: 'en organización · pendiente',
-    minRatio: { light: 4.54, dark: 4.54 },
-  },
-  {
-    role: 'Warning soft',
-    cssVar: '--color-cabuya-warning-soft',
-    light: '#F6ECDF',
-    dark: '#33240F',
-    usage: 'Its chip background',
-  },
-  {
-    role: 'Info',
-    cssVar: '--color-cabuya-info',
-    light: '#3C6176',
-    dark: '#6E8B9B',
-    usage: 'informativo · neutral',
-    minRatio: { light: 5.81, dark: 4.51 },
-  },
-  {
-    role: 'Info soft',
-    cssVar: '--color-cabuya-info-soft',
-    light: '#EAF1F4',
-    dark: '#17262E',
-    usage: 'Its chip background',
-  },
-  {
-    role: 'Danger',
-    cssVar: '--color-cabuya-danger',
-    light: '#A43536',
-    dark: '#C37073',
-    usage: 'urgente · error',
-    minRatio: { light: 5.85, dark: 4.55 },
-  },
-  {
-    role: 'Danger soft',
-    cssVar: '--color-cabuya-danger-soft',
-    light: '#FDECEC',
-    dark: '#331416',
-    usage: 'Its chip background',
-  },
-];
-
-const groups: { title: string; blurb: string; tokens: Token[] }[] = [
-  {
-    title: 'Brand — foreground',
-    blurb: 'These flip between themes. Text, icons, borders, focus rings.',
-    tokens: brand,
-  },
-  {
-    title: 'Brand — solid fill',
+    title: 'Brand foreground',
     blurb:
-      'These never flip. Buttons and filled chips, identical in both themes.',
-    tokens: fill,
+      'Flips forest → fique in dark mode, because forest on Night measures about 1.9:1.',
+    entries: [
+      {
+        token: 'cabuya-primary',
+        role: 'The brand colour in running text and icons',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-primary-strong',
+        role: 'Hover · active · pressed',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-primary-soft',
+        role: 'Tinted ground behind primary content',
+        kind: 'ground',
+      },
+      {
+        token: 'cabuya-primary-light',
+        role: 'Seedling; display text on dark canvases',
+        kind: 'decor',
+      },
+      {
+        token: 'cabuya',
+        role: 'Alias of text — inherits the flip through var()',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-secondary',
+        role: 'Alias of text-secondary',
+        kind: 'text',
+      },
+    ],
   },
   {
-    title: 'Rosa & accent',
+    title: 'Brand fill — the pair that never flips',
     blurb:
-      'Rosa is an official brand color, not a tint. The accent is restricted.',
-    tokens: rosa,
+      'A filled brand surface is forest-with-ivory in both themes. This is the split that stops bg-primary + text-white.',
+    entries: [
+      { token: 'cabuya-fill', role: 'Filled brand surface', kind: 'fill' },
+      {
+        token: 'cabuya-fill-strong',
+        role: 'Pressed state of a filled surface',
+        kind: 'fill',
+      },
+      {
+        token: 'cabuya-on-fill',
+        role: 'The only foreground allowed on a fill',
+        kind: 'decor',
+      },
+    ],
+  },
+  {
+    title: 'Fique — the golden strand',
+    blurb:
+      'Raw fique is decorative on light grounds. Its measurement below is the reason, not a footnote.',
+    entries: [
+      {
+        token: 'cabuya-accent',
+        role: 'Icons, strands, large display type, the logo',
+        kind: 'decor',
+      },
+      {
+        token: 'cabuya-accent-strong',
+        role: 'The only text-safe fique on light',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-seedling',
+        role: 'Pale green display text on dark canvases',
+        kind: 'decor',
+      },
+      {
+        token: 'cabuya-seedling-soft',
+        role: 'Palest brand tint',
+        kind: 'ground',
+      },
+    ],
   },
   {
     title: 'Surfaces',
-    blurb: 'Page, elevated and brand-tinted grounds.',
-    tokens: surfaces,
+    blurb:
+      'Page grounds and elevations. Measured by what body text does on them.',
+    entries: [
+      { token: 'cabuya-bg', role: 'The page', kind: 'ground' },
+      {
+        token: 'cabuya-bg-elevated',
+        role: 'Cards, panels, raised surfaces',
+        kind: 'ground',
+      },
+      { token: 'cabuya-bg-brand', role: 'Soft brand ground', kind: 'ground' },
+      {
+        token: 'cabuya-bg-brand-strong',
+        role: 'Chips and inline code on brand grounds',
+        kind: 'ground',
+      },
+      {
+        token: 'cabuya-bg-dark',
+        role: 'Always-dark canvas, in both themes',
+        kind: 'decor',
+      },
+    ],
+  },
+  {
+    title: 'Borders',
+    blurb:
+      'Non-text UI: the threshold is 3:1, and interactive borders must clear it.',
+    entries: [
+      { token: 'cabuya-border', role: 'Hairlines and dividers', kind: 'ui' },
+      {
+        token: 'cabuya-border-strong',
+        role: 'Emphasised separation',
+        kind: 'ui',
+      },
+      {
+        token: 'cabuya-border-interactive',
+        role: 'Inputs, focusable outlines',
+        kind: 'ui',
+      },
+    ],
   },
   {
     title: 'Text',
     blurb:
-      'Nothing lighter than “muted” is permitted for body copy. Two short aliases exist because they are used constantly: --color-cabuya re-exports --color-cabuya-text, and --color-cabuya-secondary re-exports --color-cabuya-text-secondary.',
-    tokens: text,
-  },
-  {
-    title: 'Borders',
-    blurb: 'Only “interactive” clears the 3:1 non-text requirement.',
-    tokens: borders,
+      'Three weights of legibility. All three clear AA on both light grounds.',
+    entries: [
+      { token: 'cabuya-text', role: 'Body and headings', kind: 'text' },
+      {
+        token: 'cabuya-text-secondary',
+        role: 'Supporting prose',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-text-muted',
+        role: 'Captions and metadata — the floor, not the default',
+        kind: 'text',
+      },
+    ],
   },
   {
     title: 'Status',
-    blurb: 'Verified on page and chip grounds — never on rosa brand surfaces.',
-    tokens: status,
+    blurb:
+      'Each colour ships with a soft ground sized so the colour stays AA when placed on it.',
+    entries: [
+      {
+        token: 'cabuya-success',
+        role: 'Confirmed, measured, conforming',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-success-soft',
+        role: 'Ground for success',
+        kind: 'ground',
+      },
+      {
+        token: 'cabuya-warning',
+        role: 'Stale, unmeasured, degraded',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-warning-soft',
+        role: 'Ground for warning',
+        kind: 'ground',
+      },
+      { token: 'cabuya-info', role: 'Neutral notes', kind: 'text' },
+      { token: 'cabuya-info-soft', role: 'Ground for info', kind: 'ground' },
+      {
+        token: 'cabuya-danger',
+        role: 'Errors and blocked states',
+        kind: 'text',
+      },
+      {
+        token: 'cabuya-danger-soft',
+        role: 'Ground for danger',
+        kind: 'ground',
+      },
+    ],
   },
 ];
 
-const verdict = (r?: number) =>
-  r === undefined ? null : r >= 4.5 ? 'AA' : r >= 3 ? 'large only' : 'fails AA';
+// ── Completeness, enforced at build time ─────────────────
+const grouped = new Set(GROUPS.flatMap((g) => g.entries.map((e) => e.token)));
+const declared = Object.keys(light);
+const ungrouped = declared.filter((t) => !grouped.has(t)).sort();
+const phantom = [...grouped].filter((t) => !light[t]).sort();
+if (ungrouped.length > 0 || phantom.length > 0) {
+  throw new Error(
+    [
+      'internal/brand/colors: the palette page and global.css disagree.',
+      ungrouped.length > 0
+        ? `  declared but not documented: ${ungrouped.join(', ')}`
+        : '',
+      phantom.length > 0
+        ? `  documented but not declared: ${phantom.join(', ')}`
+        : '',
+      '  Add the token to a group in this page, or remove it from global.css.',
+    ]
+      .filter(Boolean)
+      .join('\n')
+  );
+}
+
+// ── Measurement ──────────────────────────────────────────
+const WHITE = light['cabuya-bg'];
+const IVORY = light['cabuya-on-fill'];
+const DARK_ELEVATED = dark['cabuya-bg-elevated'];
+
+interface Row {
+  token: string;
+  role: string;
+  kind: Kind;
+  lightHex: string;
+  darkHex: string;
+  flips: boolean;
+  lightNote: string;
+  darkNote: string;
+  lightPass: boolean;
+  darkPass: boolean;
+}
+
+function rowFor(entry: Entry): Row {
+  const lightHex = light[entry.token];
+  const darkHex = dark[entry.token];
+  const flips = lightHex !== darkHex;
+
+  let lightNote = '—';
+  let darkNote = '—';
+  let lightPass = true;
+  let darkPass = true;
+
+  switch (entry.kind) {
+    case 'text': {
+      const onWhite = measure(lightHex, WHITE);
+      const onIvory = measure(lightHex, IVORY);
+      const tighter = onWhite.ratio <= onIvory.ratio ? onWhite : onIvory;
+      lightNote = `${tighter.label} on the tighter light ground`;
+      lightPass = tighter.body;
+      const onDark = measure(darkHex, DARK_ELEVATED);
+      darkNote = `${onDark.label} on dark elevated`;
+      darkPass = onDark.body;
+      break;
+    }
+    case 'ground': {
+      const body = measure(light['cabuya-text'], lightHex);
+      lightNote = `body text ${body.label}`;
+      lightPass = body.body;
+      const bodyDark = measure(dark['cabuya-text'], darkHex);
+      darkNote = `body text ${bodyDark.label}`;
+      darkPass = bodyDark.body;
+      break;
+    }
+    case 'fill': {
+      const pair = measure(light['cabuya-on-fill'], lightHex);
+      lightNote = `on-fill ${pair.label}`;
+      lightPass = pair.body;
+      darkNote = 'identical — never flips';
+      darkPass = !flips;
+      break;
+    }
+    case 'ui': {
+      const onPage = measure(lightHex, light['cabuya-bg']);
+      lightNote = `${onPage.label} vs the page`;
+      lightPass = onPage.large;
+      const onNight = measure(darkHex, dark['cabuya-bg']);
+      darkNote = `${onNight.label} vs the page`;
+      darkPass = onNight.large;
+      break;
+    }
+    default: {
+      // Decorative or fixed-purpose: state where it IS safe, plainly.
+      if (entry.token === 'cabuya-accent') {
+        const onWhite = measure(lightHex, WHITE);
+        const onNight = measure(lightHex, light['cabuya-bg-dark']);
+        lightNote = `${onWhite.label} on white — not text-safe`;
+        lightPass = false;
+        darkNote = `${onNight.label} on Night — text-safe`;
+        darkPass = onNight.body;
+      } else if (entry.token === 'cabuya-bg-dark') {
+        const ivoryOn = measure(IVORY, lightHex);
+        lightNote = `ivory on it ${ivoryOn.label}`;
+        lightPass = ivoryOn.body;
+        darkNote = 'the same canvas in both themes';
+        darkPass = true;
+      } else {
+        const onNight = measure(lightHex, light['cabuya-bg-dark']);
+        lightNote = `${onNight.label} on Night`;
+        lightPass = onNight.body;
+        darkNote = 'unchanged';
+        darkPass = !flips;
+      }
+      break;
+    }
+  }
+  return {
+    token: entry.token,
+    role: entry.role,
+    kind: entry.kind,
+    lightHex,
+    darkHex,
+    flips,
+    lightNote,
+    darkNote,
+    lightPass,
+    darkPass,
+  };
+}
+
+const groups = GROUPS.map((group) => ({
+  ...group,
+  rows: group.entries.map(rowFor),
+}));
+
+const KIND_LABEL: Record<Kind, string> = {
+  text: 'text',
+  ground: 'ground',
+  fill: 'fill pair',
+  ui: 'non-text UI',
+  decor: 'decorative',
+};
 ---
 
 <InternalLayout
-  title="Color — Brand Book"
-  description="The Corag palette: every token with its light and dark value, its role, and its measured contrast."
+  title="Palette"
+  description="Every token read from global.css and measured at build time. Nothing on this page is typed by hand."
   section="brand"
-  subsection="colors"
+  subsection="brand-colors"
 >
-  <header class="mb-10 space-y-3">
-    <p class="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">Brand Book · 02</p>
-    <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100">Color</h1>
-    <p class="max-w-3xl text-base text-gray-600 dark:text-gray-300">
-      The official palette comes from Corag's <strong>Manual de Identidad Visual</strong>:
-      wine <code>#78020E</code>, its 50% <code>#BC727C</code>, rosa <code>#FFC7D5</code>
-      and rosa claro <code>#FFE2E9</code>. Everything else — neutrals and status colors —
-      was derived and measured, because a logo package cannot supply a product UI palette.
+  <section class="mb-10 rounded-xl border border-cabuya-border bg-cabuya-bg-brand/50 dark:bg-cabuya-bg-elevated p-5">
+    <h2 class="text-base font-semibold mb-2">How to read this page</h2>
+    <p class="text-sm text-cabuya-text-secondary max-w-3xl">
+      Hexes come from <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">src/styles/global.css</code>;
+      ratios are computed here with the WCAG relative-luminance formula. Each
+      token is measured against the ground it actually meets: text against the
+      tighter of the two light grounds and against dark elevated, surfaces by
+      what body text does on them, borders against the 3:1 non-text threshold.
+      A token that fails its own threshold is marked, not hidden — for
+      <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5">accent</code>
+      that failure <em>is</em> the documentation.
     </p>
-    <p class="max-w-3xl text-sm text-gray-600 dark:text-gray-300">
-      Ratios below are the <strong>measured minimum</strong> across every ground the token
-      appears on, not a best case. Values mirror <code>src/styles/global.css</code>.
+    <p class="mt-3 text-sm text-cabuya-text-muted">
+      {declared.length} tokens declared · all {declared.length} documented below
+      — the build fails if those two numbers ever differ.
     </p>
-  </header>
-
-  <section class="mb-10 rounded-2xl border border-cabuya-border bg-cabuya-bg-brand p-6">
-    <h2 class="text-lg font-semibold text-cabuya">The two rules that matter</h2>
-    <ol class="mt-3 space-y-2 text-sm text-cabuya-secondary">
-      <li>
-        <strong class="text-cabuya">The brand flips, the fill does not.</strong> In dark mode
-        <code>primary</code> becomes rosa, because wine on a dark ground measures 1.52:1.
-        A filled button must therefore use <code>bg-cabuya-fill</code> +
-        <code>text-cabuya-on-fill</code> — never <code>bg-cabuya-primary</code> +
-        <code>text-white</code>, which becomes white-on-rosa.
-      </li>
-      <li>
-        <strong class="text-cabuya">The accent is decorative.</strong>
-        <code>#BC727C</code> fails AA on every light ground. Large display type, hairlines,
-        shapes and labelled icons only. Use <code>accent-strong</code> when it must be read.
-      </li>
-    </ol>
   </section>
 
-  {groups.map((group) => (
-    <section class="mb-12">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{group.title}</h2>
-      <p class="mt-1 mb-4 text-sm text-gray-600 dark:text-gray-300">{group.blurb}</p>
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[52rem] text-left text-sm">
-          <thead class="border-b border-gray-200 dark:border-gray-700">
-            <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              <th class="py-2 pr-4">Light</th>
-              <th class="py-2 pr-4">Dark</th>
-              <th class="py-2 pr-4">Role</th>
-              <th class="py-2 pr-4">CSS variable</th>
-              <th class="py-2 pr-4">Min ratio</th>
-              <th class="py-2">Usage</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-            {group.tokens.map((token) => (
+  {
+    groups.map((group) => (
+      <section class="mb-12">
+        <h2 class="text-xl font-display font-bold mb-1">{group.title}</h2>
+        <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">{group.blurb}</p>
+
+        <div class="overflow-x-auto rounded-xl border border-cabuya-border">
+          <table class="w-full text-sm min-w-[54rem]">
+            <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
               <tr>
-                <td class="py-3 pr-4">
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="inline-block h-8 w-8 shrink-0 rounded-lg border border-gray-200 dark:border-gray-700"
-                      style={`background:${token.light}`}
-                      aria-hidden="true"
-                    ></span>
-                    <code class="text-xs">{token.light}</code>
-                  </div>
-                </td>
-                <td class="py-3 pr-4">
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="inline-block h-8 w-8 shrink-0 rounded-lg border border-gray-200 dark:border-gray-700"
-                      style={`background:${token.dark}`}
-                      aria-hidden="true"
-                    ></span>
-                    <code class="text-xs">{token.dark}</code>
-                  </div>
-                </td>
-                <td class="py-3 pr-4 font-medium text-gray-900 dark:text-gray-100">
-                  {token.role}
-                  {token.note === 'restricted' && (
-                    <span class="ml-2 rounded-full bg-cabuya-danger-soft px-2 py-0.5 text-[11px] font-semibold text-cabuya-danger">
-                      restricted
-                    </span>
-                  )}
-                  {token.note === 'no-flip' && (
-                    <span class="ml-2 rounded-full bg-cabuya-info-soft px-2 py-0.5 text-[11px] font-semibold text-cabuya-info">
-                      no flip
-                    </span>
-                  )}
-                </td>
-                <td class="py-3 pr-4"><code class="text-xs">{token.cssVar}</code></td>
-                <td class="py-3 pr-4 whitespace-nowrap">
-                  {token.minRatio ? (
-                    <span class="text-xs text-gray-600 dark:text-gray-300">
-                      {token.minRatio.light.toFixed(2)} / {token.minRatio.dark.toFixed(2)}
-                      <span
-                        class={`ml-2 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                          verdict(Math.min(token.minRatio.light, token.minRatio.dark)) === 'AA'
-                            ? 'bg-cabuya-success-soft text-cabuya-success'
-                            : 'bg-cabuya-warning-soft text-cabuya-warning'
-                        }`}
-                      >
-                        {verdict(Math.min(token.minRatio.light, token.minRatio.dark))}
-                      </span>
-                    </span>
-                  ) : (
-                    <span class="text-xs text-gray-500 dark:text-gray-400">surface</span>
-                  )}
-                </td>
-                <td class="py-3 text-gray-600 dark:text-gray-300">{token.usage}</td>
+                <th scope="col" class="px-4 py-2.5 font-semibold">Swatch</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">Token</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">Light</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">Dark</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">Measured</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  ))}
+            </thead>
+            <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+              {group.rows.map((row) => (
+                <tr>
+                  <td class="px-4 py-3">
+                    <div class="flex gap-1.5">
+                      <span
+                        class="inline-block w-9 h-9 rounded-md border border-cabuya-border"
+                        style={`background:${row.lightHex}`}
+                        title={`light: ${row.lightHex}`}
+                      />
+                      <span
+                        class="inline-block w-9 h-9 rounded-md border border-cabuya-border"
+                        style={`background:${row.darkHex}`}
+                        title={`dark: ${row.darkHex}`}
+                      />
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 align-top">
+                    <code class="text-xs">--color-{row.token}</code>
+                    <p class="mt-1 text-xs text-cabuya-text-secondary max-w-xs">{row.role}</p>
+                    <span class="mt-1.5 inline-block rounded-full bg-cabuya-bg-brand-strong px-2 py-0.5 text-[0.65rem] font-medium uppercase tracking-wide">
+                      {KIND_LABEL[row.kind]}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 align-top">
+                    <code class="text-xs uppercase">{row.lightHex}</code>
+                  </td>
+                  <td class="px-4 py-3 align-top">
+                    <code class="text-xs uppercase">{row.darkHex}</code>
+                    {!row.flips && (
+                      <p class="mt-1 text-[0.65rem] uppercase tracking-wide text-cabuya-text-muted">
+                        no flip
+                      </p>
+                    )}
+                  </td>
+                  <td class="px-4 py-3 align-top">
+                    <p class={row.lightPass ? 'text-cabuya-success' : 'text-cabuya-danger'}>
+                      <span class="font-semibold">{row.lightPass ? 'PASS' : 'FAIL'}</span>
+                      <span class="text-cabuya-text-secondary"> light · {row.lightNote}</span>
+                    </p>
+                    <p class={`mt-1 ${row.darkPass ? 'text-cabuya-success' : 'text-cabuya-danger'}`}>
+                      <span class="font-semibold">{row.darkPass ? 'PASS' : 'FAIL'}</span>
+                      <span class="text-cabuya-text-secondary"> dark · {row.darkNote}</span>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))
+  }
 
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Live check</h2>
-    <p class="mt-1 mb-4 text-sm text-gray-600 dark:text-gray-300">
-      These render with the real tokens. Toggle the theme — every one must stay readable.
-    </p>
-    <div class="flex flex-wrap gap-3">
-      <span class="rounded-full bg-cabuya-fill px-5 py-2.5 font-semibold text-cabuya-on-fill">Primary button</span>
-      <span class="rounded-full border border-cabuya-primary px-5 py-2.5 font-semibold text-cabuya-primary">Secondary button</span>
-      <span class="rounded-full bg-cabuya-success-soft px-3 py-1 text-sm font-medium text-cabuya-success">Con evidencia</span>
-      <span class="rounded-full bg-cabuya-warning-soft px-3 py-1 text-sm font-medium text-cabuya-warning">En organización</span>
-      <span class="rounded-full bg-cabuya-info-soft px-3 py-1 text-sm font-medium text-cabuya-info">Informativo</span>
-      <span class="rounded-full bg-cabuya-danger-soft px-3 py-1 text-sm font-medium text-cabuya-danger">Urgente</span>
-    </div>
-    <div class="mt-4 rounded-[18px] border border-cabuya-border bg-cabuya-bg-elevated p-6 shadow-cabuya-sm">
-      <p class="font-display text-xl font-semibold text-cabuya">Card on an elevated surface</p>
-      <p class="mt-1 text-cabuya-secondary">Supporting copy in the secondary token.</p>
-      <p class="mt-1 text-sm text-cabuya-text-muted">Muted copy — the lightest permitted body text.</p>
-    </div>
+  <section class="rounded-xl border border-cabuya-border p-5">
+    <h2 class="text-base font-semibold mb-2">Where the numbers can still be wrong</h2>
+    <ul class="text-sm text-cabuya-text-secondary space-y-1.5 list-disc list-inside max-w-3xl">
+      <li>
+        Contrast is measured against the grounds a token is <em>documented</em> to
+        meet. Put a token somewhere it was never meant to go and the number here
+        no longer describes it.
+      </li>
+      <li>
+        Opacity utilities are not modelled. <code>bg-cabuya-bg-brand/50</code>
+        composites against whatever is behind it, and this page measures the
+        solid value.
+      </li>
+      <li>
+        The live per-utility view is at
+        <a href="/internal/ui/colors" class="text-cabuya-primary underline underline-offset-2">/internal/ui/colors</a>,
+        which reads <code>getComputedStyle</code> in the browser and so catches a
+        broken utility that this build-time view cannot see.
+      </li>
+    </ul>
   </section>
-
-  <footer class="border-t border-gray-200 pt-6 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
-    Full rules in <code>docs/DESIGN.md</code>; identity and voice in
-    <code>docs/BRAND_GUIDE.md</code>. Token values live in
-    <code>src/styles/global.css</code> — the only place they may be changed.
-  </footer>
 </InternalLayout>

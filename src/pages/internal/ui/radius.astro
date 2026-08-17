@@ -88,7 +88,7 @@ const componentMapping = [
         <div class="text-center">
           <div class:list={['w-full aspect-square border-2 border-cabuya-primary/40 bg-cabuya-fill/10 dark:bg-cabuya-fill/20 mb-2', r.name]} />
           <code class="text-xs font-medium">{r.name}</code>
-          <div class="text-xs text-gray-600 dark:text-gray-300 mt-0.5">{r.value}</div>
+          <div class="text-xs text-cabuya-text-secondary mt-0.5">{r.value}</div>
         </div>
       ))}
     </div>
@@ -97,25 +97,25 @@ const componentMapping = [
   <!-- Component Mapping -->
   <section class="mb-12" data-component="component-mapping">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Component Mapping</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+    <p class="text-sm text-cabuya-text-secondary mb-4">
       Which radius to use for which component type:
     </p>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Component</th>
               <th class="text-left py-3 px-4 font-semibold">Radius</th>
               <th class="text-left py-3 px-4 font-semibold">Examples</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {componentMapping.map((m) => (
               <tr>
                 <td class="py-3 px-4 font-medium">{m.component}</td>
                 <td class="py-3 px-4"><code class="text-xs">{m.radius}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{m.example}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{m.example}</td>
               </tr>
             ))}
           </tbody>
@@ -128,13 +128,13 @@ const componentMapping = [
   <section class="mb-12" data-component="live-examples">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Live Examples</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+      <div class="rounded-2xl border border-cabuya-border p-5">
         <div class="font-semibold mb-1">Standard Card</div>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Uses <code class="text-xs">rounded-2xl</code></p>
+        <p class="text-sm text-cabuya-text-secondary">Uses <code class="text-xs">rounded-2xl</code></p>
       </div>
-      <div class="rounded-3xl border border-gray-200 dark:border-gray-700 p-5 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-900">
+      <div class="rounded-3xl border border-cabuya-border p-5 bg-gradient-to-br from-cabuya-bg-brand/50 to-cabuya-bg-elevated dark:from-cabuya-bg-brand dark:to-cabuya-bg-elevated">
         <div class="font-semibold mb-1">Welcome Card</div>
-        <p class="text-sm text-gray-600 dark:text-gray-300">Uses <code class="text-xs">rounded-3xl</code> with gradient</p>
+        <p class="text-sm text-cabuya-text-secondary">Uses <code class="text-xs">rounded-3xl</code> with gradient</p>
       </div>
       <div>
         <button type="button" class="rounded-lg bg-cabuya-bg-dark text-white px-4 py-2 text-sm font-medium">
@@ -142,30 +142,30 @@ const componentMapping = [
         </button>
       </div>
       <div class="flex gap-2">
-        <span class="rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-xs font-medium">Pill tag</span>
+        <span class="rounded-full bg-cabuya-bg-brand-strong px-3 py-1 text-xs font-medium">Pill tag</span>
         <span class="rounded-full bg-cabuya-fill/10 text-cabuya-primary px-3 py-1 text-xs font-medium">Active pill</span>
       </div>
     </div>
   </section>
 
   <!-- Agent Reference -->
-  <section class="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8" data-agent-reference="true">
+  <section class="mt-16 border-t border-cabuya-border pt-8" data-agent-reference="true">
     <h2 class="text-lg font-bold mb-4">Agent Reference</h2>
     <div class="overflow-x-auto">
       <table class="w-full text-sm border-collapse">
         <thead>
-          <tr class="border-b border-gray-200 dark:border-gray-700 text-left">
+          <tr class="border-b border-cabuya-border text-left">
             <th class="py-2 pr-4 font-semibold">Token</th>
             <th class="py-2 pr-4 font-semibold">Value</th>
             <th class="py-2 font-semibold">Usage</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+        <tbody class="divide-y divide-cabuya-border">
           {radiusValues.map((r) => (
             <tr>
               <td class="py-2 pr-4"><code class="text-xs">{r.name}</code></td>
-              <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">{r.value}</td>
-              <td class="py-2 text-gray-600 dark:text-gray-300">{r.usage}</td>
+              <td class="py-2 pr-4 text-cabuya-text-secondary">{r.value}</td>
+              <td class="py-2 text-cabuya-text-secondary">{r.usage}</td>
             </tr>
           ))}
         </tbody>

@@ -1,9 +1,9 @@
 ---
 /**
- * Corag v3.0.0 small status/category pill (filter pills, tag chips).
+ * Cabuya small status/category pill (filter pills, tag chips).
  *
- * For tier-aware sponsor badges or sponsor levels, use `<Badge variant="...">`
- * instead.
+ * For state labels — measured, unmeasured, proposed — use `<Badge>` instead:
+ * a pill is a category, a badge is a claim about state.
  */
 
 interface Props {
@@ -25,8 +25,12 @@ const {
 const sizeClass = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
 
 const variantBase = {
+  // The border is not decoration: `bg-cabuya-bg-elevated` is also what cards
+  // and panels use, so without an edge the default pill dissolves into any
+  // raised surface it sits on. The component contact sheet is where that
+  // became obvious — it was invisible in the dark half.
   default:
-    'bg-cabuya-bg-elevated text-cabuya-secondary hover:bg-cabuya-primary-soft',
+    'bg-cabuya-bg-elevated text-cabuya-secondary border border-cabuya-border hover:bg-cabuya-primary-soft',
   primary: 'bg-cabuya-fill text-cabuya-on-fill hover:bg-cabuya-fill-strong',
   accent: 'bg-cabuya-accent text-cabuya-bg-dark hover:bg-cabuya-accent-strong',
   outline:

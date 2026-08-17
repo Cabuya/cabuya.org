@@ -1,66 +1,49 @@
 ---
 import '@/styles/global.css';
 
-interface NavItem {
-  id: string;
-  label: string;
-  href: string;
-  icon: string;
-  parent?: string;
-}
+import {
+  INTERNAL_SECTIONS,
+  type InternalPage,
+  pagesIn,
+  topLevelPages,
+} from '@/lib/internal-hub';
+
+/**
+ * The dev-only hub shell.
+ *
+ * The sidebar is generated from `src/lib/internal-hub.ts` rather than a list
+ * kept here, because the hand-maintained version outlived the pages it linked
+ * to. A unit test reconciles that registry with the filesystem.
+ */
 
 interface Props {
   title: string;
   description?: string;
+  /** Section id from the registry — drives the active state. */
   section?: string;
+  /** Page id from the registry when the page is a sub-page. */
   subsection?: string;
 }
 
 const { title, description, section, subsection } = Astro.props;
-const fullTitle = `${title} — Corag Internal`;
-
-const navItems: NavItem[] = [
-  { id: 'hub', label: 'Hub', href: '/internal', icon: '~' },
-  { id: 'brand', label: 'Brand Book', href: '/internal/brand', icon: '*' },
-  { id: 'ui', label: 'UI Design System', href: '/internal/ui', icon: '#' },
-  { id: 'guide', label: 'Staff Guide', href: '/internal/guide', icon: '>' },
-  {
-    id: 'tech-stack',
-    label: 'Tech Stack',
-    href: '/internal/guide/tech-stack',
-    icon: '*',
-    parent: 'guide',
-  },
-  {
-    id: 'file-structure',
-    label: 'File Structure',
-    href: '/internal/guide/file-structure',
-    icon: '/',
-    parent: 'guide',
-  },
-  { id: 'authors', label: 'Authors', href: '/internal/authors', icon: '&' },
-  {
-    id: 'certificates',
-    label: 'Certificates',
-    href: '/internal/certificates',
-    icon: '%',
-  },
-  { id: 'sitemap', label: 'Sitemap', href: '/internal/sitemap', icon: '@' },
-];
+const fullTitle = `${title} — Cabuya Internal`;
 
 const activeId = subsection || section;
-const isGuideActive =
-  section === 'guide' ||
-  navItems.some((item) => item.parent === 'guide' && item.id === activeId);
+const topLevelItems = topLevelPages();
+const activeSection =
+  INTERNAL_SECTIONS.find((s) => s.id === section)?.id ?? undefined;
+const children: InternalPage[] = activeSection
+  ? pagesIn(activeSection).filter((page) => !page.topLevel)
+  : [];
 
-const topLevelItems = navItems.filter((item) => !item.parent);
-const guideChildren = navItems.filter((item) => item.parent === 'guide');
-
-const visibleItems = navItems.filter((item) => !item.parent || isGuideActive);
+/** Flat order for the mobile prev/next pair. */
+const visibleItems: InternalPage[] = topLevelItems.flatMap((item) =>
+  item.section === activeSection ? [item, ...children] : [item]
+);
 const currentIndex = visibleItems.findIndex((item) => item.id === activeId);
 const prevItem = currentIndex > 0 ? visibleItems[currentIndex - 1] : null;
 const nextItem =
-  currentIndex < visibleItems.length - 1
+  currentIndex >= 0 && currentIndex < visibleItems.length - 1
     ? visibleItems[currentIndex + 1]
     : null;
 ---
@@ -77,24 +60,24 @@ const nextItem =
   (function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');})();
 </script>
   </head>
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+  <body class="min-h-screen bg-cabuya-bg dark:bg-cabuya-bg-dark text-cabuya-text font-sans antialiased transition-colors duration-300">
 
-    <!-- Sticky amber warning banner -->
-    <div class="sticky top-0 z-50 flex items-center justify-between gap-3 px-3 sm:px-4 py-2 text-sm font-semibold bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-100 border-b border-amber-300 dark:border-amber-700">
+    <!-- Dev-only banner. Amber is intentional: it is not a brand surface, it is a warning. -->
+    <div class="sticky top-0 z-50 flex items-center justify-between gap-3 px-3 sm:px-4 py-2 text-sm font-semibold bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-100 border-b border-amber-400 dark:border-amber-800">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="inline-flex items-center rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wide shrink-0">
-          INTERNAL
+        <span class="inline-flex items-center rounded-full bg-amber-900 dark:bg-amber-200 px-2 py-0.5 text-xs font-bold text-amber-50 dark:text-amber-950 uppercase tracking-wide shrink-0">
+          Internal
         </span>
-        <span class="text-xs sm:text-sm truncate">Corag · Staff Portal</span>
+        <span class="text-xs sm:text-sm truncate">Cabuya · dev-only hub</span>
       </div>
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <span class="hidden md:inline text-xs text-amber-700 dark:text-amber-300">
-          Not included in production
+        <span class="hidden md:inline text-xs">
+          Never shipped to production
         </span>
         <button
           id="internal-theme-toggle"
           type="button"
-          class="group inline-flex items-center gap-2 rounded-full pl-1 pr-3 py-1 bg-white dark:bg-cabuya-bg-elevated text-cabuya-text dark:text-cabuya-text border border-amber-300 dark:border-amber-700 hover:border-cabuya-primary dark:hover:border-cabuya-primary hover:shadow-sm transition-all"
+          class="group inline-flex items-center gap-2 rounded-full pl-1 pr-3 py-1 bg-cabuya-bg-elevated text-cabuya-text border border-amber-400 dark:border-amber-800 hover:border-cabuya-primary hover:shadow-sm transition-all"
           aria-label="Toggle light/dark mode"
           title="Toggle light/dark mode"
         >
@@ -115,22 +98,22 @@ const nextItem =
     </div>
 
     <!-- Mobile horizontal navigation -->
-    <div class="lg:hidden sticky top-[41px] z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <div class="lg:hidden sticky top-[41px] z-40 bg-cabuya-bg-elevated border-b border-cabuya-border">
       <div class="flex items-center gap-1 px-2 py-2 overflow-x-auto scrollbar-hide">
         {visibleItems.map((item) => (
           <a
             href={item.href}
             class:list={[
               'shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap',
-              item.parent ? 'ml-1' : '',
+              item.topLevel ? '' : 'ml-1',
               activeId === item.id
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
+                ? 'bg-cabuya-fill text-cabuya-on-fill'
+                : 'bg-cabuya-bg-brand text-cabuya-text-secondary hover:bg-cabuya-bg-brand-strong',
             ]}
             aria-current={activeId === item.id ? 'page' : undefined}
           >
-            <span class="text-sm font-mono" aria-hidden="true">{item.icon}</span>
-            <span>{item.label}</span>
+            {item.icon && <span class="text-sm font-mono" aria-hidden="true">{item.icon}</span>}
+            <span>{item.title}</span>
           </a>
         ))}
       </div>
@@ -140,11 +123,12 @@ const nextItem =
 
       <!-- Desktop sidebar -->
       <nav
-        class="hidden lg:flex flex-col w-60 shrink-0 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 sticky top-[41px] h-[calc(100vh-41px)]"
+        class="hidden lg:flex flex-col w-64 shrink-0 border-r border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated sticky top-[41px] h-[calc(100vh-41px)]"
+        aria-label="Internal hub"
       >
         <div class="flex-1 overflow-y-auto py-4 px-3">
           <div class="mb-4 px-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <span class="text-xs font-bold uppercase tracking-wider text-cabuya-text-muted">
               Navigation
             </span>
           </div>
@@ -155,31 +139,31 @@ const nextItem =
                   href={item.href}
                   class:list={[
                     'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    activeId === item.id || (item.id === 'guide' && isGuideActive)
-                      ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
+                    activeId === item.id || item.section === activeSection
+                      ? 'bg-cabuya-fill text-cabuya-on-fill'
+                      : 'text-cabuya-text-secondary hover:bg-cabuya-bg-brand-strong',
                   ]}
                   aria-current={activeId === item.id ? 'page' : undefined}
                 >
                   <span class="w-6 text-center text-base font-mono" aria-hidden="true">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span>{item.title}</span>
                 </a>
-                {item.id === 'guide' && isGuideActive && (
+                {item.section === activeSection && children.length > 0 && (
                   <ul class="mt-0.5 ml-6 space-y-0.5">
-                    {guideChildren.map((child) => (
+                    {children.map((child) => (
                       <li>
                         <a
                           href={child.href}
                           class:list={[
                             'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
                             activeId === child.id
-                              ? 'bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900'
-                              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700',
+                              ? 'bg-cabuya-bg-brand-strong text-cabuya-text'
+                              : 'text-cabuya-text-secondary hover:bg-cabuya-bg-brand-strong',
                           ]}
                           aria-current={activeId === child.id ? 'page' : undefined}
                         >
-                          <span class="font-mono" aria-hidden="true">{child.icon}</span>
-                          <span>{child.label}</span>
+                          <span class="font-mono" aria-hidden="true">&rsaquo;</span>
+                          <span>{child.title}</span>
                         </a>
                       </li>
                     ))}
@@ -195,33 +179,33 @@ const nextItem =
       <main class="flex-1 min-w-0 overflow-x-hidden">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div class="mb-8 sm:mb-10">
-            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">{title}</h1>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-display font-bold tracking-tight">{title}</h1>
             {description && (
-              <p class="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-300">{description}</p>
+              <p class="mt-2 text-base sm:text-lg text-cabuya-text-secondary">{description}</p>
             )}
           </div>
 
           <slot />
 
           <!-- Mobile prev/next navigation -->
-          <div class="lg:hidden flex items-center justify-between mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div class="lg:hidden flex items-center justify-between mt-12 pt-6 border-t border-cabuya-border">
             {prevItem ? (
-              <a href={prevItem.href} class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <a href={prevItem.href} class="flex items-center gap-2 text-sm font-medium text-cabuya-text-secondary hover:text-cabuya-primary transition-colors">
                 <span aria-hidden="true">&larr;</span>
-                <span>{prevItem.label}</span>
+                <span>{prevItem.title}</span>
               </a>
             ) : <span />}
             {nextItem && (
-              <a href={nextItem.href} class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                <span>{nextItem.label}</span>
+              <a href={nextItem.href} class="flex items-center gap-2 text-sm font-medium text-cabuya-text-secondary hover:text-cabuya-primary transition-colors">
+                <span>{nextItem.title}</span>
                 <span aria-hidden="true">&rarr;</span>
               </a>
             )}
           </div>
         </div>
 
-        <footer class="border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 text-center text-xs text-gray-600 dark:text-gray-300">
-          Corag Internal Hub &middot; Staff Only &middot; Dev Only
+        <footer class="border-t border-cabuya-border px-4 sm:px-6 py-4 text-center text-xs text-cabuya-text-muted">
+          Cabuya internal hub &middot; dev-only &middot; removed from every production build
         </footer>
       </main>
     </div>

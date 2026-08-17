@@ -95,13 +95,13 @@ const keyLibraries = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Core Technologies</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {coreTech.map((tech) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold">{tech.name}</h3>
             <span class="text-xs px-2 py-0.5 rounded-full bg-cabuya-fill/10 text-cabuya-primary font-medium">{tech.version}</span>
           </div>
-          <div class="text-xs text-gray-600 dark:text-gray-300 mb-1 font-medium">{tech.role}</div>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{tech.description}</p>
+          <div class="text-xs text-cabuya-text-secondary mb-1 font-medium">{tech.role}</div>
+          <p class="text-sm text-cabuya-text-secondary">{tech.description}</p>
         </div>
       ))}
     </div>
@@ -112,10 +112,10 @@ const keyLibraries = [
     <h2 class="text-xl md:text-2xl font-bold mb-4">Architecture Patterns</h2>
     <div class="space-y-4">
       {patterns.map((p) => (
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div class="rounded-xl border border-cabuya-border p-4">
           <h3 class="font-semibold mb-1">{p.name}</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">{p.description}</p>
-          <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
+          <p class="text-sm text-cabuya-text-secondary mb-2">{p.description}</p>
+          <div class="rounded-lg bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand p-2">
             <code class="text-xs">{p.example}</code>
           </div>
         </div>
@@ -126,22 +126,22 @@ const keyLibraries = [
   <!-- Key Libraries -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Key Libraries</h2>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Package</th>
               <th class="text-left py-3 px-4 font-semibold">Version</th>
               <th class="text-left py-3 px-4 font-semibold">Purpose</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             {keyLibraries.map((lib) => (
               <tr>
                 <td class="py-3 px-4"><code class="text-xs font-medium">{lib.name}</code></td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{lib.version}</td>
-                <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{lib.purpose}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{lib.version}</td>
+                <td class="py-3 px-4 text-cabuya-text-secondary">{lib.purpose}</td>
               </tr>
             ))}
           </tbody>
@@ -154,24 +154,24 @@ const keyLibraries = [
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Development Tools</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div class="rounded-xl border border-cabuya-border p-4">
         <h3 class="font-semibold mb-1">Linting & Formatting</h3>
-        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Biome handles both linting and formatting in a single tool.</p>
+        <p class="text-sm text-cabuya-text-secondary mb-2">Biome handles both linting and formatting in a single tool.</p>
         <code class="text-xs">npm run biome:check</code>
       </div>
-      <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div class="rounded-xl border border-cabuya-border p-4">
         <h3 class="font-semibold mb-1">Type Checking</h3>
-        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Astro's built-in TypeScript checker for .astro and .ts files.</p>
+        <p class="text-sm text-cabuya-text-secondary mb-2">Astro's built-in TypeScript checker for .astro and .ts files.</p>
         <code class="text-xs">npm run astro:check</code>
       </div>
-      <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div class="rounded-xl border border-cabuya-border p-4">
         <h3 class="font-semibold mb-1">Image Optimization</h3>
-        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Drop images in _staging/, run optimize script to resize and compress.</p>
+        <p class="text-sm text-cabuya-text-secondary mb-2">Drop images in _staging/, run optimize script to resize and compress.</p>
         <code class="text-xs">npm run images:optimize</code>
       </div>
-      <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div class="rounded-xl border border-cabuya-border p-4">
         <h3 class="font-semibold mb-1">Testing</h3>
-        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Vitest for unit tests. Test files follow *.test.ts naming convention.</p>
+        <p class="text-sm text-cabuya-text-secondary mb-2">Vitest for unit tests. Test files follow *.test.ts naming convention.</p>
         <code class="text-xs">npm run test</code>
       </div>
     </div>
@@ -180,34 +180,34 @@ const keyLibraries = [
   <!-- Hydration Directives -->
   <section class="mb-12">
     <h2 class="text-xl md:text-2xl font-bold mb-4">Hydration Directives</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+    <p class="text-sm text-cabuya-text-secondary mb-4">
       Choose the lightest directive that meets requirements. Performance priority: <code class="text-xs">client:visible</code> &gt; <code class="text-xs">client:idle</code> &gt; <code class="text-xs">client:load</code>.
     </p>
-    <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="rounded-2xl border border-cabuya-border overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <tr class="border-b border-cabuya-border bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand">
               <th class="text-left py-3 px-4 font-semibold">Directive</th>
               <th class="text-left py-3 px-4 font-semibold">When</th>
               <th class="text-left py-3 px-4 font-semibold">Use Case</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody class="divide-y divide-cabuya-border">
             <tr>
               <td class="py-3 px-4"><code class="text-xs">client:load</code></td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">Immediately on page load</td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">Header, search, theme toggle</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">Immediately on page load</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">Header, search, theme toggle</td>
             </tr>
             <tr>
               <td class="py-3 px-4"><code class="text-xs">client:idle</code></td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">After page is idle</td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">Non-critical interactive features</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">After page is idle</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">Non-critical interactive features</td>
             </tr>
             <tr>
               <td class="py-3 px-4"><code class="text-xs">client:visible</code></td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">When scrolled into viewport</td>
-              <td class="py-3 px-4 text-gray-600 dark:text-gray-300">Below-fold components, blog grid</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">When scrolled into viewport</td>
+              <td class="py-3 px-4 text-cabuya-text-secondary">Below-fold components, blog grid</td>
             </tr>
           </tbody>
         </table>
