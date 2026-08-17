@@ -132,7 +132,7 @@ jobs:
           done
 
       - name: Open or update the daily pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: bot/registry-history
           commit-message: |
