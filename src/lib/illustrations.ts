@@ -63,10 +63,15 @@ export const ILLUSTRATIONS = {
   /** HP-01 — the landing hero. The one asset that is an LCP candidate. */
   'hero-cordage': {
     src: `${VISUALS}/home/hero-cordage.webp`,
-    srcset: pair(`${VISUALS}/home/hero-cordage`, 520),
-    width: 520,
-    height: 589,
-    sizes: '(min-width: 1024px) 34vw, (min-width: 640px) 60vw, 84vw',
+    srcset: pair(`${VISUALS}/home/hero-cordage`, 600),
+    width: 600,
+    height: 679,
+    /*
+     * Below `lg` the art is a full-bleed band, so it is the viewport wide. From
+     * `lg` it is height-driven and fills the fold, which on a wide screen is
+     * around half the viewport once the column bleeds into the container's slack.
+     */
+    sizes: '(min-width: 1024px) 55vw, 100vw',
     mobile: {
       src: `${VISUALS}/home/hero-cordage-mobile.webp`,
       srcset: pair(`${VISUALS}/home/hero-cordage-mobile`, 480),

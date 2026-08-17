@@ -244,7 +244,7 @@ describe('hero call-to-action honesty', () => {
      * flagship drawing did not exist for most readers. The wrapper must be
      * visible by default and only *change* at `lg`.
      */
-    const wrapper = source.match(/<div class="([^"]*lg:self-stretch[^"]*)"/);
+    const wrapper = source.match(/class="([^"]*lg:self-stretch[^"]*)"/);
     expect(wrapper, 'the art column wrapper').not.toBeNull();
     expect(wrapper?.[1]).not.toContain('hidden');
   });
@@ -259,11 +259,42 @@ describe('hero call-to-action honesty', () => {
      */
     expect(source).toContain('object-cover object-bottom');
     expect(source).toContain('lg:object-contain lg:object-top');
+    /*
+     * `:global(img)` is not cosmetic. Astro scopes `.hero-art img` to
+     * `.hero-art[data-astro-cid-…] img[data-astro-cid-…]`, and the `<img>` comes
+     * from `Illustration.astro` — it carries that component's id, never this
+     * one's, so the rule matched nothing and the fade silently did not exist for
+     * two passes at this component. Asserting the selector shape is the only way
+     * a source-level test catches that class of failure.
+     */
     expect(source).toMatch(
-      /\.hero-art img\s*\{[\s\S]*mask-image: linear-gradient/
+      /\.hero-art :global\(img\)\s*\{[\s\S]*mask-image: linear-gradient/
     );
     expect(source).toMatch(
-      /@media \(min-width: 1024px\)[\s\S]*\.hero-art img\s*\{[\s\S]*mask-image: none/
+      /@media \(min-width: 1024px\)[\s\S]*\.hero-art :global\(img\)\s*\{[\s\S]*mask-image: none/
+    );
+  });
+
+  it('sizes the desktop art from the fold, not from a percentage height', () => {
+    /*
+     * `lg:h-full` resolved against an indefinite grid-row height and fell back to
+     * `auto`, so the drawing rendered at its intrinsic width on every screen and a
+     * 27-inch display got what a 13-inch laptop did. The height has to come from
+     * the same `dvh` expression the section's `min-h` uses, and from `xl` the
+     * column has to be allowed past the container's own 80rem so a wide screen can
+     * fill the fold. `illustrations:check` measures the outcome; this catches the
+     * mechanism going back.
+     */
+    const artClasses = source.match(/class="([^"]*object-cover[^"]*)"/)?.[1];
+    expect(artClasses, 'the illustration class list').toBeTypeOf('string');
+    expect(artClasses).toContain(
+      'lg:h-[calc(100dvh-var(--cabuya-chrome-height))]'
+    );
+    /* Only in the class list — the comment above it explains the old `h-full`. */
+    expect(artClasses).not.toMatch(/\blg:h-full\b/);
+    expect(artClasses).toContain('lg:max-w-none');
+    expect(source).toMatch(
+      /xl:-mr-\[max\(0px,calc\(\(100vw-80rem\)\/2-1\.5rem\)\)\]/
     );
   });
 });

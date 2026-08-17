@@ -78,8 +78,26 @@ const RATIO_TOLERANCE = 0.015;
  * the `<picture>` that picks between them is worth measuring twice.
  */
 const SURFACES = [
-  { url: '/', expect: ['hero-cordage', 'ornament-braid', 'join-open-knot'] },
-  { url: '/es/', expect: ['hero-cordage', 'ornament-braid', 'join-open-knot'] },
+  {
+    url: '/',
+    expect: ['hero-cordage', 'ornament-braid', 'join-open-knot'],
+    /*
+     * The hero is the site's flagship image and it is supposed to hang from the
+     * header down past the buttons. It spent weeks rendering at its intrinsic
+     * 520 px on every screen — a 27-inch display got exactly what a 13-inch
+     * laptop did — because `h-full` resolves against an indefinite grid-row
+     * height and silently became `auto`. Nothing in any gate noticed, so this is
+     * the gate: from `lg` up — the same 1024px breakpoint the component switches
+     * at — the painted drawing must be at least 70% of the fold. Narrower than
+     * that it is a band by design, and a band is 25% of a tall tablet's fold.
+     */
+    rules: { 'hero-cordage': { minFoldShare: 0.7, fromWidth: 1024 } },
+  },
+  {
+    url: '/es/',
+    expect: ['hero-cordage', 'ornament-braid', 'join-open-knot'],
+    rules: { 'hero-cordage': { minFoldShare: 0.7, fromWidth: 1024 } },
+  },
   { url: '/developers/', expect: ['portal-loom'] },
   {
     url: '/developers/quickstart/',
@@ -297,16 +315,51 @@ async function runJob({ viewport, theme }) {
           continue;
         }
 
+        /*
+         * What the eye actually sees, which is not always the box.
+         *
+         * With `object-fit: contain` the drawing is letterboxed inside its box:
+         * a 700 px-wide box can paint a 300 px drawing, and measuring the box
+         * would call that fine. So the painted size is derived from the drawing's
+         * own ratio and the box, and every size rule below uses it.
+         */
+        const drawingRatio =
+          art.declaredWidth && art.declaredHeight
+            ? art.declaredWidth / art.declaredHeight
+            : art.width / art.height;
+        const painted =
+          art.objectFit === 'contain' || art.objectFit === 'scale-down'
+            ? {
+                width: Math.min(art.width, art.height * drawingRatio),
+                height: Math.min(art.height, art.width / drawingRatio),
+              }
+            : { width: art.width, height: art.height };
+
         /* Marks are punctuation, not pictures: the ornament is 16 px tall by
            design and the coil is a badge. They are held to presence, aspect and
            clipping, not to a minimum width. */
         const isMark = id === 'ornament-braid' || id === 'empty-coil';
         if (!isMark) {
-          if (art.width < MIN_WIDTH) {
+          const rule = surface.rules?.[id];
+          if (
+            rule?.minFoldShare &&
+            viewport.width >= (rule.fromWidth ?? 0) &&
+            painted.height < viewport.height * rule.minFoldShare
+          ) {
+            record('too-small-for-the-fold', {
+              ...where,
+              id,
+              detail:
+                `painted ${Math.round(painted.width)}×${Math.round(painted.height)}px — ` +
+                `${Math.round((painted.height / viewport.height) * 100)}% of a ${viewport.height}px fold, ` +
+                `floor is ${rule.minFoldShare * 100}%`,
+            });
+          }
+          if (painted.width < MIN_WIDTH) {
             record('too-small', {
               ...where,
               id,
-              detail: `${art.width}px wide, floor is ${MIN_WIDTH}px`,
+              detail: `${Math.round(painted.width)}px wide, floor is ${MIN_WIDTH}px`,
             });
           } else if (
             /*
@@ -320,33 +373,33 @@ async function runJob({ viewport, theme }) {
              */
             viewport.isMobile &&
             viewport.height >= viewport.width &&
-            art.width < art.contentWidth * MIN_SHARE_OF_CONTENT
+            painted.width < art.contentWidth * MIN_SHARE_OF_CONTENT
           ) {
             record('too-small-for-phone', {
               ...where,
               id,
-              detail: `${art.width}px of ${art.contentWidth}px content width (${Math.round(
-                (art.width / art.contentWidth) * 100
+              detail: `${Math.round(painted.width)}px of ${art.contentWidth}px content width (${Math.round(
+                (painted.width / art.contentWidth) * 100
               )}%, floor is ${MIN_SHARE_OF_CONTENT * 100}%)`,
             });
           }
         }
 
         /*
-         * `object-fit: cover` is a crop window, not a squash.
+         * Only `object-fit: fill` can actually squash a drawing.
          *
-         * The landing hero uses one below `lg`: a full-bleed band showing the fan
-         * of fibres with the rest faded out, so its box is deliberately a
-         * different shape from the file. `cover` preserves the drawing's own
-         * aspect ratio by construction — the only thing a ratio comparison could
-         * report there is the crop the designer asked for. `fill` and a missing
-         * `object-fit` still get checked, which is where an accidental `h-full`
-         * shows up.
+         * `fill` is the default for `<img>`, so this check still covers every
+         * ordinary placement: the box is the drawing, and a box of the wrong
+         * shape is a stretched drawing. The landing hero is the exception at both
+         * ends — a `cover` crop window below `lg` (the faded band) and a
+         * `contain` box sized from the fold above it — and in both the drawing
+         * keeps its own aspect ratio by construction, so comparing the box to the
+         * file there would only report the framing the design asked for.
          */
         const declared = art.declaredWidth / art.declaredHeight;
         const rendered = art.width / art.height;
-        if (art.objectFit === 'cover') {
-          /* nothing to compare: the box is a window, not the drawing */
+        if (art.objectFit !== 'fill') {
+          /* the box is a window or a frame, not the drawing itself */
         } else if (
           !declared ||
           Math.abs(rendered - declared) / declared > RATIO_TOLERANCE
@@ -427,6 +480,7 @@ const ORDER = [
   'page-overflows',
   'too-small',
   'too-small-for-phone',
+  'too-small-for-the-fold',
   'undeclared',
 ];
 

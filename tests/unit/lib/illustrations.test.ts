@@ -36,9 +36,18 @@ import {
 const PUBLIC = join(process.cwd(), 'public');
 const VISUALS = join(PUBLIC, 'images/visuals');
 
-/** 1x ceilings in KB. Marks are punctuation and get a tenth of the budget. */
+/**
+ * 1x ceilings in KB. Marks are punctuation and get a tenth of the budget.
+ *
+ * The hero's is the one raised ceiling and it buys sharpness where the drawing
+ * is largest: from `lg` the art is height-driven and fills the fold, so a 27-inch
+ * display paints it around 790 px wide and a retina laptop asks for ~1400 device
+ * pixels. It is also desktop-only weight — a phone fetches the narrow framing
+ * (`hero-cordage-mobile`, well inside 96 KB) through the `<picture>`'s `media`
+ * source, so the landing's mobile LCP does not pay for it.
+ */
 const BUDGET_KB: Record<string, number> = {
-  'hero-cordage': 96,
+  'hero-cordage': 128,
   'join-open-knot': 80,
   'portal-loom': 80,
   'quickstart-first-thread': 60,

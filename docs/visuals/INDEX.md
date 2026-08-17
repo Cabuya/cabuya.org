@@ -88,6 +88,16 @@ one declared box is honest for both, and one fetch either way. Its entry has the
 reasoning; the short version is that a 4:5 drawing shrunk into a phone column is
 a thumbnail of a hero, and `hidden lg:block` is not an option.
 
+It is also the entry that taught the pack two lessons the gates now carry.
+**Artwork can be present and still be wrong**: the desktop framing rendered at its
+intrinsic width on every screen for two passes, because `h-full` resolves against
+an indefinite grid-row height and quietly became `auto` — `illustrations:check`
+measures the *painted* drawing against the fold now. And **CSS that exists is not
+CSS that applies**: the band's fade sat in a scoped `<style>` as `.hero-art img`,
+which Astro compiles to require its own `data-astro-cid` on the `<img>` — an
+element that belongs to `Illustration.astro`. Two visual defects, neither visible
+to a build, both now covered.
+
 ## What is left
 
 Nothing is blocked. `OG-02` (per-section share cards) is the only entry not

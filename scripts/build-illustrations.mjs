@@ -72,8 +72,15 @@ const ASSETS = [
     master: '01-hp-01-hero-cordage.png',
     area: 'home',
     slug: 'hero-cordage',
-    width: 520,
-    budget: 96,
+    /*
+     * 600, not 520: from `lg` the hero is height-driven and fills the fold, so
+     * on a tall 27-inch screen the drawing renders around 790 CSS px wide. A 520
+     * `1x` meant the 1040 `2x` was the only usable candidate there and it was
+     * already below 1:1 on a retina laptop — visible as softness in exactly the
+     * fine filaments this drawing is made of.
+     */
+    width: 600,
+    budget: 128,
     /** The rope descends out of the header: no margin at the top. */
     bleed: 'top',
   },

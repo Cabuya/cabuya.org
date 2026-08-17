@@ -20,6 +20,20 @@
  * the fibres end where the page does. The layout is still built so that the
  * art's absence costs nothing: flip `HERO_ART.present` off and the copy column
  * simply takes the width. No placeholder box, per the integration guide.
+ *
+ * ## Why the art is sized in `dvh` and not with `h-full`
+ *
+ * It used to be `lg:h-full w-auto`, which looked right and did nothing: a
+ * percentage height resolves against the *parent's* height, the parent is a grid
+ * item whose height comes from the row, and that is indefinite while the row is
+ * being laid out — so `h-full` fell back to `auto` and the drawing rendered at
+ * its intrinsic width on every screen. A 27-inch display got the same 520 px of
+ * artwork as a 13-inch laptop, which is what "the illustration is too small"
+ * meant. Sizing it from `100dvh` minus the chrome — the same expression the
+ * section's `min-h` uses — makes the height definite, so `object-contain` scales
+ * the drawing to whichever of the fold or the column is the binding constraint.
+ * From `xl` the column also bleeds into the container's own slack, which is what
+ * lets a wide screen fill the fold instead of stopping at 80 rem.
  */
 import Illustration from '@/components/editorial/Illustration.astro';
 import { getUrlPrefix, type Language } from '@/lib/i18n';
@@ -70,14 +84,20 @@ const HERO_ART = { present: true };
 <section
   class="main-container flex flex-col justify-center pt-16 pb-20 sm:pt-24 sm:pb-28 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:py-0"
 >
+  {/*
+    `gap-4` below `lg`, not `gap-12`: the band's own fade already reads as space,
+    so a structural gap on top of it left the drawing floating a long way under
+    the buttons. From `lg` the two are columns again and the gap is horizontal,
+    where 4rem is right.
+  */}
   <div
-    class="grid items-center gap-12 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[minmax(0,38rem)_minmax(0,1fr)]"
+    class="grid items-center gap-4 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] xl:gap-12 2xl:grid-cols-[minmax(0,38rem)_minmax(0,1fr)]"
   >
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.14em] text-cabuya-accent-strong">
         {t.home.hero.eyebrow}
       </p>
-      <h1 class="mt-4 max-w-3xl text-display text-cabuya-primary">
+      <h1 class="mt-4 max-w-3xl text-balance text-display text-cabuya-primary">
         {t.home.hero.title}
       </h1>
       <p class="measure mt-7 text-lg leading-relaxed text-cabuya-text-secondary">
@@ -121,12 +141,14 @@ const HERO_ART = { present: true };
 
     {
       HERO_ART.present && (
-        <div class="hero-art -mx-4 mt-2 md:-mx-6 lg:mx-0 lg:mt-0 lg:flex lg:items-start lg:justify-end lg:self-stretch">
+        <div
+          class="hero-art -mx-4 md:-mx-6 lg:mx-0 lg:flex lg:items-start lg:justify-end lg:self-stretch xl:-mr-[max(0px,calc((100vw-80rem)/2-1.5rem))]"
+        >
           <Illustration
             id="hero-cordage"
             loading="eager"
             priority
-            class="h-52 w-full object-cover object-bottom sm:h-64 lg:h-full lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
+            class="h-52 w-full object-cover object-bottom sm:h-64 lg:h-[calc(100dvh-var(--cabuya-chrome-height))] lg:max-w-none lg:object-contain lg:object-top"
           />
         </div>
       )
@@ -153,23 +175,35 @@ const HERO_ART = { present: true };
    * From `lg` the mask comes off: there the art is the full drawing, hung from
    * the header with its own top bleed, and a fade would erase the rope.
    */
-  .hero-art img {
+  /*
+   * `:global(img)` is load-bearing, not a shortcut.
+   *
+   * Astro scopes a selector by requiring its own `data-astro-cid` on *every*
+   * compound — `.hero-art img` compiles to
+   * `.hero-art[data-astro-cid-…] img[data-astro-cid-…]`. The `<img>` comes from
+   * `Illustration.astro`, so it carries that component's id and never this one's:
+   * the rule matched nothing and the fade silently did not exist. That is the
+   * whole reason the band looked cut across the top for two passes at this
+   * component. `:global` on the descendant keeps the scope on the wrapper, which
+   * is in this template, and lets the rule reach the child's element.
+   */
+  .hero-art :global(img) {
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgb(0 0 0 / 0.35) 22%,
-      #000 55%
+      rgb(0 0 0 / 0.4) 26%,
+      #000 62%
     );
     mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgb(0 0 0 / 0.35) 22%,
-      #000 55%
+      rgb(0 0 0 / 0.4) 26%,
+      #000 62%
     );
   }
 
   @media (min-width: 1024px) {
-    .hero-art img {
+    .hero-art :global(img) {
       -webkit-mask-image: none;
       mask-image: none;
     }
