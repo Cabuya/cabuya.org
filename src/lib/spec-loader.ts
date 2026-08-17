@@ -131,6 +131,26 @@ export function specSections(version: string): SpecSection[] {
     .sort((a, b) => a.order - b.order);
 }
 
+/**
+ * A section's body with its own title line removed, for rendering inside a page.
+ *
+ * Each specification file opens with `# §3 — The feed`, which is correct for a
+ * standalone Markdown document and wrong inside a page that already renders an
+ * `<h1>`: assistive technology announces two document titles and the outline
+ * says the page contains two documents. axe does not flag it; a heading-level
+ * walk does.
+ *
+ * Only the rendered HTML is affected. The `.md` twin serves `body`, unchanged
+ * and byte-exact, because the twin *is* the source file and a reader fetching
+ * it should get the document rather than the document minus a line.
+ */
+export function specSectionForRender(section: SpecSection): string {
+  // The body opens with a blank line (frontmatter is stripped, its newline is
+  // not), so the anchor has to allow it — an earlier version used `^#` without
+  // accounting for that and silently changed nothing.
+  return section.body.replace(/^\s*#\s+[^\n]*\n+/, '');
+}
+
 export function specSection(
   version: string,
   slug: string

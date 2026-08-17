@@ -73,5 +73,6 @@
 |---|---|
 | Token contrast | `tests/unit/lib/design-tokens.test.ts` (re-computed WCAG) |
 | Runtime scan | `a11y:check` — axe over eight routes × light/dark × mobile/desktop + menu/report states *(Task 35)* |
-| Manual | Keyboard walk, 200% zoom reflow, screen-reader pass — recorded in `analysis_results/PERF_A11Y_BASELINE.md` |
+| Structural | Heading levels, landmarks, skip link, `alt` + dimensions, focus visibility, Escape/focus return, reduced motion, 200% reflow — `tests/e2e/a11y/manual-checks.spec.ts` |
+| Manual | Screen-reader pass and testing with disabled users — **not yet done**, and listed as not done in `analysis_results/PERF_A11Y_BASELINE.md` §9 |
 | Lighthouse | a11y = 100 on the route matrix |

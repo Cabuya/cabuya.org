@@ -36,6 +36,7 @@
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
 | `pnpm run prose:check(:strict)` | Every `--tw-prose-*` variable in the **compiled** CSS resolves to a Cabuya token, and the mapping is unlayered. Reads `dist/`, so it runs after the build | ✅ live |
+| `pnpm run a11y:check` | axe over 8 routes × 2 themes × 2 viewports + 4 interactive states, plus the structural pass (headings, landmarks, focus, reflow) | ✅ live |
 | `pnpm run perf:budgets(:strict)` | Per-route gzipped JS against the budget table. Reads `dist/`, follows each page's island and preload graph | ✅ live |
 | `pnpm run lighthouse` | LHCI on the eight representative routes, median of 3, against `dist/` | ✅ live |
 | `pnpm run llms:generate(:check)` — `llms:check` | Regenerates `public/llms.txt` and `llms-full.txt` from the nav registries, the spec loader, the registry and the check catalogue. `llms:check` fails when the committed copy has drifted | ✅ live |
@@ -47,7 +48,6 @@
 
 | Command | Asserts | Ships |
 |---|---|---|
-| `pnpm run a11y:check` | Playwright + axe over the route matrix × themes × viewports | Task 35 |
 | `pnpm run lighthouse:full` | The wider LHCI surface, for a release check | ✅ live |
 | `pnpm exec playwright test tests/e2e/journeys/` | The five E2E journeys | Task 47 |
 

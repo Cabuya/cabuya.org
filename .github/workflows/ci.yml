@@ -118,6 +118,12 @@ jobs:
       - name: Performance gate — JavaScript budgets per route (strict)
         run: pnpm run perf:budgets:strict
 
+      # axe over eight routes × two themes × two viewports, plus the four
+      # interactive states a static scan cannot reach. Blocking: it has already
+      # caught two real WCAG failures that no source-reading test could see.
+      - name: Accessibility gate — axe across the route matrix
+        run: pnpm exec playwright install --with-deps chromium && pnpm run a11y:check
+
       # Advisory on pull requests, blocking on main: a Lighthouse median swings
       # about 0.03 on a shared runner, and a gate that flakes on a PR is a gate
       # people learn to ignore. The deterministic half of the contract is

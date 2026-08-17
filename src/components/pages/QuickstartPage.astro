@@ -86,7 +86,13 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.quickstart.lead}</p>
 
   <!-- Two paths, agent first -->
-  <div class="not-prose my-8 grid gap-4 md:grid-cols-2">
+  <!--
+    `[&>*]:min-w-0` on every grid: a card containing a code block inherits the
+    block's min-content width otherwise, and at 200% zoom the card is wider
+    than the viewport. WCAG 1.4.10 reflow — measured at 680 px in a 640 px
+    viewport before this.
+  -->
+  <div class="not-prose my-8 grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
     <div class="rounded-cabuya-md border border-cabuya-primary bg-cabuya-primary-soft p-5">
       <h2 class="font-display text-base font-semibold text-cabuya-primary">
         {t.quickstart.agentPathTitle}
@@ -190,7 +196,7 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   <h2 id={headings[2].slug}>{t.quickstart.piiTitle}</h2>
   <p>{t.quickstart.piiLead}</p>
 
-  <div class="not-prose my-6 grid gap-4 md:grid-cols-2">
+  <div class="not-prose my-6 grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
     <div class="rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-5">
       <h3 class="text-sm font-semibold">{t.quickstart.piiKeysLabel}</h3>
       <p class="mt-3 flex flex-wrap gap-1.5">
@@ -209,7 +215,16 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
         {
           DENY_PATTERNS.map((pattern) => (
             <li>
-              <code class="text-cabuya-danger">{pattern.class}</code>
+              {/*
+                The chip carries its own ground. Bare `text-cabuya-danger`
+                inherits the prose code background (`bg-brand-strong`), where
+                it measures 4.07:1 in dark mode — a WCAG AA failure axe caught
+                across 198 nodes. On `danger-soft` it is 5.99:1, and it matches
+                the identical chip in the deny-list block above.
+              */}
+              <code class="rounded bg-cabuya-danger-soft px-1.5 py-0.5 text-cabuya-danger">
+                {pattern.class}
+              </code>
             </li>
           ))
         }

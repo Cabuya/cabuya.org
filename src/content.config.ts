@@ -17,7 +17,12 @@ import { z } from 'zod';
 
 import type { RootDocId } from '@/lib/root-docs';
 import { rootDoc } from '@/lib/root-docs';
-import { specRfcs, specSections, specVersions } from '@/lib/spec-loader';
+import {
+  specRfcs,
+  specSectionForRender,
+  specSections,
+  specVersions,
+} from '@/lib/spec-loader';
 
 /**
  * Portal prose.
@@ -99,8 +104,10 @@ const specSectionsCollection = defineCollection({
           store.set({
             id,
             data,
+            // The stored body is the source; the rendered one drops the
+            // duplicate title. The twin serves the former, the page the latter.
             body: section.body,
-            rendered: await renderMarkdown(section.body),
+            rendered: await renderMarkdown(specSectionForRender(section)),
           });
         }
       }

@@ -338,6 +338,24 @@
   .prose :not(pre) > code {
     @apply rounded bg-cabuya-bg-brand-strong px-1 py-0.5 font-normal;
   }
+
+  /*
+   * A code span inside a link keeps the link colour and loses the chip.
+   *
+   * The two treatments stack badly and, in dark mode, illegibly: the link
+   * colour is fique, and fique on the chip ground measures **4.24:1** — a WCAG
+   * AA failure axe found across 58 nodes on the specification pages. On the
+   * page ground the same colour is 5.96:1.
+   *
+   * Dropping the chip rather than changing the colour is the right way round:
+   * the element is a link that happens to be set in mono, and a reader needs
+   * the link affordance more than the code affordance.
+   */
+  .prose a :not(pre) > code,
+  .prose a > code {
+    background-color: transparent;
+    padding-inline: 0;
+  }
   .prose :not(pre) > code::before,
   .prose :not(pre) > code::after {
     content: none;

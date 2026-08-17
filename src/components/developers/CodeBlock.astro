@@ -39,7 +39,19 @@ const t = getTranslations(uiLang);
 const trimmed = code.replace(/\n+$/, '');
 ---
 
-<figure class="my-6 overflow-hidden rounded-cabuya-sm border border-cabuya-fill-strong bg-cabuya-bg-dark">
+<!--
+  `min-w-0` is load-bearing, not tidiness.
+
+  A grid or flex item's minimum width defaults to its content's, so a long
+  unbroken line of code inside one widens the item, which widens its container,
+  which gives the whole page a horizontal scrollbar. At 200% zoom — the WCAG
+  1.4.10 reflow condition — the publisher page was 1268 px wide in a 640 px
+  viewport because of one embed snippet. The `overflow-x-auto` inside only
+  helps once the box is allowed to be narrower than its contents.
+-->
+<figure
+  class="my-6 min-w-0 max-w-full overflow-hidden rounded-cabuya-sm border border-cabuya-fill-strong bg-cabuya-bg-dark"
+>
   <figcaption class="flex items-center justify-between gap-3 border-b border-cabuya-fill-strong px-4 py-2">
     <span class="font-mono text-xs text-cabuya-primary-light">
       {title ?? lang}

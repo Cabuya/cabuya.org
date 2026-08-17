@@ -1,7 +1,6 @@
 # Performance and accessibility baseline
 
-Measured numbers for cabuya.org, with the method that produced each one. The
-accessibility half lands with Task 35; the performance half is complete.
+Measured numbers for cabuya.org, with the method that produced each one.
 
 Nothing here is a projection. Where a number could not be measured honestly —
 edge latency, real-network LCP — that is said rather than estimated.
@@ -153,3 +152,109 @@ in `functions/api/validate.ts` and tested.
 - **`dist/`, not a deployment.** Every number here is reproducible from a clean
   checkout with `pnpm run build`. No number depends on infrastructure that only
   the maintainers can reach.
+
+---
+
+# Accessibility
+
+## 6. axe across the matrix
+
+**Method.** `pnpm run a11y:check` — axe-core through Playwright on the eight
+representative routes × two themes × two viewports, plus four interactive
+states, tagged `wcag2a wcag2aa wcag21a wcag21aa`. **55 checks.**
+
+**Result: zero serious or critical violations, zero moderate, zero minor.**
+
+The interactive states are the half a static scan cannot reach:
+
+| State | Why it needs its own check |
+|---|---|
+| Mobile drawer, open | The disclosure pattern only exists after a click |
+| Nav group, expanded | Same, and it is where `role="menu"` would creep in |
+| Registry with a filter applied | Rows hidden, the live count updated |
+| Validator showing a report | Severity markup only renders after a run |
+
+### Two real failures it found
+
+**`text-cabuya-danger` on the prose code ground: 4.07:1.** The PII deny-pattern
+chips on the quickstart carried the danger colour with no ground of their own,
+so they inherited the inline-code chip background. 198 nodes, dark mode only.
+They carry `bg-cabuya-danger-soft` now — 5.99:1, and identical to the chip
+directly above them that already did.
+
+**Fique inside a link inside a code chip: 4.24:1.** A `<code>` inside a link
+takes the link colour, which is fique, on the code-chip ground. 58 nodes on the
+specification pages. The chip is dropped inside a link now: the element is a
+link that happens to be set in mono, the reader needs the link affordance more
+than the code affordance, and on the page ground the same colour is 5.96:1.
+
+Both were dark-mode only. Both were invisible to every test that reads source
+rather than pixels — which is the third time that has been true on this project
+and the reason the matrix runs in both themes.
+
+## 7. Structure, keyboard, motion, zoom
+
+**Method.** `tests/e2e/a11y/manual-checks.spec.ts` — the mechanical floor of a
+manual audit, over ten routes, so a human pass can spend its attention on
+judgement rather than on counting.
+
+| Check | Result |
+|---|---|
+| Exactly one `<h1>` in `<main>` | ✅ after one fix |
+| No skipped heading level | ✅ |
+| `banner` / `main` / `contentinfo` landmarks | ✅ |
+| Skip link is the first tab stop | ✅ |
+| Every `<img>` has `alt` and dimensions | ✅ |
+| Every focusable control shows a focus indicator | ✅ |
+| Drawer closes on `Escape`, focus returns to its toggle | ✅ |
+| `prefers-reduced-motion` stops every animation > 0.2 s | ✅ |
+| 200% zoom (640×512) reflows without horizontal scroll | ✅ after two fixes |
+
+### Three more findings, fixed
+
+**Two `<h1>` on every specification page.** The layout renders the route title,
+and each specification file opens with `# §3 — The feed` because it is also a
+standalone document. Assistive technology announced two document titles and the
+outline claimed the page contained two documents.
+
+The rendered body now drops that first line; the `.md` twin still serves the
+file byte-exact, because the twin *is* the source and a reader fetching it
+should get the document rather than the document minus a line. Anchors are
+unaffected: they are derived from the § number in the text, not from the tag —
+which was not luck, it is why they were built that way.
+
+**The publisher page was 1268 px wide in a 640 px viewport.** A grid item's
+minimum width defaults to its content's, so one long unbroken line in an embed
+snippet widened the item, the section, and the page. `overflow-x-auto` inside
+the code block could not help until the box was allowed to be narrower than its
+contents. `min-w-0` on the code figure and on the grid children.
+
+**The quickstart was 680 px in the same viewport**, for the same reason in a
+different grid.
+
+axe does not flag any of the three. WCAG 1.4.10 is about reflow, and a page that
+scrolls sideways at 200% zoom is one a low-vision reader has to pan through line
+by line.
+
+## 8. The two site-specific rules
+
+| Rule | Where it is enforced |
+|---|---|
+| Validator severity is never colour alone | `axe.spec.ts` reads the rendered report as text and asserts the severity word is present; `ReportView.svelte` prints it |
+| The badge SVG carries `<title>` and `aria-label` | `tests/unit/lib/badge.test.ts` asserts both on all six states × two languages, plus the version and the absence of "certif" |
+
+## 9. What this does not measure
+
+Stated because an accessibility report that implies completeness is worse than
+one that does not.
+
+- **No screen-reader pass.** Nobody has driven this site with VoiceOver, NVDA
+  or TalkBack. The landmark, heading and name checks make one likely to go
+  well; they do not replace it.
+- **No testing with disabled users.** The most valuable pass, and the one that
+  needs people rather than a runner.
+- **axe finds about a third of WCAG issues** by its own maintainers' estimate.
+  Zero violations means zero *detectable* violations.
+- **Cognitive accessibility is unmeasured.** Reading level, consistent
+  vocabulary, error-recovery — the writing guides address these; nothing
+  verifies them.
