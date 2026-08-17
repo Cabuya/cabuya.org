@@ -52,9 +52,19 @@ outage with a good reason.
 | **`/api/validate`** | **SSRF** — it fetches arbitrary URLs on request; also abuse-as-scanner against volunteers' servers | The full control set (§2). The highest-risk surface in the repo, reviewed as such |
 | `/api/contact` | Spam, header injection into the DailyBot payload, secret leakage | Server validation, honeypot + min-fill-time, KV rate limit, env-only secret, `no-store` |
 | `/badge/[publisher]` | Path traversal, SVG injection via registry strings | Id allowlist from registry entries; escape at composition; entries are HTML-free by gate (B6) |
+| `/registry/status.json` | Reads KV; disclosure | **Read-only**, and everything in the namespace is already published on the site. No parameters, so nothing to inject |
+| `_middleware.ts` | Path handling in content negotiation; response substitution | Serves only static assets that exist, via the platform's own `ASSETS` binding. It no longer varies any response by user agent — see below |
 | Registry PRs | Malicious entries (impersonation, personal data, HTML) | `registry:check` gate + human identity review + the reviewer checklist |
 | Spec/examples | PII smuggled into fixtures | B7: deny-pattern pass over our own tree in CI |
 | The cron | Token theft → KV tampering | Single CF API token, scoped **write-only to one KV namespace**, repo secret, rotation documented in OPERATIONS |
+
+**No user-agent-conditional content.** The middleware once rewrote
+`robots.txt` for Lighthouse-family user agents, stripping a directive their
+audit rejects, so the SEO category scored 1.00. Removed in the Task 50
+review: serving different bytes to the tool that measures you is the failure
+this project measures other people's manifests for. If an audit and a valid
+directive disagree, the directive stays and the exclusion is declared —
+`docs/PERFORMANCE.md` records it.
 
 **Data stance:** the site stores no personal data and has no field that could
 hold one (org-level contact only, everywhere). The validator/API retain

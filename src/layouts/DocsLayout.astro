@@ -22,6 +22,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import type { Language } from '@/lib/i18n';
 import type { TocEntry } from '@/lib/toc';
 import { getTranslations } from '@/lib/translations';
+import { twinUrlFor } from '@/lib/twin-url';
 
 interface Props {
   lang: Language;
@@ -46,7 +47,7 @@ const {
 const t = getTranslations(lang);
 const pathname = Astro.url.pathname;
 /** Every page serves `{route}.md`; the copy bar and the link both use it. */
-const twinUrl = `${pathname.replace(/\/$/, '')}.md`;
+const twinUrl = twinUrlFor(pathname);
 
 const updatedLabel = updated
   ? new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-GB', {

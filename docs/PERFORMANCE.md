@@ -84,3 +84,26 @@ gzipped off every route on the site.
 The budget wins by default. The escape path is explicit: measure, document
 the trade in the PR, get the budget row changed in this file in the same
 review — never ship over-budget silently.
+
+
+## One declared exclusion in the Lighthouse configuration
+
+The SEO category is reported with the **`robots-txt` audit skipped**, and the
+published score should be read with that stated rather than assumed.
+
+The audit implements RFC 9309 strictly and rejects `Content-Signal` — an IETF
+draft directive (`draft-romm-aipref-contentsignals`) — as unknown syntax. That
+directive is how this site declares its own reuse terms, which is the same
+kind of declaration the protocol asks publishers to make. Removing it to
+please an audit would be choosing a score over the thing being scored.
+
+**What changed in the Task 50 security review.** The Pages middleware used to
+serve a *different* `robots.txt` to Lighthouse-family user agents, with the
+directive stripped, so the audit passed and the category read 1.00. That is
+cloaking: different bytes to the tool that measures you. It is exactly the
+failure this project measures other people's manifests for, and it has been
+removed.
+
+The distinction is worth stating plainly, because the two look similar and are
+not: **skipping an audit in our own lab configuration is a declared
+exclusion; changing what the tool sees is a false measurement.**

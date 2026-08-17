@@ -26,17 +26,28 @@ module.exports = {
       settings: {
         chromeFlags:
           '--no-sandbox --headless --user-agent="Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36 Chrome-Lighthouse"',
-        // Skip the robots-txt audit because it follows RFC 9309 strictly and
-        // rejects the Content-Signal directive (IETF draft
-        // draft-romm-aipref-contentsignals) as unknown. The directive is
-        // required in robots.txt for isitagentready.com's Bot Access Control
-        // check. Skipping this single audit keeps SEO category at 1.00 while
-        // every other audit (meta tags, viewport, crawlability, structured
-        // data, hreflang, etc.) stays strict.
+        /*
+         * One audit is excluded, and the exclusion is declared rather than
+         * hidden.
+         *
+         * `robots-txt` implements RFC 9309 strictly and rejects
+         * `Content-Signal` (IETF draft draft-romm-aipref-contentsignals) as
+         * unknown syntax. That directive is how this site declares its own
+         * reuse terms — the same kind of declaration the protocol asks
+         * publishers for — so it stays, and the audit that does not know
+         * about it is skipped.
+         *
+         * What changed in the Task 50 review: the middleware used to serve a
+         * *different* robots.txt to Lighthouse user agents so this audit
+         * passed. That is cloaking, and it is precisely the failure this
+         * project measures other people for. It is gone. Skipping an audit in
+         * our own lab config is a stated exclusion; changing what the tool
+         * sees is not.
+         *
+         * Recorded in docs/PERFORMANCE.md so the published score is qualified
+         * rather than presented as unconditional.
+         */
         skipAudits: ['robots-txt'],
-        // Belt-and-suspenders: never hit the Umami proxy during lab runs
-        // (static dist has no Pages Functions; a 404 would fail Best Practices).
-        blockedUrlPatterns: ['*/api/umami/*', '*umami.is*', '*umami/script.js*'],
       },
     },
     assert: {

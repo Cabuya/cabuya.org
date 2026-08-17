@@ -1,15 +1,20 @@
 /**
- * Cloudflare Pages Middleware — AI Bot Analytics & Markdown Content Negotiation
+ * Cloudflare Pages middleware — content negotiation and bot logging.
  *
- * Two responsibilities:
+ * Two responsibilities. Note what is *not* here: this middleware used to
+ * rewrite `robots.txt` for Lighthouse-family user agents, stripping the
+ * `Content-Signal` directive so the SEO audit scored 1.00. Serving different
+ * bytes to the tool that measures you is the failure this whole project
+ * measures other people for, so it was removed in the Task 50 security
+ * review. The directive stays; the score is whatever the real document earns.
  *
  * 1. **Markdown for Agents**: If a request sends `Accept: text/markdown`,
  *    serves the static `.md` version of the page (if it exists) instead of HTML.
  *    This enables AI agents to get clean, token-efficient Markdown content
  *    without parsing HTML. See: https://blog.cloudflare.com/markdown-for-agents/
  *
- * 2. **AI Bot Analytics**: Detects AI crawler visits via User-Agent matching
- *    and tracks them server-side to Umami (AI bots don't execute JavaScript,
+ * 2. **AI bot logging**: Detects AI crawler visits via User-Agent and writes a
+ *    line to the Worker log (AI bots don't execute JavaScript,
  *    so client-side analytics are invisible to them).
  *
  * Non-bot, non-markdown requests pass through with zero overhead.
@@ -92,49 +97,6 @@ function extractBotName(userAgent: string): string {
   const firstToken = userAgent.match(/^([^\s\/]+)/);
   const name = firstToken ? firstToken[1] : userAgent;
   return name.slice(0, 60);
-}
-
-/**
- * Detect Lighthouse-family user-agents (Google PageSpeed Insights, Lighthouse
- * DevTools, Lighthouse CI). These tools audit `robots.txt` strictly against
- * RFC 9309 and reject the `Content-Signal` directive as "unknown", even
- * though RFC 9309 §2.2.3 says unknown directives MUST be ignored by parsers.
- * For these specific tools only, we strip the `Content-Signal` line so
- * their audit passes without weakening the directive for any other client.
- */
-const LIGHTHOUSE_UA_PATTERN = /Chrome-Lighthouse|PageSpeed|Lighthouse/i;
-
-async function tryRewriteRobotsForLighthouse(
-  context: EventContext
-): Promise<Response | null> {
-  const url = new URL(context.request.url);
-  if (url.pathname !== '/robots.txt') return null;
-
-  const ua = context.request.headers.get('user-agent') || '';
-  if (!LIGHTHOUSE_UA_PATTERN.test(ua)) return null;
-
-  try {
-    const assetResponse = await context.env.ASSETS.fetch(
-      new Request(new URL('/robots.txt', url.origin).toString())
-    );
-    if (!assetResponse.ok) return null;
-
-    const originalBody = await assetResponse.text();
-    // Remove the `Content-Signal: ...` directive line plus its trailing newline.
-    const rewritten = originalBody.replace(/^Content-Signal:.*\r?\n?/m, '');
-
-    return new Response(rewritten, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'public, max-age=0, must-revalidate',
-        Vary: 'User-Agent',
-        'X-Robots-Rewrite': 'lighthouse',
-      },
-    });
-  } catch {
-    return null;
-  }
 }
 
 /** Paths that should never be served as Markdown */
@@ -274,14 +236,8 @@ async function tryServeMarkdown(
   }
 }
 
-/** Track a markdown request to Umami analytics */
+/** The middleware entry point. */
 export async function onRequest(context: EventContext): Promise<Response> {
-  // 0. robots.txt UA rewrite — strip Content-Signal for Lighthouse-family
-  //    tools to keep PageSpeed SEO at 1.00 without weakening the directive
-  //    for search engines, AI crawlers, or isitagentready.com's scanner.
-  const robotsRewrite = await tryRewriteRobotsForLighthouse(context);
-  if (robotsRewrite) return robotsRewrite;
-
   // 1a. Schema negotiation, before Markdown: an agent asking a schema page for
   //      `application/schema+json` wants the schema, not a description of it.
   const schemaResponse = await tryServeSchema(context);

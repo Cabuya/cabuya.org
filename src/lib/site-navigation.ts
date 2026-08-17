@@ -41,6 +41,8 @@ export interface NavEntry {
   ships?: string;
   /** Source file under `src/pages/`, checked by the nav test when live. */
   file?: string;
+  /** Emitted once at the root; never prefixed with a language. */
+  languageNeutral?: boolean;
   /** Short gloss for the mobile drawer and the footer's title attributes. */
   hint?: Record<string, string>;
 }
@@ -51,6 +53,8 @@ export interface NavGroup {
   /** A group with a path is a direct link; with children, a disclosure. */
   path?: string;
   file?: string;
+  /** Emitted once at the root; never prefixed with a language. */
+  languageNeutral?: boolean;
   status: NavStatus;
   ships?: string;
   children?: NavEntry[];
@@ -276,6 +280,8 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
         path: '/llms.txt',
         status: 'live',
         file: 'llms.txt',
+        // One file, not one per language — `/es/llms.txt` does not exist.
+        languageNeutral: true,
       },
       {
         label: { en: 'Founding record', es: 'Registro fundacional' },
@@ -291,10 +297,13 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
 
 /** Prefix a site-relative path for a language (external URLs pass through). */
 export function navHref(
-  entry: Pick<NavEntry, 'path' | 'external'>,
+  entry: Pick<NavEntry, 'path' | 'external' | 'languageNeutral'>,
   lang: Language
 ): string {
   if (entry.external) return entry.path;
+  // A single artifact serving both languages — `llms.txt`, and anything else
+  // emitted once at the root. Prefixing it produces a 404 on `/es`.
+  if (entry.languageNeutral) return entry.path;
   const language = isValidLanguage(lang) ? lang : 'en';
   const prefix = getUrlPrefix(language);
   if (entry.path === '/') return prefix || '/';
@@ -365,11 +374,25 @@ export function allEntries(): Array<NavEntry | NavGroup> {
  * `/`        ⇄ `/es`
  * `/foo/bar` ⇄ `/es/foo/bar`
  */
+/**
+ * Routes that exist once, for every language.
+ *
+ * The 404 page is emitted as a single `404.html` and served by the host for
+ * any unmatched path, including under `/es`. Prefixing it produced a switcher
+ * on the 404 page linking to `/es/404`, which is not a file — a broken link on
+ * the page a reader reaches *because* something was already broken.
+ *
+ * The switcher sends them to that language's home instead, which is the
+ * useful destination from a page that does not exist.
+ */
+const LANGUAGE_NEUTRAL_ROUTES = new Set(['/404']);
+
 export function switchLanguagePath(pathname: string, target: Language): string {
   const prefix = getUrlPrefix(target);
   // Strip any known language prefix, leaving a root-relative route.
   const bare = pathname.replace(/^\/(es)(?=\/|$)/, '') || '/';
   const withoutTrailing = bare !== '/' ? bare.replace(/\/$/, '') : '/';
   if (withoutTrailing === '/') return prefix || '/';
+  if (LANGUAGE_NEUTRAL_ROUTES.has(withoutTrailing)) return prefix || '/';
   return `${prefix}${withoutTrailing}`;
 }
