@@ -57,6 +57,32 @@
 #
 # A published discovery document for endpoints that do not exist is precisely
 # the failure this project measures other people's manifests for.
+#
+# Restored since, because these three describe endpoints that do exist:
+# `/openapi.json` (the three public, authless endpoints, and nothing else),
+# `/.well-known/api-catalog` (RFC 9727, pointing at that document and at the
+# human pages beside it), and the `Link` headers below (RFC 8288).
+#
+# Still absent, and staying absent: OAuth and OIDC discovery, the protected
+# resource metadata, `auth.md` and an MCP server card. This site has no
+# authorization server, no protected resource and no deployed MCP endpoint,
+# and a card advertising one would be the same lie in a newer format.
+
+# Agent discovery, on every HTML page. `api-catalog` and `service-desc` are
+# IANA-registered relations; `describedby` points an agent at the file written
+# for it rather than at the rendered page.
+/*
+  Link: </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </openapi.json>; rel="service-desc"; type="application/openapi+json", </llms.txt>; rel="describedby"; type="text/plain"
+
+# RFC 9727 says the catalog is `application/linkset+json`. It has no file
+# extension, so nothing infers the type for it.
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Cache-Control: public, max-age=3600
+
+/openapi.json
+  Content-Type: application/openapi+json
+  Cache-Control: public, max-age=3600
 
 # Agent-markdown twins. `text/markdown` is deliberate, and browsers have no
 # renderer for that type — they download the file or show a blank viewport.

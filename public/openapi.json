@@ -1,0 +1,202 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "cabuya.org public API",
+    "version": "0.1.0",
+    "summary": "The three public, authless endpoints cabuya.org serves.",
+    "description": "Every endpoint here exists and is reachable. This document deliberately describes nothing else.\n\nThere is no authentication anywhere in it, and that is a design decision rather than an omission: every read is public, and a service that fetches arbitrary URLs on request is a far more attractive target if it also holds a credential.\n\nThe contact form endpoint is intentionally absent. It is a human form with a honeypot, a minimum fill time and a rate limit; documenting it as an API would invite exactly the automated submission those measures exist to stop.",
+    "license": {
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
+    },
+    "contact": {
+      "name": "Cabuya maintainers",
+      "url": "https://cabuya.org/join"
+    }
+  },
+  "servers": [{ "url": "https://cabuya.org" }],
+  "externalDocs": {
+    "description": "The Cabuya Protocol specification",
+    "url": "https://cabuya.org/developers/spec"
+  },
+  "paths": {
+    "/api/validate": {
+      "post": {
+        "operationId": "validateDocument",
+        "summary": "Validate a published manifest or feed against the specification",
+        "description": "Fetches the document at the given URL and runs the published validator's schema, semantic and person-level-data passes over it.\n\nRuns in degraded mode: the transport passes are skipped rather than run against nothing, so the response reports findings but does not assert a measured conformance level. Reporting a level without the transport checks would be the overclaim this project exists to avoid.\n\nNothing is retained. The document is fetched, checked and discarded with the request.",
+        "tags": ["validation"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["url"],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Absolute https URL of a Cabuya manifest or place feed. Refused if it resolves to a private, loopback or link-local address.",
+                    "examples": ["https://example.org/.well-known/cabuya.json"]
+                  },
+                  "lang": {
+                    "type": "string",
+                    "enum": ["en", "es"],
+                    "default": "en",
+                    "description": "Language of the human-readable `message`, `rule` and `fix` in each finding. Check ids never translate."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The run completed. A conforming document and a failing one both return 200 — the verdict is in the body, not the status.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Report" }
+              }
+            }
+          },
+          "400": {
+            "description": "The body was not JSON, or the URL was rejected by the address guard.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Failure" }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited, per caller and per target host. The per-host limit protects the publisher being checked, not this service."
+          }
+        }
+      }
+    },
+    "/registry/status.json": {
+      "get": {
+        "operationId": "registryStatus",
+        "summary": "Measured conformance state for every registry publisher",
+        "description": "What the validator last found, per publisher, with the timestamp of the run. A publisher with no entry has not been measured — absence is reported as absence, never as a pass or a fail.",
+        "tags": ["registry"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "A map of publisher id to measured state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/MeasuredStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/badge/{publisher}.svg": {
+      "get": {
+        "operationId": "conformanceBadge",
+        "summary": "Conformance badge for one publisher, as SVG",
+        "description": "Renders the same measurement `/registry/status.json` reports and links back to the publisher's registry page, so anyone can check it. It refuses to say more than the validator measured, and it never says certified.",
+        "tags": ["registry"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "publisher",
+            "in": "path",
+            "required": true,
+            "description": "Registry publisher id.",
+            "schema": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The badge.",
+            "content": { "image/svg+xml": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "No such publisher in the registry." }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {},
+    "schemas": {
+      "Report": {
+        "type": "object",
+        "description": "A validator run.",
+        "properties": {
+          "target": { "type": "string", "format": "uri" },
+          "specVersion": { "type": "string", "examples": ["0.1.0"] },
+          "validatorVersion": { "type": "string" },
+          "findings": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Finding" }
+          }
+        }
+      },
+      "Finding": {
+        "type": "object",
+        "description": "One check's result. Every finding locates the problem and states the correction.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable check id. Never translated, never renamed — a retired check keeps its id and is marked.",
+            "examples": ["ENV007", "REC001", "PII003"]
+          },
+          "severity": { "type": "string", "enum": ["error", "warning", "info"] },
+          "level": { "type": "string", "examples": ["L1", "L2", "L3", "L4"] },
+          "pointer": {
+            "type": "string",
+            "description": "JSON Pointer to the offending member, when the check has one."
+          },
+          "message": { "type": "string" },
+          "rule": { "type": "string" },
+          "fix": { "type": "string" },
+          "spec": {
+            "type": "string",
+            "format": "uri",
+            "description": "Anchor in the normative text. Stable."
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "description": "The check's entry in the published catalogue."
+          }
+        }
+      },
+      "MeasuredStatus": {
+        "type": "object",
+        "properties": {
+          "publisher_id": { "type": "string" },
+          "state": {
+            "type": "string",
+            "enum": [
+              "conforming",
+              "stale",
+              "failing",
+              "unreachable",
+              "archived"
+            ]
+          },
+          "level": { "type": "string", "examples": ["L2"] },
+          "checked_at": { "type": "string", "format": "date-time" },
+          "version": { "type": "string", "examples": ["0.1"] }
+        }
+      },
+      "Failure": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    }
+  }
+}

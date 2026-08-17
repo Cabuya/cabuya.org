@@ -1,0 +1,72 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://cabuya.org/api/validate",
+      "service-desc": [
+        {
+          "href": "https://cabuya.org/openapi.json",
+          "type": "application/openapi+json",
+          "title": "OpenAPI 3.1 description of the public API"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://cabuya.org/developers/validator",
+          "type": "text/html",
+          "title": "The validator: what it checks and what it keeps"
+        },
+        {
+          "href": "https://cabuya.org/developers/validator.md",
+          "type": "text/markdown",
+          "title": "The same page, as Markdown"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://cabuya.org/developers/validator/checks",
+          "type": "text/html",
+          "title": "Every check the validator can report, with a stable anchor"
+        }
+      ]
+    },
+    {
+      "anchor": "https://cabuya.org/registry/status.json",
+      "service-doc": [
+        {
+          "href": "https://cabuya.org/registry",
+          "type": "text/html",
+          "title": "The registry: what was measured, and when"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance",
+          "type": "text/html",
+          "title": "§8.3 — conformance is measured, never declared"
+        }
+      ]
+    },
+    {
+      "anchor": "https://cabuya.org/developers/spec",
+      "describedby": [
+        {
+          "href": "https://cabuya.org/schemas/0.1/manifest.schema.json",
+          "type": "application/schema+json",
+          "title": "Publisher manifest schema"
+        },
+        {
+          "href": "https://cabuya.org/schemas/0.1/place-feed.schema.json",
+          "type": "application/schema+json",
+          "title": "Place feed schema"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://cabuya.org/llms-full.txt",
+          "type": "text/plain",
+          "title": "The specification, the consumption rules and every check, in one file"
+        }
+      ]
+    }
+  ]
+}
