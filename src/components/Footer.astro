@@ -6,9 +6,12 @@
  * footer grows as the site does without anyone remembering to edit it — and it
  * never lists a page that does not exist.
  *
- * The principle is rendered in Spanish with an English gloss in both languages,
- * rather than translated. It is a phrase the working group said in Spanish;
- * replacing it with an English sentence would quietly erase where it came from.
+ * The principle is printed here in both languages, and in both the reader's own
+ * language leads: English on `/`, Spanish on `/es`. The Spanish original is
+ * credited underneath on the English side rather than dropped — it is a phrase the
+ * working group said in Spanish and losing it would erase where it came from, but
+ * putting it first made an English reader translate before they could read it.
+ * `lang="es"` therefore follows the Spanish line, whichever line that is.
  */
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
@@ -78,10 +81,13 @@ const year = new Date().getFullYear();
 
     <div class="mt-12 border-t border-cabuya-border pt-8">
       <blockquote class="max-w-2xl">
-        <p class="font-display text-lg text-cabuya-text" lang="es">
+        <p class="font-display text-lg text-cabuya-text">
           {t.footer.principle}
         </p>
-        <footer class="mt-1 text-sm text-cabuya-text-secondary">
+        <footer
+          class="mt-1 text-sm text-cabuya-text-secondary"
+          lang={language === 'en' ? 'es' : undefined}
+        >
           {t.footer.principleGloss}
         </footer>
       </blockquote>

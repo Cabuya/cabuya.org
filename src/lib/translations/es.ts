@@ -32,9 +32,9 @@ export const es: SiteTranslations = {
 
     hero: {
       eyebrow: 'Un protocolo abierto para apps de ayuda',
-      title: 'Cada app es un hilo. El protocolo es la cuerda.',
+      title: 'Apps de ayuda que por fin se leen entre sí.',
       pitch:
-        'Un formato abierto para que las apps de ayuda publiquen y lean los mismos datos: puntos de acopio, necesidades, capacidades y entregas.',
+        'Un formato abierto para los mismos datos: puntos de acopio, necesidades, capacidades y entregas. Un validador público mide la conformidad; el registro muestra lo que encontró.',
       pitchSecond: 'La conformidad se mide, nunca se declara.',
       ctaPrimary: 'Publicar un feed',
       ctaSecondary: 'Ver quién publica',
@@ -142,7 +142,7 @@ export const es: SiteTranslations = {
     metaTitle: 'Página no encontrada — Cabuya',
     title: 'Esta página no existe',
     description:
-      'El hilo que seguiste no lleva a ninguna parte: puede que la página se haya movido durante la migración, o que la dirección tenga un error.',
+      'El hilo que seguiste no lleva a ninguna parte: puede que la página se haya movido, o que la dirección tenga un error.',
     backHome: 'Volver al inicio',
     otherExitLabel: 'Leer el registro fundacional',
   },

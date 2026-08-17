@@ -175,7 +175,8 @@ export const ILLUSTRATIONS = {
     srcset: pair(`${VISUALS}/marks/ornament-braid`, 240),
     width: 240,
     height: 16,
-    sizes: '240px',
+    /** `SectionOrnament` renders it at two sizes: punctuation, or a section close. */
+    sizes: '(min-width: 1024px) 384px, (min-width: 640px) 320px, 224px',
   },
 } satisfies Record<string, Illustration>;
 

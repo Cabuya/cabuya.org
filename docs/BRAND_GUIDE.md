@@ -24,6 +24,13 @@ thread; the protocol is the rope.**
   **«Crecemos juntos: no competimos, nos alimentamos.»**
   (*We grow together: we don't compete, we feed each other.*)
 
+  **Both lines are always printed, and the reader's own language leads.** On `/`
+  the English sentence is the one set large and the Spanish original is credited
+  beneath it, marked `lang="es"`; on `/es` the original *is* the sentence. The
+  phrase was said in Spanish and dropping it would erase where the project came
+  from — but printing it first on an English page made a reader translate a
+  sentence before they could read the argument it introduces.
+
 ## 2. The mark
 
 The logo is a **rope braided into a C** — the brand thesis made visual: many

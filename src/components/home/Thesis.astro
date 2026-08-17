@@ -7,9 +7,12 @@
  * not exist yet, and a page that implied otherwise would be making exactly the
  * kind of claim the protocol was built to stop other people making.
  *
- * The principle stays in Spanish in both languages. It is a phrase the working
- * group said in Spanish; replacing it with an English sentence would quietly
- * erase where the project came from.
+ * The principle leads in the reader's own language, and the Spanish original is
+ * credited beneath it on the English page. It is a phrase the working group said
+ * in Spanish, and dropping it would erase where the project came from — but
+ * printing it first on an English page made a reader translate a sentence before
+ * they could read the argument it introduces. Both lines are always present; only
+ * the order changes, and `lang="es"` follows the Spanish one.
  */
 import Kicker from '@/components/editorial/Kicker.astro';
 import SectionOrnament from '@/components/editorial/SectionOrnament.astro';
@@ -22,30 +25,65 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getTranslations(lang);
+
+/**
+ * Which of the two lines is in Spanish.
+ *
+ * On `/es` the principle is the Spanish original and the page is already Spanish,
+ * so neither line needs marking. On `/` the principle reads in English and the
+ * line beneath it is the original — that one gets `lang="es"`.
+ */
+const quoteLang = undefined;
+const glossLang = lang === 'en' ? 'es' : undefined;
 ---
 
 <section class="border-y border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated">
-  <div class="main-container py-16 sm:py-20">
+  <div class="main-container py-20 sm:py-28">
     <Kicker>{t.home.thesis.kicker}</Kicker>
-    <blockquote class="mt-4 max-w-3xl">
-      <p class="text-title text-cabuya-primary" lang="es">
+    {/*
+      The quote is the loudest thing on the page after the headline, and it should
+      be: this section is the argument the rest of the site rests on. It was set
+      at `text-title` in a 3xl measure, which read as a subheading rather than as
+      a thesis.
+
+      `lang="es"` follows the Spanish, wherever the Spanish is. On the English
+      page the sentence reads in English and the original is credited beneath it;
+      on the Spanish page the original *is* the sentence and the line beneath is
+      the fibre gloss. Marking the wrong line would tell a screen reader to read
+      English with Spanish pronunciation rules.
+    */}
+    <blockquote class="mt-6 max-w-4xl">
+      <p class="text-balance text-display text-cabuya-primary" lang={quoteLang}>
         {t.home.thesis.principle}
       </p>
-      <footer class="mt-2 text-base text-cabuya-text-secondary">
+      {/*
+        Italic only when it is the credited original: an English reader needs the
+        line to look like a quotation from somewhere else, while on `/es` it is
+        the section's own gloss and italics would be noise.
+      */}
+      <footer
+        class:list={[
+          'mt-5 text-lg text-cabuya-text-secondary sm:text-xl',
+          glossLang === 'es' && 'italic',
+        ]}
+        lang={glossLang}
+      >
         {t.home.thesis.gloss}
       </footer>
     </blockquote>
 
-    <div class="mt-10 grid gap-6 md:grid-cols-2">
-      <p class="text-base leading-relaxed text-cabuya-text-secondary">
+    <div class="mt-14 grid max-w-5xl gap-8 md:grid-cols-2 md:gap-12">
+      <p class="text-lg leading-relaxed text-cabuya-text-secondary">
         {t.home.thesis.body}
       </p>
-      <p class="text-base leading-relaxed text-cabuya-text-secondary">
+      <p class="text-lg leading-relaxed text-cabuya-text-secondary">
         {t.home.thesis.bodySecond}
       </p>
     </div>
 
-    <p class="mt-8 max-w-2xl border-l-2 border-cabuya-accent pl-4 text-sm text-cabuya-text-muted">
+    <p
+      class="mt-12 max-w-3xl border-l-2 border-cabuya-accent pl-5 text-base text-cabuya-text-muted"
+    >
       {t.home.thesis.intentNote}
     </p>
 
@@ -57,6 +95,6 @@ const t = getTranslations(lang);
       does the job it was drawn for: a breath after the thesis, in the project's
       own vocabulary instead of an asterisk.
     */}
-    <SectionOrnament class="mt-12 sm:mt-14" />
+    <SectionOrnament class="mt-16 sm:mt-20" size="lg" />
   </div>
 </section>

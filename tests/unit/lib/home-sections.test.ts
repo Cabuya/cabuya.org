@@ -30,7 +30,16 @@ describe.each(LANGUAGE_CODES)('landing copy (%s)', (lang) => {
     // One section per beat. A missing beat is a page that stopped making one
     // of the arguments it was designed around.
     expect(t.home.hero.title.length).toBeGreaterThan(10);
-    expect(t.home.thesis.principle).toContain('Crecemos juntos');
+    /*
+     * The founding phrase is printed on this page in both languages, but the
+     * reader's own language leads: `principle` is English on `/` and Spanish on
+     * `/es`, with the other line beneath it. What must never happen is the phrase
+     * disappearing from the section altogether, so the pair is checked rather
+     * than one field.
+     */
+    expect(`${t.home.thesis.principle} ${t.home.thesis.gloss}`).toContain(
+      'Crecemos juntos'
+    );
     expect(t.home.howItWorks.steps).toHaveLength(4);
     expect(t.home.ladder.respectNote.length).toBeGreaterThan(40);
     expect(t.home.network.proposedExplainer.length).toBeGreaterThan(40);

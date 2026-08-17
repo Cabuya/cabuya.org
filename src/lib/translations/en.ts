@@ -32,9 +32,9 @@ export const en: SiteTranslations = {
 
     hero: {
       eyebrow: 'An open protocol for aid apps',
-      title: 'Each app is a thread. The protocol is the rope.',
+      title: 'Aid apps that can finally read each other.',
       pitch:
-        'An open format that lets aid apps publish and read the same data: collection points, needs, capacities and deliveries.',
+        'An open format for the same data: collection points, needs, capacities and deliveries. A public validator measures conformance; the registry shows what it found.',
       pitchSecond: 'Conformance is measured, never declared.',
       ctaPrimary: 'Publish a feed',
       ctaSecondary: 'See who publishes',
@@ -42,8 +42,17 @@ export const en: SiteTranslations = {
 
     thesis: {
       kicker: 'The thesis',
-      principle: '«Crecemos juntos: no competimos, nos alimentamos.»',
-      gloss: 'We grow together: we don’t compete, we feed each other.',
+      /*
+       * English first on an English page, with the original underneath.
+       *
+       * The phrase is the working group's and it was said in Spanish; the brand
+       * guide asks for it wherever the brand speaks. Leading with the Spanish on
+       * an English page made a reader translate before they could read the
+       * argument, so the order is inverted and nothing is lost: `gloss` carries
+       * the original, marked `lang="es"`, directly beneath.
+       */
+      principle: 'We grow together: we don’t compete, we feed each other.',
+      gloss: '«Crecemos juntos: no competimos, nos alimentamos.»',
       body: 'Cabuya is the fibre you tie things with. A single thread holds nothing; twisted together, they carry what no one of them could. That is not a metaphor about collaboration in general — it is a description of what happens when two applications can read each other’s data.',
       bodySecond:
         'Every app that joins keeps its own product, its own users and its own decisions. What it gains is that its records stop being trapped inside it, and that it can read everyone else’s without asking.',
@@ -129,8 +138,9 @@ export const en: SiteTranslations = {
   },
 
   footer: {
-    principle: '«Crecemos juntos: no competimos, nos alimentamos.»',
-    principleGloss: 'We grow together: we don’t compete, we feed each other.',
+    /* Same inversion as the landing's thesis section — see the note there. */
+    principle: 'We grow together: we don’t compete, we feed each other.',
+    principleGloss: '«Crecemos juntos: no competimos, nos alimentamos.»',
     license: 'Apache-2.0 code · CC0 spec & registry',
     sourceCode: 'Source code',
     foundingRecord: 'Founding record',
@@ -141,7 +151,7 @@ export const en: SiteTranslations = {
     metaTitle: 'Page not found — Cabuya',
     title: 'This page does not exist',
     description:
-      'The thread you followed leads nowhere — the page may have moved during the migration, or the address has a typo.',
+      'The thread you followed leads nowhere — the page may have moved, or the address has a typo.',
     backHome: 'Back to the home page',
     otherExitLabel: 'Read the founding record',
   },

@@ -63,8 +63,25 @@ describe('language integrity', () => {
   });
 
   it('the founding principle appears verbatim in both footers', () => {
+    /*
+     * Verbatim, and in both — but not always as the *first* line.
+     *
+     * The reader's own language leads: on `/es` the Spanish original is the
+     * sentence, on `/` it is credited beneath the English one (`lang="es"`, see
+     * `Footer.astro`). Asserting it as `footer.principle` in English required
+     * printing Spanish first on an English page, which is the thing that changed.
+     * What must not change is that the phrase is still printed, unaltered, on
+     * both sides — so the pair is checked, and the original is required to be
+     * byte-identical wherever it lands.
+     */
     const principle = '«Crecemos juntos: no competimos, nos alimentamos.»';
-    expect(en.footer.principle).toBe(principle);
+    expect([en.footer.principle, en.footer.principleGloss]).toContain(
+      principle
+    );
+    expect([es.footer.principle, es.footer.principleGloss]).toContain(
+      principle
+    );
+    /* And the Spanish page leads with it, because there it is the sentence. */
     expect(es.footer.principle).toBe(principle);
   });
 });

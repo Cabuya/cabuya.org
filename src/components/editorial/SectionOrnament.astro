@@ -19,11 +19,18 @@ import Illustration from '@/components/editorial/Illustration.astro';
 
 interface Props {
   class?: string;
+  /**
+   * `sm` is punctuation between two paragraphs; `lg` closes a whole section and
+   * needs to hold its own beside a display-size quote.
+   */
+  size?: 'sm' | 'lg';
 }
 
-const { class: className = '' } = Astro.props;
+const { class: className = '', size = 'sm' } = Astro.props;
+
+const width = size === 'lg' ? 'w-56 sm:w-80 lg:w-96' : 'w-40 sm:w-56';
 ---
 
 <div class={`flex justify-center ${className}`} aria-hidden="true">
-  <Illustration id="ornament-braid" class="h-auto w-40 opacity-80 sm:w-60" />
+  <Illustration id="ornament-braid" class={`h-auto ${width} opacity-90`} />
 </div>
