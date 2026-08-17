@@ -9,5 +9,8 @@
   ],
   "status": "proposed",
   "added": "2026-08-16",
-  "notes": "Wave-0 candidate (open source; PII-free reports; GeoJSON/CSV/KML/JSON feed observed). Entered on the team's behalf; awaiting their confirmation."
+  "notes": {
+    "en": "Wave-0 candidate (open source; PII-free reports; GeoJSON/CSV/KML/JSON feed observed). Entered on the team's behalf; awaiting their confirmation.",
+    "es": "Candidata de la ola 0 (código abierto; reportes sin datos personales; feed GeoJSON/CSV/KML/JSON observado). Registrada en nombre del equipo; a la espera de su confirmación."
+  }
 }

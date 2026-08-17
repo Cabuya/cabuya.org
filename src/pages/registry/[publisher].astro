@@ -1,0 +1,15 @@
+---
+import PublisherPage from '@/components/pages/PublisherPage.astro';
+import { allPublishers } from '@/lib/registry-loader';
+
+export function getStaticPaths() {
+  return allPublishers().map((entry) => ({
+    params: { publisher: entry.publisher_id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<PublisherPage lang="en" entry={entry} />

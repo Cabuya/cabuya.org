@@ -9,5 +9,8 @@
   ],
   "status": "proposed",
   "added": "2026-08-16",
-  "notes": "Wave-0 candidate (published closed category vocabulary; public data surface observed). Entered on the team's behalf; awaiting their confirmation."
+  "notes": {
+    "en": "Wave-0 candidate (published closed category vocabulary; public data surface observed). Entered on the team's behalf; awaiting their confirmation.",
+    "es": "Candidata de la ola 0 (vocabulario cerrado de categorías publicado; superficie de datos pública observada). Registrada en nombre del equipo; a la espera de su confirmación."
+  }
 }

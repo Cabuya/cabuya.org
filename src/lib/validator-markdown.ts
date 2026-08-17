@@ -9,6 +9,7 @@ import { CHECKS, ES } from '@cabuya/validator';
 
 import type { Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
+import { URL_MODE_AVAILABLE } from '@/lib/validate-api-contract';
 
 export interface TwinSection {
   heading: string;
@@ -24,11 +25,15 @@ export function validatorSections(lang: Language): TwinSection[] {
     },
     {
       heading: t.validator.urlModeTitle,
-      lines: [
-        t.validator.urlModeLead,
-        '',
-        `${t.validator.unavailableTitle}. ${t.validator.unavailableBody}`,
-      ],
+      // The twin says what the page says. Reading the same flag is the only
+      // way that stays true without somebody remembering to check.
+      lines: URL_MODE_AVAILABLE
+        ? [t.validator.urlModeLead]
+        : [
+            t.validator.urlModeLead,
+            '',
+            `${t.validator.unavailableTitle}. ${t.validator.unavailableBody}`,
+          ],
     },
     {
       heading: t.validator.pasteModeTitle,

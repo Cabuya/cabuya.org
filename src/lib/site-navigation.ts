@@ -125,8 +125,7 @@ export const NAV_GROUPS: NavGroup[] = [
     id: 'registry',
     label: { en: 'Registry', es: 'Registro' },
     path: '/registry',
-    status: 'planned',
-    ships: 'Task 28',
+    status: 'live',
   },
   {
     id: 'governance',
@@ -200,8 +199,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Registry', es: 'Registro' },
         path: '/registry',
-        status: 'planned',
-        ships: 'Task 28',
+        status: 'live',
       },
       {
         label: { en: 'Agent skill', es: 'Skill para agentes' },

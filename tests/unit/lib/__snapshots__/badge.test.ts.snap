@@ -1,0 +1,153 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`badge SVG > renders Spanish 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="160" height="20" role="img" aria-label="corag — compatible con Cabuya 0.1">
+  <title>corag — compatible con Cabuya 0.1</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="160" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="80" height="20" fill="#2F6F4F"/>
+    <rect width="160" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1200" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">compatible</text>
+    <text x="1200" y="140" transform="scale(.1)" textLength="620">compatible</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders archived identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="148" height="20" role="img" aria-label="corag — Cabuya 0.1: archived entry">
+  <title>corag — Cabuya 0.1: archived entry</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="148" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="68" height="20" fill="#4A4F57"/>
+    <rect width="148" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1140" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="500">archived</text>
+    <text x="1140" y="140" transform="scale(.1)" textLength="500">archived</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders conforming identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="160" height="20" role="img" aria-label="corag — Cabuya 0.1 compatible">
+  <title>corag — Cabuya 0.1 compatible</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="160" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="80" height="20" fill="#2F6F4F"/>
+    <rect width="160" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1200" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">compatible</text>
+    <text x="1200" y="140" transform="scale(.1)" textLength="620">compatible</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders failing identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="166" height="20" role="img" aria-label="corag — Cabuya 0.1: not passing">
+  <title>corag — Cabuya 0.1: not passing</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="166" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="86" height="20" fill="#A33A2E"/>
+    <rect width="166" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1230" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="680">not passing</text>
+    <text x="1230" y="140" transform="scale(.1)" textLength="680">not passing</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders stale identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="210" height="20" role="img" aria-label="corag — Cabuya 0.1 compatible, feed not recently updated">
+  <title>corag — Cabuya 0.1 compatible, feed not recently updated</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="210" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="130" height="20" fill="#8A6D1F"/>
+    <rect width="210" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1450" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="1120">compatible (stale)</text>
+    <text x="1450" y="140" transform="scale(.1)" textLength="1120">compatible (stale)</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders the flat variant without the gradient overlay 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="160" height="20" role="img" aria-label="corag — Cabuya 0.1 compatible">
+  <title>corag — Cabuya 0.1 compatible</title>
+  
+  <clipPath id="c"><rect width="160" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="80" height="20" fill="#2F6F4F"/>
+    
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1200" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">compatible</text>
+    <text x="1200" y="140" transform="scale(.1)" textLength="620">compatible</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders unmeasured identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="197" height="20" role="img" aria-label="corag — Cabuya 0.1: not yet measured">
+  <title>corag — Cabuya 0.1: not yet measured</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="197" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="117" height="20" fill="#5B6470"/>
+    <rect width="197" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1385" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="990">not yet measured</text>
+    <text x="1385" y="140" transform="scale(.1)" textLength="990">not yet measured</text>
+  </g>
+</svg>"
+`;
+
+exports[`badge SVG > renders unreachable identically to the pinned output 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="166" height="20" role="img" aria-label="corag — Cabuya 0.1: unreachable">
+  <title>corag — Cabuya 0.1: unreachable</title>
+  <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+  <clipPath id="c"><rect width="166" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="80" height="20" fill="#2C3033"/>
+    <rect x="80" width="86" height="20" fill="#5B6470"/>
+    <rect width="166" height="20" rx="3" fill="url(#g)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="110">
+    <text x="400" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="400" y="140" transform="scale(.1)" textLength="620">Cabuya 0.1</text>
+    <text x="1230" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="680">unreachable</text>
+    <text x="1230" y="140" transform="scale(.1)" textLength="680">unreachable</text>
+  </g>
+</svg>"
+`;

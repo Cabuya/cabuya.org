@@ -36,6 +36,13 @@
    and diagrams carry fixed `aspect-ratio`; async content reserves space.
 8. **Islands are leaves.** No island imports page-level data wholesale; props
    are the narrow interface.
+9. **Watch the chunk graph, not just the imports.** A module with no
+   dependencies can still be expensive: Rollup places the CommonJS interop
+   helper somewhere, and if that somewhere is the chunk holding the JSON Schema
+   compiler, importing a dependency-free analytics module pulls 61 KB gzipped
+   onto every page. That is not hypothetical — it is what happened, and the
+   `manualChunks` rule in `astro.config.mjs` that isolates `validator-engine`
+   is the fix. Measure the *page*, not the import list.
 
 ## 3. Measurement
 
@@ -45,6 +52,24 @@
   a spec section, schema ref, validator, registry index, publisher page).
 - Function latencies measured locally against the fixture server, recorded
   with methodology in `analysis_results/PERF_A11Y_BASELINE.md`.
+
+Measured after Task 28 (gzipped script bytes, every script the page fetches,
+Chromium, network-idle):
+
+| Route | Budget | Measured |
+|---|---|---|
+| `/` | ≤ 40 KB | 40.9 KB |
+| `/developers` | 0 KB unless it carries an island | 41.9 KB — chrome only |
+| `/registry` | ≤ 60 KB | 40.9 KB |
+| `/registry/{id}` | ≤ 60 KB | 41.8 KB |
+| `/developers/validator` | ≤ 90 KB | 45.8 KB before a run |
+
+Everything above the landing budget is the shared chrome — the header island
+(21.6 KB) and the Svelte runtime (15.7 KB) — carried identically by every page,
+including the documentation pages the table says should ship none. The registry
+pages add nothing measurable beyond it: the filter and the freshness refresh are
+plain module scripts under a kilobyte together. Closing the chrome baseline is
+Task 34's, and `perf:budgets` is the gate that will hold it closed.
 
 ## 4. When a budget and a feature collide
 

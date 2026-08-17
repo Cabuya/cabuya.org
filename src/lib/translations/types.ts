@@ -320,6 +320,85 @@ export interface SiteTranslations {
     untranslatedNote: string;
   };
 
+  /** The public registry: the index, the publisher pages, the badge. */
+  registry: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    /** The two sentences that must be printed in both languages. */
+    notEndorsementTitle: string;
+    notEndorsement: string;
+    everyEntryMeasured: string;
+    /** Column headers of the server-rendered table. */
+    columnPublisher: string;
+    columnState: string;
+    columnLevel: string;
+    columnDomains: string;
+    columnChecked: string;
+    /** Filter island. */
+    filterTitle: string;
+    filterAll: string;
+    filterState: string;
+    filterDomain: string;
+    filterReview: string;
+    filterSearch: string;
+    filterSearchPlaceholder: string;
+    filterEmpty: string;
+    filterShowing: string;
+    /** Review states from the git tree — never a measurement. */
+    reviewProposed: string;
+    reviewReviewed: string;
+    reviewTitle: string;
+    reviewBody: string;
+    /** Official sources: listed, not adopting. */
+    officialSourcesTitle: string;
+    officialSourcesBody: string;
+    officialAuthorityLabel: string;
+    /** Licensing note on the index. */
+    licenceTitle: string;
+    licenceBody: string;
+    /** How to get listed. */
+    joinTitle: string;
+    joinBody: string;
+    /** Publisher page. */
+    measuredTitle: string;
+    measuredBody: string;
+    declaredTitle: string;
+    declaredBody: string;
+    stateLabel: string;
+    levelLabel: string;
+    checkedLabel: string;
+    neverMeasured: string;
+    failingChecksTitle: string;
+    failingChecksBody: string;
+    historyTitle: string;
+    historyBody: string;
+    historyEmpty: string;
+    feedsTitle: string;
+    canonicalLabel: string;
+    domainsLabel: string;
+    eventsLabel: string;
+    addedLabel: string;
+    confirmedLabel: string;
+    unconfirmedNote: string;
+    notesLabel: string;
+    embedTitle: string;
+    embedBody: string;
+    embedMarkdown: string;
+    embedHtml: string;
+    backToIndex: string;
+    /**
+     * Publisher-page meta description. `{id}`, `{host}`, `{state}` and
+     * `{domains}` are substituted — one description per entry, because eight
+     * pages sharing one is eight pages a search engine treats as one.
+     */
+    publisherMetaDescription: string;
+    /** Staleness of the page itself, when no KV read path was available. */
+    buildTimeOnlyNote: string;
+    domainLabels: Record<string, string>;
+  };
+
   markdown: {
     /** Heading labels used by the agent-Markdown serializer */
     siteNavigation: string;

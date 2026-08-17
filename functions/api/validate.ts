@@ -37,25 +37,12 @@ import {
   translateFinding,
 } from '@cabuya/validator';
 
+import type { KvReadWrite, PagesContext } from '../lib/pages-runtime';
 import { assertAllowedUrl, REJECTION_MESSAGES } from '../lib/ssrf-guard';
 
 interface Env {
   /** KV namespace holding only the two rate counters. */
-  VALIDATE_RATE?: KVNamespace;
-}
-
-interface KVNamespace {
-  get(key: string): Promise<string | null>;
-  put(
-    key: string,
-    value: string,
-    options?: { expirationTtl?: number }
-  ): Promise<void>;
-}
-
-interface PagesContext {
-  request: Request;
-  env: Env;
+  VALIDATE_RATE?: KvReadWrite;
 }
 
 // ── Limits, all in one place ──────────────────────────────
@@ -122,7 +109,7 @@ function failure(
  * being hammered, not to stop a determined attacker, who has other options.
  */
 async function checkRate(
-  kv: KVNamespace | undefined,
+  kv: KvReadWrite | undefined,
   scope: 'ip' | 'host',
   subject: string,
   limit: number,
@@ -306,7 +293,7 @@ function headerMap(response: Response): Record<string, string> {
 // ── The handler ───────────────────────────────────────────
 
 export const onRequestPost = async (
-  context: PagesContext
+  context: PagesContext<Env>
 ): Promise<Response> => {
   const started = Date.now();
   const deadline = started + LIMITS.runBudgetMs;
@@ -442,7 +429,7 @@ export const onRequestPost = async (
 
 /** Anything but POST. Stated, rather than a silent 404. */
 export const onRequest = async (
-  context: PagesContext
+  context: PagesContext<Env>
 ): Promise<Response> => {
   if (context.request.method === 'POST') return onRequestPost(context);
   return failure('rejected', 'This endpoint accepts POST.', 405, {

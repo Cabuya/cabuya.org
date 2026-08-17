@@ -100,8 +100,23 @@
       "format": "uri"
     },
     "notes": {
-      "type": "string",
-      "maxLength": 500
+      "type": "object",
+      "required": [
+        "en",
+        "es"
+      ],
+      "properties": {
+        "en": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "es": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false,
+      "description": "Free-text context, written natively in both languages. Rendered verbatim on the registry pages, which are published in both — a note in one language only would leave half the readers with a blank field where the caveat should be."
     }
   }
 }

@@ -1,0 +1,45 @@
+---
+/**
+ * A measured state, rendered as text with a tone — never as a tone alone.
+ *
+ * Site rule (`docs/ACCESSIBILITY.md`): severity is never carried by colour.
+ * Here it matters more than on the validator, because this pill is the whole
+ * message. A row whose only signal is "the dot is amber" says nothing to a
+ * screen reader, nothing in a printout, and the wrong thing to the reader who
+ * cannot separate amber from green — and what it would be saying wrong is a
+ * conformance claim about somebody else's software.
+ *
+ * The tones come from the semantic tokens rather than from the badge SVG's own
+ * palette. The SVG has to be self-contained and legible at 20px inside a
+ * README; this pill sits in a themed page and has to follow the theme, which
+ * includes going readable in dark mode. They agree on meaning, not on hex.
+ */
+import { STATE_LABELS, STATE_TONE_CLASSES } from '@/lib/badge';
+import type { Language } from '@/lib/i18n';
+import type { BadgeState } from '@/lib/registry-loader';
+
+interface Props {
+  state: BadgeState;
+  lang: Language;
+  /** `sm` in table rows, `md` on the publisher page's measured block. */
+  size?: 'sm' | 'md';
+}
+
+const { state, lang, size = 'sm' } = Astro.props;
+
+const SIZE = {
+  sm: 'px-2 py-0.5 text-xs',
+  md: 'px-3 py-1 text-sm',
+};
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded font-semibold whitespace-nowrap',
+    STATE_TONE_CLASSES[state],
+    SIZE[size],
+  ]}
+  data-state={state}
+>
+  {STATE_LABELS[state][lang]}
+</span>

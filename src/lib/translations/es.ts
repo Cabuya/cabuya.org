@@ -444,6 +444,91 @@ export const es: SiteTranslations = {
       'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no corre.',
   },
 
+  registry: {
+    metaTitle: 'Registro — Protocolo Cabuya',
+    metaDescription:
+      'Aplicaciones que publican feeds Cabuya, con el resultado medido de la última validación y la fecha en que se hizo. Estar listado no es un respaldo.',
+    title: 'Registro',
+    lead: 'Aplicaciones que publican un feed Cabuya, y lo que el validador encontró la última vez que leyó uno. Todos los estados de esta página fueron medidos; ninguno fue declarado.',
+    notEndorsementTitle: 'Estar listado no es un respaldo',
+    notEndorsement:
+      'Listar una aplicación aquí dice que publica un feed y que lo medimos. No dice nada sobre si la información de ese feed es correcta, si la organización detrás es una con la que deberías trabajar, ni si la ayuda que señala está disponible hoy. Un directorio lista. Un registro mide. Ninguno de los dos recomienda.',
+    everyEntryMeasured:
+      'Cada entrada muestra cuándo se validó por última vez y qué encontró la ejecución. Un estado sin fecha es un estado que nadie ha medido todavía, y así está etiquetado.',
+    columnPublisher: 'Publicador',
+    columnState: 'Estado medido',
+    columnLevel: 'Nivel',
+    columnDomains: 'Dominios',
+    columnChecked: 'Última validación',
+    filterTitle: 'Filtrar',
+    filterAll: 'Todos',
+    filterState: 'Estado',
+    filterDomain: 'Dominio',
+    filterReview: 'Revisión',
+    filterSearch: 'Buscar',
+    filterSearchPlaceholder: 'publicador o dominio',
+    filterEmpty: 'Ninguna entrada coincide con esos filtros.',
+    filterShowing: 'mostrando',
+    reviewProposed: 'Propuesta',
+    reviewReviewed: 'Revisada',
+    reviewTitle: 'Propuestas y revisadas',
+    reviewBody:
+      'Una entrada propuesta se agregó en nombre de un equipo a partir de información pública y espera su confirmación. Se muestra porque ocultarla haría que el registro pareciera más vacío que la red — y se etiqueta porque un equipo que no ha respondido no ha aceptado nada.',
+    officialSourcesTitle: 'Fuentes oficiales',
+    officialSourcesBody:
+      'Estas no son publicadores y no han adoptado nada. Son las instituciones a las que convergen las preguntas sobre personas, listadas aquí para que una aplicación que implementa el protocolo sepa a dónde enviar a alguien a quien el protocolo deliberadamente no puede ayudar. A nadie de esta lista se le ha pedido participar, y su presencia no implica ninguna relación.',
+    officialAuthorityLabel: 'Autoridad',
+    licenceTitle: 'El registro en sí',
+    licenceBody:
+      'Las entradas de abajo viven en este repositorio como JSON bajo CC0, un archivo por publicador, y se pueden leer sin esta página. El estado medido no vive allí: lo escribe el cron de validación en un almacén de claves y valores, porque un nivel de conformidad en un archivo es un nivel de conformidad que alguien puede editar en un pull request.',
+    joinTitle: 'Cómo aparecer aquí',
+    joinBody:
+      'Publica un feed, corre el validador contra él y abre un pull request agregando tu entrada. A nadie se le agrega por un formulario y a nadie se le agrega porque nosotros decidamos que le corresponde; la entrada es tuya y la corrección también, si está mal.',
+    measuredTitle: 'Medido',
+    measuredBody:
+      'Lo que encontró el validador. Producido por una ejecución contra el feed en vivo, en la fecha que se muestra, sin intervención del publicador.',
+    declaredTitle: 'Declarado',
+    declaredBody:
+      'Lo que la entrada dice de sí misma. Revisado por una persona antes de integrarse, pero no verificado por una máquina — este bloque es una afirmación, y por eso mismo está separado del bloque de arriba.',
+    stateLabel: 'Estado',
+    levelLabel: 'Nivel',
+    checkedLabel: 'Última validación',
+    neverMeasured: 'Aún sin medir',
+    failingChecksTitle: 'Comprobaciones que fallan',
+    failingChecksBody:
+      'Cada identificador enlaza a la comprobación que lo produjo, donde están escritas la regla y la corrección.',
+    historyTitle: 'Historial',
+    historyBody:
+      'Un punto por día, agregado por el cron de validación. Un registro que solo mostrara el día de hoy dejaría que un feed que se rompe cada dos semanas pareciera confiable.',
+    historyEmpty:
+      'Todavía no hay historial. El primer punto aparece después de la primera ejecución.',
+    feedsTitle: 'Feed',
+    canonicalLabel: 'URL canónica',
+    domainsLabel: 'Dominios de entidad',
+    eventsLabel: 'Eventos',
+    addedLabel: 'Agregada',
+    confirmedLabel: 'Confirmada por el equipo',
+    unconfirmedNote:
+      'Esta entrada se creó a partir de información pública y no ha sido confirmada por el equipo que opera la aplicación. Si eres tú, la entrada es un archivo en un repositorio público y el pull request que la corrige es bienvenido.',
+    notesLabel: 'Notas',
+    embedTitle: 'Insertar la insignia',
+    embedBody:
+      'La insignia lee la misma medición que esta página y enlaza de vuelta aquí para que cualquiera pueda comprobarla. Se niega a decir más de lo que el validador midió, y nunca dice certificado.',
+    embedMarkdown: 'Markdown',
+    embedHtml: 'HTML',
+    backToIndex: 'Todas las entradas',
+    publisherMetaDescription:
+      'Entrada de {id} ({host}) en el registro de Cabuya: {state} Dominios de entidad: {domains}. Medido por el validador, nunca autodeclarado.',
+    buildTimeOnlyNote:
+      'Esta página se construyó sin conexión al almacén de mediciones, así que todas las entradas aparecen como aún sin medir. Eso es una propiedad de esta construcción, no de los publicadores.',
+    domainLabels: {
+      place: 'Lugares',
+      need: 'Necesidades',
+      alert: 'Alertas',
+      missing_persons: 'Personas desaparecidas',
+    },
+  },
+
   markdown: {
     siteNavigation: 'Navegación del Sitio',
     languageNote: 'Esta página también está disponible en inglés.',

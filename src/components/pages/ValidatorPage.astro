@@ -12,6 +12,7 @@ import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
 import { buildToc } from '@/lib/toc';
 import { getTranslations } from '@/lib/translations';
+import { URL_MODE_AVAILABLE } from '@/lib/validate-api-contract';
 
 interface Props {
   lang: Language;
@@ -20,13 +21,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
-
-/**
- * The Function ships in Task 27. Until then URL mode says so plainly instead
- * of failing on submit — a form that looks live and is not costs the reader a
- * URL, a wait and their trust.
- */
-const URL_MODE_AVAILABLE = false;
 
 /** The quickstart hands a URL over with `?url=`. */
 const initialUrl = Astro.url.searchParams.get('url') ?? '';

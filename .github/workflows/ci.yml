@@ -72,6 +72,13 @@ jobs:
       - name: Protocol gate — registry:check (strict)
         run: pnpm run registry:check:strict
 
+      # The badge endpoint runs at the edge, where there is no filesystem to
+      # read `registry/` from, so the id list is inlined at build time. This
+      # fails when a new entry landed without regenerating it — the alternative
+      # is a publisher whose own badge 404s.
+      - name: Protocol gate — the badge id list matches the registry
+        run: pnpm run registry:ids:check
+
       - name: Validator — build and test the workspace package
         run: pnpm run validator:build && pnpm run validator:test
 

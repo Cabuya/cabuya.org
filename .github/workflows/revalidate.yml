@@ -1,0 +1,219 @@
+# Revalidation — the only job allowed to write a conformance state.
+#
+# Every six hours it runs the published validator against every active
+# publisher and writes what it found to the `REGISTRY_STATUS` KV namespace. The
+# badge endpoint and the registry pages read exactly that; nothing else in the
+# system may write it, which is what makes a Cabuya badge a measurement rather
+# than a claim.
+#
+# ## The credential
+#
+# `CF_KV_TOKEN` is a Cloudflare API token scoped to **Workers KV Storage: Edit
+# on one namespace** and nothing else. It cannot deploy, cannot read other
+# namespaces, and cannot touch DNS. Documented with its scope and rotation note
+# in `docs/SECURITY.md`. It exists as a repository secret and appears nowhere
+# else — a fork's pull request never sees it, because `pull_request` triggers
+# do not run this workflow at all.
+#
+# ## Why history is a pull request
+#
+# The measurement goes to KV, where it is current. The daily record goes to
+# `registry/history/*.jsonl` through one bot pull request a day, where it is
+# permanent, diffable and revertible. A public record of who was conforming
+# when should be reviewable by the people it describes; a KV write is not.
+
+name: revalidate
+
+on:
+  schedule:
+    # Every six hours, at :17 past — off the hour so it does not land in the
+    # same minute as every other cron on the planet.
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Print transitions without writing anything'
+        type: boolean
+        default: false
+
+# One run at a time. Two concurrent runs would read the same previous record and
+# both count it as the first strike, which would defeat the two-strike rule.
+concurrency:
+  group: revalidate
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    # Never on a fork: the secret is not available there and a run without it
+    # would report every publisher as unmeasurable.
+    if: github.repository == 'Cabuya/cabuya.org'
+    outputs:
+      history: ${{ steps.run.outputs.history }}
+      issues: ${{ steps.run.outputs.issues }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The cron spawns the built CLI, not the source, so it measures the same
+      # binary an adopter runs.
+      - run: pnpm --filter @cabuya/validator run build
+
+      - name: Measure every active publisher
+        id: run
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_REGISTRY_KV_ID: ${{ secrets.CF_REGISTRY_KV_ID }}
+          CF_KV_TOKEN: ${{ secrets.CF_KV_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            node scripts/revalidate.mjs --dry-run | tee run.log
+          else
+            node scripts/revalidate.mjs | tee run.log
+          fi
+          section() {
+            sed -n "/^--- $1 ---$/,/^--- \|^✅/p" run.log \
+              | tail -n +2 | grep -v '^---' | grep -v '^✅' | grep -v '^$' || true
+          }
+          {
+            echo 'history<<SECTION_EOF'
+            section history
+            echo 'SECTION_EOF'
+            echo 'issues<<SECTION_EOF'
+            section issues
+            echo 'SECTION_EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: revalidate-log
+          path: run.log
+          retention-days: 7
+
+  history:
+    needs: measure
+    if: needs.measure.outputs.history != '' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Append today's points
+        env:
+          HISTORY: ${{ needs.measure.outputs.history }}
+        run: |
+          set -euo pipefail
+          mkdir -p registry/history
+          # One tab-separated line per publisher: id, then the JSONL record.
+          # Appended only if the day is not already recorded, so a manual
+          # re-run does not double-write a point.
+          printf '%s\n' "$HISTORY" | while IFS=$'\t' read -r id record; do
+            [ -n "$id" ] || continue
+            file="registry/history/${id}.jsonl"
+            day=$(printf '%s' "$record" | sed -n 's/.*"date":"\([0-9-]*\)".*/\1/p')
+            if [ -f "$file" ] && grep -q "\"date\":\"${day}\"" "$file"; then
+              continue
+            fi
+            printf '%s\n' "$record" >> "$file"
+          done
+
+      - name: Open or update the daily pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/registry-history
+          commit-message: |
+            chore(registry): append daily measurement history
+
+            Signed-off-by: cabuya-bot <bot@cabuya.org>
+          title: 'chore(registry): daily measurement history'
+          body: |
+            Appended by `.github/workflows/revalidate.yml`.
+
+            One point per publisher per day, from the run that wrote the current
+            KV state. The measurement is already live on the registry pages and
+            the badges; this is the permanent, reviewable record of it.
+
+            Nothing here is a new claim — every line restates what the validator
+            found and when.
+          labels: registry
+          # DCO is CI-enforced on every commit, including this one. The trailer
+          # is written here rather than relying on a signing flag, because the
+          # gate checks for the trailer.
+          committer: cabuya-bot <bot@cabuya.org>
+          author: cabuya-bot <bot@cabuya.org>
+
+  status-issue:
+    needs: measure
+    # Only when a publisher actually moved into or out of a bad state. A job
+    # that ran unconditionally would file an issue every six hours saying
+    # nothing had happened, and the tracker would stop being a signal.
+    if: needs.measure.outputs.issues != '' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open, update or close the status issue
+        uses: actions/github-script@v7
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          script: |
+            /*
+             * One issue, reused. The run log names every transition; an issue
+             * per publisher per incident would be a tracker nobody reads, and
+             * reopening one every six hours is the same failure with extra
+             * notifications.
+             */
+            const title = 'registry:status — publishers not currently passing';
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'registry:status',
+            });
+            const existing = open.find((issue) => issue.title === title);
+
+            const body = [
+              'The revalidation cron recorded a failing or unreachable state.',
+              '',
+              `Run: ${process.env.RUN_URL}`,
+              '',
+              'A publisher reaches `unreachable` only after two failed fetches',
+              'at least an hour apart — a single bad afternoon does not appear',
+              'here. `failing` means the validator read the document and found',
+              'errors; the check ids are on the publisher page.',
+            ].join('\n');
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['registry:status'],
+              });
+            }

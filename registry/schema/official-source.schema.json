@@ -9,6 +9,7 @@
     "id",
     "name",
     "authority",
+    "authority_lang",
     "canonical_url",
     "domain"
   ],
@@ -36,6 +37,11 @@
     "authority": {
       "type": "string"
     },
+    "authority_lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "BCP-47 tag for the language the authority's name is written in. An institution's legal name is not translated, so a consumer rendering it inside a document in another language needs to mark it — a screen reader that reads 'Unidad Nacional para la Gestion del Riesgo de Desastres' with English phonemes is unintelligible. Required rather than defaulted: the registry is designed to hold sources from any country, and there is no language that is the right guess for all of them."
+    },
     "canonical_url": {
       "type": "string",
       "format": "uri",
@@ -50,8 +56,23 @@
       ]
     },
     "notes": {
-      "type": "string",
-      "maxLength": 500
+      "type": "object",
+      "required": [
+        "en",
+        "es"
+      ],
+      "properties": {
+        "en": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "es": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false,
+      "description": "Free-text context, written natively in both languages. Rendered verbatim on the registry pages, which are published in both — a note in one language only would leave half the readers with a blank field where the caveat should be."
     }
   }
 }

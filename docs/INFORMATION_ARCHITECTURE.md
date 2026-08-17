@@ -16,8 +16,8 @@
 | Route | Job | JSON-LD | Status |
 |---|---|---|---|
 | `/` | The landing: story, ladder, network, horizon | `Organization` + `WebSite` | Task 21 |
-| `/registry` | Implementers registry: table + filters, measured states | `Dataset` (CC0, with distribution) | Task 28 |
-| `/registry/{publisher_id}` | One publisher: claimed vs measured, history | — | Task 28 |
+| `/registry` | Implementers registry: table + filters, measured states | `Dataset` (CC0, with distribution) — *Task 33* | ✅ live |
+| `/registry/{publisher_id}` | One publisher: claimed vs measured, history | — | ✅ live |
 | `/rfcs`, `/rfcs/{number}` | RFC index + individual RFCs | `TechArticle` | Task 30 |
 | `/changelog` | Spec + validator + skill releases, one timeline | — | Task 30 |
 | `/governance` | The governance model, maintainers, continuity | — | Task 30 |
@@ -50,8 +50,9 @@
 |---|---|
 | `{route}.md` twins | Every HTML page serves a complete Markdown twin (Task 32) |
 | `/llms.txt` · `/llms-full.txt` | The agent map / the inlined protocol (Task 32) |
-| `/api/validate` | The live validator Function (Task 27) |
-| `/badge/{publisher_id}.svg` | The measured badge (`?lang=`, `?style=`) (Task 28) |
+| `/api/validate` | The live validator Function | ✅ live |
+| `/badge/{publisher_id}.svg` | The measured badge (`?lang=`, `?style=`) | ✅ live |
+| `/registry/status.json` | Every measured state, live, so the static pages can refresh themselves | ✅ live |
 | `/schemas/{version}/{name}.schema.json` | Schemas served byte-exact at their `$id` URLs | ✅ live |
 | `sitemap-index.xml`, `robots.txt`, `site.webmanifest`, favicons | Standard |
 

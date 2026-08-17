@@ -71,6 +71,21 @@ export type ValidateResponse = ValidateSuccess | ValidateFailure;
 export const VALIDATE_ENDPOINT = '/api/validate';
 
 /**
+ * Whether URL mode is offered.
+ *
+ * Lives beside the contract rather than in the page, because two surfaces
+ * depend on it: the form, and the Markdown twin an agent reads instead of the
+ * form. When this was `false` and the twin did not know, the page said the
+ * feature was unbuilt while the `.md` beside it said nothing at all — the
+ * agent-facing copy is the one nobody notices going stale.
+ *
+ * It stays as a flag now that the Function is deployed: it is the switch that
+ * turns the mode off in one edit if the endpoint ever has to be pulled. A form
+ * that looks live and is not costs the reader a URL, a wait and their trust.
+ */
+export const URL_MODE_AVAILABLE = true;
+
+/**
  * Client-side URL screening.
  *
  * The server does this again, properly, and its version is the one that

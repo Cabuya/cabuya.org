@@ -5,7 +5,11 @@
     "es": "Registro Único de Damnificados (UNGRD)"
   },
   "authority": "Unidad Nacional para la Gestión del Riesgo de Desastres",
+  "authority_lang": "es",
   "canonical_url": "https://www.gestiondelriesgo.gov.co",
   "domain": "affected_persons",
-  "notes": "The official instrument for identifying affected people; platforms feed it, they do not replace it (mesa técnica report, 2026-08-16)."
+  "notes": {
+    "en": "The official instrument for identifying affected people; platforms feed it, they do not replace it (mesa técnica report, 2026-08-16).",
+    "es": "El instrumento oficial para identificar a las personas afectadas; las plataformas lo alimentan, no lo reemplazan (informe de la mesa técnica, 2026-08-16)."
+  }
 }

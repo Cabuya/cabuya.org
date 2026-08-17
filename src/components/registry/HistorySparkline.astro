@@ -1,0 +1,107 @@
+---
+/**
+ * A publisher's measurement history, as an inline SVG.
+ *
+ * No chart library. Not for the bundle size, though that is real — for what a
+ * chart library would encourage: axes, tooltips, interpolation between points.
+ * This is a record of discrete daily runs, and drawing a smooth line between
+ * Tuesday's pass and Thursday's failure would invent a Wednesday nobody
+ * measured.
+ *
+ * So it is a row of blocks, one per run, in run order. Blocks rather than a
+ * line, gaps rather than interpolation, and the whole thing described in a
+ * `<title>` and a table-free summary sentence so the information survives
+ * without the graphic. A sparkline that only works visually is decoration on a
+ * page whose entire argument is that its claims are checkable.
+ */
+import { STATE_LABELS } from '@/lib/badge';
+import type { Language } from '@/lib/i18n';
+import type { BadgeState, HistoryPoint } from '@/lib/registry-loader';
+
+interface Props {
+  points: HistoryPoint[];
+  lang: Language;
+  /** Accessible name — the publisher this history belongs to. */
+  publisherId: string;
+}
+
+const { points, lang, publisherId } = Astro.props;
+
+/**
+ * The last 90 runs.
+ *
+ * A quarter is long enough to show a pattern of intermittency and short enough
+ * that each block stays wide enough to see. Older history is in the JSONL file,
+ * which is linked — truncating the view is fine; truncating the record is not.
+ */
+const WINDOW = 90;
+const shown = points.slice(-WINDOW);
+
+const BLOCK = 6;
+const GAP = 2;
+const HEIGHT = 28;
+const width = Math.max(shown.length * (BLOCK + GAP) - GAP, 1);
+
+/**
+ * Fills, from the semantic tokens via `currentColor`-free literals.
+ *
+ * An inline SVG in a themed page can use CSS custom properties, and does: the
+ * `fill` references the same tokens the rest of the page uses, so the chart
+ * follows dark mode instead of fighting it.
+ */
+const FILL: Record<BadgeState, string> = {
+  conforming: 'var(--color-cabuya-success)',
+  stale: 'var(--color-cabuya-warning)',
+  unreachable: 'var(--color-cabuya-border-strong)',
+  failing: 'var(--color-cabuya-danger)',
+  unmeasured: 'var(--color-cabuya-border)',
+  archived: 'var(--color-cabuya-border-strong)',
+};
+
+/** Counts, for the sentence that carries the same information as the picture. */
+const counts = shown.reduce<Record<string, number>>((acc, point) => {
+  acc[point.state] = (acc[point.state] ?? 0) + 1;
+  return acc;
+}, {});
+
+const summary = Object.entries(counts)
+  .sort((a, b) => b[1] - a[1])
+  .map(
+    ([state, count]) => `${count} × ${STATE_LABELS[state as BadgeState][lang]}`
+  )
+  .join(' · ');
+
+const title =
+  lang === 'es'
+    ? `Historial de ${publisherId}: ${shown.length} ejecuciones — ${summary}`
+    : `History for ${publisherId}: ${shown.length} runs — ${summary}`;
+---
+
+<figure class="not-prose m-0">
+  <svg
+    width={width}
+    height={HEIGHT}
+    viewBox={`0 0 ${width} ${HEIGHT}`}
+    role="img"
+    aria-label={title}
+    class="h-7 w-full max-w-full"
+    preserveAspectRatio="none"
+  >
+    <title>{title}</title>
+    {
+      shown.map((point, index) => (
+        <rect
+          x={index * (BLOCK + GAP)}
+          y={0}
+          width={BLOCK}
+          height={HEIGHT}
+          rx={1}
+          fill={FILL[point.state]}
+        >
+          <title>{`${point.date} — ${STATE_LABELS[point.state][lang]}`}</title>
+        </rect>
+      ))
+    }
+  </svg>
+  <figcaption class="mt-2 text-xs text-cabuya-text-muted">{summary}</figcaption>
+</figure>

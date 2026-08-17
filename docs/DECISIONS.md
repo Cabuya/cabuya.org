@@ -12,6 +12,7 @@
 | D-W2 | 2026-08-16 | The migration runs as **one direct multi-project plan**, not an orchestrator plan | — |
 | D-W3 | 2026-08-16 | Site forms connect to **DailyBot Forms** (one contact/join form) | `docs/context/PRODUCTS_BLUEPRINT.md` §2.3's mailto-and-issues-only default |
 | D-W4 | 2026-08-16 | npm package name is **`@cabuya/validator`** | The naming doc's earlier `cabuya-validator` sketch (`docs/context/BRAND_AND_NAMING.md` §7.1) — `docs/context/DECISIONS.md` P6 already ratified the scoped name |
+| D-W5 | 2026-08-17 | Registry free text is **bilingual by schema**: `notes` is `{en, es}`, and `official_source.authority` carries a required `authority_lang` | The registry schemas' original single-string `notes` |
 
 ---
 
@@ -80,6 +81,35 @@ the blueprint's default.)
 **Why.** The founding decision log (P6) ratified the `@cabuya` npm scope; the
 earlier naming-doc sketch predated it. Scoped names prevent squatting and
 group future packages (`@cabuya/mcp-server`).
+
+## D-W5 — The registry's free text is bilingual by schema
+
+**Decision.** `notes` in `registry/schema/{publisher-entry,official-source,
+event}.schema.json` is an object with required `en` and `es`. Official sources
+additionally carry a required `authority_lang` (BCP-47) beside the institution's
+name.
+
+**Why.** The registry pages render these fields verbatim in both languages, and
+`notes` is where the most important caveat on the page lives — *this entry was
+created from public information and the team has not confirmed it*. A
+single-string field meant a Spanish reader saw that caveat in English, which the
+language gate caught the moment the pages shipped. Making it bilingual in the
+schema rather than translating at render time keeps the registry a tree another
+organisation can lift whole: the translation belongs to the data, not to this
+website.
+
+`authority_lang` exists because an institution's legal name is not translated
+in either direction. *Unidad Nacional para la Gestión del Riesgo de Desastres*
+appears unchanged on the English page, where a screen reader would otherwise
+read it with English phonemes. It is required rather than defaulted: the
+registry is designed to hold sources from any country, and no language is the
+right guess for all of them. The language audit was taught the general rule at
+the same time — a phrase element carrying an explicit `lang` is a declaration,
+not a translation defect.
+
+**Cost.** Two schema changes and seven entries, done in the same commit. Every
+future entry pays a translated sentence, which is the correct price for a
+bilingual public record.
 
 ---
 

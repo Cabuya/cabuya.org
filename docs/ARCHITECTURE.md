@@ -102,12 +102,22 @@ missing translation is a build error.
 | Function | Job | Risk class |
 |---|---|---|
 | `functions/_middleware.ts` | `Accept: text/markdown` negotiation → `.md` twins; schema content negotiation | Low |
-| `functions/api/validate.ts` *(Task 27)* | The live validator — fetches arbitrary URLs | **The attack surface.** Full SSRF control set; zero retention |
+| `functions/api/validate.ts` | The live validator — fetches arbitrary URLs | **The attack surface.** Full SSRF control set; zero retention |
 | `functions/api/contact.ts` *(Task 31)* | Contact form → DailyBot Forms | Env-gated secret; honeypot; rate limit |
-| `functions/badge/[publisher].ts` *(Task 28)* | Measured badge SVG from KV | Cache 15 min; a11y attributes |
+| `functions/badge/[publisher].ts` | Measured badge SVG from KV | Read-only binding; cache 15 min; state as text; 404 for an unregistered id |
+| `functions/registry/status.json.ts` | Every measured state, so the static pages can refresh themselves | Read-only binding; same cache window as the badge |
 
-State: **KV only** (badge status + rate counters). No database anywhere.
-The public audit trail is monthly CC0 JSONL committed to `registry/history/`.
+Every Function's KV binding is typed against `functions/lib/pages-runtime.ts`,
+which declares the four runtime members this site uses and nothing else. The
+badge and status endpoints bind `KvRead` — they have no `put` at the type level,
+which is the first place the rule *only the cron writes conformance* is
+enforced.
+
+State: **KV only** (measured status + two rate counters), in two namespaces
+that never mix. No database anywhere. The public audit trail is daily CC0 JSONL
+appended to `registry/history/` by a reviewable bot pull request — measured
+state lives in KV because it must be current, and its record lives in git
+because it must be permanent.
 
 ### 3.6 The agent-facing content layer *(Task 32 completes it)*
 

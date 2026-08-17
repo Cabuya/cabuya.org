@@ -92,6 +92,26 @@ export default defineConfig({
             if (id.includes('node_modules/svelte/')) {
               return 'svelte';
             }
+            /*
+             * The validator engine and its JSON Schema compiler get a chunk of
+             * their own.
+             *
+             * Without this, Rollup put the CommonJS interop helper that every
+             * bundled module needs into the same chunk as Ajv — so importing
+             * `analytics.ts`, which has no dependencies at all, pulled 61 KB
+             * gzipped of schema compiler onto every page on the site. The
+             * validator is used by exactly one island, on one page, behind a
+             * lazy import; this keeps it there.
+             */
+            if (
+              id.includes('packages/validator/') ||
+              id.includes('node_modules/ajv') ||
+              id.includes('node_modules/json-schema-traverse') ||
+              id.includes('node_modules/fast-deep-equal') ||
+              id.includes('node_modules/fast-uri')
+            ) {
+              return 'validator-engine';
+            }
           },
         },
       },

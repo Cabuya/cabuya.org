@@ -89,7 +89,14 @@ const groups = (): Array<{
           {group.title} ({group.findings.length})
         </h4>
         <ul class="mt-2 flex flex-col gap-3">
-          {#each group.findings as finding (finding.id + finding.pointer)}
+          <!--
+            Keyed by position as well as identity. One check can fire more than
+            once at the same pointer — two records missing the same required
+            field both report at the envelope — and a key of id+pointer alone
+            collides, which Svelte reports as `each_key_duplicate` and which
+            drops findings from the list a publisher is trying to fix.
+          -->
+          {#each group.findings as finding, index (finding.id + finding.pointer + index)}
             <li class="rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-4">
               <p class="flex flex-wrap items-center gap-2 text-xs">
                 <!-- The severity word, never the colour alone. -->

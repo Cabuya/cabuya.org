@@ -9,5 +9,8 @@
   ],
   "status": "proposed",
   "added": "2026-08-16",
-  "notes": "Wave-0 candidate (founding analysis: reference-implementation tier; public API with namespaced external-id writes observed in production). Entered on the team's behalf; awaiting their confirmation."
+  "notes": {
+    "en": "Wave-0 candidate (founding analysis: reference-implementation tier; public API with namespaced external-id writes observed in production). Entered on the team's behalf; awaiting their confirmation.",
+    "es": "Candidata de la ola 0 (análisis fundacional: nivel de implementación de referencia; API pública con escrituras de identificadores externos con espacio de nombres observadas en producción). Registrada en nombre del equipo; a la espera de su confirmación."
+  }
 }

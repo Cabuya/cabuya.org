@@ -434,6 +434,15 @@ export function detectLanguage(text: string): LanguageScore {
  * Strip HTML to visible text while preserving block boundaries as newlines, so
  * a Spanish paragraph inside an English page stays its own analyzable unit.
  *
+ * Phrase elements carrying an explicit `lang` are dropped too. A proper noun in
+ * another language — *Unidad Nacional para la Gestión del Riesgo de Desastres*
+ * on an English page — is not a translation defect; it is an institution's
+ * name, and marking it `lang="es"` is what the HTML spec asks for so a screen
+ * reader pronounces it correctly. Content the author has explicitly declared as
+ * another language is a declaration, so the audit stops treating it as a
+ * finding. Only phrase elements are stripped this way: `<html lang>` wraps the
+ * document, and honouring it here would delete every page.
+ *
  * `<code>` and `<pre>` are dropped along with scripts and styles. They hold
  * identifiers, not prose — and protocol vocabulary is deliberately
  * Spanish-looking in places: the validator's deny-list rejects field names like
@@ -451,6 +460,10 @@ export function htmlToText(html: string): string {
       .replace(/<(script|style|svg|noscript|template)[\s\S]*?<\/\1>/gi, ' ')
       .replace(/<pre[\s\S]*?<\/pre>/gi, ' ')
       .replace(/<code[\s\S]*?<\/code>/gi, ' ')
+      .replace(
+        /<(span|b|i|em|strong|cite|q|abbr|dfn|small|a)\b[^>]*\slang\s*=\s*["'][^"']+["'][^>]*>[\s\S]*?<\/\1>/gi,
+        ' '
+      )
       // Block-level boundaries become newlines before tags are dropped.
       .replace(
         /<\/(p|div|li|h[1-6]|section|article|header|footer|nav|td|th|tr|blockquote|figcaption|dd|dt)>/gi,

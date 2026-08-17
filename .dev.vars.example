@@ -15,3 +15,20 @@ DAILYBOT_API_KEY=
 # If the endpoint ever appears to need a credential, that is a design change
 # worth stopping for: a service that fetches arbitrary URLs and also holds a
 # secret is a considerably more attractive target than one that does not.
+
+# ── The registry's measured state ─────────────────────────
+#
+# The badge endpoint and `/registry/status.json` read the KV namespace
+# `REGISTRY_STATUS`. Both are read-only: nothing served from a Function can
+# write a conformance state. Create it locally with
+# `wrangler pages dev dist --kv VALIDATE_RATE --kv REGISTRY_STATUS`; an empty
+# namespace renders every badge as its honest "not yet measured" state.
+#
+# The build can bake the current states into the static pages when these three
+# are set. All three are optional — without them the build succeeds and every
+# entry renders as not yet measured, which is what a local build should show.
+# The token is READ-only and scoped to the one namespace; the write token lives
+# only in the revalidation workflow's secrets. See docs/SECURITY.md § 4.
+CF_ACCOUNT_ID=
+CF_REGISTRY_KV_ID=
+CF_KV_READ_TOKEN=

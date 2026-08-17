@@ -5,7 +5,11 @@
     "es": "Cruz Roja Colombiana — Restablecimiento del Contacto Familiar"
   },
   "authority": "Cruz Roja Colombiana",
+  "authority_lang": "es",
   "canonical_url": "https://www.cruzrojacolombiana.org",
   "domain": "missing_persons",
-  "notes": "The official channel missing-person link-outs converge to (spec §7.1). Deep program URL to be confirmed with the institution before deep-linking."
+  "notes": {
+    "en": "The official channel missing-person link-outs converge to (spec §7.1). Deep program URL to be confirmed with the institution before deep-linking.",
+    "es": "El canal oficial al que convergen los enlaces de personas desaparecidas (§7.1 de la especificación). La URL interna del programa se confirmará con la institución antes de enlazar directamente."
+  }
 }

@@ -35,6 +35,7 @@
 | `pnpm run spec:check(:strict)` | Schemas lint (2020-12); `$id`s absolute+versioned; valid examples pass; invalid examples fail the schema OR declare their designed later-pass violation | ✅ live |
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
+| `pnpm run registry:ids:check` | The badge endpoint's inlined id list still matches `registry/publishers/` — a new entry whose own badge would 404 fails here | ✅ live |
 | `pnpm run checks:catalogue(:strict)` | Ids unique, well-formed and never reused; every check has a title, rule and a spec anchor that resolves to a file on disk; every **implemented** check has its Spanish rule and fix; every **catalogued-but-unimplemented** check says where it is planned. Once `/developers/validator/checks` exists (Task 26) the same run cross-checks ids ↔ page anchors in both directions — it needs `pnpm run validator:build` first, and CI therefore runs it after the site build | ✅ live |
 
 ## Quality gates
@@ -67,7 +68,10 @@
 |---|---|
 | `pnpm run images:optimize` | WebP + responsive sets for staged images |
 | `pnpm run generate:agent-skills-index` | Regenerates the agent-skills index (runs in prebuild) |
-| `node scripts/revalidate.mjs --dry-run` | Registry re-validation state machine locally *(Task 28)* |
+| `pnpm run revalidate:dry-run` | Every transition the cron would make, against the live feeds, writing nothing |
+| `node scripts/revalidate.mjs --dry-run --fixtures tests/fixtures/revalidate` | The same, against fixtures — no network, deterministic, what the test suite runs |
+| `node scripts/revalidate.mjs --only <publisher_id>` | Narrow a run to one entry |
+| `pnpm run registry:ids` | Regenerate the badge endpoint's inlined id list after adding an entry |
 | `pnpm run ncu:check` | Dependency update report (TS major is pinned out) |
 | `pnpm run release` | Version bump + release commit (CI release flow) |
 
@@ -75,17 +79,24 @@
 
 ```bash
 pnpm run build
-pnpm exec wrangler pages dev dist --kv VALIDATE_RATE
+pnpm exec wrangler pages dev dist --kv VALIDATE_RATE --kv REGISTRY_STATUS
 ```
 
-`--kv` creates the namespace locally, so working on `/api/validate` needs no
-Cloudflare account setup. The endpoint takes no secrets — see
-`.dev.vars.example` for why that is a property worth keeping.
+`--kv` creates each namespace locally, so working on the Functions needs no
+Cloudflare account setup. `/api/validate` takes no secrets at all — see
+`.dev.vars.example` for why that is a property worth keeping. `REGISTRY_STATUS`
+starts empty, so every badge renders its honest *not yet measured* state until
+you put something in it:
 
-To point the site's URL mode at the local Function, flip
-`URL_MODE_AVAILABLE` in `src/components/pages/ValidatorPage.astro` and rebuild.
-It ships `false` so the deployed page says the service is not up rather than
-failing on submit.
+```bash
+pnpm exec wrangler kv key put --local --binding REGISTRY_STATUS status:corag \
+  '{"publisher_id":"corag","state":"conforming","level":"L2","checked_at":"2026-08-17T00:00:00Z","version":"0.1"}'
+```
+
+`URL_MODE_AVAILABLE` in `src/lib/validate-api-contract.ts` is the one switch
+that turns the validator's URL mode off, for both the page and its Markdown
+twin. It ships `true` now that the Function is deployed; set it `false` and the
+page says the service is not up rather than failing on submit.
 
 | Command | Asserts |
 |---|---|

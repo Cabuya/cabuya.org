@@ -1,0 +1,205 @@
+---
+/**
+ * The filter controls, and the script that makes them work.
+ *
+ * Rendered inside a `<noscript>`-free block that is hidden until the script
+ * takes over: controls that do nothing are worse than no controls, and a reader
+ * without JavaScript should see the complete table with nothing above it
+ * suggesting they are missing part of it.
+ *
+ * ## Why this is not a Svelte island
+ *
+ * The plan called for one. It would have meant either re-rendering the table in
+ * the island — duplicating the server's markup in a second language, with the
+ * two able to disagree about the registry's contents — or shipping a framework
+ * runtime to toggle the `hidden` attribute on twelve rows. The page budget is
+ * 60 KB and this does the whole job in under one, so the enhancement is a plain
+ * module script and the table stays the server's single rendering.
+ */
+import { STATE_LABELS } from '@/lib/badge';
+import type { Language } from '@/lib/i18n';
+import type { BadgeState, PublisherEntry } from '@/lib/registry-loader';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  entries: PublisherEntry[];
+  /** States that actually occur, so the menu never offers an empty filter. */
+  states: BadgeState[];
+}
+
+const { lang, entries, states } = Astro.props;
+const t = getTranslations(lang);
+
+const domains = [...new Set(entries.flatMap((entry) => entry.entity_domains))]
+  .sort()
+  .map((domain) => ({
+    value: domain,
+    label: t.registry.domainLabels[domain] ?? domain,
+  }));
+
+const stateOptions = states.map((state) => ({
+  value: state,
+  label: STATE_LABELS[state][lang],
+}));
+
+const reviewOptions = [
+  { value: 'reviewed', label: t.registry.reviewReviewed },
+  { value: 'proposed', label: t.registry.reviewProposed },
+];
+
+const SELECT_CLASS =
+  'rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg px-2 py-1.5 text-sm text-cabuya-text focus:border-cabuya-border-interactive focus:outline-none focus-visible:ring-2 focus-visible:ring-cabuya-primary';
+---
+
+<div
+  class="not-prose mb-6 hidden flex-wrap items-end gap-4"
+  data-registry-filters
+  hidden
+>
+  <div class="flex flex-col gap-1">
+    <label
+      for="registry-search"
+      class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
+    >
+      {t.registry.filterSearch}
+    </label>
+    <input
+      id="registry-search"
+      type="search"
+      class={SELECT_CLASS}
+      placeholder={t.registry.filterSearchPlaceholder}
+      data-filter="search"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label
+      for="registry-state"
+      class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
+    >
+      {t.registry.filterState}
+    </label>
+    <select id="registry-state" class={SELECT_CLASS} data-filter="state">
+      <option value="">{t.registry.filterAll}</option>
+      {
+        stateOptions.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))
+      }
+    </select>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label
+      for="registry-domain"
+      class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
+    >
+      {t.registry.filterDomain}
+    </label>
+    <select id="registry-domain" class={SELECT_CLASS} data-filter="domains">
+      <option value="">{t.registry.filterAll}</option>
+      {
+        domains.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))
+      }
+    </select>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label
+      for="registry-review"
+      class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
+    >
+      {t.registry.filterReview}
+    </label>
+    <select id="registry-review" class={SELECT_CLASS} data-filter="review">
+      <option value="">{t.registry.filterAll}</option>
+      {
+        reviewOptions.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))
+      }
+    </select>
+  </div>
+
+  <p
+    class="text-sm text-cabuya-text-muted"
+    data-registry-count
+    data-label={t.registry.filterShowing}
+    aria-live="polite"
+  >
+  </p>
+</div>
+
+<script>
+  /*
+   * Filtering, in the smallest form that does the job.
+   *
+   * The script's contract with the table is four data attributes and the
+   * `hidden` property. It reads no text and writes no markup, so a change to
+   * how a row looks cannot break filtering, and a bug in filtering cannot
+   * change what a row says.
+   */
+  const filters = document.querySelector<HTMLElement>('[data-registry-filters]');
+  const table = document.querySelector<HTMLElement>('[data-registry-table]');
+  if (filters && table) {
+    // Revealed only now: the controls exist once they work.
+    filters.hidden = false;
+    filters.classList.remove('hidden');
+    filters.classList.add('flex');
+
+    const rows = Array.from(
+      table.querySelectorAll<HTMLElement>('[data-registry-row]')
+    );
+    const empty = document.querySelector<HTMLElement>('[data-registry-empty]');
+    const count = document.querySelector<HTMLElement>('[data-registry-count]');
+    const inputs = Array.from(
+      filters.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+        '[data-filter]'
+      )
+    );
+    const showingLabel = count?.dataset.label ?? '';
+
+    const apply = (): void => {
+      const values = new Map(
+        inputs.map((input) => [
+          input.dataset.filter ?? '',
+          input.value.trim().toLowerCase(),
+        ])
+      );
+      const search = values.get('search') ?? '';
+
+      let visible = 0;
+      for (const row of rows) {
+        const matches =
+          (!values.get('state') || row.dataset.state === values.get('state')) &&
+          (!values.get('review') ||
+            row.dataset.review === values.get('review')) &&
+          (!values.get('domains') ||
+            (row.dataset.domains ?? '')
+              .split(' ')
+              .includes(values.get('domains') ?? '')) &&
+          (!search ||
+            `${row.dataset.publisher} ${row.dataset.host}`
+              .toLowerCase()
+              .includes(search));
+
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      }
+
+      if (empty) empty.hidden = visible > 0;
+      if (count) {
+        count.textContent =
+          visible === rows.length ? '' : `${showingLabel} ${visible}/${rows.length}`;
+      }
+    };
+
+    for (const input of inputs) {
+      input.addEventListener('input', apply);
+      input.addEventListener('change', apply);
+    }
+  }
+</script>

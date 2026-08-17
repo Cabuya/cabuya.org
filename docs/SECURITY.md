@@ -48,7 +48,9 @@ exempt for embedding).
 
 | Secret | Scope | Where |
 |---|---|---|
-| Cloudflare API token (cron) | Write-only, one KV namespace | GitHub repo secret |
+| `CF_KV_TOKEN` (revalidation cron) | Workers KV Storage: **Edit**, one namespace | GitHub repo secret |
+| `CF_ACCOUNT_ID` · `CF_REGISTRY_KV_ID` | Identifiers, not credentials | GitHub repo secret |
+| `CF_KV_READ_TOKEN` (site build) | Workers KV Storage: **Read**, same namespace | Pages build env |
 | `DAILYBOT_FORMS_TOKEN` + form id | Form submission only | Pages env / `.dev.vars` |
 | `PUBLIC_CF_BEACON_TOKEN` | Analytics beacon (public) | Pages env |
 
@@ -56,6 +58,41 @@ Rules: names documented in `.dev.vars.example` with placeholders; values
 never in git; **a pushed secret is a leaked secret — rotate it, don't just
 remove it**; the Security Review sweeps `git log -p` for added-then-removed
 material.
+
+### The KV write token
+
+`CF_KV_TOKEN` is the only credential in the system that can change what the
+registry says about a publisher, so it is worth being precise about it.
+
+**Scope.** Workers KV Storage: Edit, restricted to the `REGISTRY_STATUS`
+namespace, on one account. It cannot deploy, cannot read or write any other
+namespace, cannot touch DNS, and cannot read the rate-counter namespace the
+validator endpoint uses. A token that can only do the one thing it is for
+cannot be repurposed by whoever finds it.
+
+**Blast radius.** Someone holding it can write a false conformance state. They
+cannot change the registry entries (those are git, and a pull request), cannot
+change the history (also git, appended by a reviewable bot PR), and cannot
+change the checks. The lie would be visible in the next cron run six hours
+later, when the real measurement overwrites it — and the history PR would show
+a day whose recorded state does not match the badge anyone saw.
+
+**Where it can appear.** `.github/workflows/revalidate.yml` only. That workflow
+does not run on `pull_request`, so a fork never receives it; it is gated on the
+repository name so a fork's scheduled run exits before the step that would need
+it; and `concurrency: revalidate` keeps two runs from racing on the same
+counter.
+
+**Rotation.** Rotate on any maintainer departure, on any suspicion, and
+otherwise every 90 days. Rotation is a dashboard action plus a secret update —
+there is nothing to redeploy, because no built artefact contains it.
+
+**Read side.** `CF_KV_READ_TOKEN` is a separate, read-only token used at build
+time to bake measured states into the static pages. It is deliberately not the
+same token: a build environment is a more exposed place than a workflow secret,
+and nothing that builds the site needs to be able to write a measurement.
+Without it the build still succeeds and every entry renders as *not yet
+measured*, which is the honest fallback rather than a broken one.
 
 ## 5. Repository & supply chain
 

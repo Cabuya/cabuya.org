@@ -1,0 +1,320 @@
+---
+/**
+ * `/registry` — who publishes a feed, and what the validator found in it.
+ *
+ * The page has one job that is harder than it looks: to be useful without ever
+ * becoming a recommendation. Everything on it is either a measurement or a
+ * label saying it is not one, and the two sentences at the top — *inclusion is
+ * not endorsement*, *every entry shows when it was last validated* — are
+ * printed in both languages because they are the terms on which the rest of the
+ * page can be read at all.
+ *
+ * Official sources are rendered in their own section, below the table and
+ * visually separated. They are institutions the protocol points people toward,
+ * not adopters, and putting a Red Cross programme in the same table as a
+ * volunteer directory would imply a relationship that does not exist.
+ */
+import Callout from '@/components/editorial/Callout.astro';
+import RegistryFilters from '@/components/registry/RegistryFilters.astro';
+import RegistryTable from '@/components/registry/RegistryTable.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { STATE_LABELS, STATE_TONE_CLASSES } from '@/lib/badge';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import type { BadgeState } from '@/lib/registry-loader';
+import { allPublishers, officialSources } from '@/lib/registry-loader';
+import {
+  fetchMeasuredStatuses,
+  statusSourceIsLive,
+} from '@/lib/registry-status';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const entries = allPublishers();
+const sources = officialSources();
+const statuses = await fetchMeasuredStatuses(
+  entries.map((entry) => entry.publisher_id)
+);
+const live = statusSourceIsLive();
+
+/**
+ * One clock for the whole render.
+ *
+ * Every relative age on the page is computed from this instant rather than from
+ * a fresh `new Date()` per row, so two rows measured in the same run always
+ * read the same age — and so the built HTML is stable enough to diff.
+ */
+const now = new Date();
+
+/**
+ * Label and tone per state, for the freshness script.
+ *
+ * Every state is emitted, not just the ones present at build time: the whole
+ * point of the refresh is that a publisher can move into a state this build has
+ * never seen.
+ */
+const stateVocabulary = Object.fromEntries(
+  (Object.keys(STATE_TONE_CLASSES) as BadgeState[]).map((state) => [
+    state,
+    { label: STATE_LABELS[state][lang], className: STATE_TONE_CLASSES[state] },
+  ])
+);
+
+/** Only the states that actually occur are offered as filters. */
+const presentStates = [
+  ...new Set(
+    entries.map(
+      (entry) => statuses.get(entry.publisher_id)?.state ?? 'unmeasured'
+    )
+  ),
+] as BadgeState[];
+---
+
+<MainLayout
+  lang={lang}
+  title={t.registry.metaTitle}
+  description={t.registry.metaDescription}
+>
+  <!--
+    The border is load-bearing in dark mode: `bg-cabuya-bg-dark` and
+    `bg-cabuya-bg` are close enough there that without it the hero has no edge
+    and the page opens with a heading floating in nothing.
+  -->
+  <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+    <div class="main-container py-16 md:py-20">
+      <h1 class="font-display text-3xl font-bold md:text-4xl">
+        {t.registry.title}
+      </h1>
+      <p class="mt-4 max-w-3xl text-base text-white/80 md:text-lg">
+        {t.registry.lead}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-cabuya-bg py-12 md:py-16">
+    <div class="main-container">
+      <div class="max-w-4xl">
+        <Callout tone="limit" label={t.registry.notEndorsementTitle}>
+          <p>{t.registry.notEndorsement}</p>
+          <p class="mt-3">{t.registry.everyEntryMeasured}</p>
+        </Callout>
+
+        {
+          !live && (
+            <p class="mt-6 rounded-cabuya-md border border-dashed border-cabuya-border-strong bg-cabuya-bg-brand/40 p-4 text-sm text-cabuya-text-secondary">
+              {t.registry.buildTimeOnlyNote}
+            </p>
+          )
+        }
+      </div>
+
+      <div class="mt-10">
+        <RegistryFilters
+          lang={lang}
+          entries={entries}
+          states={presentStates}
+        />
+        <RegistryTable
+          lang={lang}
+          entries={entries}
+          statuses={statuses}
+          now={now}
+        />
+      </div>
+
+      <div class="mt-10 grid gap-8 md:grid-cols-2">
+        <div>
+          <h2 class="font-display text-lg font-bold">
+            {t.registry.reviewTitle}
+          </h2>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">
+            {t.registry.reviewBody}
+          </p>
+        </div>
+        <div>
+          <h2 class="font-display text-lg font-bold">
+            {t.registry.licenceTitle}
+          </h2>
+          <p class="mt-2 text-sm text-cabuya-text-secondary">
+            {t.registry.licenceBody}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-cabuya-border bg-cabuya-bg-elevated py-12 md:py-16">
+    <div class="main-container">
+      <h2 class="font-display text-2xl font-bold">
+        {t.registry.officialSourcesTitle}
+      </h2>
+      <p class="mt-3 max-w-3xl text-sm text-cabuya-text-secondary">
+        {t.registry.officialSourcesBody}
+      </p>
+
+      <ul class="mt-8 grid list-none gap-4 p-0 md:grid-cols-2">
+        {
+          sources.map((source) => (
+            <li class="rounded-cabuya-md border border-cabuya-border bg-cabuya-bg p-5">
+              <h3 class="font-display text-base font-semibold">
+                {source.name[lang]}
+              </h3>
+              <p class="mt-1 text-xs uppercase tracking-wider text-cabuya-text-muted">
+                {t.registry.officialAuthorityLabel}:{' '}
+                <!--
+                  The institution's legal name, in its own language whatever
+                  language the page is in. `lang` comes from the entry and is
+                  here for the screen reader, which otherwise reads a Spanish
+                  name with English phonemes.
+                -->
+                <span lang={source.authority_lang}>{source.authority}</span>
+              </p>
+              <p class="mt-3 text-sm">
+                <a
+                  href={source.canonical_url}
+                  rel="noopener"
+                  class="break-all text-cabuya-primary underline underline-offset-2"
+                >
+                  {source.canonical_url}
+                </a>
+              </p>
+              {source.notes && (
+                <p class="mt-3 text-sm text-cabuya-text-secondary">
+                  {source.notes[lang]}
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-cabuya-bg py-12 md:py-16">
+    <div class="main-container">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="font-display text-2xl font-bold">{t.registry.joinTitle}</h2>
+        <p class="mt-3 text-cabuya-text-secondary">{t.registry.joinBody}</p>
+        <p class="mt-6">
+          <a
+            href={`${prefix}/developers/quickstart`}
+            class="inline-flex items-center rounded-cabuya-md bg-cabuya-fill px-5 py-3 font-semibold text-cabuya-on-fill"
+          >
+            {t.quickstart.title}
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    The state vocabulary, emitted from the same maps the pills were rendered
+    from. The freshness script below reads it instead of carrying its own copy,
+    so a label or a tone can only ever be defined in one place.
+  -->
+  <script
+    is:inline
+    type="application/json"
+    data-registry-state-vocabulary
+    set:html={JSON.stringify(stateVocabulary)}
+  />
+
+  <script>
+    /*
+     * Freshness.
+     *
+     * The states above were baked at deploy time; `/registry/status.json` reads
+     * the same KV keys the badges do. If a state has moved since the build, the
+     * pill is rewritten — label and tone together, from the vocabulary the
+     * server emitted. If the fetch fails — offline, blocked, the endpoint down
+     * — nothing happens and the page keeps showing the deploy's states with
+     * their own timestamps, which is older but never wrong.
+     *
+     * The relative age is not rewritten. Doing so would mean shipping the
+     * language's date vocabulary to the client to restate what the `datetime`
+     * attribute already carries, for a difference measured in hours on a page
+     * whose measurements are six hours apart. The row is marked `data-updated`
+     * instead, which the stylesheet uses to flag it as newer than the page.
+     */
+    interface StateEntry {
+      label: string;
+      className: string;
+    }
+
+    const table = document.querySelector<HTMLElement>('[data-registry-table]');
+    const vocabularyNode = document.querySelector<HTMLScriptElement>(
+      '[data-registry-state-vocabulary]'
+    );
+
+    if (table && vocabularyNode?.textContent) {
+      const vocabulary = JSON.parse(vocabularyNode.textContent) as Record<
+        string,
+        StateEntry
+      >;
+
+      void fetch('/registry/status.json', {
+        headers: { Accept: 'application/json' },
+      })
+        .then((response) => (response.ok ? response.json() : null))
+        .then(
+          (
+            payload: {
+              statuses?: Record<
+                string,
+                { state?: string; level?: string | null }
+              >;
+            } | null
+          ) => {
+            const statuses = payload?.statuses;
+            if (!statuses) return;
+
+            const rows =
+              table.querySelectorAll<HTMLElement>('[data-registry-row]');
+
+            for (const row of rows) {
+              const id = row.dataset.publisher ?? '';
+              const live = statuses[id];
+              const next = live?.state;
+              // An unknown state is ignored rather than rendered raw: a value
+              // this build does not have a label for is a value it cannot
+              // describe honestly.
+              if (!next || next === row.dataset.state || !vocabulary[next]) {
+                continue;
+              }
+
+              const pill = row.querySelector<HTMLElement>(
+                '[data-cell="state"] [data-state]'
+              );
+              if (pill) {
+                const previous = vocabulary[pill.dataset.state ?? ''];
+                if (previous) {
+                  pill.classList.remove(...previous.className.split(' '));
+                }
+                pill.classList.add(...vocabulary[next].className.split(' '));
+                pill.textContent = vocabulary[next].label;
+                pill.dataset.state = next;
+              }
+
+              const levelCell = row.querySelector<HTMLElement>(
+                '[data-cell="level"]'
+              );
+              if (levelCell) levelCell.textContent = live?.level ?? '\u2014';
+
+              row.dataset.state = next;
+              row.dataset.updated = 'true';
+            }
+          }
+        )
+        .catch(() => {
+          // Silent by design: see the note above.
+        });
+    }
+  </script>
+</MainLayout>

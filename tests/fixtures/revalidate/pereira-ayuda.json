@@ -1,0 +1,12 @@
+{
+  "code": 1,
+  "report": {
+    "level": "L1",
+    "feed": { "last_updated": "2026-08-17T01:00:00Z" },
+    "findings": [
+      { "severity": "error", "check": "ENV-003" },
+      { "severity": "error", "check": "REC-011" },
+      { "severity": "warning", "check": "BEH-002" }
+    ]
+  }
+}

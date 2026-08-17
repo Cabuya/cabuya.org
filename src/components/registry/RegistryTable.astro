@@ -1,0 +1,135 @@
+---
+/**
+ * The registry, as a table the server renders in full.
+ *
+ * Every row is here before any JavaScript runs. The filter controls above it
+ * are an enhancement that hides rows; with scripting off they are not rendered
+ * at all and the reader gets the complete list, which is the only outcome that
+ * is acceptable for a page someone may be reading on a bad connection during an
+ * emergency.
+ *
+ * The `data-*` attributes are the filter's entire interface to the table. That
+ * is deliberate: the script never parses text, never re-renders a row, and
+ * never has an opinion about what a state means. It sets `hidden`. Anything
+ * more and the two would be able to disagree about the contents of the
+ * registry, which is the one thing this page cannot afford.
+ */
+import StateBadge from '@/components/registry/StateBadge.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import type { MeasuredStatus, PublisherEntry } from '@/lib/registry-loader';
+import { displayHost } from '@/lib/registry-loader';
+import { measurementAge } from '@/lib/registry-status';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  entries: PublisherEntry[];
+  statuses: Map<string, MeasuredStatus>;
+  /** Injected so the rendered HTML is deterministic across a build. */
+  now: Date;
+}
+
+const { lang, entries, statuses, now } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const rows = entries.map((entry) => {
+  const status = statuses.get(entry.publisher_id);
+  return {
+    entry,
+    state: status?.state ?? ('unmeasured' as const),
+    level: status?.level ?? null,
+    checkedAt: status?.checked_at ?? '',
+  };
+});
+---
+
+<div class="not-prose overflow-x-auto">
+  <table
+    class="w-full min-w-[42rem] border-collapse text-sm"
+    data-registry-table
+  >
+    <caption class="sr-only">{t.registry.title}</caption>
+    <thead>
+      <tr class="border-b border-cabuya-border-strong text-left">
+        <th scope="col" class="py-3 pr-4 font-semibold">
+          {t.registry.columnPublisher}
+        </th>
+        <th scope="col" class="py-3 pr-4 font-semibold">
+          {t.registry.columnState}
+        </th>
+        <th scope="col" class="py-3 pr-4 font-semibold">
+          {t.registry.columnLevel}
+        </th>
+        <th scope="col" class="py-3 pr-4 font-semibold">
+          {t.registry.columnDomains}
+        </th>
+        <th scope="col" class="py-3 font-semibold">
+          {t.registry.columnChecked}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map(({ entry, state, level, checkedAt }) => (
+          <tr
+            class="border-b border-cabuya-border align-top"
+            data-registry-row
+            data-publisher={entry.publisher_id}
+            data-state={state}
+            data-review={entry.status}
+            data-domains={entry.entity_domains.join(' ')}
+            data-host={displayHost(entry)}
+          >
+            <td class="py-3 pr-4">
+              <a
+                href={`${prefix}/registry/${entry.publisher_id}`}
+                class="font-mono font-semibold text-cabuya-primary underline-offset-2 hover:underline"
+              >
+                {entry.publisher_id}
+              </a>
+              <span class="block text-xs text-cabuya-text-muted">
+                {displayHost(entry)}
+              </span>
+              {entry.status === 'proposed' && (
+                <span class="mt-1 inline-block rounded border border-dashed border-cabuya-border-strong px-1.5 py-0.5 text-xs text-cabuya-text-muted">
+                  {t.registry.reviewProposed}
+                </span>
+              )}
+            </td>
+            <td class="py-3 pr-4" data-cell="state">
+              <StateBadge state={state} lang={lang} />
+            </td>
+            <td class="py-3 pr-4 font-mono text-xs" data-cell="level">
+              {level ?? '—'}
+            </td>
+            <td class="py-3 pr-4 text-xs text-cabuya-text-secondary">
+              {entry.entity_domains
+                .map((domain) => t.registry.domainLabels[domain] ?? domain)
+                .join(', ')}
+            </td>
+            <td class="py-3 text-xs text-cabuya-text-muted" data-cell="checked">
+              {checkedAt ? (
+                <time datetime={checkedAt}>
+                  {measurementAge(checkedAt, now, lang)}
+                </time>
+              ) : (
+                t.registry.neverMeasured
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <!--
+    Hidden by the attribute alone, never by a class: the filter script toggles
+    `hidden`, and a `hidden` utility class beside it would win the cascade and
+    leave the reader with an empty table and no explanation.
+  -->
+  <p class="mt-4 text-sm text-cabuya-text-muted" data-registry-empty hidden>
+    {t.registry.filterEmpty}
+  </p>
+</div>

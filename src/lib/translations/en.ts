@@ -444,6 +444,91 @@ export const en: SiteTranslations = {
       'Checks that are catalogued but not yet implemented are shown in English. Their rules are translated when the check ships, so a Spanish reader is never shown a translation of something that does not run yet.',
   },
 
+  registry: {
+    metaTitle: 'Registry — Cabuya Protocol',
+    metaDescription:
+      'Applications that publish Cabuya feeds, with the measured result of the last validation run and the date it was made. Listing is not endorsement.',
+    title: 'Registry',
+    lead: 'Applications that publish a Cabuya feed, and what the validator last found when it read one. Every state on this page was measured; none of it was declared.',
+    notEndorsementTitle: 'Inclusion is not endorsement',
+    notEndorsement:
+      'Listing an application here says that it publishes a feed and that we measured it. It says nothing about whether the information in that feed is accurate, whether the organisation behind it is one you should work with, or whether the aid it points to is available today. A directory lists. A registry measures. Neither one recommends.',
+    everyEntryMeasured:
+      'Every entry shows when it was last validated and what the run found. A state with no timestamp is a state nobody has measured yet, and it is labelled as one.',
+    columnPublisher: 'Publisher',
+    columnState: 'Measured state',
+    columnLevel: 'Level',
+    columnDomains: 'Domains',
+    columnChecked: 'Last validated',
+    filterTitle: 'Filter',
+    filterAll: 'All',
+    filterState: 'State',
+    filterDomain: 'Domain',
+    filterReview: 'Review',
+    filterSearch: 'Search',
+    filterSearchPlaceholder: 'publisher or domain',
+    filterEmpty: 'No entry matches those filters.',
+    filterShowing: 'showing',
+    reviewProposed: 'Proposed',
+    reviewReviewed: 'Reviewed',
+    reviewTitle: 'Proposed and reviewed',
+    reviewBody:
+      'A proposed entry was added on a team\u2019s behalf from public information and is waiting for them to confirm it. It is shown because hiding it would make the registry look emptier than the network is — and it is labelled because a team that has not answered has not agreed to anything.',
+    officialSourcesTitle: 'Official sources',
+    officialSourcesBody:
+      'These are not publishers and they have not adopted anything. They are the institutions that person-level questions converge to, listed here so that an application implementing the protocol knows where to send someone the protocol deliberately cannot help. Nobody on this list has been asked to join, and their presence implies no relationship.',
+    officialAuthorityLabel: 'Authority',
+    licenceTitle: 'The registry itself',
+    licenceBody:
+      'The entries below live in this repository as CC0 JSON, one file per publisher, and can be read without this page. Measured state does not live there — it is written to a key-value store by the validation cron, because a conformance level in a file is a conformance level somebody can edit in a pull request.',
+    joinTitle: 'Getting listed',
+    joinBody:
+      'Publish a feed, run the validator against it, and open a pull request adding your entry. Nobody is added by a form and nobody is added by us deciding you belong; the entry is yours and so is the correction if it is wrong.',
+    measuredTitle: 'Measured',
+    measuredBody:
+      'What the validator found. Produced by a run against the live feed, at the timestamp shown, with no input from the publisher.',
+    declaredTitle: 'Declared',
+    declaredBody:
+      'What the entry says about itself. Reviewed by a human before merge, but not verified by a machine — this block is a claim, and it is separated from the block above for exactly that reason.',
+    stateLabel: 'State',
+    levelLabel: 'Level',
+    checkedLabel: 'Last validated',
+    neverMeasured: 'Not yet measured',
+    failingChecksTitle: 'Failing checks',
+    failingChecksBody:
+      'Each id links to the check that produced it, where the rule and the fix are written out.',
+    historyTitle: 'History',
+    historyBody:
+      'One point per day, appended by the validation cron. A registry that only showed today would let a feed that breaks every other week look reliable.',
+    historyEmpty:
+      'No history yet. The first point appears after the first run.',
+    feedsTitle: 'Feed',
+    canonicalLabel: 'Canonical URL',
+    domainsLabel: 'Entity domains',
+    eventsLabel: 'Events',
+    addedLabel: 'Added',
+    confirmedLabel: 'Confirmed by the team',
+    unconfirmedNote:
+      'This entry was created from public information and has not been confirmed by the team that runs the application. If that is you, the entry is a file in a public repository and the pull request that corrects it is welcome.',
+    notesLabel: 'Notes',
+    embedTitle: 'Embed the badge',
+    embedBody:
+      'The badge reads the same measurement this page does, and links back here so anyone can check it. It refuses to say more than the validator measured, and it never says certified.',
+    embedMarkdown: 'Markdown',
+    embedHtml: 'HTML',
+    backToIndex: 'All entries',
+    publisherMetaDescription:
+      'Cabuya registry entry for {id} ({host}): {state} Entity domains: {domains}. Measured by the validator, never self-declared.',
+    buildTimeOnlyNote:
+      'This page was built without a connection to the measurement store, so every entry shows as not yet measured. That is a property of this build, not of the publishers.',
+    domainLabels: {
+      place: 'Places',
+      need: 'Needs',
+      alert: 'Alerts',
+      missing_persons: 'Missing persons',
+    },
+  },
+
   markdown: {
     siteNavigation: 'Site Navigation',
     languageNote: 'This page is also available in Spanish.',
