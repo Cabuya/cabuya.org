@@ -55,6 +55,8 @@
     "test:responsive:update": "playwright test tests/e2e/responsive/ --update-snapshots",
     "release": "bash .github/scripts/prepare_release.sh",
     "responsive:audit": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777",
+    "responsive:full": "node scripts/responsive-audit/full-audit.mjs",
+    "responsive:full:quick": "node scripts/responsive-audit/full-audit.mjs --quick",
     "responsive:audit:quick": "node scripts/responsive-audit/audit-layout.mjs --base=http://localhost:7777 --quick",
     "spec:check": "node scripts/check-spec.mjs",
     "spec:check:strict": "node scripts/check-spec.mjs --strict",

@@ -13,6 +13,8 @@ export const es: SiteTranslations = {
     home: 'Inicio',
     foundingRecord: 'Registro fundacional',
     github: 'GitHub',
+    repoSite: 'Repositorio del protocolo y el sitio en GitHub',
+    repoSkill: 'Repositorio de la skill para agentes en GitHub',
     openMenu: 'Abrir el menú',
     closeMenu: 'Cerrar el menú',
     switchToLanguage: 'Switch to English',
@@ -39,13 +41,10 @@ export const es: SiteTranslations = {
       eyebrow: 'Un protocolo abierto para apps de ayuda',
       title: 'Cada app es un hilo. El protocolo es la cuerda.',
       pitch:
-        'Cabuya es un formato abierto para que las apps de ayuda publiquen y lean los mismos datos: puntos de acopio, necesidades, capacidades y entregas.',
-      pitchSecond:
-        'Cualquier equipo puede implementarlo en una tarde, y nadie tiene que pedirle permiso a nadie. La conformidad se mide con un validador publicado — nunca se declara.',
+        'Un formato abierto para que las apps de ayuda publiquen y lean los mismos datos: puntos de acopio, necesidades, capacidades y entregas.',
+      pitchSecond: 'La conformidad se mide, nunca se declara.',
       ctaPrimary: 'Publicar un feed',
       ctaSecondary: 'Ver quién publica',
-      ctaPending:
-        'La guía rápida y el registro se están escribiendo ahora. Mientras tanto, la especificación y el validador ya están en el repositorio.',
     },
 
     thesis: {
@@ -145,8 +144,6 @@ export const es: SiteTranslations = {
     foundingRecord: 'Registro fundacional',
     languages: 'Idiomas',
     specStatus: 'Especificación 0.1 — borrador en revisión',
-    analytics:
-      'Analítica sin cookies: vistas de página y velocidad de carga, en agregado. Sin cookies, sin identificadores, nada sobre quién eres.',
   },
 
   notFoundPage: {

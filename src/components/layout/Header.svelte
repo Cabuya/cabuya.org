@@ -22,9 +22,11 @@ import { onMount } from 'svelte';
 
 import type { Language } from '@/lib/i18n';
 import {
+  GITHUB_URL,
   liveGroups,
   type NavGroup,
   navHref,
+  SKILL_REPO_URL,
   switchLanguagePath,
 } from '@/lib/site-navigation';
 
@@ -51,10 +53,25 @@ export let labels: {
   openMenu: string;
   closeMenu: string;
   switchToLanguage: string;
+  /** Accessible names for the two repository links. */
+  repoSite: string;
+  repoSkill: string;
   /** Forwarded to the theme toggle, which is in this island's chunk. */
   toDark: string;
   toLight: string;
 };
+
+/**
+ * The two repositories, in the header because this is a protocol project and
+ * the source is the product. Names rather than two identical marks: the whole
+ * point is that they are different repositories, and an icon repeated twice
+ * says the opposite. The names collapse below `xl`, where the mark and the
+ * accessible name carry it.
+ */
+$: repos = [
+  { href: GITHUB_URL, name: 'cabuya.org', label: labels.repoSite },
+  { href: SKILL_REPO_URL, name: 'cabuya-skill', label: labels.repoSkill },
+];
 $: other = (lang === 'es' ? 'en' : 'es') as Language;
 $: switchHref = switchLanguagePath(pathname, other);
 
@@ -146,7 +163,7 @@ onMount(() => {
   <div class="main-container flex items-center justify-between gap-4 py-3">
     <a
       href={lang === 'en' ? '/' : `/${lang}`}
-      class="flex shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabuya-primary"
+      class="flex min-h-11 shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabuya-primary"
       aria-label="Cabuya"
     >
       <img
@@ -169,7 +186,7 @@ onMount(() => {
             <button
               id="nav-disclosure-{group.id}"
               type="button"
-              class="nav-link inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+              class="nav-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
               class:is-active={groupActive(group)}
               aria-expanded={openGroup === group.id}
               aria-controls="nav-panel-{group.id}"
@@ -220,7 +237,7 @@ onMount(() => {
         {:else if group.path}
           <a
             href={navHref({ path: group.path }, lang)}
-            class="nav-link rounded-md px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+            class="nav-link inline-flex min-h-11 items-center rounded-md px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
             class:is-active={groupActive(group)}
             aria-current={isActive(group.path) ? 'page' : undefined}
           >
@@ -230,10 +247,35 @@ onMount(() => {
       {/each}
     </nav>
 
-    <div class="flex items-center gap-2 sm:gap-3">
+    <div class="flex items-center gap-1 sm:gap-2">
+      <span class="mr-1 hidden items-center gap-1 lg:flex">
+        {#each repos as repo (repo.href)}
+          <a
+            href={repo.href}
+            rel="noopener"
+            target="_blank"
+            title={repo.label}
+            aria-label={repo.label}
+            class="nav-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+          >
+            <svg
+              class="h-[18px] w-[18px] shrink-0"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+              />
+            </svg>
+            <span class="hidden xl:inline">{repo.name}</span>
+          </a>
+        {/each}
+      </span>
+
       <a
         href={switchHref}
-        class="nav-link rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+        class="nav-link inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
         hreflang={other}
         lang={other}
         aria-label={labels.switchToLanguage}
@@ -324,6 +366,30 @@ onMount(() => {
               {/if}
             </li>
           {/each}
+          <li class="mt-2 border-t border-cabuya-border pt-2">
+            {#each repos as repo (repo.href)}
+              <a
+                href={repo.href}
+                rel="noopener"
+                target="_blank"
+                aria-label={repo.label}
+                class="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-cabuya-text-secondary hover:bg-cabuya-bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary"
+                on:click={() => (drawerOpen = false)}
+              >
+                <svg
+                  class="h-4 w-4 shrink-0"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+                  />
+                </svg>
+                {repo.name}
+              </a>
+            {/each}
+          </li>
         </ul>
       </nav>
     </div>

@@ -45,7 +45,7 @@ $: label =
 
 <button
   type="button"
-  class="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-cabuya-on-fill/80 transition-colors hover:text-cabuya-on-fill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary-light"
+  class="inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-cabuya-on-fill/80 transition-colors hover:text-cabuya-on-fill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary-light"
   on:click={copy}
 >
   <svg

@@ -2,21 +2,26 @@
 /**
  * The landing hero.
  *
- * Two columns from `lg`: the pitch and its two calls to action on the left,
- * the flagship illustration on the right. The illustration is not here yet
- * (`HP-01` in the prompt pack), and the layout is built so that its absence
- * costs nothing — the copy column simply takes the width. No placeholder box,
- * per the integration guide: an empty slot nobody notices beats a grey
- * rectangle everybody does.
+ * From `lg` it fills the viewport below the chrome — `100dvh` minus the sticky
+ * header, which `MainLayout` keeps measured in `--cabuya-chrome-height`. The
+ * draft banner is deliberately not subtracted: it scrolls away and never comes
+ * back, so netting it out would leave a permanent gap once it is gone. Below
+ * `lg` the section is its content's height, because a phone that reserves a
+ * whole screen for a headline has spent the fold on nothing.
  *
- * The CTAs are the one place on this page where Rule-0 bites hardest. Both
- * targets are still being built, so rather than link to a 404 or quietly drop
- * them, they render as text with an honest line about where those things
- * actually are today. `CTA_TARGETS` flips them to links the moment the routes
- * exist, and the nav registry's own test will notice if that lags.
+ * Filling a screen only works if the copy is short enough to fit one. The
+ * pitch is the two sentences MESSAGING.md gives this surface and no more; the
+ * afternoon claim belongs to the quickstart and the permissionless claim to
+ * the thesis section, and both were saying it here too.
+ *
+ * The art column drops its top padding at `lg` so the rope's cut top lands
+ * flush on the header's bottom rule — it reads as descending out of the
+ * chrome, not as a drawing that was trimmed — and stretches to the fold, so
+ * the fibres end where the page does. The layout is still built so that the
+ * art's absence costs nothing: flip `HERO_ART.present` off and the copy column
+ * simply takes the width. No placeholder box, per the integration guide.
  */
 import type { Language } from '@/lib/i18n';
-import { GITHUB_URL } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -27,26 +32,48 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 
 /**
- * Flip these to the real routes when Tasks 24 and 28 ship them.
- * `null` renders the label as plain emphasis rather than a dead link.
+ * Both routes ship now (Tasks 24 and 28), so both CTAs are links and the
+ * honest "these are still being written" note underneath them is gone. Set a
+ * target back to `null` and the label renders as plain emphasis rather than a
+ * dead link — Rule-0 holds either way.
  */
 const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
   primary: '/developers/quickstart',
-  secondary: null, // '/registry' — Task 28
+  secondary: '/registry',
 };
 
-/** The illustration slot, wired for the day the file lands. */
+/**
+ * The illustration slot.
+ *
+ * The generated asset has a true alpha channel rather than the matched light
+ * and dark pair the entry originally called for, so there is no `-dark` file
+ * and no `<picture>`: the ink is drawn in both forest and ivory, which means
+ * the page's own ground shows through correctly in either theme. That is also
+ * the only way to hit `#FAF9F6` and `#082A24` exactly — every lossy WebP of a
+ * flattened ground lands a step or two off and leaves a faint rectangle.
+ *
+ * Two widths because line work this fine goes soft at 1x on a retina display.
+ * `sizes` states the real rendered width — the column is height-driven, so at
+ * a tall viewport the 4:5 art is wider than its intrinsic 520 px and the 2x
+ * file is the right pick; below `lg` the column does not render at all.
+ */
 const HERO_ART = {
   src: '/images/visuals/home/hero-cordage.webp',
-  darkSrc: '/images/visuals/home/hero-cordage-dark.webp',
+  srcset:
+    '/images/visuals/home/hero-cordage.webp 520w, /images/visuals/home/hero-cordage-2x.webp 1040w',
+  sizes: '(min-width: 1024px) 40vw, 1px',
   width: 520,
   height: 650,
-  present: false, // set true in the same commit that adds the files
+  present: true,
 };
 ---
 
-<section class="main-container pt-16 pb-20 sm:pt-24 sm:pb-28">
-  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+<section
+  class="main-container flex flex-col justify-center pt-16 pb-20 sm:pt-24 sm:pb-28 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:py-0"
+>
+  <div
+    class="grid items-center gap-12 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:gap-16"
+  >
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.14em] text-cabuya-accent-strong">
         {t.home.hero.eyebrow}
@@ -91,39 +118,23 @@ const HERO_ART = {
           )
         }
       </div>
-
-      {
-        (!CTA_TARGETS.primary || !CTA_TARGETS.secondary) && (
-          <p class="measure mt-4 text-sm text-cabuya-text-muted">
-            {t.home.hero.ctaPending}{' '}
-            <a
-              href={GITHUB_URL}
-              rel="noopener"
-              target="_blank"
-              class="text-cabuya-primary underline underline-offset-2"
-            >
-              {t.home.finalCta.github}
-            </a>
-          </p>
-        )
-      }
     </div>
 
     {
       HERO_ART.present && (
-        <div class="hidden lg:block">
-          <picture>
-            <source srcset={HERO_ART.darkSrc} media="(prefers-color-scheme: dark)" />
-            <img
-              src={HERO_ART.src}
-              alt=""
-              width={HERO_ART.width}
-              height={HERO_ART.height}
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-            />
-          </picture>
+        <div class="hidden lg:flex lg:items-start lg:justify-end lg:self-stretch">
+          <img
+            src={HERO_ART.src}
+            srcset={HERO_ART.srcset}
+            sizes={HERO_ART.sizes}
+            alt=""
+            width={HERO_ART.width}
+            height={HERO_ART.height}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            class="h-full w-auto max-w-full object-contain object-top"
+          />
         </div>
       )
     }

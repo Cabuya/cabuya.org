@@ -48,10 +48,10 @@ $: label =
       : labels.copy;
 </script>
 
-<div class="flex flex-wrap items-center gap-3 text-xs">
+<div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs">
   <button
     type="button"
-    class="inline-flex items-center gap-1.5 rounded-md border border-cabuya-border px-2.5 py-1 font-medium text-cabuya-text-secondary transition-colors hover:border-cabuya-primary hover:text-cabuya-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary disabled:opacity-60"
+    class="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-cabuya-border px-2.5 py-1 font-medium text-cabuya-text-secondary transition-colors hover:border-cabuya-primary hover:text-cabuya-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary disabled:opacity-60"
     disabled={state === 'busy'}
     on:click={copyMarkdown}
   >
@@ -75,7 +75,7 @@ $: label =
 
   <a
     href={twinUrl}
-    class="text-cabuya-text-muted underline underline-offset-2 hover:text-cabuya-primary"
+    class="inline-flex min-h-11 items-center text-cabuya-text-muted underline underline-offset-2 hover:text-cabuya-primary"
   >
     {labels.view}
   </a>

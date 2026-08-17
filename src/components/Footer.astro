@@ -37,7 +37,7 @@ const languageLinks: Array<{ code: Language; label: string }> = [
       <div class="lg:col-span-1">
         <a
           href={getUrlPrefix(language) || '/'}
-          class="inline-flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabuya-primary"
+          class="inline-flex min-h-11 items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabuya-primary"
           aria-label="Cabuya"
         >
           <img
@@ -120,14 +120,6 @@ const languageLinks: Array<{ code: Language; label: string }> = [
         <p>© {year} Cabuya · {t.footer.license}</p>
         <p>{t.footer.specStatus}</p>
       </div>
-
-      <!--
-        The analytics disclosure, in the footer of every page rather than on a
-        policy page nobody opens. It says what is recorded, not that we care —
-        a site whose argument is that unverifiable claims are worthless should
-        not make one about itself.
-      -->
-      <p class="mt-4 text-xs text-cabuya-text-muted">{t.footer.analytics}</p>
     </div>
   </div>
 </footer>

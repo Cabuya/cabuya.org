@@ -194,12 +194,12 @@ async function copyReport(): Promise<void> {
           type="url"
           bind:value={url}
           placeholder={labels.urlPlaceholder}
-          class="flex-1 rounded-cabuya-sm border border-cabuya-border-interactive bg-cabuya-bg px-3 py-2 text-sm focus:outline-2 focus:outline-offset-1 focus:outline-cabuya-primary"
+          class="min-h-11 flex-1 rounded-cabuya-sm border border-cabuya-border-interactive bg-cabuya-bg px-3 py-2 text-sm focus:outline-2 focus:outline-offset-1 focus:outline-cabuya-primary"
         />
         <button
           type="submit"
           disabled={state.kind === 'running'}
-          class="rounded-cabuya-sm bg-cabuya-fill px-5 py-2 text-sm font-semibold text-cabuya-on-fill hover:bg-cabuya-fill-strong disabled:opacity-60"
+          class="min-h-11 rounded-cabuya-sm bg-cabuya-fill px-5 py-2 text-sm font-semibold text-cabuya-on-fill hover:bg-cabuya-fill-strong disabled:opacity-60"
         >
           {state.kind === 'running' ? labels.running : labels.run}
         </button>
@@ -227,12 +227,17 @@ async function copyReport(): Promise<void> {
         <legend class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
           {labels.kindLabel}
         </legend>
-        <label class="flex items-center gap-2 text-sm">
-          <input type="radio" bind:group={documentKind} value="feed" />
+        <!--
+          `min-h-11` on the label, not just the input: the label is the hit
+          area, and a finger aimed at a 13px radio misses more often than the
+          control's own size suggests.
+        -->
+        <label class="flex min-h-11 cursor-pointer items-center gap-2 text-sm">
+          <input class="h-4 w-4" type="radio" bind:group={documentKind} value="feed" />
           {labels.kindFeed}
         </label>
-        <label class="flex items-center gap-2 text-sm">
-          <input type="radio" bind:group={documentKind} value="manifest" />
+        <label class="flex min-h-11 cursor-pointer items-center gap-2 text-sm">
+          <input class="h-4 w-4" type="radio" bind:group={documentKind} value="manifest" />
           {labels.kindManifest}
         </label>
       </fieldset>
@@ -251,7 +256,7 @@ async function copyReport(): Promise<void> {
         <button
           type="submit"
           disabled={state.kind === 'running' || document_.trim().length === 0}
-          class="rounded-cabuya-sm bg-cabuya-fill px-5 py-2 text-sm font-semibold text-cabuya-on-fill hover:bg-cabuya-fill-strong disabled:opacity-60"
+          class="min-h-11 rounded-cabuya-sm bg-cabuya-fill px-5 py-2 text-sm font-semibold text-cabuya-on-fill hover:bg-cabuya-fill-strong disabled:opacity-60"
         >
           {state.kind === 'running' ? labels.running : labels.run}
         </button>

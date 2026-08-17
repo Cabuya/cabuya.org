@@ -419,11 +419,77 @@
     background: var(--color-cabuya-bg-elevated);
     padding: clamp(1rem, 0.6rem + 1.6vw, 2rem);
   }
+  /*
+   * The diagram scrolls rather than shrinking past legibility.
+   *
+   * Every diagram is authored in a 640-unit viewBox, and an SVG scales its
+   * text with that box. On a 320px phone the figure renders at roughly 0.45×,
+   * which turns a 12.5px label into 5.6px and a 9px monospace annotation into
+   * 4px — measured, not estimated. Nobody reads that; they pinch-zoom, and on
+   * a page whose diagrams carry the explanation, that is the explanation
+   * failing.
+   *
+   * So below the width where the text stays readable, the figure becomes a
+   * horizontally scrollable region and the diagram keeps its minimum size.
+   * A technical diagram 640 units wide genuinely does not fit on a narrow
+   * phone at a readable size — scrolling it is honest, shrinking it is not.
+   *
+   * The minimum is the viewBox width itself, so **a diagram is never drawn
+   * below the size it was authored at**. A phone reader sees the same 9px
+   * annotation a desktop reader sees, and scrolls to reach the right-hand
+   * side, rather than seeing a 4px one they cannot read at all. Any smaller
+   * minimum means picking a scale at which the type becomes illegible, and
+   * there is no principled place to put that line.
+   *
+   * `touch-action` keeps the page and the figure from fighting over the drag.
+   */
+  .cabuya-figure {
+    /* The scroll container is the padding box, so the border stays put. */
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+  }
   .cabuya-figure svg {
     display: block;
     width: 100%;
+    min-width: 40rem; /* 640px — the viewBox width; never scaled below 1:1 */
     height: auto;
     overflow: visible;
+  }
+
+  /*
+   * A scrollable figure has to look scrollable, or nobody scrolls it. The
+   * caption says so in words for anyone who cannot see the affordance.
+   */
+  @media (max-width: 37.5rem) {
+    .cabuya-figure {
+      /* A hint of shadow at the edges that fades as you reach them. */
+      background-image:
+        linear-gradient(
+          to right,
+          var(--color-cabuya-bg-elevated) 30%,
+          transparent
+        ),
+        linear-gradient(
+          to left,
+          var(--color-cabuya-bg-elevated) 30%,
+          transparent
+        ),
+        linear-gradient(to right, rgb(0 0 0 / 0.08), transparent 12px),
+        linear-gradient(to left, rgb(0 0 0 / 0.08), transparent 12px);
+      background-position:
+        left center,
+        right center,
+        left center,
+        right center;
+      background-repeat: no-repeat;
+      background-size:
+        40px 100%,
+        40px 100%,
+        14px 100%,
+        14px 100%;
+      background-attachment: local, local, scroll, scroll;
+    }
   }
   .cabuya-figure figcaption {
     margin-top: 1rem;

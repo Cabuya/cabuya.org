@@ -61,6 +61,8 @@ const LABELS = {
   openMenu: 'Open menu',
   closeMenu: 'Close menu',
   switchToLanguage: 'Cambiar a español',
+  repoSite: 'Protocol and site repository on GitHub',
+  repoSkill: 'Agent skill repository on GitHub',
   toDark: 'Switch to dark mode',
   toLight: 'Switch to light mode',
 };

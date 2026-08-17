@@ -130,7 +130,7 @@ const headings = buildToc([
                 <td class="px-4 py-3 align-top" style={`padding-left:${1 + field.depth}rem`}>
                   <code class="text-xs font-medium">{field.name}</code>
                   {field.required && (
-                    <span class="ml-1.5 text-[0.65rem] font-semibold uppercase text-cabuya-text-muted">
+                    <span class="ml-1.5 text-[0.75rem] font-semibold uppercase text-cabuya-text-muted md:text-[0.65rem]">
                       {t.docs.required}
                     </span>
                   )}
@@ -142,20 +142,20 @@ const headings = buildToc([
                   {field.enumValues && (
                     <p class="mt-1 flex flex-wrap gap-1">
                       {field.enumValues.map((value) => (
-                        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5 text-[0.65rem]">
+                        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5 text-[0.75rem] md:text-[0.65rem]">
                           {value}
                         </code>
                       ))}
                     </p>
                   )}
                   {field.notes.map((note) => (
-                    <p class="mt-1 text-[0.7rem] text-cabuya-text-muted">{note}</p>
+                    <p class="mt-1 text-[0.75rem] text-cabuya-text-muted md:text-[0.7rem]">{note}</p>
                   ))}
                 </td>
                 <td class="px-4 py-3 align-top">
                   <code class="text-xs text-cabuya-text-secondary">{field.type}</code>
                   {field.format && (
-                    <code class="mt-1 block text-[0.7rem] text-cabuya-text-muted">
+                    <code class="mt-1 block text-[0.75rem] text-cabuya-text-muted md:text-[0.7rem]">
                       {field.format}
                     </code>
                   )}
@@ -176,7 +176,7 @@ const headings = buildToc([
                       {checks.map((id) => (
                         <a
                           href={checkHref(id, prefix)}
-                          class="rounded bg-cabuya-primary-soft px-1.5 py-0.5 font-mono text-[0.7rem] text-cabuya-primary"
+                          class="rounded bg-cabuya-primary-soft px-1.5 py-0.5 font-mono text-[0.75rem] text-cabuya-primary md:text-[0.7rem]"
                         >
                           {id}
                         </a>

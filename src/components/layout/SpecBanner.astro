@@ -11,9 +11,12 @@
  * absorbed the caveat, which we cannot know, and the caveat applies to every
  * page equally. When 1.0 ships, `SPEC_IS_DRAFT` goes false and the banner
  * disappears everywhere at once.
+ *
+ * `SHOW_SPEC_BANNER` is the second gate and the one that is off today — see
+ * `spec-status.ts` for why, and for where the draft state is still stated.
  */
 import type { Language } from '@/lib/i18n';
-import { SPEC_IS_DRAFT } from '@/lib/spec-status';
+import { SHOW_SPEC_BANNER, SPEC_IS_DRAFT } from '@/lib/spec-status';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -25,10 +28,10 @@ const t = getTranslations(lang);
 ---
 
 {
-  SPEC_IS_DRAFT && (
+  SPEC_IS_DRAFT && SHOW_SPEC_BANNER && (
     <div class="border-b border-cabuya-border bg-cabuya-bg-brand">
       <p class="main-container flex flex-wrap items-center gap-x-2 gap-y-1 !py-2 text-xs text-cabuya-text-secondary">
-        <span class="rounded-full bg-cabuya-fill px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-cabuya-on-fill">
+        <span class="rounded-full bg-cabuya-fill px-2 py-0.5 text-xs font-semibold uppercase tracking-wide md:text-[0.65rem] text-cabuya-on-fill">
           {t.specBanner.label}
         </span>
         <span>{t.specBanner.text}</span>

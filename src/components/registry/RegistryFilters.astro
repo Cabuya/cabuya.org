@@ -48,8 +48,15 @@ const reviewOptions = [
   { value: 'proposed', label: t.registry.reviewProposed },
 ];
 
+/**
+ * `min-h-11` — 44px, the published minimum tap target.
+ *
+ * These sat at 36px, which is comfortable with a mouse and a near-miss with a
+ * thumb. The registry's filters are the one interactive thing on a page people
+ * will reach on a phone while looking for a shelter, so they get the full size.
+ */
 const SELECT_CLASS =
-  'rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg px-2 py-1.5 text-sm text-cabuya-text focus:border-cabuya-border-interactive focus:outline-none focus-visible:ring-2 focus-visible:ring-cabuya-primary';
+  'min-h-11 rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg px-2 py-1.5 text-sm text-cabuya-text focus:border-cabuya-border-interactive focus:outline-none focus-visible:ring-2 focus-visible:ring-cabuya-primary';
 ---
 
 <div
@@ -57,7 +64,7 @@ const SELECT_CLASS =
   data-registry-filters
   hidden
 >
-  <div class="flex flex-col gap-1">
+  <div class="flex min-w-0 flex-1 basis-48 flex-col gap-1">
     <label
       for="registry-search"
       class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
@@ -67,13 +74,13 @@ const SELECT_CLASS =
     <input
       id="registry-search"
       type="search"
-      class={SELECT_CLASS}
+      class={`${SELECT_CLASS} w-full min-w-0`}
       placeholder={t.registry.filterSearchPlaceholder}
       data-filter="search"
     />
   </div>
 
-  <div class="flex flex-col gap-1">
+  <div class="flex min-w-0 flex-col gap-1">
     <label
       for="registry-state"
       class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
@@ -90,7 +97,7 @@ const SELECT_CLASS =
     </select>
   </div>
 
-  <div class="flex flex-col gap-1">
+  <div class="flex min-w-0 flex-col gap-1">
     <label
       for="registry-domain"
       class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"
@@ -107,7 +114,7 @@ const SELECT_CLASS =
     </select>
   </div>
 
-  <div class="flex flex-col gap-1">
+  <div class="flex min-w-0 flex-col gap-1">
     <label
       for="registry-review"
       class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted"

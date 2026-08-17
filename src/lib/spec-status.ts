@@ -12,3 +12,18 @@ export const SPEC_VERSION = '0.1';
 
 /** True while that version is a draft under review. */
 export const SPEC_IS_DRAFT = true;
+
+/**
+ * Whether the draft state gets its own bar above the header.
+ *
+ * Separate from `SPEC_IS_DRAFT` on purpose: the specification *is* a draft,
+ * and anything that reasons about that must keep reading the flag above. This
+ * one is presentation — the bar is off while the landing is being tuned to
+ * fill the viewport, because it took a fixed slice off the top of every page.
+ *
+ * Turning it off does not drop the disclosure: `footer.specStatus` states
+ * «Specification 0.1 — draft under review» on every page, the specification
+ * index carries its own status block, and `/developers/spec/*` labels the
+ * version. Flip this back to `true` to restore the bar.
+ */
+export const SHOW_SPEC_BANNER = false;

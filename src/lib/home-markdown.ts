@@ -27,13 +27,7 @@ export function homeSections(lang: Language): TwinSection[] {
   return [
     {
       heading: t.home.hero.eyebrow,
-      lines: [
-        t.home.hero.pitch,
-        '',
-        t.home.hero.pitchSecond,
-        '',
-        t.home.hero.ctaPending,
-      ],
+      lines: [t.home.hero.pitch, '', t.home.hero.pitchSecond],
     },
     {
       heading: t.home.thesis.kicker,

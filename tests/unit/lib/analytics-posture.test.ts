@@ -109,11 +109,6 @@ describe.skipIf(!existsSync(DIST))('the built site', () => {
     }
   });
 
-  it('carries the disclosure in the footer, in both languages', () => {
-    expect(read('index.html')).toContain('Cookieless analytics');
-    expect(read('es/index.html')).toContain('Analítica sin cookies');
-  });
-
   it('allows exactly one third-party script origin, and it is the beacon', () => {
     const headers = readFileSync(join(DIST, '_headers'), 'utf-8');
     // The header line, not the first line that mentions the header. `_headers`

@@ -21,6 +21,9 @@ export interface SiteTranslations {
     home: string;
     foundingRecord: string;
     github: string;
+    /** Accessible names for the two repository links in the header. */
+    repoSite: string;
+    repoSkill: string;
     openMenu: string;
     closeMenu: string;
     switchToLanguage: string; // label for the language switcher target
@@ -50,8 +53,6 @@ export interface SiteTranslations {
       pitchSecond: string;
       ctaPrimary: string;
       ctaSecondary: string;
-      /** Shown under the CTAs while the routes they point at do not exist. */
-      ctaPending: string;
     };
 
     thesis: {
@@ -111,16 +112,6 @@ export interface SiteTranslations {
     foundingRecord: string;
     languages: string;
     specStatus: string;
-    /**
-     * The analytics disclosure. One sentence, in the footer of every page.
-     *
-     * The site's own argument is that a claim you cannot check is worth
-     * nothing, which applies to its claims about itself. Somebody who wants to
-     * know what this site records should not have to read a policy page to
-     * find out — and should not have to take the sentence on trust either,
-     * which is why it says *what* rather than *we care about your privacy*.
-     */
-    analytics: string;
   };
 
   notFoundPage: {
