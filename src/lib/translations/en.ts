@@ -278,8 +278,9 @@ export const en: SiteTranslations = {
     validatorTitle: 'Run it',
     validatorLead:
       'Point the validator at your manifest URL. It follows the feeds it declares, and reports what it found.',
+    validatorOpen: 'Open the validator',
     validatorPending:
-      'The in-browser validator is being built. Until it is up, the command-line version does the same job and takes one line.',
+      'The paste mode runs the same engine in your browser, with nothing uploaded. URL checking — which also measures the transport behaviour — needs a server, and that part is still being built. The command line does both today:',
 
     honestyTitle: 'How long this actually takes',
     honestyBody:
@@ -329,6 +330,85 @@ export const en: SiteTranslations = {
     validLabel: 'Conforms',
     invalidLabel: 'Does not conform',
     teachingNote: 'What this example demonstrates',
+  },
+
+  validator: {
+    metaTitle: 'Validator — Cabuya',
+    metaDescription:
+      'Check a feed or manifest against the Cabuya specification. Paste a document to validate it in your browser, or point the validator at a live URL.',
+    title: 'Validator',
+    lead: 'The same engine the command line runs, and the same check ids. Every finding names the field, states the rule, and tells you what to change.',
+    urlModeTitle: 'Check a live URL',
+    urlModeLead:
+      'Point it at your manifest or a feed. The validator fetches what is published and reports what it found, including the transport behaviour a file on disk cannot show.',
+    urlLabel: 'Manifest or feed URL',
+    urlPlaceholder: 'https://example.org/.well-known/cabuya.json',
+    run: 'Run the validator',
+    running: 'Running…',
+    pasteModeTitle: 'Check a document you have not published yet',
+    pasteModeLead:
+      'Paste a feed or manifest. Useful before anything is deployed, and for a document you would rather not send anywhere.',
+    pastePrivacy:
+      'This runs entirely in your browser. The document is not uploaded, not logged, and never leaves this page.',
+    pasteLabel: 'The document',
+    pastePlaceholder: '{ "last_updated": "…", "ttl": 900, … }',
+    kindLabel: 'What is this?',
+    kindFeed: 'A place feed',
+    kindManifest: 'A manifest',
+    resultTitle: 'Result',
+    blockersTitle: 'Blocking the next level',
+    errorsTitle: 'Errors',
+    warningsTitle: 'Warnings',
+    notesTitle: 'Notes',
+    noFindings: 'Nothing to report.',
+    copyReport: 'Copy the report as Markdown',
+    copied: 'Copied',
+    fixLabel: 'Fix',
+    ruleLabel: 'Rule',
+    specLabel: 'Specification',
+    checkLabel: 'About this check',
+    unavailableTitle: 'URL checking is not deployed yet',
+    unavailableBody:
+      'The service that fetches a URL is still being built. In the meantime the command line does the same job — and the paste mode below runs the identical engine in your browser.',
+    transportTitle: 'Could not reach it',
+    transportBody:
+      'This says nothing about your data. The request failed — DNS, TLS, a timeout, or the host refusing us — and the validator stops rather than guessing. Nothing here means your feed is wrong.',
+    parseErrorTitle: 'That is not valid JSON',
+    parseErrorBody:
+      'The document could not be parsed, so no checks ran. Fix the syntax and try again.',
+    degradedNote:
+      'Schema-valid; conformance unmeasured. Running without network means the transport checks did not run, so no level can be measured — that is different from passing them.',
+  },
+
+  checks: {
+    metaTitle: 'Checks — Cabuya validator',
+    metaDescription:
+      'Every check the Cabuya validator runs: its id, severity, level, the rule it enforces, and how to fix a document that fails it. Anchors are stable forever.',
+    title: 'Checks',
+    lead: 'Every check the validator can report, with a stable anchor. Error messages link here, so these URLs do not move.',
+    stableNote:
+      'A check id is permanent. Renaming one would break the fix loop of every agent that cached the old id, so retired checks keep their id and are marked rather than removed.',
+    implementedLabel: 'Implemented',
+    implementedCountLabel: 'implemented',
+    plannedLabel: 'Catalogued, not yet implemented',
+    severityLabel: 'Severity',
+    levelLabel: 'Level',
+    familyLabels: {
+      discovery: 'Discovery',
+      envelope: 'Envelope',
+      record: 'Record',
+      pii: 'Person-level data',
+      behavior: 'Behaviour',
+      api: 'Read API',
+      write: 'Write API',
+      license: 'Licensing',
+    },
+    ruleLabel: 'Rule',
+    fixLabel: 'Fix',
+    specLabel: 'Specification',
+    countSummary: 'checks catalogued',
+    untranslatedNote:
+      'Checks that are catalogued but not yet implemented are shown in English. Their rules are translated when the check ships, so a Spanish reader is never shown a translation of something that does not run yet.',
   },
 
   markdown: {

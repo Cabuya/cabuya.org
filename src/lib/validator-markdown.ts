@@ -1,0 +1,94 @@
+/**
+ * Twins for the validator surfaces.
+ *
+ * The checks twin matters more than most: it is the whole catalogue in one
+ * fetch, which is exactly what an agent wants before it starts a fix loop —
+ * every id, rule and remedy, without following 62 anchors.
+ */
+import { CHECKS, ES } from '@cabuya/validator';
+
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+export interface TwinSection {
+  heading: string;
+  lines: string[];
+}
+
+export function validatorSections(lang: Language): TwinSection[] {
+  const t = getTranslations(lang);
+  return [
+    {
+      heading: t.validator.title,
+      lines: [t.validator.lead],
+    },
+    {
+      heading: t.validator.urlModeTitle,
+      lines: [
+        t.validator.urlModeLead,
+        '',
+        `${t.validator.unavailableTitle}. ${t.validator.unavailableBody}`,
+      ],
+    },
+    {
+      heading: t.validator.pasteModeTitle,
+      lines: [t.validator.pasteModeLead, '', t.validator.pastePrivacy],
+    },
+    {
+      heading: t.validator.resultTitle,
+      lines: [
+        `${t.validator.blockersTitle} · ${t.validator.errorsTitle} · ${t.validator.warningsTitle} · ${t.validator.notesTitle}`,
+        '',
+        t.validator.degradedNote,
+        '',
+        t.validator.transportBody,
+      ],
+    },
+  ];
+}
+
+export function checksSections(lang: Language): TwinSection[] {
+  const t = getTranslations(lang);
+  const implemented = CHECKS.filter((check) => check.implemented).length;
+
+  const sections: TwinSection[] = [
+    {
+      heading: t.checks.title,
+      lines: [
+        t.checks.lead,
+        '',
+        `${CHECKS.length} ${t.checks.countSummary} · ${implemented} ${t.checks.implementedLabel}.`,
+        '',
+        t.checks.stableNote,
+        ...(lang === 'en' ? [] : ['', t.checks.untranslatedNote]),
+      ],
+    },
+  ];
+
+  const families = [...new Set(CHECKS.map((check) => check.family))];
+  for (const family of families) {
+    const group = CHECKS.filter((check) => check.family === family);
+    sections.push({
+      heading: t.checks.familyLabels[family] ?? family,
+      lines: group.flatMap((check) => [
+        `### ${check.id} — ${check.title}`,
+        '',
+        `- ${t.checks.severityLabel}: ${check.severity} · ${t.checks.levelLabel}: ${check.level} · ${
+          check.implemented
+            ? t.checks.implementedLabel
+            : `${t.checks.plannedLabel}${check.plannedIn ? ` (${check.plannedIn})` : ''}`
+        }`,
+        `- ${t.checks.ruleLabel}: ${
+          (lang === 'es' ? ES[check.id]?.rule : undefined) ?? check.rule
+        }`,
+        `- ${t.checks.fixLabel}: ${
+          (lang === 'es' ? ES[check.id]?.fix : undefined) ?? check.fix
+        }`,
+        `- ${t.checks.specLabel}: ${check.specAnchor}`,
+        '',
+      ]),
+    });
+  }
+
+  return sections;
+}

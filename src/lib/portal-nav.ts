@@ -94,8 +94,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Validator', es: 'Validador' },
         path: '/developers/validator',
-        status: 'planned',
-        ships: 'Task 26',
+        status: 'live',
         blurb: {
           en: 'Run it against a URL and read what it found.',
           es: 'Córrelo contra una URL y lee lo que encontró.',
@@ -104,8 +103,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Checks', es: 'Verificaciones' },
         path: '/developers/validator/checks',
-        status: 'planned',
-        ships: 'Task 26',
+        status: 'live',
       },
       {
         label: { en: 'Our probe', es: 'Nuestro sondeo' },

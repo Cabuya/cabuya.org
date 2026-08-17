@@ -278,8 +278,9 @@ export const es: SiteTranslations = {
     validatorTitle: 'Córrelo',
     validatorLead:
       'Apunta el validador a la URL de tu manifiesto. Sigue los feeds que declara y reporta lo que encontró.',
+    validatorOpen: 'Abrir el validador',
     validatorPending:
-      'El validador en el navegador se está construyendo. Mientras tanto, la versión de línea de comandos hace lo mismo y cabe en una línea.',
+      'El modo de pegar corre el mismo motor en tu navegador, sin subir nada. La revisión por URL —que además mide el comportamiento de transporte— necesita un servidor, y esa parte se está construyendo. La línea de comandos hace las dos cosas hoy:',
 
     honestyTitle: 'Cuánto toma esto de verdad',
     honestyBody:
@@ -329,6 +330,85 @@ export const es: SiteTranslations = {
     validLabel: 'Cumple',
     invalidLabel: 'No cumple',
     teachingNote: 'Qué demuestra este ejemplo',
+  },
+
+  validator: {
+    metaTitle: 'Validador — Cabuya',
+    metaDescription:
+      'Revisa un feed o un manifiesto contra la especificación de Cabuya. Pega un documento para validarlo en tu navegador, o apunta el validador a una URL en vivo.',
+    title: 'Validador',
+    lead: 'El mismo motor que corre la línea de comandos, y los mismos identificadores de verificación. Cada hallazgo nombra el campo, dice la regla y te dice qué cambiar.',
+    urlModeTitle: 'Revisar una URL en vivo',
+    urlModeLead:
+      'Apúntalo a tu manifiesto o a un feed. El validador trae lo que está publicado y reporta lo que encontró, incluido el comportamiento de transporte que un archivo en disco no puede mostrar.',
+    urlLabel: 'URL del manifiesto o del feed',
+    urlPlaceholder: 'https://ejemplo.org/.well-known/cabuya.json',
+    run: 'Correr el validador',
+    running: 'Corriendo…',
+    pasteModeTitle: 'Revisar un documento que todavía no publicaste',
+    pasteModeLead:
+      'Pega un feed o un manifiesto. Sirve antes de desplegar nada, y para un documento que preferirías no mandar a ninguna parte.',
+    pastePrivacy:
+      'Esto corre completamente en tu navegador. El documento no se sube, no se registra y nunca sale de esta página.',
+    pasteLabel: 'El documento',
+    pastePlaceholder: '{ "last_updated": "…", "ttl": 900, … }',
+    kindLabel: '¿Qué es esto?',
+    kindFeed: 'Un feed de lugares',
+    kindManifest: 'Un manifiesto',
+    resultTitle: 'Resultado',
+    blockersTitle: 'Bloquea el siguiente nivel',
+    errorsTitle: 'Errores',
+    warningsTitle: 'Advertencias',
+    notesTitle: 'Notas',
+    noFindings: 'Nada que reportar.',
+    copyReport: 'Copiar el reporte como Markdown',
+    copied: 'Copiado',
+    fixLabel: 'Arreglo',
+    ruleLabel: 'Regla',
+    specLabel: 'Especificación',
+    checkLabel: 'Sobre esta verificación',
+    unavailableTitle: 'La revisión por URL todavía no está desplegada',
+    unavailableBody:
+      'El servicio que trae una URL se está construyendo. Mientras tanto la línea de comandos hace lo mismo — y el modo de pegar, abajo, corre el motor idéntico en tu navegador.',
+    transportTitle: 'No se pudo alcanzar',
+    transportBody:
+      'Esto no dice nada sobre tus datos. La petición falló — DNS, TLS, un tiempo agotado, o el host negándose — y el validador se detiene en vez de adivinar. Nada de esto significa que tu feed esté mal.',
+    parseErrorTitle: 'Eso no es JSON válido',
+    parseErrorBody:
+      'El documento no se pudo interpretar, así que no corrió ninguna verificación. Arregla la sintaxis e inténtalo otra vez.',
+    degradedNote:
+      'Válido contra el esquema; conformidad no medida. Correr sin red significa que las verificaciones de transporte no corrieron, así que no se puede medir ningún nivel — eso es distinto de aprobarlas.',
+  },
+
+  checks: {
+    metaTitle: 'Verificaciones — validador de Cabuya',
+    metaDescription:
+      'Cada verificación que corre el validador de Cabuya: su identificador, severidad, nivel, la regla que aplica y cómo arreglar un documento que la incumple. Los anclajes son estables.',
+    title: 'Verificaciones',
+    lead: 'Cada verificación que el validador puede reportar, con un anclaje estable. Los mensajes de error enlazan aquí, así que estas URL no se mueven.',
+    stableNote:
+      'Un identificador de verificación es permanente. Renombrar uno rompería el bucle de arreglo de todo agente que guardó el anterior, así que las verificaciones retiradas conservan su identificador y se marcan en vez de borrarse.',
+    implementedLabel: 'Implementada',
+    implementedCountLabel: 'implementadas',
+    plannedLabel: 'Catalogada, todavía no implementada',
+    severityLabel: 'Severidad',
+    levelLabel: 'Nivel',
+    familyLabels: {
+      discovery: 'Descubrimiento',
+      envelope: 'Sobre',
+      record: 'Registro',
+      pii: 'Datos de persona',
+      behavior: 'Comportamiento',
+      api: 'API de lectura',
+      write: 'API de escritura',
+      license: 'Licencias',
+    },
+    ruleLabel: 'Regla',
+    fixLabel: 'Arreglo',
+    specLabel: 'Especificación',
+    countSummary: 'verificaciones catalogadas',
+    untranslatedNote:
+      'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no corre.',
   },
 
   markdown: {

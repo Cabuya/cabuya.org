@@ -35,8 +35,8 @@
 | `/developers/spec/{version}` | Spec TOC for one version | ✅ live |
 | `/developers/spec/{version}/{section}` | One normative section; stable `#N-M` anchors | ✅ live |
 | `/developers/schemas` · `/developers/schemas/{version}/{name}` | Generated field-by-field schema reference with check-id cross-links | ✅ live |
-| `/developers/validator` | Live validator (URL mode + paste-JSON mode) | Tasks 26–27 |
-| `/developers/validator/checks` | The full check catalogue; stable anchors `#REC001` | Task 26 |
+| `/developers/validator` | Live validator (paste mode live; URL mode wired, awaiting the Function) | ✅ live |
+| `/developers/validator/checks` | The full check catalogue; stable anchors `#REC001` | ✅ live |
 | `/developers/validator/probe` | What our probe UA does and why (politeness page) | Task 27 |
 | `/developers/consume` | The six consumption rules as a checklist | Task 29 |
 | `/developers/profiles` | Core vs Extended; how extension sets become profiles | Task 29 |
@@ -52,7 +52,7 @@
 | `/llms.txt` · `/llms-full.txt` | The agent map / the inlined protocol (Task 32) |
 | `/api/validate` | The live validator Function (Task 27) |
 | `/badge/{publisher_id}.svg` | The measured badge (`?lang=`, `?style=`) (Task 28) |
-| `/spec/**` raw files | Schemas served at their `$id` URLs (Task 25) |
+| `/schemas/{version}/{name}.schema.json` | Schemas served byte-exact at their `$id` URLs | ✅ live |
 | `sitemap-index.xml`, `robots.txt`, `site.webmanifest`, favicons | Standard |
 
 ### Dev-only (`/internal/*` — excluded from production three ways)

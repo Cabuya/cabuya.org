@@ -224,12 +224,20 @@ git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
   <!-- 6. Where the validator begins -->
   <h2 id={headings[3].slug}>{t.quickstart.validatorTitle}</h2>
   <p>{t.quickstart.validatorLead}</p>
+  <p class="not-prose my-6">
+    <a
+      href={`${prefix}/developers/validator`}
+      class="inline-block rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+    >
+      {t.quickstart.validatorOpen}
+    </a>
+  </p>
+  <p class="text-sm text-cabuya-text-secondary">{t.quickstart.validatorPending}</p>
   <CodeBlock
     code={'npx @cabuya/validator validate https://example.org/.well-known/cabuya.json'}
     lang="shellscript"
     uiLang={lang}
   />
-  <p class="text-sm text-cabuya-text-muted">{t.quickstart.validatorPending}</p>
 
   <!-- 7. How long this takes, honestly -->
   <h2 id={headings[4].slug}>{t.quickstart.honestyTitle}</h2>

@@ -1,0 +1,102 @@
+---
+/**
+ * `/developers/validator` — the tool.
+ *
+ * The island is the heaviest thing on the site, so it hydrates on idle and
+ * lazy-loads the engine on first run: a reader who came to understand what the
+ * validator does should not download it.
+ */
+import ValidatorApp from '@/components/validator/ValidatorApp.svelte';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+/**
+ * The Function ships in Task 27. Until then URL mode says so plainly instead
+ * of failing on submit — a form that looks live and is not costs the reader a
+ * URL, a wait and their trust.
+ */
+const URL_MODE_AVAILABLE = false;
+
+/** The quickstart hands a URL over with `?url=`. */
+const initialUrl = Astro.url.searchParams.get('url') ?? '';
+
+const headings = buildToc([
+  { depth: 2, text: t.validator.urlModeTitle },
+  { depth: 2, text: t.validator.pasteModeTitle },
+]);
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.validator.title}
+  description={t.validator.metaDescription}
+  trail={[{ label: t.validator.title }]}
+  headings={headings}
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.validator.lead}</p>
+
+  <p class="not-prose mb-6 text-sm">
+    <a
+      href={`${prefix}/developers/validator/checks`}
+      class="text-cabuya-primary underline underline-offset-2"
+    >
+      {t.checks.title}
+    </a>
+  </p>
+
+  <ValidatorApp
+    client:idle
+    lang={lang === 'es' ? 'es' : 'en'}
+    urlModeAvailable={URL_MODE_AVAILABLE}
+    initialUrl={initialUrl}
+    checksBase={`${prefix}/developers/validator/checks`}
+    labels={{
+      urlModeTitle: t.validator.urlModeTitle,
+      urlModeLead: t.validator.urlModeLead,
+      urlLabel: t.validator.urlLabel,
+      urlPlaceholder: t.validator.urlPlaceholder,
+      run: t.validator.run,
+      running: t.validator.running,
+      pasteModeTitle: t.validator.pasteModeTitle,
+      pasteModeLead: t.validator.pasteModeLead,
+      pastePrivacy: t.validator.pastePrivacy,
+      pasteLabel: t.validator.pasteLabel,
+      pastePlaceholder: t.validator.pastePlaceholder,
+      kindLabel: t.validator.kindLabel,
+      kindFeed: t.validator.kindFeed,
+      kindManifest: t.validator.kindManifest,
+      copyReport: t.validator.copyReport,
+      copied: t.validator.copied,
+      unavailableTitle: t.validator.unavailableTitle,
+      unavailableBody: t.validator.unavailableBody,
+      transportTitle: t.validator.transportTitle,
+      transportBody: t.validator.transportBody,
+      parseErrorTitle: t.validator.parseErrorTitle,
+      parseErrorBody: t.validator.parseErrorBody,
+    }}
+    reportLabels={{
+      result: t.validator.resultTitle,
+      blockers: t.validator.blockersTitle,
+      errors: t.validator.errorsTitle,
+      warnings: t.validator.warningsTitle,
+      notes: t.validator.notesTitle,
+      none: t.validator.noFindings,
+      fix: t.validator.fixLabel,
+      rule: t.validator.ruleLabel,
+      spec: t.validator.specLabel,
+      check: t.validator.checkLabel,
+      degraded: t.validator.degradedNote,
+    }}
+  />
+</DocsLayout>

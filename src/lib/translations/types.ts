@@ -197,6 +197,7 @@ export interface SiteTranslations {
     validatorTitle: string;
     validatorLead: string;
     validatorPending: string;
+    validatorOpen: string;
 
     honestyTitle: string;
     honestyBody: string;
@@ -234,6 +235,71 @@ export interface SiteTranslations {
     validLabel: string;
     invalidLabel: string;
     teachingNote: string;
+  };
+
+  /** The validator surfaces. */
+  validator: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    urlModeTitle: string;
+    urlModeLead: string;
+    urlLabel: string;
+    urlPlaceholder: string;
+    run: string;
+    running: string;
+    pasteModeTitle: string;
+    pasteModeLead: string;
+    pastePrivacy: string;
+    pasteLabel: string;
+    pastePlaceholder: string;
+    kindLabel: string;
+    kindFeed: string;
+    kindManifest: string;
+    /** Result chrome. */
+    resultTitle: string;
+    blockersTitle: string;
+    errorsTitle: string;
+    warningsTitle: string;
+    notesTitle: string;
+    noFindings: string;
+    copyReport: string;
+    copied: string;
+    fixLabel: string;
+    ruleLabel: string;
+    specLabel: string;
+    checkLabel: string;
+    /** Honest failure states. */
+    unavailableTitle: string;
+    unavailableBody: string;
+    transportTitle: string;
+    transportBody: string;
+    parseErrorTitle: string;
+    parseErrorBody: string;
+    degradedNote: string;
+  };
+
+  /** The check catalogue. */
+  checks: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    stableNote: string;
+    implementedLabel: string;
+    /** Mid-sentence form: "42 implemented". Casing differs by language. */
+    implementedCountLabel: string;
+    plannedLabel: string;
+    severityLabel: string;
+    levelLabel: string;
+    familyLabels: Record<string, string>;
+    ruleLabel: string;
+    fixLabel: string;
+    specLabel: string;
+    countSummary: string;
+    /** Shown on non-English pages: which entries are still English, and why. */
+    untranslatedNote: string;
   };
 
   markdown: {

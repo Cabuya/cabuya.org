@@ -1,0 +1,18 @@
+---
+import ChecksPage from '@/components/pages/ChecksPage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+
+export function getStaticPaths(): { params: { lang: Language } }[] {
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Language };
+---
+
+<ChecksPage lang={lang} />

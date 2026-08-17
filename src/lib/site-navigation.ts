@@ -195,8 +195,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Validator', es: 'Validador' },
         path: '/developers/validator',
-        status: 'planned',
-        ships: 'Task 26',
+        status: 'live',
       },
       {
         label: { en: 'Registry', es: 'Registro' },
