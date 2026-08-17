@@ -1,150 +1,1218 @@
-# Corag — full context for AI agents
+# Cabuya Protocol — everything, in one file
 
-> El ecosistema de impacto social.
+Specification 0.1 (draft), the consumption rules, and every
+validator check with its rule and remedy. Generated from the repository;
+nothing here is a summary.
 
-Corag connects foundations, governments, entrepreneurs and individuals through a
-transparent digital platform so that solidarity produces real, measurable impact
-in communities. Its stated vision is to become the leading global platform for
-social innovation, where donating, serving and transforming lives is a
-trustworthy and deeply human experience.
-
-The name comes from **coraje**. The heart replacing the `o` in the wordmark
-carries **amor**. The brand's own statement is that the mark transmits *coraje,
-innovación y amor*.
-
-**Values:** Colaboración · Empatía · Confianza · Amor · Innovación social ·
-Transparencia.
+Map of the site: https://cabuya.org/llms.txt
 
 ---
 
-## 1. The two surfaces — read this before doing anything
+# Specification 0.1
 
-| Surface | What it is | Writes? |
+<!-- https://cabuya.org/developers/spec/0.1/0-introduction -->
+
+# §0 — Introduction
+
+**This document is a DRAFT (0.1) under working-group review.** Every normative
+statement is a proposal until adopted through the RFC process
+([`/rfcs`](/rfcs)); nothing here commits any team. A release candidate becomes
+normative only after at least one publisher ships it publicly (§8).
+
+## §0.1 What the Cabuya Protocol is
+
+Cabuya is an open interoperability protocol for aid applications. It defines:
+
+1. **One schema, four transports.** A static JSON feed (L2), a read API (L3),
+   a write API (L4) and an MCP surface are projections of the **same**
+   `place` record — a static feed is a degenerate read API and vice versa.
+2. **A discovery mechanism** — a manifest at a well-known path plus a
+   PR-reviewed registry (§2).
+3. **A conformance ladder** (L0–L4), **measured by a published validator,
+   never self-declared** (§1, §8).
+4. **Normative exclusions that do not move** — person-level data never
+   travels; contact values never travel; data enters by publication, never by
+   scraping (§7).
+
+The founding principle, normative where the spec can carry it:
+**«Crecemos juntos: no competimos, nos alimentamos»** — feeds exist so apps
+feed each other.
+
+## §0.2 Conventions
+
+The keywords **MUST**, **MUST NOT**, **REQUIRED**, **SHOULD**, **SHOULD
+NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as
+described in RFC 2119 and RFC 8174 when, and only when, they appear in all
+capitals.
+
+Machine identifiers (field names, `place_kind` tokens, check ids, level
+names) are never translated. Human-readable strings in feeds follow §3's
+localization rule, with **`es` as the REQUIRED baseline**.
+
+## §0.3 Document map
+
+| Section | Contents |
+|---|---|
+| [§1](/developers/spec/0.1/1-architecture) | The conformance ladder L0–L4 |
+| [§2](/developers/spec/0.1/2-discovery) | Manifest, well-known path, the registry |
+| [§3](/developers/spec/0.1/3-the-feed) | The feed envelope and the `place` record |
+| [§4](/developers/spec/0.1/4-api-surface) | Read/write APIs, consumption rules, sync, MCP |
+| [§5](/developers/spec/0.1/5-identifiers) | Record and place identity |
+| [§6](/developers/spec/0.1/6-trust-and-verification) | The verification block; threat posture |
+| [§7](/developers/spec/0.1/7-normative-exclusions) | The lines that don't move |
+| [§8](/developers/spec/0.1/8-versioning-and-conformance) | SemVer, profiles, measured conformance |
+| [Appendix A](/developers/spec/0.1/appendix-a-design-decisions) | Non-normative: decision log + the implementability walkthrough |
+
+Schemas: [`manifest.schema.json`](https://cabuya.org/schemas/0.1/manifest.schema.json)
+· [`place-feed.schema.json`](https://cabuya.org/schemas/0.1/place-feed.schema.json)
+— with five worked examples (two valid, three invalid with designed error
+messages) in [`examples/`](/developers/schemas).
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/1-architecture -->
+
+# §1 — Architecture: the conformance ladder
+
+The protocol is a **ladder, not a gate**. Every level is a respected
+membership class; each level up unlocks more of the network's value. Levels
+are cumulative.
+
+## §1.1 The levels
+
+| Level | Name | Requirements (summary) | Badge | Typical effort |
+|---|---|---|---|---|
+| **L0** | **Listed** | Appears in the registry with a reviewed entry: canonical URL, declared aliases, entity domains, crawl/reuse policy. | `listed` | One PR, minutes |
+| **L1** | **Linked** | Publishes the **manifest** (§2) with identity, conformance target, `public_url` pattern, license, `permitted_use`, org-level contact. Links out to peers. | `linked` | ≤ 1 hour (a static JSON file) |
+| **L2** | **Publishes** | Serves ≥ 1 conforming **place feed** (§3) passing the validator at profile `Core`. | `publishes` | **One afternoon** (small apps); days (medium) |
+| **L3** | **Serves & consumes** | Serves the **read API** (§4.1) *or* live-refreshed feeds with sync signals (§4.4); **consumes** ≥ 1 peer feed under the consumption rules (§4.3). | `interop` | Days |
+| **L4** | **Federates** | Accepts **writes** (§4.2) with `source`+`external_id` idempotency; optionally exposes MCP (§4.5). | `federates` | Per-app |
+| — | **Directory-only** | For apps whose records are irreducibly personal, or who choose not to publish: L0/L1 forever, stated plainly, **respected**. | `listed` / `linked` | — |
+| — | **Link-out-only** | People-domain apps: L0/L1 ceiling **by rule §7.1**, not by choice. | `listed` | — |
+
+## §1.2 Preconditions for L2+
+
+From observed production failures (the "discovery trap"):
+
+- A real `robots.txt` (HTTP 200, `text/plain`).
+- The manifest path **excluded from SPA catch-alls**. The validator treats
+  `200 + text/html` at a discovery path as *absent* (the soft-404 rule), with
+  byte-size equality against `/` as the discriminator.
+
+## §1.3 The HXL/CSV on-ramp (below L2)
+
+An HXL-tagged spreadsheet at a stable URL is an accepted **generator input**:
+conversion tooling (the skill / the validator's `convert` mode) produces the
+conforming JSON feed from it. One canonical schema still holds (§3.2);
+conformance is measured on the **produced feed**. The converter MUST drop
+contact columns (§7.2) unless declared institutional.
+
+## §1.4 Design constraint: the afternoon bar
+
+The floor for "publishes data" is deliberately **one afternoon of work with
+exactly one human decision** (the PII gate). Normative changes that would
+raise that bar require an RFC that names the cost explicitly (see Appendix A
+for the walkthrough this bar is calibrated against).
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/2-discovery -->
+
+# §2 — Discovery
+
+**§2.1** A publisher MUST expose a **manifest**: a JSON document conforming to
+[`manifest.schema.json`](https://cabuya.org/schemas/0.1/manifest.schema.json).
+
+**§2.2 Location.** RECOMMENDED at `/.well-known/cabuya.json`. ACCEPTABLE: any
+stable HTTPS path declared in the registry entry and advertised with
+`<link rel="cabuya" href="…">` in the site's HTML head. The registry entry is
+the authoritative pointer; the well-known path is the convention. (Some
+volunteer hosts mangle dot-directories — the well-known path is never a MUST.)
+
+**§2.3 Contents.** The manifest carries: `protocol` (name + `spec_version`),
+`publisher{}` (registry `publisher_id`, canonical URL, declared aliases,
+org-level contact), `conformance_target` (L0–L4), `feeds[]`
+(`{name, url, entity, profile}` — auto-discovery style), `api{}` (base URL if
+L3+), `mcp{}` (endpoint if any), `license`, `permitted_use[]`,
+`crawl_policy_url`, `events[]` (registry event ids served), `languages[]`
+(BCP 47).
+
+**§2.4 Registry.** A git-tracked collection of publisher entries, updated by
+pull request with human review. Keys are **canonical URL + declared aliases,
+never slugs** (the same app has shipped under three names in production). The
+registry records each publisher's crawl/reuse policy; **tooling — including
+the agent skill — MUST honor it**: no fetching from a publisher whose policy
+reserves reuse.
+
+**§2.5 Why both mechanisms.** A registry outage must not break
+publisher-to-publisher reads (so well-known paths exist); catch-all SPAs and
+host limitations prevent a well-known-only rule (2 of 20 observed hosts could
+not serve one honestly). Both, each doing the job it is good at.
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/3-the-feed -->
+
+# §3 — The feed (L2), entity `place`
+
+## §3.1 Envelope
+
+```json
+{
+  "last_updated": "2026-08-16T04:00:00Z",
+  "ttl": 300,
+  "version": "0.1.0",
+  "publisher_id": "example-app",
+  "license": "CC-BY-4.0",
+  "permitted_use": ["display", "aggregate", "ai_answer"],
+  "data": { "places": [] }
+}
+```
+
+- **`last_updated`** (RFC 3339 UTC) is the REQUIRED feed-level generation
+  timestamp — without it a consumer cannot distinguish "nothing changed" from
+  "the pipeline died". **`ttl`** is the caching contract. **`version`** is the
+  spec version implemented.
+- **`license` is REQUIRED.** An unlicensed feed does not conform: absence
+  blocks every consumer's legal review. **`permitted_use`** carries
+  consent-to-reuse **in the envelope** (closed enum: `display` | `aggregate`
+  | `redistribute` | `ai_answer` | `ai_train`).
+- **Records** follow the `place` model encoded in
+  [`place-feed.schema.json`](https://cabuya.org/schemas/0.1/place-feed.schema.json),
+  including the three-axis status (names MUST NOT encode operational state —
+  CR-2), the verification block (§6), structured `source{}`, REQUIRED
+  `public_url`, and the locator rule (`address_text` OR `lat`+`lon`; both
+  RECOMMENDED; neither = non-conforming).
+- **Transport:** HTTPS, UTF-8, `Content-Type: application/json`, and
+  **`Access-Control-Allow-Origin: *` REQUIRED** — the one non-obvious MUST;
+  without it every browser-based consumer needs a proxy.
+- **Localization:** human-readable strings MAY use `[{text, language}]`
+  arrays; plain strings are interpreted as `es`. **`es` is the REQUIRED
+  baseline; `en` RECOMMENDED.** Machine tokens are never translated.
+- **Size:** one file SHOULD stay ≤ 5 MB / ≤ 10 000 records; beyond that,
+  shard by DIVIPOLA municipality and list shards in the manifest `feeds[]`.
+  No pagination inside static files.
+- **Sync signals at L2:** re-generate + `last_updated`; RECOMMENDED
+  per-shard `lastmod`. **Named anti-pattern (MUST NOT):** regenerating
+  `last_updated` per request so it always reads "now" — worse than no signal
+  (observed in production).
+
+## §3.2 Static ≡ API equivalence rule
+
+The feed's `data.places[]` array and the read API's items (§4.1) MUST be
+byte-compatible per record. A static feed is a degenerate read API;
+conformance tooling tests both with the same schema.
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/4-api-surface -->
+
+# §4 — The standard API surface
+
+This section is the protocol's end-state and the founding goal:
+**standardized exposure and consumption so the apps feed each other.** L2 is
+the on-ramp; this is the road.
+
+## §4.1 Read API (L3)
+
+- Base path: `/{api-base}/v1/places` — RECOMMENDED base `/api/public/v1/`
+  (an emergent ecosystem convention, adopted rather than invented).
+- Parameters (all optional): `municipality` (DIVIPOLA), `kind`
+  (`place_kind`), `bbox` (`west,south,east,north`), `updated_since`
+  (RFC 3339), `limit` (1–500, default 100), `cursor` (opaque).
+- **Cursor rule:** incremental sync MUST order on a **server-side sequence**
+  (opaque cursor), never on record timestamps — offline-composed reports
+  arrive hours after their creation time, and timestamp cursors silently drop
+  them. `updated_since` is a convenience filter, not the sync mechanism.
+- Responses use the feed envelope with `data.places[]` + `next_cursor`.
+  CORS `*`; no auth for reads.
+
+## §4.2 Write API (L4)
+
+- `POST /{api-base}/v1/places` — envelope:
+  `{ "source": "<publisher_id>", "external_id": "<sender's local_id>", "place": { … } }`.
+- **Idempotency MUST be keyed on (`source`, `external_id`)** — re-sending is
+  an upsert of the sender's own contribution, never a duplicate. One
+  mechanism, not two.
+- Auth: the publisher's choice, declared in the manifest — `none` (emergency
+  mode) or `bearer` (hand-issued per integration). In `none` mode,
+  mitigations are REQUIRED: rate limiting, a moderation queue before records
+  enter the publisher's own feed, and echo responses carrying the record's
+  moderation state (`received` | `published` | `held`).
+- The receiver republishes accepted records with `source.source_id` = the
+  sender — **the sender's identity travels with the record forever** (§4.3).
+- Status codes: 201 created/replayed · 400 schema · 401
+  (+`WWW-Authenticate`) · 409 (id conflict outside the sender's namespace —
+  a publisher MUST NOT mint in another's namespace, §5) · 429 · 5xx.
+
+## §4.3 Consumption rules — what «nos alimentamos» requires
+
+A consuming app (L3+) MUST:
+
+1. **Attribute:** display the origin publisher for every foreign record
+   (machine-checkable via `source.source_id`; `attribution_required`
+   honored).
+2. **Show age:** render `last_confirmed_at` age (or "sin confirmar" for
+   `null`) wherever a foreign record can direct a person somewhere. When age
+   exceeds 7 days OR `contradictions_active > 0`, the consumer MUST visually
+   distinguish the record; it SHOULD NOT silently hide it (absence of data is
+   not evidence of closure — §6).
+3. **Not mutate:** never alter a foreign record's content; enrichments live
+   in the consumer's own records with `same_as` claims.
+4. **Preserve chains:** an aggregator republishing MUST keep the **original**
+   `source{}` intact — its own identity goes in the envelope `publisher_id`,
+   never in the record's provenance.
+5. **Dedupe by claim, not by authority:** cluster via `same_as` (one-hop,
+   non-transitive) plus accent-folded address/DIVIPOLA matching — never raw
+   display strings; publish clusters only as the consumer's own records.
+6. **Respect exclusions:** never join place data with person-level sources
+   (§7.1); never fetch from publishers whose declared policy reserves reuse.
+
+## §4.4 Sync tiers
+
+| Tier | Mechanism | Who |
 |---|---|---|
-| `cabuya.org` (this site) | Institutional and informational. Explains the model, the transparency mechanism, the team, and how to integrate. | **No.** Static site. |
-| `ayuda.cabuya.org` | **Corag Ayuda Directa** — the flagship product. Emergencies, requests, offers, contributions, leaders, evidence. | **Yes.** Public API + MCP. |
+| Cheap (L2) | Poll feed per `ttl`; optional per-shard `lastmod` | Static publishers |
+| Standard (L3) | `cursor` pagination on a server sequence | API publishers |
+| Push | **Out of scope v0.1** | v1+ discussion |
 
-**An agent acting for a user who needs help, wants to offer help, or wants to
-contribute must go to `ayuda.cabuya.org`.** This site has no write API and no
-personal records. Sending a humanitarian need here means it reaches nobody.
+## §4.5 MCP mapping (network-level agent surface)
 
----
-
-## 2. Corag Ayuda Directa — the model
-
-Ayuda Directa is not a donation page and not a map of disaster victims. It is a
-coordination, traceability and interoperability layer for aid.
-
-```
-Necesidad real → Publicación → Geolocalización y categorización →
-Persona u organización que puede ayudar → Coordinación → Entrega →
-Evidencia → Verificación → Trazabilidad pública
-```
-
-### Core entities
-
-`Emergency` · `Request` · `Offer` · `Contribution` · `Leader` ·
-`Operational Front` · `Delivery` · `Evidence` · `Verification` · `Location`
-
-### Requests and offers
-
-Both are published through the same endpoint, distinguished by `type`:
-
-- `type: "request"` — something a person or community needs.
-- `type: "offer"` — capacity someone can provide (transport, goods, a skill,
-  storage, professional services).
-
-Urgency levels: `urgent` · `needed` · `stable`.
-Categories: alimentos · salud · refugio · transporte · acopio · rescate · otro.
-Geographic fields: `latitude`, `longitude`, `address`, `neighborhood`, validated
-against Colombian territory.
-
-### Operational fronts
-
-A large emergency is divided into coordinable units — for example health and
-first aid, food, and logistics/collection/transport. Each front has its own
-needs, responsible people, conversations, priorities and evidence.
-
-### Transparency — the two numbers
-
-Corag reports **money received** and **money used with evidence** as two
-separate public figures. Evidence (receipts, photographs, results) is moderated
-before publication; those responsible have a limited window to upload it.
-
-Contributions are made by **direct transfer to verified leader accounts**, not to
-a central Corag treasury. This reduces custodial risk and makes the destination
-of each contribution attributable.
-
-### Privacy
-
-- A contributor may appear publicly as *"Persona solidaria"* instead of by name.
-- Publishing a contact detail is **opt-in**, via an explicit `publishContact`
-  consent field, and only where coordination genuinely requires it.
-- Tracking a contribution is private — it uses the same phone number that
-  registered it, and the query itself is not published.
+MCP is an OPTIONAL layer **above** the protocol, never the conformance floor.
+One reference server (run by the initiative) serves the whole network:
+`list_publishers` → registry; `search_places(municipality?, kind?, q?)` →
+federated read over conforming feeds/APIs; `get_place(qualified_id)` → record
++ provenance; `publish_place(...)` → the §4.2 write, only against publishers
+whose manifest declares write support. Tool schemas are 1:1 projections of
+§4.1/§4.2 — same schema, fourth transport. Product-level MCPs remain their
+own; the registry carries their tool metadata (identifiers may be Spanish —
+tooling must not assume English).
 
 ---
 
-## 3. Integration surface (on `ayuda.cabuya.org`)
+<!-- https://cabuya.org/developers/spec/0.1/5-identifiers -->
 
-- **REST:** `POST https://ayuda.cabuya.org/api/public/v1/help` — publish a request
-  or an offer.
-- **OpenAPI 3.1:** `https://ayuda.cabuya.org/api/public/openapi.json` — the
-  authoritative schema. Prefer it over any prose description, including this one.
-- **MCP server:** tools `listar_emergencias`, `publicar_solicitud`,
-  `publicar_ofrecimiento`.
-- **Idempotency:** a `source` + `externalId` pair identifies a record uniquely, so
-  retries after a timeout or an unstable mobile connection do not duplicate it.
-- **Rate limiting:** the endpoint returns HTTP `429` when a client exceeds its
-  allowance. Back off and retry.
+# §5 — Identifiers
 
-### The principle behind the API
+## §5.1 Record identity (REQUIRED, v0.1)
 
-> **Muchas interfaces, una sola red de datos.**
+`{publisher_id}:{local_id}`.
 
-During an emergency, multiple teams build parallel applications, each with its
-own database of needs and offers — which produces more fragmentation, not less.
-Corag's public API exists so a new client becomes a client *of one network*
-rather than a new silo. If you are building an aid application, synchronize with
-Corag rather than starting another source of truth.
+- `publisher_id` is registry-assigned once (PR-reviewed, human-readable);
+  `local_id` is whatever the publisher's database already uses (int, UUID,
+  hex — all conforming unchanged). Globally unique with **zero
+  coordination**.
+- Ids MUST be stable across edits; MUST NOT embed personal data; one id
+  system per entity per publisher; **never minted in another publisher's
+  namespace** (the write API answers 409 — §4.2).
 
----
+## §5.2 Place identity (deferred to v0.2)
 
-## 4. This site
+*Claimed* via `same_as[]` (fully-qualified ids, one-hop, non-authoritative)
+plus `merged_into` for same-publisher supersession. A curated,
+municipality-scoped place index (DIVIPOLA-prefixed, human-legible — e.g. the
+`CO-RIS-PER-ACOPIO-0007` shape used institutionally, mapped 1:1 to the
+`co-66001-…` scheme) enters the registry **only after real clusters exist**.
+Record identity is unchanged by any of this.
 
-### Structure
+## §5.3 Survivability
 
-- Spanish is the primary language, served at the root (`/`).
-- English is served under `/en`.
-- Both languages carry the same content.
-- Route slugs are English in both languages, so the pair is `/how-it-works` and
-  `/en/how-it-works`.
-- Every public page has a complete Markdown twin at its path plus `.md` — for
-  example `/how-it-works.md` and `/en/how-it-works.md`. Content comes from the
-  same source the HTML renders, not converted from rendered output, so code
-  blocks, links and formatting keep full fidelity. A build gate measures word
-  coverage against the page, so a twin cannot silently degrade into a summary.
-
-### Technology
-
-- Astro (static site generation) with Svelte islands for the few interactive parts
-- Tailwind CSS 4, with the Corag design tokens (`--color-corag-*`) declared via
-  `@theme`
-- Content lives in Astro Content Collections with strict Zod schemas
-- Deployed to Cloudflare Pages; contact forms run as Pages Functions
-- No tracking beyond privacy-respecting aggregate analytics
-
-### What this site collects
-
-Only what a contact form submission carries, and only when someone submits one.
-No accounts, no personal records, no aid data. See `/privacy`.
+Ids remain valid references after a publisher winds down (§7.4): a
+`publisher_id` is never reassigned, even after archive.
 
 ---
 
-## 5. Links
+<!-- https://cabuya.org/developers/spec/0.1/6-trust-and-verification -->
 
-- [Site](https://cabuya.org): institutional surface (this host)
-- [Application](https://ayuda.cabuya.org): Corag Ayuda Directa
-- [Short agent summary](https://cabuya.org/llms.txt): compact catalogue
-- [Public write API](https://ayuda.cabuya.org/api/public/v1/help)
-- [OpenAPI 3.1](https://ayuda.cabuya.org/api/public/openapi.json)
+# §6 — Trust and verification
+
+## §6.1 The verification block (Core)
+
+Three ecosystem teams invented this independently — the spec adopts it as
+Core:
+
+- **`last_confirmed_at`** — the **key is REQUIRED on every record; `null` is
+  legal and honest** ("never confirmed"). Omission is non-conforming.
+- `confirmed_by` — a **role token** (`team` | `volunteer` | `official_source`
+  | `partner:{publisher_id}`), never a personal name.
+- `confirmation_method` — closed enum.
+- `confirmations_24h`, `contradictions_active`.
+- **`last_reported_absent_at`** — negative confirmation is first-class.
+- **`updated_at` ≠ `last_confirmed_at`** (CR-1): freshness semantics do not
+  interconvert — **an edit is not a confirmation**.
+
+## §6.2 Staleness display
+
+Consumers MUST show age (§4.3 rule 2). Publishers SHOULD set `expires_at` on
+inherently temporary places.
+
+## §6.3 No signatures in v0.1
+
+Key management is the one cost volunteer teams reliably fail at, and the
+threat model's dominant risk (poisoned place data) is mitigated at the
+**registry** layer (reviewed publishers, canonical URLs) and the **write**
+layer (moderation queues), not by record signatures.
+
+**Upgrade path (v1):** manifest-published keys + detached feed signatures
+(`{feed-url}.sig`), opt-in per publisher — the envelope already carries
+`publisher_id`, so the trust anchor exists.
+
+Threats considered and their mitigations: feed spoofing (HTTPS + registry
+canonical URL) · impersonation (registry review) · poisoned places
+(moderation queue + `contradictions_active` + validator provenance checks) ·
+id squatting (§5 namespace rule + 409) · stale-data harm (mandatory freshness
+display) · aggregator amplification (chain preservation, §4.3 rule 4).
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/7-normative-exclusions -->
+
+# §7 — Normative exclusions
+
+## §7.1 Person-level data
+
+The protocol MUST NOT transport person-level entities — missing persons,
+individual cases, volunteer *identities*, personal names, personal phone
+numbers, personal media. This is a **join prohibition, not a field
+omission**: tooling MUST NOT combine protocol data with person-level sources,
+and grants are entity-scoped — an app that holds both place and
+missing-person data federates **only** its non-person entities, from surfaces
+that do not co-serve person data. Free text is the third leak channel:
+publishers MUST strip personal data from `description` / `warning_text`
+before publishing.
+
+People-domain integration is **link-out only, permanently** — and link-outs
+SHOULD converge on the official channels: **Cruz Roja Colombiana
+(Restablecimiento del Contacto Familiar)** for missing persons and the
+**Registro Único de Damnificados (UNGRD)** for affected people. The registry
+lists those channels as `official_source` entries.
+
+## §7.2 Contact
+
+Contact values MUST NOT travel in feeds. `public_url` + link-out is the
+mechanism; `contact_available` carries the fact, never the value;
+`institutional_contact` (Extended) is org-owned numbers only.
+
+## §7.3 Scraping and consent
+
+Data enters the network by **publication, never by scraping**. Consuming a
+publisher requires its registry-declared consent (`permitted_use`).
+Suppressed or moderated records are **omitted**, never labelled downstream —
+a foreign moderation verdict republished without appeal is a
+defamation-shaped risk.
+
+## §7.4 Orderly wind-down
+
+A departing publisher SHOULD: freeze feeds with a final `last_updated`,
+publish `sunset_at` in its manifest, and either (a) transfer record custody
+to a named publisher (records republished with chained provenance) or (b)
+declare records archived. The registry marks the publisher `archived`; its
+`publisher_id` is never reassigned.
+
+## §7.5 Registry suspension (involuntary)
+
+The maintainers MAY mark a publisher `suspended` — badge withdrawn, feeds
+delisted, consumers SHOULD stop ingesting — for: publishing person-level
+data, persistent fabricated places after notice, or impersonation.
+Suspension follows the RFC process's lazy-consensus rules with a 48-hour
+emergency path for PII incidents; the publisher gets a public, appealable
+record — never a silent removal (the no-silent-verdicts principle of §7.3
+applies to the registry itself). The `publisher_id` is still never
+reassigned.
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance -->
+
+# §8 — Versioning and conformance
+
+## §8.1 Versioning
+
+- **SemVer** for the spec; `version` in every envelope; supported versions
+  span ≤ 2 MAJORs; producers get 180 days on MAJOR bumps; deprecated terms
+  warn for one release, then error.
+- **A release candidate becomes normative only after ≥ 1 publisher ships it
+  publicly** — the spec never outruns its implementers.
+
+## §8.2 Profiles
+
+- **`Core`**: the manifest + one conforming `places` feed with the required
+  field set.
+- **`Extended`**: capacity, needs, hours, media, institutional contact.
+- Editorial rule: **a MUST that a script cannot validate SHOULD be a
+  SHOULD.**
+
+## §8.3 Conformance is measured
+
+**Conformance = passing the published validator, never self-declaration**
+(production evidence: adapter registries that *declare* unimplemented
+capabilities — manifests lie, behavior doesn't). Registry badges are
+re-measured on schedule; states: `conforming` | `stale` (validator passing
+but `last_updated` beyond 7 × `ttl`) | `failing` | `unreachable` |
+`archived`.
+
+## §8.4 Extensibility
+
+Unknown members MUST be preserved and MUST NOT fail validation;
+`x_{publisher}_{field}` namespaced extensions are always allowed; shared
+extension sets become versioned **Profiles** at public URIs.
+
+## §8.5 Reserved for v0.2 (recorded so names don't drift)
+
+- Entities: `need`/`offer` (with **`quantity_required`** and
+  **`quantity_covered`** — the field that prevents over-delivery to
+  saturated points while unserved zones wait), `rental_notice`,
+  `damage_report` (EDAN-referenced).
+- **Alerts reference CAP** — officially adopted in Colombia (IDEAM/UNGRD) —
+  rather than any invented format; the registry records publishers' CAP
+  endpoints as first-class.
+- The curated place index (§5.2).
+
+---
+
+<!-- https://cabuya.org/developers/spec/0.1/appendix-a-design-decisions -->
+
+# Appendix A — Design decisions (NON-NORMATIVE)
+
+> Nothing in this appendix is normative. It records **why** the normative
+> sections say what they say, so future RFCs argue against the real
+> rationale instead of guessing at it.
+
+## A.1 The decision log
+
+| Decision | Alternatives considered | Why | Revisit when |
+|---|---|---|---|
+| Static file first (L2 floor) | REST-first; push federation | Nearly half the observed apps are an afternoon from a static file; federation protocols would cost the whole adoption budget; a 300 s `ttl` covers shelter-data latency | A real-time entity (bed availability) enters scope |
+| JSON (+ the adopted envelope shape) | HXL-tagged CSV; JSON-LD | Every observed app is JSON-native; JSON-LD variance is a documented interop tax | Never for v0.x |
+| Registry by PR + well-known | Central registry only; DNS discovery | Diff-able, reviewable, forkable (a governance feature); catch-all SPAs break well-known-only on real hosts today | Registry outgrows git review |
+| One entity (`place`) | Ship need/offer/damage too | Places are the largest duplication surface, non-personal, slow-changing; matching vocabularies are provably incompatible and need the crosswalk machinery first | v0.2 RFCs |
+| Feed-first; API required only at L3 | API-first | The founding goal is the API surface, but the *floor* can't be — most observed apps have no public API. One schema, four transports keeps the end-state coherent while the on-ramp stays an afternoon | Two release cycles of L3 adoption data |
+| `{publisher_id}:{local_id}`; no UUID mandate | All-UUID; central place ids | Zero-coordination uniqueness; no migration tax; central place identity deferred until real clusters exist | v0.2 place index |
+| No signatures v0.1 | Signed feeds; DID identity | Key management fails volunteer teams; registry + moderation mitigate the live threats; upgrade path preserved | First observed spoofing incident, or v1 |
+| Event-scoped registry, event-optional records | Country-scoped; event-mandatory | Apps run multiple events in parallel; places outlive emergencies — reuse beyond the founding event is the north star | First non-Colombia deployment |
+| Moderation never federates | Federate trust verdicts | Defamation-shaped risk; omission is safe, labelling is not | A cross-publisher trust framework RFC (v1+) |
+
+## A.2 The implementability walkthrough — the afternoon bar
+
+Profile: a real ecosystem app (Next.js App Router + Supabase, no public API),
+taken to **L2** by a coding agent with the skill installed:
+
+1. *(15 min)* The skill reads the repo, finds the database schema; maps the
+   shelter/collection tables → `place`: `last_confirmed_at` ← the app's own
+   confirmation field (this field was lifted *from* the ecosystem), category
+   → `place_kind` via the crosswalk, municipality → DIVIPOLA lookup.
+2. *(30 min)* The agent writes a route handler (or build-time export)
+   serializing the mapped records into the envelope. **The PII decision is
+   surfaced to the human**: name/phone columns flagged by the deny-list and
+   excluded; `public_url` points at the app's own record pages. One human
+   decision.
+3. *(15 min)* Manifest written to `/.well-known/cabuya.json`; SPA catch-all
+   exclusion added (one line); `robots.txt` check.
+4. *(30–60 min)* Validator loop: schema errors → fix mapping; soft-404 →
+   pass; always-now double-probe → pass.
+5. *(10 min)* Registry PR opened; scheduled re-validation picks it up; the
+   `publishes` badge appears.
+
+**Total: ≈ 2 hours of agent time + one human decision.**
+
+Steps that would break the bar if the spec were different — and therefore why
+each §10 decision went the way it did: mandatory UUIDs (step 1 becomes a
+migration) · mandatory GeoJSON (step 2 grows a geometry refactor) ·
+signatures (step 3 becomes a key ceremony) · central place-id minting (step 5
+becomes a negotiation).
+
+---
+
+# Consumption rules — the half that is usually forgotten
+
+<!-- https://cabuya.org/developers/consume -->
+
+Publishing gets the attention. Publishing is also the easy half: you export
+what you already have, and if you get it wrong, the validator tells you.
+
+Consuming is where the damage happens. A consumer decides what a person sees
+when they are looking for a place to sleep tonight — which record, how old,
+whose it is, and whether the two entries that look like the same shelter are
+the same shelter. Get that wrong and nobody's validator fires. Someone just
+walks to a collection point that closed on Tuesday.
+
+So the protocol has six requirements for consumers, and they are MUSTs. They
+are written out in [§4.3](/developers/spec/0.1/4-api-surface#4-3) and repeated
+here with what each one is actually protecting against, because a rule you
+understand is a rule you will still be following in six months when the
+deadline is tight.
+
+## The six rules
+
+### 1. Attribute
+
+> Display the origin publisher for every foreign record.
+
+Machine-checkable through `source.source_id`, and `attribution_required` in the
+publisher's manifest makes it explicit.
+
+**What it protects.** A phone number that does not answer, an address that is
+wrong, a shelter that turned someone away — these are things people need to
+report to *somebody*, and the somebody is whoever published the record, not
+whoever displayed it. An unattributed aggregate makes every error yours and
+fixable by nobody.
+
+It also protects the publishers. A team that sees its own data credited in
+someone else's app has a reason to keep publishing. A team that sees its work
+absorbed into an unattributed pile has a reason to stop.
+
+**Self-test.** A test that fails when a card renders without its source stamp.
+Not a code review item — a test, because this is the rule that quietly erodes
+first when a layout gets crowded.
+
+### 2. Show age
+
+> Render `last_confirmed_at` age — or *sin confirmar* when it is `null` —
+> wherever a foreign record can direct a person somewhere.
+
+Past seven days, or when `contradictions_active > 0`, the record MUST be
+visually distinguished. It SHOULD NOT be silently hidden.
+
+**What it protects.** The rule against hiding is the important half.
+[§6.2](/developers/spec/0.1/6-trust-and-verification#6-2) puts it plainly:
+absence of data is not evidence of closure. A stale record shown as stale lets
+someone decide to call ahead. A stale record hidden looks exactly like a place
+that never existed, and the person goes somewhere further away for no reason.
+
+`sin confirmar` is not a failure state either. It means nobody has been back to
+check, which is the honest condition of most records during the first week of
+an emergency, and it is more useful than a confident timestamp that was copied
+from `updated_at` when somebody fixed a typo.
+
+**Self-test.** Three fixture records — fresh, eight days old, and `null` — and
+an assertion about what each renders.
+
+### 3. Do not mutate
+
+> Never alter a foreign record's content.
+
+Corrections and enrichments live in *your* records, linked with `same_as`.
+
+**What it protects.** The publisher's ability to answer for their own data. The
+moment a consumer edits a record in flight, the record says something its
+publisher never said, and the attribution in rule 1 becomes a lie with a name
+attached to it.
+
+This is also what makes the network debuggable. If every copy of a record is
+byte-identical to what its publisher served, a discrepancy is a bug in one
+place. If consumers each apply their own fixes, it is a bug in *n* places and
+nobody can tell which.
+
+**Self-test.** Type-level. The foreign-record type has no setters.
+
+### 4. Preserve chains
+
+> An aggregator that republishes MUST keep the original `source{}` intact.
+
+Your own identity goes in the envelope's `publisher_id` — never in the record's
+provenance.
+
+**What it protects.** Provenance across two hops. Aggregators aggregate each
+other; that is fine and expected. What is not fine is the second aggregator
+appearing to be the origin of a record that came from a shelter's own
+spreadsheet three hops back. Chains are the difference between a network and a
+game of telephone.
+
+**Self-test.** A round-trip fixture: read a record, republish it, read it back,
+assert `source{}` is unchanged.
+
+### 5. Dedupe by claim, not by authority
+
+> Cluster with `same_as` — one hop, non-transitive — plus accent-folded address
+> and DIVIPOLA matching. Never raw display strings. Publish clusters as your
+> own records.
+
+**What it protects.** The thing that makes deduplication dangerous is that it
+is a judgement, and a judgement published as a fact is a claim you made on
+someone else's behalf. *Colegio San José* and *I.E. San José* may be the same
+building or may be two blocks apart, and the consumer who merges them has
+decided something the publishers did not.
+
+So merge, by all means — an app showing the same shelter four times is useless.
+But publish the merge as *your* record, with `same_as` pointing at the four you
+merged, so the next consumer can disagree with you. One hop and
+non-transitive for the same reason: `A same_as B` and `B same_as C` does not
+make A and C the same place, and a transitive closure over a noisy graph
+eventually merges half a city.
+
+Never raw display strings, because *Cra 8 #12-34* and *Carrera 8 No. 12 - 34*
+are the same address and *Sede A* is thirty different places.
+
+**Self-test.** The clusters are published as the consumer's own records and
+documented as such in the generated code's header.
+
+### 6. Respect exclusions
+
+> Never join place data with person-level sources. Never fetch from a publisher
+> whose declared policy reserves reuse.
+
+**What it protects.** Both halves are about the thing the protocol refuses to
+carry.
+
+The join prohibition ([§7.1](/developers/spec/0.1/7-normative-exclusions#7-1))
+is not satisfied by leaving personal fields out of your database. It is a
+prohibition on the *join*: an application holding both place data and a
+missing-persons list may federate its place data and must not combine the two,
+even internally, even for a feature that would be useful. That is the whole
+design — a protocol that cannot be assembled into a surveillance tool by
+combining two individually-harmless datasets.
+
+The reuse half is simpler and just as firm. `permitted_use` in a manifest is
+the publisher's answer to *what may be done with this*, and a consumer that
+fetches anyway has decided their use matters more than the publisher's consent.
+Build the refusal into the fetch layer, not into a policy document: the request
+should be impossible to make, not merely discouraged.
+
+**Self-test.** The fetch layer refuses those hosts by construction.
+
+## What consuming well looks like
+
+[Ayudas Colombia](https://github.com/juanptoror/aqui-ayuda) is the working
+reference, open-sourced by its author for this integration effort. It is a
+Vite/React application aggregating five separate backends into one view, and it
+arrived at several of these rules on its own, before there was a protocol to
+require them.
+
+Its provenance component gives every source its own visual stamp — the source's
+own brand colour, "so a stamp says whose the data is, not how serious it is" —
+and the project's README is explicit that this is not decoration: *if a phone
+does not answer or an address is wrong, you have to be able to know who
+published it and who to complain to.* That is rule 1, discovered from the field
+rather than from a specification. **A test fails if a card renders without a
+stamp, or with the wrong one.**
+
+It also gets the hardest part of rule 2 right, in a place the rule does not
+quite reach. When its upstream API fails, the screen says so — a 500 is never
+rendered as "nobody is asking for help". The README's own words: *saying there
+are no needs when in fact you could not ask is disinformation in the middle of
+an emergency.* Same distinction the validator draws between exit code 1 and
+exit code 3, and the same reason.
+
+The pattern worth copying wholesale: **a gap you cannot explain is worse than
+an explicit zero.** Their dashboard draws all four indicators whether or not
+there is data behind them, because a missing tile reads as "fine" and a zero
+reads as a zero.
+
+## Where this leaves you
+
+If you are building a consumer, the shortest honest path is: fetch through a
+layer that knows about `permitted_use` and crawl policy, store foreign records
+immutably, render source and age on every card, and treat your merges as your
+own opinions.
+
+If you would rather have an agent do it, the
+[agent skill](/developers/skill) turns this page into a checklist it verifies
+against the code it writes, with the self-tests above.
+
+The [registry](/registry) lists who publishes what, and what the validator last
+found in each feed. Nothing there is a recommendation — read
+[the note on the page](/registry) before you treat it as one.
+
+---
+
+# Checks
+
+Every check the validator can report. Ids are permanent — a retired check
+keeps its id and is marked rather than removed, because renaming one would
+break the fix loop of every agent that cached the old id.
+
+## DSC001 — Manifest reachable over HTTPS as JSON
+
+- Severity: error · Level: L1
+- Status: catalogued, not implemented (Task 15 (behavioral probes))
+- Rule: The manifest MUST be served over HTTPS with Content-Type: application/json.
+- Fix: Serve the manifest over HTTPS with a JSON content type, and check it from outside your network.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-1
+
+## DSC002 — Soft-404: a discovery path answering 200 + text/html is absent
+
+- Severity: error · Level: L1
+- Status: implemented
+- Rule: A manifest is JSON. HTML at a discovery path means an SPA catch-all is answering — the manifest is absent, not present.
+- Fix: Exclude the discovery path from your catch-all so the file is served instead of your app shell.
+- Specification: https://cabuya.org/developers/spec/0.1/1-architecture#1-2
+
+## DSC003 — robots.txt returns 200 text/plain
+
+- Severity: warning · Level: L1
+- Status: catalogued, not implemented (Task 15)
+- Rule: L2+ preconditions include a real robots.txt.
+- Fix: Serve a real robots.txt at the root with a text/plain content type.
+- Specification: https://cabuya.org/developers/spec/0.1/1-architecture#1-2
+
+## DSC004 — Manifest at the RECOMMENDED path, or a <link rel> advertisement
+
+- Severity: warning · Level: L1
+- Status: catalogued, not implemented (Task 15)
+- Rule: The manifest SHOULD live at /.well-known/cabuya.json, or be advertised with <link rel="cabuya">.
+- Fix: Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya-manifest">.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-2
+
+## DSC005 — Manifest validates against manifest.schema.json
+
+- Severity: error · Level: L1
+- Status: implemented
+- Rule: The manifest MUST conform to its schema.
+- Fix: Correct the manifest against the published schema; the finding names the failing property.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-1
+
+## DSC006 — publisher.canonical_url matches the registry entry
+
+- Severity: error · Level: L1
+- Status: catalogued, not implemented (Task 15)
+- Rule: A registered publisher’s manifest MUST agree with its registry entry about its canonical URL.
+- Fix: Make the canonical URL in the manifest match the one in your registry entry, or open a pull request to change the entry.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-4
+
+## DSC007 — Every feeds[].url is absolute HTTPS and reachable
+
+- Severity: error · Level: L1
+- Status: catalogued, not implemented (Task 15)
+- Rule: Declared feeds MUST resolve.
+- Fix: Give every feed an absolute https URL that resolves from outside your network.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-3
+
+## DSC008 — crawl_policy_url resolves
+
+- Severity: warning · Level: L1
+- Status: catalogued, not implemented (Task 15)
+- Rule: The declared crawl/reuse policy SHOULD be fetchable — consumers must honor it.
+- Fix: Point crawl_policy_url at a page that exists, or remove the field.
+- Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-4
+
+## DSC009 — conformance_target does not exceed the measured level
+
+- Severity: error · Level: L1
+- Status: catalogued, not implemented (Task 13 (content side) + Task 15)
+- Rule: conformance_target is a declaration; it MUST NOT claim more than this run measures. Reported as a mismatch, never as the level.
+- Fix: Lower conformance_target to the level you actually reach, or fix what is blocking the level you claim. The target is an intention, not a claim.
+- Specification: https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance#8-3
+
+## SCH001 — The document does not conform to its published JSON Schema
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Every feed and manifest MUST validate against its versioned schema.
+- Fix: Correct the value so it satisfies the schema. The finding gives the pointer and the expected shape.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV001 — Envelope required fields present and well-typed
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: last_updated, ttl, version, publisher_id and license are REQUIRED on every feed envelope.
+- Fix: Add the missing envelope field. All five are required on every feed.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV002 — last_updated is RFC 3339 with a UTC offset
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: The generation timestamp MUST be unambiguous.
+- Fix: Write last_updated as an RFC 3339 timestamp with an explicit UTC offset, e.g. 2026-08-17T14:02:00Z.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV003 — license present
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: An unlicensed feed does not conform — absence blocks every consumer’s legal review.
+- Fix: Declare a licence. An unlicensed feed blocks every consumer’s legal review, which is a harder problem than a missing field.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV004 — license is an SPDX id, or license_url accompanies it
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: A machine-resolvable licence SHOULD be used.
+- Fix: Use an SPDX identifier, or keep the custom string and add license_url pointing at the terms.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV005 — permitted_use present, values within the closed enum
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Consent-to-reuse travels in the envelope: display | aggregate | redistribute | ai_answer | ai_train.
+- Fix: Add permitted_use with values from the closed enum: display, aggregate, redistribute.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV006 — version is a supported spec version
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Supported versions span at most two MAJORs.
+- Fix: Set version to a supported spec version. Consumers use it to decide how to read the rest.
+- Specification: https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance#8-1
+
+## ENV007 — Access-Control-Allow-Origin: * present
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: The one non-obvious MUST: without it every browser-based consumer needs a proxy.
+- Fix: Send Access-Control-Allow-Origin: * on the feed. Without it a browser client cannot read you at all.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV008 — ttl is a positive, plausible integer (1–86400)
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: ttl is the caching contract; implausible values break polling consumers.
+- Fix: Set ttl to a positive number of seconds between 1 and 86400. It is the caching contract, not a hint.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV009 — Feed ≤ 5 MB and ≤ 10 000 records, or shards declared
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Beyond the size guidance, publishers SHOULD shard by municipality and declare shards in the manifest.
+- Fix: Shard the feed and declare the shards, or reduce it below 5 MB and 10 000 records.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## ENV010 — Content-Type: application/json, UTF-8
+
+- Severity: info · Level: L2
+- Status: implemented
+- Rule: Transport hygiene.
+- Fix: Serve the feed as application/json with UTF-8. A text/plain feed is one many clients will refuse.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC001 — last_confirmed_at KEY present on every record (null is legal)
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: The confirmation key is REQUIRED; null is the honest "never confirmed". Omission is not.
+- Fix: Include last_confirmed_at on every record. If nobody has confirmed it, publish null — that is the honest answer and consumers know what to do with it. Never invent one.
+- Specification: https://cabuya.org/developers/spec/0.1/6-trust-and-verification#6-1
+
+## REC002 — id matches the {publisher_id}:{local_id} shape
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Record identity is {publisher_id}:{local_id} — globally unique with zero coordination.
+- Fix: Use the {publisher_id}:{local_id} form for the record id, with your own publisher id.
+- Specification: https://cabuya.org/developers/spec/0.1/5-identifiers#5-1
+
+## REC003 — No minting in another publisher’s namespace
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: A publisher MUST NOT mint ids in another publisher’s namespace.
+- Fix: Mint ids only in your own namespace. Reference another publisher’s record with same_as instead.
+- Specification: https://cabuya.org/developers/spec/0.1/5-identifiers#5-1
+
+## REC004 — Locator rule: address_text OR lat+lon present
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: A place you cannot locate directs no one.
+- Fix: Give the record an address_text, or a lat and lon pair, or both. A place nobody can find is not a place.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC005 — Both locators present (RECOMMENDED)
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Address and coordinates together survive more consumer contexts than either alone.
+- Fix: Add the second locator. Coordinates and an address answer different questions for a person on the ground.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC006 — public_url present and absolute
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Link-out is the contact mechanism — contact values never travel.
+- Fix: Add an absolute public_url pointing at your own page for this place, so a consumer can hand the reader back to you.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-2
+
+## REC007 — place_kind within the enum
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: The shared vocabulary is what makes crosswalks possible; unknown kinds use other + a namespaced extension.
+- Fix: Use a place_kind from the enum, and put your own vocabulary in place_kind_ext alongside it.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC008 — municipality_code is a valid DIVIPOLA code
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Territorial coding is DIVIPOLA; publishers keep their raw string in municipality_text.
+- Fix: Use the official DIVIPOLA code for the municipality. The shape is five digits.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC009 — source{} present with source_id
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Provenance is structured, never prose — attribution and chains depend on it.
+- Fix: Add source with a source_id, so attribution survives every hop the record makes.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-3
+
+## REC010 — CR-2: name contains no operational-state token
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Names MUST NOT encode operational state — state belongs in lifecycle_status / service_status.
+- Fix: Take the operational state out of the name and put it in service_status. A name that says CLOSED is a name that is wrong the moment it reopens.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC011 — name and status fields do not contradict each other
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: A record that says two things about its own state is a record a consumer cannot render honestly.
+- Fix: Reconcile the name and the status fields. When they disagree a consumer has to guess, and it will guess wrong half the time.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC012 — CR-1: updated_at is not a reused last_confirmed_at
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: An edit is not a confirmation; the two timestamps do not interconvert.
+- Fix: Set updated_at to when the row changed and last_confirmed_at to when a human verified it. Reusing one for the other tells consumers a place was checked when it was only edited.
+- Specification: https://cabuya.org/developers/spec/0.1/6-trust-and-verification#6-1
+
+## REC013 — expires_at set on inherently temporary place kinds
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Temporary places SHOULD declare when they stop being true.
+- Fix: Set expires_at on a place that is temporary by nature, so consumers can stop showing it without asking you.
+- Specification: https://cabuya.org/developers/spec/0.1/6-trust-and-verification#6-2
+
+## REC014 — same_as entries are fully-qualified and one-hop
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: same_as is a one-hop, non-transitive claim — never a transitive chain.
+- Fix: Write same_as entries as fully-qualified {publisher_id}:{id} references, one hop only, and never as an authority claim.
+- Specification: https://cabuya.org/developers/spec/0.1/5-identifiers#5-2
+
+## REC015 — Unknown members are preserved, never rejected
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Extensibility applies to the validator first: an unknown member MUST NOT fail validation.
+- Fix: Preserve unknown members rather than dropping them. A field you do not understand may be the one another consumer needs.
+- Specification: https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance#8-4
+
+## REC016 — x_ extensions are namespaced x_{publisher}_{field}
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Namespaced extensions prevent two publishers colliding on one private field name.
+- Fix: Namespace the extension as x_{publisher}_{field}, so two publishers can extend the same record without colliding.
+- Specification: https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance#8-4
+
+## REC017 — es baseline present for localized strings
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: es is the REQUIRED baseline for human-readable strings; en is RECOMMENDED.
+- Fix: Provide the es baseline for the localized string. Spanish is the floor every consumer can rely on.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## REC018 — No duplicate id within one feed
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Two records with one id make every downstream dedupe wrong.
+- Fix: Remove the duplicate id. Two records with one id make every consumer’s merge non-deterministic.
+- Specification: https://cabuya.org/developers/spec/0.1/5-identifiers#5-1
+
+## PII001 — A contact value appears in any field, extensions included
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Contact values MUST NOT travel in feeds — namespaced extensions do not exempt them.
+- Fix: Remove the contact value. Use contact_available to say that contact exists, and public_url to send the reader to you for it.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-2
+
+## PII002 — confirmed_by is a role token, never a personal name
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: confirmed_by ∈ team | volunteer | official_source | partner:{publisher_id}.
+- Fix: Replace the personal name in confirmed_by with a role token: team, volunteer, official_source, or partner:{publisher_id}.
+- Specification: https://cabuya.org/developers/spec/0.1/6-trust-and-verification#6-1
+
+## PII003 — Free text matches a personal-data pattern
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Free text is the third leak channel: publishers MUST strip personal data from description / warning_text.
+- Fix: Remove the personal data from the free text. The finding names the field and the pattern class, never the value it matched.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-1
+
+## PII004 — A person-level entity appears
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Person-level data never federates — this is a join prohibition, not a field omission.
+- Fix: Remove the person-level entity. Cabuya carries places; a person’s situation stays inside the application that owns it.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-1
+
+## PII005 — A field name matches the deny-list even if the value looks clean
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: A field named for contact data will eventually carry it.
+- Fix: Rename the field. A deny-listed name signals person-level data even when today’s values look clean, and the next row may not be.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-2
+
+## PII006 — A moderation verdict about a third party is republished
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: Moderation verdicts do not federate; suppressed records are omitted, never labelled downstream.
+- Fix: Remove the moderation verdict. Republishing a judgement about a third party spreads it beyond anyone who can correct it.
+- Specification: https://cabuya.org/developers/spec/0.1/7-normative-exclusions#7-3
+
+## BEH001 — Feed reachable on two probes; content-type stable
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: A feed that answers differently on two probes cannot be consumed reliably.
+- Fix: Serve the feed consistently. Two probes returning different content types means a consumer cannot cache you at all.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## BEH002 — Always-now: last_updated advances with the probe clock on identical content
+
+- Severity: error · Level: L2
+- Status: implemented
+- Rule: last_updated MUST be generated at build/publish time, never per request — a per-request timestamp is worse than no signal.
+- Fix: Set last_updated to when the content actually changed. A timestamp that follows the clock makes every consumer refetch identical bytes forever.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## BEH003 — last_updated older than 7 × ttl (the stale badge state)
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Staleness is information, not failure — but it must be visible.
+- Fix: Regenerate the feed, or raise ttl to match how often you really update. Stale beyond seven times your own ttl is a promise you are not keeping.
+- Specification: https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance#8-3
+
+## BEH004 — Per-shard lastmod present (the incremental-sync pattern)
+
+- Severity: warning · Level: L2
+- Status: catalogued, not implemented (Task 15)
+- Rule: A per-shard lastmod is working incremental sync at zero cost.
+- Fix: Publish a lastmod per shard so consumers can fetch only what changed.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-4
+
+## BEH005 — Declared shards reachable and envelope-consistent
+
+- Severity: error · Level: L2
+- Status: catalogued, not implemented (Task 15)
+- Rule: A declared shard that disagrees with its siblings breaks every consumer that trusts the manifest.
+- Fix: Make every declared shard reachable and consistent with the envelope that declares it.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## API001 — Read API base reachable; envelope shape identical to the feed
+
+- Severity: error · Level: L3
+- Status: catalogued, not implemented (v0.2 (L3 checks — deferred from the walking skeleton))
+- Rule: One schema, four transports.
+- Fix: Serve the read API at the declared base with the same envelope shape as the static feed.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-1
+
+## API002 — Static ≡ API: the same record is byte-compatible from both surfaces
+
+- Severity: error · Level: L3
+- Status: catalogued, not implemented (Task 15)
+- Rule: The equivalence rule is what lets one schema serve four transports.
+- Fix: Return byte-compatible records from the API and the feed. A consumer must not have to know which one it read.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-2
+
+## API003 — cursor pagination ordered on a server sequence, not a timestamp
+
+- Severity: error · Level: L3
+- Status: catalogued, not implemented (v0.2)
+- Rule: Timestamp cursors silently drop offline-composed records that arrive late.
+- Fix: Paginate on a server-side sequence rather than a timestamp. Timestamps collide and records get skipped.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-1
+
+## API004 — Documented query parameters accepted
+
+- Severity: warning · Level: L3
+- Status: catalogued, not implemented (v0.2)
+- Rule: municipality, kind, bbox, updated_since, limit, cursor.
+- Fix: Accept the documented query parameters, or remove them from the documentation.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-1
+
+## API005 — CORS * on the API; no auth required for reads
+
+- Severity: error · Level: L3
+- Status: catalogued, not implemented (v0.2)
+- Rule: Reads are public by design.
+- Fix: Serve the API with CORS * and no authentication for reads. Public-interest data behind a key is not public.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-1
+
+## API006 — Consumes ≥ 1 peer feed (partly self-declared)
+
+- Severity: info · Level: L3
+- Status: catalogued, not implemented (v0.2)
+- Rule: L3 requires consuming as well as serving — the one requirement a probe cannot fully measure, so it is reported as info with the limitation stated.
+- Fix: Consume at least one peer feed. The level is about interoperating, not only about publishing.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-3
+
+## WRT001 — POST accepts the {source, external_id, place} envelope
+
+- Severity: error · Level: L4
+- Status: catalogued, not implemented (v0.2)
+- Rule: The write envelope is fixed.
+- Fix: Accept the {source, external_id, place} envelope on POST.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-2
+
+## WRT002 — Idempotency on (source, external_id): a replay does not duplicate
+
+- Severity: error · Level: L4
+- Status: catalogued, not implemented (v0.2)
+- Rule: Re-sending is an upsert of the sender’s own contribution, never a duplicate.
+- Fix: Make writes idempotent on (source, external_id). A replay after a timeout must not create a second record.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-2
+
+## WRT003 — 409 on an id conflict outside the sender’s namespace
+
+- Severity: error · Level: L4
+- Status: catalogued, not implemented (v0.2)
+- Rule: Namespace discipline is enforced at the write boundary.
+- Fix: Return 409 when a sender tries to write an id outside its own namespace.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-2
+
+## WRT004 — In auth:none mode, a moderation state is echoed and rate limiting is observable
+
+- Severity: error · Level: L4
+- Status: catalogued, not implemented (v0.2)
+- Rule: Open writes REQUIRE mitigations: rate limiting, a moderation queue, and an echoed state.
+- Fix: Echo the moderation state and make rate limiting observable, so an unauthenticated sender knows what happened to its write.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-2
+
+## WRT005 — Republished records carry source.source_id = the original sender
+
+- Severity: error · Level: L4
+- Status: catalogued, not implemented (v0.2)
+- Rule: The sender’s identity travels with the record forever.
+- Fix: Keep source.source_id as the original sender when republishing. Attribution is the thing that must survive the hop.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-2
+
+## LIC001 — Declared licence is not share-alike
+
+- Severity: warning · Level: L2
+- Status: implemented
+- Rule: Share-alike licences poison aggregation for downstream consumers.
+- Fix: Choose a licence that is not share-alike. A viral licence makes every aggregator’s whole dataset derivative, which is why most will not read you.
+- Specification: https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
+
+## LIC002 — attribution string present for aggregators to display
+
+- Severity: info · Level: L2
+- Status: implemented
+- Rule: Attribution is a consumption MUST; an explicit string makes it easy to honor.
+- Fix: Add an attribution string for aggregators to display. Credit that travels with the data is the point of the network.
+- Specification: https://cabuya.org/developers/spec/0.1/4-api-surface#4-3

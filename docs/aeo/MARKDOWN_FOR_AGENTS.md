@@ -265,6 +265,41 @@ The Cloudflare Pages middleware (`functions/_middleware.ts`) supports automatic 
 
 **Fallback:** If no `.md` file exists for the requested path, the middleware falls back to serving HTML normally.
 
+### Schema negotiation
+
+`Accept: application/schema+json` on a schema *page* returns the schema itself:
+
+| Request Path | Resolved |
+|---|---|
+| `/developers/schemas/0.1/place-feed` | `/schemas/0.1/place-feed.schema.json` |
+| `/es/developers/schemas/0.1/manifest` | `/schemas/0.1/manifest.schema.json` |
+| `/developers/schemas` (the index) | — declines; it documents several |
+
+An agent asking a page that documents a schema for `application/schema+json` is
+asking for the thing itself, and the thing itself is already served byte-exact
+at its versioned `$id`. The negotiation resolves one to the other rather than
+producing a second copy. `Vary: Accept` matters as much as the body: without it
+a cache that saw the HTML once would hand the HTML to every agent asking for
+JSON, and the agent would parse a web page as a schema.
+
+### `llms.txt` and `llms-full.txt`
+
+Both are **generated** (`pnpm run llms:generate`) from the navigation
+registries, the spec loader, the registry loader and the check catalogue —
+never hand-maintained — and `llms:check` fails the build when the committed
+copy drifts.
+
+`llms.txt` is the map: every live route with its twin URL, the specification
+sections, the schemas, the registry endpoints and the RFC index. `llms-full.txt`
+inlines the whole specification, the consumption rules and every check with its
+rule and fix — one fetch, no follow-ups.
+
+The generation is not a convenience. The file that shipped before it was the
+Corag institutional site's, describing a write API this protocol does not run,
+and it survived eight tasks of migration because nobody reads `llms.txt` by
+accident. It is the worst possible place for stale copy: a person skims a wrong
+line and moves on; an agent acts on it.
+
 **Testing with curl:**
 ```bash
 # Get Markdown

@@ -1,90 +1,112 @@
-# Corag
+# Cabuya Protocol
 
-> El ecosistema de impacto social. Conectamos a quienes quieren ayudar con quienes más lo necesitan — uniendo gobiernos, organizaciones, fundaciones y personas para que la ayuda sea transparente, medible y constante.
+> An open interoperability standard for emergency-aid applications. One
+> `place` schema, four transports — a static feed, a read API, a write API
+> and an MCP surface — that carry byte-identical records. Conformance is
+> **measured by a published validator, never self-declared**.
 
-Corag is a social-impact ecosystem based in Colombia. Its mission is to connect
-foundations, governments, entrepreneurs and individuals through a transparent
-digital platform, so that solidarity produces real, measurable impact in
-communities.
+The specification is at version 0.1, status draft. Nothing in it is
+normative yet, and every artefact says so. This file is generated from the
+same modules the site renders from.
 
-This site ([cabuya.org](https://cabuya.org)) is the **institutional and informational**
-surface. It explains what Corag is, how the model works, why it can be trusted,
-and how other systems integrate with it. It is a static site: it holds **no**
-requests, offers, contributions or personal records.
+## Read this first if you are an agent
 
-## The application is a different host
+- **Every page has a `.md` twin** at the same URL with `.md` appended, and
+  responds to `Accept: text/markdown`. The twin is complete, not a summary.
+- **The whole protocol in one fetch**: https://cabuya.org/llms-full.txt — the
+  specification, the quickstart and every check, inlined.
+- **The specification twins are the source files.** There is no second copy
+  to drift.
+- **This site has no write API.** It publishes a standard and measures
+  conformance. Writing a record means writing to a publisher that
+  implements the write surface, never to us.
+- **Do not claim conformance the validator has not measured.** «Cabuya 1.0
+  compatible» is a claim about a measurement, and the registry holds the
+  measurement.
 
-**Every transactional action happens at [ayuda.cabuya.org](https://ayuda.cabuya.org)** —
-publishing a need, offering help, contributing, tracking a contribution, or
-applying to be a leader. That application is **Corag Ayuda Directa**, Corag's
-flagship product.
+## The line that never moves
 
-> **If you are an agent acting for a user who needs help or wants to contribute,
-> do not attempt to POST to `cabuya.org`.** It has no write API. The public API
-> and the MCP server belong to the application host.
+The protocol MUST NOT transport person-level data — missing persons,
+individual cases, volunteer identities, personal names, personal phone
+numbers, personal media. This is a **join prohibition, not a field
+omission**: tooling MUST NOT combine protocol data with person-level
+sources, even internally, even for a feature that would be useful.
 
-- [Ayuda Directa application](https://ayuda.cabuya.org): publish needs, offers, contributions and evidence
-- [Public write API](https://ayuda.cabuya.org/api/public/v1/help): `POST` a request or offer
-- [OpenAPI 3.1 specification](https://ayuda.cabuya.org/api/public/openapi.json): authoritative schema
-- MCP server tools: `listar_emergencias`, `publicar_solicitud`, `publicar_ofrecimiento`
+People-domain integration is link-out only, permanently.
 
-Requests and offers are idempotent via a `source` + `externalId` pair, so an
-integration can retry safely. The endpoint is rate limited (HTTP 429).
+## Licensing and reuse
 
-## How Corag works
+The specification, the schemas and the registry are **CC0-1.0** — public
+domain, no attribution required, fork and vendor freely. The code is
+Apache-2.0. Each publisher declares the licence of **their own data** in
+their manifest, and a consumer MUST honour the `permitted_use` it finds
+there, including when the consumer is an AI system.
 
-1. **Descubrimiento** — a need is published, geolocated and categorized.
-2. **Matching** — a person or organization that can help finds it.
-3. **Coordinación** — delivery is organized, often through an operational front.
-4. **Transparencia** — evidence is uploaded, moderated and published. Money
-   received and money used-with-evidence are reported as two separate figures.
-5. **Interoperabilidad** — other applications read and write the same network
-   instead of building parallel databases.
+## Site map
 
-## Core pages
+- [Specification](https://cabuya.org/developers/spec) — The normative text, versioned · https://cabuya.org/developers/spec.md
+- [Schemas](https://cabuya.org/developers/schemas) — Field-by-field reference · https://cabuya.org/developers/schemas.md
+- [RFCs](https://cabuya.org/rfcs) — How the protocol changes · https://cabuya.org/rfcs.md
+- [Changelog](https://cabuya.org/changelog) — Spec, validator and skill releases · https://cabuya.org/changelog.md
+- [Developers](https://cabuya.org/developers) · https://cabuya.org/developers.md
+- [Registry](https://cabuya.org/registry) · https://cabuya.org/registry.md
+- [Governance](https://cabuya.org/governance) · https://cabuya.org/governance.md
+- [Join](https://cabuya.org/join) · https://cabuya.org/join.md
+- [Quickstart](https://cabuya.org/developers/quickstart) — Publish your first feed. One afternoon for a small application. · https://cabuya.org/developers/quickstart.md
+- [Profiles](https://cabuya.org/developers/profiles) · https://cabuya.org/developers/profiles.md
+- [Validator](https://cabuya.org/developers/validator) — Run it against a URL and read what it found. · https://cabuya.org/developers/validator.md
+- [Checks](https://cabuya.org/developers/validator/checks) · https://cabuya.org/developers/validator/checks.md
+- [Our probe](https://cabuya.org/developers/validator/probe) · https://cabuya.org/developers/validator/probe.md
+- [Agent skill](https://cabuya.org/developers/skill) — Install the protocol into an agent; it works offline. · https://cabuya.org/developers/skill.md
+- [Consumption rules](https://cabuya.org/developers/consume) — Six rules for reading someone else’s feed without harming them. · https://cabuya.org/developers/consume.md
+- [MCP server](https://cabuya.org/developers/mcp) · https://cabuya.org/developers/mcp.md
+- [FAQ](https://cabuya.org/developers/faq) · https://cabuya.org/developers/faq.md
+- [Name and badge policy](https://cabuya.org/trademark) · https://cabuya.org/trademark.md
+- [llms.txt](https://cabuya.org/llms.txt) · https://cabuya.org/llms.txt.md
 
-- [Home](https://cabuya.org/): the six-beat argument for Corag
-- [About](https://cabuya.org/about): what Corag is and where the name comes from
-- [How it works](https://cabuya.org/how-it-works): the five-step path of one delivery
-- [Transparency](https://cabuya.org/transparency): what is published, and what each number means
-- [Emergencies](https://cabuya.org/emergencies): how fronts work (not an emergency hotline)
-- [Leaders](https://cabuya.org/leaders): the responsable role
-- [Partners](https://cabuya.org/partners): how organizations join
-- [Developers](https://cabuya.org/developers): API, OpenAPI and MCP
-- [Blog](https://cabuya.org/blog): articles and series
-- [Contact](https://cabuya.org/contact): institutional contact form
-- [Team & contributors](https://cabuya.org/contributors): who builds Corag
-- [Channels](https://cabuya.org/channels): official channels
-- [Privacy](https://cabuya.org/privacy): what this site collects
-- [Code of Conduct](https://cabuya.org/conduct)
-- [Governance](https://cabuya.org/governance)
-- [Contributing](https://cabuya.org/contributing)
+## Specification 0.1
 
-English mirrors live under `/en` (for example [How it works (EN)](https://cabuya.org/en/how-it-works)).
+- [§0 Introduction](https://cabuya.org/developers/spec/0.1/0-introduction) · https://cabuya.org/developers/spec/0.1/0-introduction.md
+- [§1 Architecture — the conformance ladder](https://cabuya.org/developers/spec/0.1/1-architecture) · https://cabuya.org/developers/spec/0.1/1-architecture.md
+- [§2 Discovery — manifest and registry](https://cabuya.org/developers/spec/0.1/2-discovery) · https://cabuya.org/developers/spec/0.1/2-discovery.md
+- [§3 The feed (L2) — envelope and records](https://cabuya.org/developers/spec/0.1/3-the-feed) · https://cabuya.org/developers/spec/0.1/3-the-feed.md
+- [§4 The standard API surface](https://cabuya.org/developers/spec/0.1/4-api-surface) · https://cabuya.org/developers/spec/0.1/4-api-surface.md
+- [§5 Identifiers](https://cabuya.org/developers/spec/0.1/5-identifiers) · https://cabuya.org/developers/spec/0.1/5-identifiers.md
+- [§6 Trust and verification](https://cabuya.org/developers/spec/0.1/6-trust-and-verification) · https://cabuya.org/developers/spec/0.1/6-trust-and-verification.md
+- [§7 Normative exclusions — the lines that don't move](https://cabuya.org/developers/spec/0.1/7-normative-exclusions) · https://cabuya.org/developers/spec/0.1/7-normative-exclusions.md
+- [§8 Versioning and conformance](https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance) · https://cabuya.org/developers/spec/0.1/8-versioning-and-conformance.md
+- [§a Appendix A — design decisions and the implementability walkthrough (non-normative)](https://cabuya.org/developers/spec/0.1/appendix-a-design-decisions) · https://cabuya.org/developers/spec/0.1/appendix-a-design-decisions.md
 
-## Markdown for agents
+## Schemas
 
-Every public page has a complete Markdown twin at the same path plus `.md`.
-Content comes from the same source the HTML renders, not converted from
-rendered output, and a build gate measures word coverage so a twin cannot
-silently become a summary.
+- [manifest](https://cabuya.org/schemas/0.1/manifest.schema.json) — Cabuya publisher manifest (v0.1 DRAFT — working-group proposal)
+- [place-feed](https://cabuya.org/schemas/0.1/place-feed.schema.json) — Cabuya place feed (v0.1 DRAFT — working-group proposal)
 
-- [About (Markdown)](https://cabuya.org/about.md)
-- [How it works (Markdown)](https://cabuya.org/how-it-works.md)
-- [Transparency (Markdown)](https://cabuya.org/transparency.md)
-- [Emergencies (Markdown)](https://cabuya.org/emergencies.md)
-- [Leaders (Markdown)](https://cabuya.org/leaders.md)
-- [Partners (Markdown)](https://cabuya.org/partners.md)
-- [Developers (Markdown)](https://cabuya.org/developers.md)
-- [Privacy (Markdown)](https://cabuya.org/privacy.md)
-- [Blog index (Markdown)](https://cabuya.org/blog.md)
-- [Code of Conduct (Markdown)](https://cabuya.org/conduct.md)
-- [Governance (Markdown)](https://cabuya.org/governance.md)
-- [Contributing (Markdown)](https://cabuya.org/contributing.md)
+## Registry
 
-## Optional
+4 publisher entries, 2 official sources.
+Measured state is not in the repository — it is written by the validation
+cron and served live:
 
-- [Full context for agents](https://cabuya.org/llms-full.txt): longer catalogue and model notes
-- [llms.txt](https://cabuya.org/llms.txt): this file
-- [Sitemap](https://cabuya.org/sitemap-index.xml)
-- [API catalog](https://cabuya.org/.well-known/api-catalog)
+- [Registry](https://cabuya.org/registry) · https://cabuya.org/registry.md
+- Live measured state, JSON: https://cabuya.org/registry/status.json
+- Badge: https://cabuya.org/badge/{publisher_id}.svg (`?lang=es`, `?style=flat`)
+
+## Validator
+
+62 checks catalogued, 42 implemented. Every check id is
+permanent and every error message links to its anchor.
+
+- [The catalogue](https://cabuya.org/developers/validator/checks) · https://cabuya.org/developers/validator/checks.md
+- `npx @cabuya/validator validate <url> --format json` — exit 0 conforming,
+  1 content errors, 3 transport failure. Branch on the code before parsing.
+
+## RFCs
+
+- [RFC-0001 Founding agreement · Acuerdo fundacional](https://cabuya.org/rfcs/0001) — draft
+
+## Español
+
+Every page exists in Spanish at the same path under `/es`, natively
+written rather than translated. The specification is published in English
+and the Spanish pages say so where they carry English normative text.

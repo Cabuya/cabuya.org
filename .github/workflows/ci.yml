@@ -88,6 +88,13 @@ jobs:
       - name: Contribution gate — the day-one issue list matches the catalogue
         run: pnpm run issues:day-one:check
 
+      # llms.txt is the first file an agent reads, which makes it the worst
+      # possible place for stale copy: a person skims a wrong sentence, an
+      # agent acts on it. Generated from the same modules the site renders
+      # from; this fails when the committed copy has drifted.
+      - name: Agent gate — llms.txt matches the site
+        run: pnpm run llms:check
+
       - name: Build
         run: pnpm run build
 

@@ -61,6 +61,8 @@
     "spec:check:strict": "node scripts/check-spec.mjs --strict",
     "spec:boundary": "node scripts/check-spec-boundary.mjs",
     "registry:check": "node scripts/check-registry.mjs",
+    "llms:generate": "tsx scripts/generate-llms-txt.ts",
+    "llms:check": "tsx scripts/generate-llms-txt.ts --check",
     "issues:day-one": "node scripts/generate-day-one-issues.mjs",
     "issues:day-one:check": "node scripts/generate-day-one-issues.mjs --check",
     "registry:ids": "node scripts/generate-registry-ids.mjs",

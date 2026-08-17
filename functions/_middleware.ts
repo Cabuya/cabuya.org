@@ -150,7 +150,26 @@ const MARKDOWN_EXCLUDED_EXTENSIONS =
  * - /es/about    → /es/about.md
  * - /            → /index.md
  */
-function resolveMarkdownPath(pathname: string): string {
+/**
+ * The schema a schema-reference page is *about*.
+ *
+ * `/developers/schemas/0.1/place-feed` documents a schema; an agent asking that
+ * URL for `application/schema+json` is asking for the thing itself, and the
+ * thing itself is already served byte-exact at its versioned `$id`. So the
+ * negotiation resolves one to the other rather than producing a second copy.
+ *
+ * Returns null for anything that is not a schema page — including the index,
+ * which documents several and has no single answer to give.
+ */
+export function resolveSchemaPath(pathname: string): string | null {
+  const match = pathname
+    .replace(/\/$/, '')
+    .match(/^(?:\/[a-z]{2})?\/developers\/schemas\/([\d.]+)\/([a-z0-9-]+)$/);
+  if (!match) return null;
+  return `/schemas/${match[1]}/${match[2]}.schema.json`;
+}
+
+export function resolveMarkdownPath(pathname: string): string {
   // Strip trailing slash (except root)
   let clean = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
 
@@ -161,6 +180,43 @@ function resolveMarkdownPath(pathname: string): string {
   if (clean.endsWith('/index')) return `${clean}.md`;
 
   return `${clean}.md`;
+}
+
+/**
+ * Serve the schema itself when a schema page is asked for one.
+ *
+ * The `Vary: Accept` matters as much as the body: without it a cache that saw
+ * the HTML once would hand the HTML to every agent asking for JSON, and the
+ * agent would parse a web page as a schema.
+ */
+async function tryServeSchema(
+  context: EventContext
+): Promise<Response | null> {
+  const accept = context.request.headers.get('accept') || '';
+  if (!accept.includes('application/schema+json')) return null;
+
+  const url = new URL(context.request.url);
+  const schemaPath = resolveSchemaPath(url.pathname);
+  if (!schemaPath) return null;
+
+  try {
+    const assetResponse = await context.env.ASSETS.fetch(
+      new Request(new URL(schemaPath, url.origin).toString())
+    );
+    if (!assetResponse.ok) return null;
+
+    return new Response(assetResponse.body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/schema+json; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600',
+        Vary: 'Accept',
+        'X-Content-Negotiation': 'schema',
+      },
+    });
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -225,6 +281,11 @@ export async function onRequest(context: EventContext): Promise<Response> {
   //    for search engines, AI crawlers, or isitagentready.com's scanner.
   const robotsRewrite = await tryRewriteRobotsForLighthouse(context);
   if (robotsRewrite) return robotsRewrite;
+
+  // 1a. Schema negotiation, before Markdown: an agent asking a schema page for
+  //      `application/schema+json` wants the schema, not a description of it.
+  const schemaResponse = await tryServeSchema(context);
+  if (schemaResponse) return schemaResponse;
 
   // 1. Markdown content negotiation — serve .md if Accept: text/markdown
   const markdownResponse = await tryServeMarkdown(context);
