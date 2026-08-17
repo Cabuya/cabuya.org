@@ -116,10 +116,17 @@ describe.skipIf(!existsSync(DIST))('the built site', () => {
 
   it('allows exactly one third-party script origin, and it is the beacon', () => {
     const headers = readFileSync(join(DIST, '_headers'), 'utf-8');
+    // The header line, not the first line that mentions the header. `_headers`
+    // explains the policy in a comment above it, and a substring match finds
+    // the prose — which then reports zero script origins and reads as though
+    // the beacon had been removed.
     const csp = headers
       .split('\n')
-      .find((line) => line.includes('Content-Security-Policy'));
-    expect(csp).toBeTruthy();
+      .find((line) => /^\s*Content-Security-Policy:/.test(line));
+    expect(
+      csp,
+      'no Content-Security-Policy header line in dist/_headers'
+    ).toBeTruthy();
 
     const scriptSrc = (csp as string)
       .split(';')

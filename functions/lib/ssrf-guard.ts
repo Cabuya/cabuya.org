@@ -175,8 +175,23 @@ export function assertAllowedUrl(input: string): GuardResult {
    * internationalised hostname that renders as `lоcalhost` with a Cyrillic o
    * becomes `xn--lcalhost-6cg`, which does not match anything below — and does
    * not resolve to loopback either.
+   *
+   * Then strip trailing dots. `metadata.google.internal.` is the fully
+   * qualified spelling of `metadata.google.internal`: the trailing dot is the
+   * DNS root label, resolvers accept it, and it reaches exactly the same host.
+   * Every check below is a string comparison, and without this line all of
+   * them miss it — which made `https://metadata.google.internal./` an allowed
+   * URL, and the cloud metadata service one redirect away. Found by
+   * adversarial testing in the Task 45 hardening pass, not by review.
+   *
+   * Multiple trailing dots are stripped too: `localhost..` is not valid DNS,
+   * but a resolver that tolerates it would reach loopback, and the cost of
+   * being thorough here is one regex.
    */
-  const hostname = url.hostname.toLowerCase();
+  const hostname = url.hostname.toLowerCase().replace(/\.+$/, '');
+
+  // A hostname that was *only* dots has nothing left to check.
+  if (hostname === '') return { allowed: false, reason: 'no-dot' };
 
   if (isIpv6Literal(hostname)) {
     // Every IPv6 literal is refused. Distinguishing ::1 and fe80:: from a
@@ -207,6 +222,17 @@ export function assertAllowedUrl(input: string): GuardResult {
   // A public hostname has a dot. This also catches bare container and service
   // names on an internal network — `redis`, `db`, `metadata`.
   if (!hostname.includes('.')) return { allowed: false, reason: 'no-dot' };
+
+  /*
+   * Hand back the canonical host, not the one that was typed.
+   *
+   * `example.org.` and `example.org` are the same host, and anything
+   * downstream that compares origins across a redirect chain — or compares a
+   * discovery path against the site root — would otherwise treat them as
+   * different. Returning the normalised form means the trailing-dot trick
+   * cannot be reintroduced one layer up.
+   */
+  url.hostname = hostname;
 
   return { allowed: true, url };
 }

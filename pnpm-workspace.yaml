@@ -16,3 +16,28 @@ allowBuilds:
   unrs-resolver: true
   sharp: true
   '@biomejs/biome': true
+
+# Transitive advisories, pinned forward.
+#
+# All four reach us only through build-time tooling — the type checker, the
+# Markdown pipeline, Vite's CSS chain — and none is a runtime dependency of
+# what deploys (a static site plus Workers that bundle only our own code). So
+# the exposure is a build machine, not a visitor.
+#
+# They are pinned anyway, because "it only runs at build time" is the sentence
+# that precedes a supply-chain incident, and because `pnpm audit` reporting
+# eight highs every run is how a team learns to stop reading it.
+#
+# svgo is the one worth naming: its `removeScripts` plugin left some executable
+# scripts intact. This repository's SVGs are all first-party brand assets, so
+# the path was never reachable — but a project that later optimises a
+# contributed SVG would have inherited it silently.
+# Caret ranges, not `>=`. An open-ended range resolved js-yaml to 5.x, which
+# dropped its default export and broke the build — a supply-chain fix that
+# takes the site down is not a fix. Each of these is the patched release in the
+# major the tree already used.
+overrides:
+  fast-uri: '^3.1.5'
+  js-yaml: '^4.3.1'
+  nanoid: '^3.3.18'
+  svgo: '^4.0.2'

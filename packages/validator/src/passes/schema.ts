@@ -17,9 +17,10 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
-
 import { getCheck } from '../checks.js';
 import type { Pass, PassContext } from '../engine.js';
+// Generated. See scripts/build-standalone.mjs.
+import { PRECOMPILED } from '../generated/index.js';
 import { locatePointer } from '../locate.js';
 import type { Finding, Level, Severity } from '../report.js';
 
@@ -217,13 +218,38 @@ export function findingFor(
   };
 }
 
-/** The compiled-validator cache, per engine run. */
+/**
+ * Resolve a validator for a schema, without calling `new Function` when we can
+ * avoid it.
+ *
+ * Ajv compiles by generating JavaScript source and evaluating it. That is
+ * forbidden by any Content-Security-Policy without `'unsafe-eval'`, and this
+ * engine runs in the browser on the validator page — where it failed with
+ * "Error compiling schema" in the console and nothing visible on the page.
+ *
+ * So the precompiled validators (`scripts/build-standalone.mjs`) are preferred,
+ * and runtime compilation remains the fallback for two cases that are both
+ * legitimate: a harness injecting a schema this build did not precompile, and
+ * Node, which has no CSP.
+ *
+ * The `$id` match is what makes the preference safe. A precompiled validator
+ * for a *different* version of the schema would enforce yesterday's rules while
+ * the harness believes it injected today's — so it is used only when the
+ * injected schema is the one it was built from.
+ */
 function compile(
   schemas: Record<string, unknown>,
   name: string
 ): ValidateFunction | undefined {
   const schema = schemas[name];
   if (!schema) return undefined;
+
+  const precompiled = PRECOMPILED[name];
+  const injectedId = (schema as { $id?: string }).$id;
+  if (precompiled && injectedId && precompiled.$id === injectedId) {
+    return precompiled.validate as ValidateFunction;
+  }
+
   const ajv = new Ajv2020({ strict: false, allErrors: true, $data: true });
   addFormats(ajv);
   return ajv.compile(schema as object);

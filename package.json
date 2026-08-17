@@ -1,6 +1,6 @@
 {
   "name": "cabuya.org",
-  "description": "cabuya.org — the home of the Cabuya Protocol: an open interoperability standard that lets emergency-aid applications publish and consume the same data. Site, CC0 spec, publisher registry and the @cabuya/validator.",
+  "description": "cabuya.org \u2014 the home of the Cabuya Protocol: an open interoperability standard that lets emergency-aid applications publish and consume the same data. Site, CC0 spec, publisher registry and the @cabuya/validator.",
   "author": "Cabuya",
   "license": "Apache-2.0",
   "homepage": "https://cabuya.org",
@@ -35,7 +35,7 @@
     "images:optimize": "node scripts/optimize-images.mjs",
     "og:fallback": "node scripts/generate-og-fallback.mjs",
     "og:fallback:force": "node scripts/generate-og-fallback.mjs --force",
-    "images:webp": "echo 'All images are natively WebP — no generation needed'",
+    "images:webp": "echo 'All images are natively WebP \u2014 no generation needed'",
     "md:check": "node scripts/check-md-parity.mjs",
     "md:check:strict": "node scripts/check-md-parity.mjs --strict",
     "md:check:existence": "node scripts/check-md-parity.mjs --existence-only",
@@ -82,7 +82,9 @@
     "prose:check:strict": "node scripts/check-prose-tokens.mjs --strict",
     "internal:check:strict": "node scripts/check-internal-excluded.mjs --strict",
     "checks:catalogue": "node scripts/check-checks-catalogue.mjs",
-    "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict"
+    "checks:catalogue:strict": "node scripts/check-checks-catalogue.mjs --strict",
+    "postbuild": "node scripts/generate-csp.mjs",
+    "csp:check": "node scripts/generate-csp.mjs --check"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

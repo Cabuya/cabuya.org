@@ -42,7 +42,8 @@
       "!**/.github",
       "!**/tmp",
       "!tests/fixtures",
-      "!**/schemas.ts"
+      "!**/schemas.ts",
+      "!packages/*/src/generated"
     ]
   },
   "formatter": {

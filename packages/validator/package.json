@@ -1,7 +1,7 @@
 {
   "name": "@cabuya/validator",
   "version": "0.1.0",
-  "description": "The Cabuya Protocol conformance validator — one engine, four harnesses (CLI, CI, live web, scheduled re-validation). Conformance is measured, never declared.",
+  "description": "The Cabuya Protocol conformance validator \u2014 one engine, four harnesses (CLI, CI, live web, scheduled re-validation). Conformance is measured, never declared.",
   "license": "Apache-2.0",
   "type": "module",
   "repository": {
@@ -45,9 +45,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node scripts/build-standalone.mjs && tsc -p tsconfig.json && node scripts/build-standalone.mjs --dist",
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "schemas:precompile": "node scripts/build-standalone.mjs",
+    "schemas:check": "node scripts/build-standalone.mjs --check"
   },
   "dependencies": {
     "ajv": "8.20.0",

@@ -7,6 +7,43 @@
 
 ---
 
+
+## The Content-Security-Policy, and two accepted risks
+
+`script-src` carries **no `'unsafe-inline'` and no `'unsafe-eval'`.** The
+policy is generated from the built output by `scripts/generate-csp.mjs`, which
+hashes every inline script the site actually shipped; `csp:check` fails a build
+whose committed policy no longer matches what it produced. A hand-maintained
+hash list would be correct on the day it was written and silently wrong
+afterwards — and the usual repair for the resulting breakage is restoring
+`'unsafe-inline'`, which is the setting that turns a CSP off.
+
+Removing `'unsafe-eval'` had a consequence worth recording: **Ajv compiles
+schemas with `new Function`**, so the validator's browser paste mode failed
+silently — the page loaded, the button clicked, and nothing happened. The
+schemas are precompiled now
+(`packages/validator/scripts/build-standalone.mjs`), so the browser runs plain
+functions and never evaluates a string. The alternative would have been making
+any injected string executable on the page where users paste data, to save a
+build step.
+
+Thirteen end-to-end tests apply the **shipped** policy to real page loads and
+fail on any violation, including three that check the interactive parts still
+work. A CSP that breaks the site is not a security improvement; it is an
+outage with a good reason.
+
+**Two accepted risks**, recorded rather than left implicit:
+
+1. **`style-src` keeps `'unsafe-inline'`.** Astro emits scoped component CSS
+   inline, and no injection path this policy leaves open runs through a
+   stylesheet.
+2. **GitHub Actions are version-pinned, not SHA-pinned.** Every action in use
+   is first-party `actions/*` or `peter-evans/create-pull-request`;
+   SHA-pinning converts routine Dependabot minor bumps into unreviewable hash
+   churn, and CI holds no credential beyond a read-only, single-namespace KV
+   token. This trade changes the day a workflow gains a write-scoped secret.
+
+
 ## 1. Threat model at a glance
 
 | Surface | Threat | Posture |

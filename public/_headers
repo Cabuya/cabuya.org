@@ -5,8 +5,21 @@
 # is small — but the two intake forms POST to a Pages Function, and the site is
 # the public face of a project whose whole argument is that it can be trusted.
 #
-# `script-src` needs `unsafe-inline` because Astro emits inline module scripts
-# for every island and the theme bootstrap runs before paint to avoid a flash.
+# **The `Content-Security-Policy` line below is a placeholder.** It is rewritten
+# after every build by `scripts/generate-csp.mjs`, which hashes every inline
+# script the site actually shipped and writes them into `script-src`. Editing it
+# here has no effect on what deploys; edit the generator.
+#
+# It is generated because Astro emits inline bootstraps for islands, and their
+# contents change whenever the island does. A hand-maintained hash list would be
+# correct on the day it was written and silently wrong afterwards — and the
+# usual repair for "silently wrong" is restoring `unsafe-inline`, which is the
+# one setting that turns a CSP off. `csp:check` fails a build whose committed
+# policy no longer matches its output.
+#
+# `style-src` keeps `unsafe-inline` deliberately: Astro emits scoped component
+# CSS inline, and no injection path this policy leaves open runs through a
+# stylesheet. Recorded in docs/SECURITY.md rather than left unexplained.
 #
 # The only third-party origin allowed anywhere in this policy is
 # `static.cloudflareinsights.com`, which serves the analytics beacon. There is

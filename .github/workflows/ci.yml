@@ -98,6 +98,18 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # The shipped policy is generated from the built output, so a stale one
+      # means either a broken site or an `unsafe-inline` restored to stop the
+      # breakage. Neither should reach a review.
+      - name: Security gate — the CSP matches what was built
+        run: pnpm run csp:check
+
+      # The browser runs precompiled validators (no `new Function`, because the
+      # policy has no `unsafe-eval`). If they drift from the schemas, the
+      # browser enforces a different contract than the CLI.
+      - name: Security gate — precompiled validators match their schemas
+        run: pnpm --filter @cabuya/validator run schemas:check
+
       - name: Security gate — the validator endpoint keeps nothing (strict)
         run: pnpm run retention:check:strict
 

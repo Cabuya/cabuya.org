@@ -211,3 +211,97 @@ describe('ssrf guard — every reason has a message', () => {
     expect(REJECTION_MESSAGES.scheme).toContain('modified in transit');
   });
 });
+
+/**
+ * Regressions from the Task 45 adversarial pass.
+ *
+ * These are not hypothetical shapes — each was tried against the guard, and the
+ * first group got through. They are kept as tests rather than as a note,
+ * because a note does not fail a build.
+ */
+describe('the trailing-dot bypass', () => {
+  /*
+   * A trailing dot is the DNS root label. `metadata.google.internal.` resolves
+   * to exactly the same host as `metadata.google.internal`, resolvers accept
+   * it, and every check in this guard is a string comparison — so before the
+   * fix, all three of these were ALLOWED, and the cloud metadata service was
+   * one fetch away.
+   */
+  it.each([
+    ['https://localhost./', 'metadata-host'],
+    ['https://LOCALHOST./', 'metadata-host'],
+    ['https://metadata.google.internal./', 'metadata-host'],
+    ['https://metadata.google.internal../', 'metadata-host'],
+    ['https://something.internal./', 'internal-tld'],
+    ['https://anything.local./', 'internal-tld'],
+    ['https://127.0.0.1./', 'loopback'],
+    ['https://169.254.169.254./', 'link-local'],
+  ] as const)('refuses %s', (url, reason) => {
+    const result = assertAllowedUrl(url);
+    expect(result.allowed, `${url} must not be allowed`).toBe(false);
+    expect(result.reason).toBe(reason);
+  });
+
+  it('a hostname of only dots is refused rather than crashing', () => {
+    const result = assertAllowedUrl('https://.../');
+    expect(result.allowed).toBe(false);
+    expect(result.reason).toBe('no-dot');
+  });
+
+  it('canonicalises the host it hands back', () => {
+    // So that nothing downstream — a redirect-origin comparison, a byte
+    // comparison against the site root — can be fooled by the same trick one
+    // layer up.
+    const result = assertAllowedUrl('https://Example.ORG./feed.json');
+    expect(result.allowed).toBe(true);
+    expect(result.url?.hostname).toBe('example.org');
+    expect(result.url?.href).toBe('https://example.org/feed.json');
+  });
+});
+
+describe('other shapes tried in the hardening pass', () => {
+  // These were already refused. They are recorded so that a future
+  // simplification of the guard has to keep refusing them.
+  it.each([
+    ['https://safe.example.org@169.254.169.254/', 'credentials'],
+    ['https://user:pass@metadata.google.internal/', 'credentials'],
+    ['https://2130706433/', 'loopback'],
+    ['https://0x7f000001/', 'loopback'],
+    ['https://0177.0.0.1/', 'loopback'],
+    ['https://127.1/', 'loopback'],
+    ['https://0/', 'loopback'],
+    ['https://[::1]/', 'ip-literal'],
+    ['https://[::ffff:127.0.0.1]/', 'ip-literal'],
+    ['https://[0:0:0:0:0:0:0:1]/', 'ip-literal'],
+    ['https://[::]/', 'ip-literal'],
+    ['https://ⓛocalhost/', 'metadata-host'],
+    ['https://example.org:6379/', 'port'],
+    ['https://example.org:22/', 'port'],
+    ['gopher://example.org/', 'scheme'],
+    ['file:///etc/passwd', 'scheme'],
+  ] as const)('still refuses %s', (url, reason) => {
+    const result = assertAllowedUrl(url);
+    expect(result.allowed, url).toBe(false);
+    expect(result.reason, url).toBe(reason);
+  });
+
+  it('still allows what a real publisher would paste', () => {
+    for (const url of [
+      'https://example.org/.well-known/cabuya.json',
+      'https://sub.domain.example.org:8443/feed.json',
+      'https://example.org:8080/feed.json',
+    ]) {
+      expect(assertAllowedUrl(url).allowed, url).toBe(true);
+    }
+  });
+
+  it('a fragment that looks like userinfo does not change the host', () => {
+    // The fragment is never sent, and the host is the safe one — so this is
+    // correctly allowed. Recorded because it looks alarming and is not.
+    const result = assertAllowedUrl(
+      'https://safe.example.org/#@169.254.169.254/'
+    );
+    expect(result.allowed).toBe(true);
+    expect(result.url?.hostname).toBe('safe.example.org');
+  });
+});
