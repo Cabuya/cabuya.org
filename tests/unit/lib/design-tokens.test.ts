@@ -117,8 +117,23 @@ describe('design tokens — declaration', () => {
     expect(notFlipped).toEqual([]);
   });
 
-  it('ships no leftover corag- token', () => {
-    expect(CSS).not.toMatch(/corag-/);
+  it('declares every colour token under one namespace', () => {
+    /*
+     * One namespace, no exceptions. This replaces an assertion that banned a
+     * single foreign prefix, which only ever caught the one prefix somebody
+     * thought to name; a positive rule catches every future one.
+     */
+    const declared = [...CSS.matchAll(/--color-([a-z0-9-]+)\s*:/g)].map(
+      (match) => match[1]
+    );
+    const foreign = [
+      ...new Set(
+        declared.filter(
+          (token) => token !== 'cabuya' && !token.startsWith('cabuya-')
+        )
+      ),
+    ];
+    expect(foreign, 'colour tokens outside the cabuya- namespace').toEqual([]);
   });
 });
 
@@ -249,8 +264,8 @@ describe('design tokens — the internal colour pages cannot go stale', () => {
    * from `global.css` at build time.
    *
    * The brand page used to be a hand-written table, and it lied for months:
-   * it printed the pre-migration wine and rosa hexes while the site rendered
-   * forest and fique. The old version of this test passed throughout, because
+   * it printed one set of hexes while the site rendered forest and fique.
+   * The old version of this test passed throughout, because
    * it only compared token *names*. Hence the no-hex-literals rule below,
    * which is what would actually have caught it.
    */

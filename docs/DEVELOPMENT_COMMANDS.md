@@ -1,8 +1,6 @@
 # Development Commands
 
-> Every npm script, what it does, and when to run it. Scripts marked
-> *(Task N)* land with that migration task — the roster is kept current so
-> nobody rediscovers the intended shape.
+> Every npm script, what it does, and when to run it.
 
 ---
 
@@ -133,8 +131,8 @@ starts empty, so every badge renders its honest *not yet measured* state until
 you put something in it:
 
 ```bash
-pnpm exec wrangler kv key put --local --binding REGISTRY_STATUS status:corag \
-  '{"publisher_id":"corag","state":"conforming","level":"L2","checked_at":"2026-08-17T00:00:00Z","version":"0.1"}'
+pnpm exec wrangler kv key put --local --binding REGISTRY_STATUS status:pereira-ayuda \
+  '{"publisher_id":"pereira-ayuda","state":"conforming","level":"L2","checked_at":"2026-08-17T00:00:00Z","version":"0.1"}'
 ```
 
 `/api/contact` needs `DAILYBOT_API_KEY`, `DAILYBOT_FORM_ID` and

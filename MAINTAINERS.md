@@ -13,7 +13,7 @@ is a governance violation you can point at in a pull request.
 
 | Maintainer | Application represented | Since |
 |---|---|---|
-| *(the initial maintainer team)* | Corag | 2026-08 |
+| *(the founding team)* | *(the application it was written from)* | 2026-08 |
 
 **The council is not seated.** The protocol is maintained by the team that wrote
 the 0.1 draft, and this table says so rather than listing names to look
@@ -27,11 +27,11 @@ needs to see which ones are at the table.
 ## The release blocker
 
 > `Cabuya 1.0` cannot be tagged until at least two maintainers in this table
-> represent applications other than Corag.
+> represent applications other than the founding team's.
 
-Until that is true, the specification stays at `0.x` and every artefact says
-*draft*. This is why the table above is short and honest rather than padded: the
-gate is only worth something if the list it reads from is real.
+Until that is true, the specification stays at `0.x`. This is why the table
+above is short and honest rather than padded: the gate is only worth something
+if the list it reads from is real.
 
 ## Becoming one
 

@@ -53,7 +53,7 @@ const INTENTIONAL_NOINDEX = [
  * matrix mirrors `src/lib/structured-data.ts`; a test asserts they agree.
  *
  * The version this replaced still listed `meetups`, `speakers` and `blog` from
- * the Corag era, so it matched nothing on this site and asserted nothing — a
+ * a previous site, so it matched nothing here and asserted nothing — a
  * gate that had been passing by describing pages that no longer existed.
  */
 function expectedJsonLdTypes(pagePath) {

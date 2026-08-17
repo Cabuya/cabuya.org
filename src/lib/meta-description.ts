@@ -12,25 +12,9 @@
  * The rule the task set is explicit: do not pad to hit a character count. A
  * clause that is not true of the page has no business here.
  */
-import type { Language } from '@/lib/i18n';
 
 export const DESCRIPTION_MIN = 130;
 export const DESCRIPTION_MAX = 160;
-
-export interface MetaDescriptionInput {
-  /** The authored description or bio — always the first thing a reader sees. */
-  lead: string;
-  /**
-   * Additional true statements about this page, most useful first. Appended
-   * only while the description is under the minimum, and only whole.
-   */
-  clauses?: Array<string | null | undefined>;
-  lang: Language;
-  min?: number;
-  max?: number;
-}
-
-const collapse = (text: string): string => text.replace(/\s+/g, ' ').trim();
 
 /**
  * Trim to `max` without cutting a word in half.
@@ -58,83 +42,3 @@ export function truncateToBand(text: string, max: number, min = 0): string {
   const cut = lastSpace > 0 ? lastSpace : max - 1;
   return `${text.slice(0, cut).replace(/[,;:.\s]+$/, '')}…`;
 }
-
-/**
- * Compose a description inside the band.
- *
- * Guarantees the result is at most `max`. It cannot guarantee the minimum —
- * that depends on how much the caller can truthfully say — so a page with a
- * short lead and no clauses stays short rather than gaining invented text.
- */
-export function buildMetaDescription({
-  lead,
-  clauses = [],
-  min = DESCRIPTION_MIN,
-  max = DESCRIPTION_MAX,
-}: MetaDescriptionInput): string {
-  let text = collapse(lead);
-  const used = new Set<string | null | undefined>();
-
-  for (const clause of clauses) {
-    if (text.length >= min) break;
-    const next = collapse(clause ?? '');
-    if (!next) continue;
-    // Skip a clause the lead already states, so the result never repeats itself.
-    if (text.toLowerCase().includes(next.toLowerCase())) continue;
-
-    const separator = /[.!?…]$/.test(text) ? ' ' : '. ';
-    const candidate = text ? `${text}${separator}${next}` : next;
-
-    // A clause is appended whole or not at all. Truncating one mid-way leaves
-    // a description ending in "Published on the Corag blog on…", which reads
-    // worse than the shorter version it replaced — so try the next clause,
-    // which may be compact enough to fit.
-    if (candidate.length > max) continue;
-    text = candidate;
-    used.add(clause);
-  }
-
-  // Still short: every remaining clause overshot on its own. Append them and
-  // trim the tail. Truncating here is safe in a way it is not mid-loop — what
-  // gets cut is the trailing context sentence, never a leading fact, and the
-  // result is guaranteed to land in the band because `max > min`.
-  if (text.length < min) {
-    const tail = clauses
-      .filter((clause) => clause && !used.has(clause))
-      .map((clause) => collapse(clause as string))
-      .filter(
-        (clause) => clause && !text.toLowerCase().includes(clause.toLowerCase())
-      )
-      .join(' ');
-    if (tail) {
-      const separator = /[.!?…]$/.test(text) ? ' ' : '. ';
-      text = `${text}${separator}${tail}`;
-    }
-  }
-
-  return truncateToBand(text, max, min);
-}
-
-/** Localized connectors for the clause builders below. */
-const PHRASES = {
-  en: {
-    authorRole: (role: string) => role,
-    postCount: (n: number) =>
-      `${n} ${n === 1 ? 'article' : 'articles'} on the Corag blog`,
-    series: (name: string) => `Part of the ${name} series`,
-    community:
-      'Published by Corag, where aid gets coordinated and every delivery is backed by evidence.',
-    sinceYear: (year: number) => `Contributing to Corag since ${year}`,
-  },
-  es: {
-    authorRole: (role: string) => role,
-    postCount: (n: number) =>
-      `${n} ${n === 1 ? 'artículo' : 'artículos'} en el blog de Corag`,
-    series: (name: string) => `Parte de la serie ${name}`,
-    community:
-      'Publicado por Corag, donde la ayuda se coordina y cada entrega queda respaldada con evidencia.',
-    sinceYear: (year: number) => `Colaborando con Corag desde ${year}`,
-  },
-} as const;
-
-export const metaPhrases = (lang: Language) => PHRASES[lang] ?? PHRASES.es;

@@ -52,12 +52,12 @@ four squares). Search for **"Dev Containers"** — the one published by
    your editor it is `Terminal` menu → `New Terminal`:
 
    ```bash
-   git clone https://github.com/pereira-tech-talks/CoragWeb.git
-   cd CoragWeb
+   git clone https://github.com/Cabuya/cabuya.org.git
+   cd cabuya.org
    ```
 
 2. **Open the folder** in your editor: `File` → `Open Folder…` → select the
-   `CoragWeb` folder.
+   `cabuya.org` folder.
 
    > **How you know it worked:** the file tree on the left shows folders like
    > `src`, `docs`, `public`.

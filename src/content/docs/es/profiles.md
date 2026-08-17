@@ -74,7 +74,7 @@ por ellos. Así que un publicador que necesita *presión del agua en la llave* o
 y no se rompe ningún consumidor.
 
 El prefijo del espacio de nombres es lo que vuelve esto seguro. Dos publicadores
-que inventan `capacity_note` colisionaron; `x_corag_capacity_note` y
+que inventan `capacity_note` colisionaron; `x_pereira_ayuda_capacity_note` y
 `x_reporteco_capacity_note` no, y esa colisión es justo lo que si no obligaría a
 coordinarse antes de que nadie pueda experimentar.
 

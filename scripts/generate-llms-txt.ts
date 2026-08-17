@@ -2,7 +2,7 @@
  * Generates `public/llms.txt` and `public/llms-full.txt`.
  *
  * `llms.txt` is the first file an agent reads, and until this script existed
- * the one being served was the Corag institutional site's — describing a write
+ * the one being served described a write
  * API at a host this protocol does not run. That is the most consequential
  * possible place for stale copy: a person skims a wrong sentence and moves on;
  * an agent acts on it.

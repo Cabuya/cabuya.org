@@ -97,7 +97,7 @@ export const onRequestGet = async (
 ): Promise<Response> => {
   const url = new URL(context.request.url);
 
-  // The route param carries the extension: `/badge/corag.svg` → `corag.svg`.
+  // The route param carries the extension: `/badge/example.svg` → `example.svg`.
   const raw = String(context.params.publisher ?? '');
   const publisherId = raw.replace(/\.svg$/i, '');
 

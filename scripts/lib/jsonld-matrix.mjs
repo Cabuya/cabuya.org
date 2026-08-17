@@ -14,7 +14,7 @@
  * a deleted line rather than a lost rich result. It is exactly the kind of
  * thing that decays silently — which is what happened to the version of this
  * list that shipped with the site: it still described `meetups`, `speakers` and
- * `blog` routes from the Corag era, so it matched nothing and asserted nothing.
+ * `blog` routes that no longer exist, so it matched nothing and asserted nothing.
  */
 
 export const JSONLD_MATRIX = [

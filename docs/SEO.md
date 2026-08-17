@@ -95,8 +95,8 @@ asserts the `Dataset` carries none of them.
 ## 7. Redirects
 
 `public/_redirects` is the single source (checked by `redirects:check`):
-retired Corag routes → closest surviving surface; `/en/*` → `/*`; legacy ES
-root URLs → `/es/*`. Every rule must resolve to a live page; no live page may
+retired routes → closest surviving surface; `/en/*` → `/*`; legacy ES root
+URLs → `/es/*`. Every rule must resolve to a live page; no live page may
 be shadowed.
 
 ## Share cards

@@ -1,14 +1,11 @@
 /**
  * Content collections for cabuya.org.
  *
- * Migration note (Task 7): the Corag collections (blog, pages, authors,
- * channels, contributors, tags, series, allies, ecosystem-apps,
- * notifications) were decommissioned with their surfaces. The Cabuya
- * collections land with their tasks:
- *   - `docs` (portal prose)            — Task 23 ✅
- *   - `specVersions`/`schemas`/
- *     `examples`/`rfcs`/`changelog`    — Task 25 (via spec-loader, B2)
- *   - `publishers`                     — Task 28 (via registry-loader, B2)
+ *   - `docs`         portal prose
+ *   - `spec`         normative sections, per language
+ *   - `schemas` / `examples` / `rfcs` / `changelog`
+ *                    read through `spec-loader.ts` (B2)
+ *   - `publishers`   read through `registry-loader.ts` (B2)
  */
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';

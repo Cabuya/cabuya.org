@@ -1,6 +1,6 @@
 # Source Directory (`src/`)
 
-This is the main source directory for the Corag Astro website. All application code, components, pages, and content live here.
+This is the main source directory for the cabuya.org Astro site. All application code, components, pages, and content live here.
 
 ## Directory Structure
 

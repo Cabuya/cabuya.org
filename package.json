@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "prebuild": "node scripts/generate-og-fallback.mjs",
+    "prebuild": "pnpm --filter @cabuya/validator run build && node scripts/generate-og-fallback.mjs",
     "dns:aid:publish": "node scripts/publish-dns-aid.mjs",
     "dns:aid:dry-run": "DNS_AID_DRY_RUN=1 node scripts/publish-dns-aid.mjs",
     "astro": "astro",

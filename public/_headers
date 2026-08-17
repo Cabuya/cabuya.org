@@ -51,7 +51,7 @@
 # Removed in the launch dry run: the OAuth metadata endpoints, `auth.md`, the
 # agent-skills index, an `api-catalog` link header pointing at a file that was
 # never generated, and `Link` headers on an `/en/` route that does not exist
-# under D-W1. All were Corag-era artifacts describing an authorization surface
+# under D-W1. All were artifacts describing an authorization surface
 # this site does not have — `auth.md` documented `/agent/register`,
 # `/agent/claim` and `/oauth/revoke`, none of them implemented here.
 #

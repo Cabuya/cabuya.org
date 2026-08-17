@@ -152,7 +152,7 @@ severity as text; that rule is normative in `docs/ACCESSIBILITY.md`.)
 |---|---|
 | Declared ≡ shown (internal pages can't go stale) | `tests/unit/lib/design-tokens.test.ts` |
 | Measured contrast re-computed (body pairs, fique-strong, borders, fill pair) | same |
-| Raw-grey ban · fique-on-light-text ban · no `corag-` remnants | same |
+| Raw-grey ban · fique-on-light-text ban · one token namespace | same |
 | No hex literals in the token showcase | same |
 | Prose variables resolve to tokens, in the compiled CSS | `prose:check` |
-| WCAG runtime scan (axe, route matrix) | `a11y:check` (migration Task 35) |
+| WCAG runtime scan (axe, route matrix) | `a11y:check` |

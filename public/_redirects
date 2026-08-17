@@ -24,7 +24,7 @@
 # working as designed, not a regression. Redirecting it to /es/ instead would
 # have sent a reader looking for developer documentation to the home page.
 
-# --- Retired Corag routes (old Spanish root URLs) → closest surface --------
+# --- Retired routes (old Spanish root URLs) → closest surface --------------
 /about                       /es/    301
 /how-it-works                /es/    301
 /transparency                /es/    301

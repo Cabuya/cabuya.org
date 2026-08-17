@@ -26,7 +26,8 @@ const DRY_RUN = process.env.DNS_AID_DRY_RUN === '1';
 /**
  * Where the MCP server actually runs.
  *
- * Not this site: cabuya.org explains Corag, the application serves it. Verified
+ * Not this site: cabuya.org explains the protocol, an application serves it.
+ * Verified
  * with a `tools/list` call — it returns listar_emergencias and friends. If that
  * ever stops being true, drop the _mcp record rather than pointing it at a 404.
  */

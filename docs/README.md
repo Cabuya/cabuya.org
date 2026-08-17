@@ -47,5 +47,5 @@ features (dark mode, image optimization, public assets)
 agent-content contract · [aeo/CHECKLIST.md](aeo/CHECKLIST.md) ·
 [aeo/QUERIES.md](aeo/QUERIES.md)
 
-**Visuals** *(from migration Task 20)*: `visuals/` — illustration style guide
+**Visuals**: `visuals/` — illustration style guide
 and prompt packs.

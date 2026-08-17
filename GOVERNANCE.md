@@ -22,8 +22,8 @@ team* until `MAINTAINERS.md` lists more than one organisation.
 ## The neutrality gate
 
 > **`Cabuya 1.0` cannot be tagged until at least two maintainers represent
-> applications other than Corag.** Until then the specification stays at `0.x`
-> and every artefact says *draft*.
+> applications other than the founding team's.** Until then the specification
+> stays at `0.x`.
 
 This is the single most important rule here, and it is stated as a release
 blocker rather than as an intention on purpose. Nineteen teams are being asked

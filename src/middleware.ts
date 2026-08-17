@@ -25,7 +25,7 @@
  * before checking this allowlist first.
  *
  * Cabuya migration note (Task 7):
- *   Every retired Corag route (blog, ecosystem, channels, contact, the seven
+ *   Every retired route (blog, ecosystem, channels, contact, the seven
  *   institutional pages, movement, …) 301s in `public/_redirects` to its
  *   closest surviving surface. Route slugs stay English in both languages;
  *   the EN-at-root [lang] topology (Task 8) validates language-prefixed

@@ -71,7 +71,7 @@ usable* can ship it tomorrow, under their own namespace, and no consumer
 breaks.
 
 The namespace prefix is what makes this safe. Two publishers who both invent
-`capacity_note` have collided; `x_corag_capacity_note` and
+`capacity_note` have collided; `x_pereira_ayuda_capacity_note` and
 `x_reporteco_capacity_note` have not, and the collision is exactly the thing
 that would otherwise force coordination before anyone can experiment.
 

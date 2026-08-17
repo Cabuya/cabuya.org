@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 /*
- * Official Corag typography (Manual de Identidad Visual, p. 17):
+ * Typography:
  *   Outfit  — logo / display
  *   Poppins — body
  * Both are SIL OFL and self-hosted from /public/fonts (no external CDN request).
@@ -244,13 +244,6 @@
   /* ── Elevation — forest-tinted on purpose, not neutral grey ────────── */
   --shadow-cabuya-sm: 0 8px 24px rgb(8 42 36 / 0.08);
   --shadow-cabuya-lg: 0 28px 70px rgb(8 42 36 / 0.14);
-
-  /*
-   * Legacy Tailwind default override inherited from the baseline. Usages of
-   * `gray-50` depend on it; Task 7's decommission removes most consumers and
-   * the site shell (Task 18) retires the rest to cabuya neutrals.
-   */
-  --color-gray-50: #f1f5f9;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

@@ -45,6 +45,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "prepare": "pnpm run build",
     "build": "node scripts/build-standalone.mjs && tsc -p tsconfig.json && node scripts/build-standalone.mjs --dist",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",

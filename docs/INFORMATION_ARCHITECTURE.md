@@ -111,9 +111,8 @@ redirect logic). Mobile: drawer with the same five groups.
 
 ## 4. Redirect posture
 
-Every retired Corag route 301s to its closest surviving surface (full table
-defined in D-W1 and recorded in
-`analysis_results/I18N_MIGRATION.md`; enforced by `redirects:check`):
+Every retired route 301s to its closest surviving surface (the table is
+defined in D-W1 and enforced by `redirects:check`):
 
 - Old `/en/*` URLs → `/*` (English moved to root).
 - Indexed Spanish-rooted URLs → `/es/*` equivalents where they exist.

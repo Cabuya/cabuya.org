@@ -23,8 +23,8 @@ que [`MAINTAINERS.md`](MAINTAINERS.md) liste más de una organización.
 ## La compuerta de neutralidad
 
 > **`Cabuya 1.0` no se puede etiquetar hasta que al menos dos maintainers
-> representen aplicaciones distintas de Corag.** Hasta entonces la
-> especificación se queda en `0.x` y todo artefacto dice *borrador*.
+> representen aplicaciones distintas de la del equipo fundador.** Hasta
+> entonces la especificación se queda en `0.x`.
 
 Es la regla más importante de aquí, y está escrita como bloqueo de release y no
 como intención a propósito. Se le está pidiendo a diecinueve equipos que pongan
