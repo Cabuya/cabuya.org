@@ -13,8 +13,6 @@ export const es: SiteTranslations = {
     home: 'Inicio',
     foundingRecord: 'Registro fundacional',
     github: 'GitHub',
-    repoSite: 'Repositorio del protocolo y el sitio en GitHub',
-    repoSkill: 'Repositorio de la skill para agentes en GitHub',
     openMenu: 'Abrir el menú',
     closeMenu: 'Cerrar el menú',
     switchToLanguage: 'Switch to English',
@@ -171,6 +169,7 @@ export const es: SiteTranslations = {
     copyFailed: 'Selecciona y copia',
     copyAsMarkdown: 'Copiar como Markdown',
     viewMarkdown: 'Ver el Markdown',
+    diagram: 'Diagrama',
     field: 'Campo',
     type: 'Tipo',
     required: 'Obligatorio',
@@ -572,6 +571,7 @@ export const es: SiteTranslations = {
 
   rootDocs: {
     sourceLinkSuffix: 'en GitHub — el archivo que esta página renderiza',
+    sourceHeading: 'Fuente',
     sourceNote:
       'Esta página renderiza un archivo del repositorio. El archivo es la fuente: es lo que se lleva una bifurcación, lo que cambia un pull request y lo que manda si alguna vez los dos no coinciden.',
   },

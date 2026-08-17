@@ -310,6 +310,46 @@ export function navHref(
   return `${prefix}${entry.path}`;
 }
 
+/**
+ * The two repositories, as a header disclosure.
+ *
+ * Deliberately not a member of `NAV_GROUPS`: the IA caps the header at five
+ * groups and the nav test checks every entry against a file under
+ * `src/pages/`, neither of which should bend for two outbound links. The
+ * header appends this after the live groups so it renders with the same
+ * disclosure markup, the same keyboard behaviour and the same panel styling.
+ *
+ * One group rather than two bare marks — the point is that these are two
+ * different repositories, and the same icon twice says the opposite.
+ */
+export const REPO_GROUP: NavGroup = {
+  id: 'github',
+  label: { en: 'GitHub', es: 'GitHub' },
+  status: 'live',
+  children: [
+    {
+      label: { en: 'Website repository', es: 'Repositorio del sitio' },
+      path: GITHUB_URL,
+      external: true,
+      status: 'live',
+      hint: {
+        en: 'This site, the specification and the validator',
+        es: 'Este sitio, la especificación y el validador',
+      },
+    },
+    {
+      label: { en: 'Skill repository', es: 'Repositorio de la skill' },
+      path: SKILL_REPO_URL,
+      external: true,
+      status: 'live',
+      hint: {
+        en: 'The installable agent skill',
+        es: 'La skill instalable para agentes',
+      },
+    },
+  ],
+};
+
 /** Header groups that have something to show today. */
 export function liveGroups(): NavGroup[] {
   return NAV_GROUPS.filter(

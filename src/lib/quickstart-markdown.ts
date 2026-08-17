@@ -12,6 +12,7 @@ import { join } from 'node:path';
 import { DENY_KEYS, SPA_EXCLUSIONS } from '@cabuya/validator';
 
 import type { Language } from '@/lib/i18n';
+import { diagramLines } from '@/lib/markdown-for-agents';
 import { getTranslations } from '@/lib/translations';
 
 export interface TwinSection {
@@ -29,7 +30,12 @@ export function quickstartSections(lang: Language): TwinSection[] {
   return [
     {
       heading: t.quickstart.agentPathTitle,
-      lines: [t.quickstart.agentPathBody],
+      lines: [
+        t.quickstart.lead,
+        '',
+        t.quickstart.agentPathBody,
+        ...diagramLines('quickstartPath', lang),
+      ],
     },
     {
       heading: t.quickstart.fileFirstTitle,

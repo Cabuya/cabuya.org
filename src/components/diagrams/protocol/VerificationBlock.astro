@@ -10,6 +10,7 @@
  * `null` is drawn as a first-class value, not an error state — publishing "we
  * do not know" is the honest answer and the protocol wants it.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -19,12 +20,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.verificationBlock;
+
+const strings = {
   en: {
-    ariaLabel:
-      'Two timestamps compared. updated_at records when the row was last edited; last_confirmed_at records when a human last verified the place is really open. They answer different questions, and last_confirmed_at may be null, which means nobody has checked — a valid and useful answer.',
-    caption:
-      'Editing a record is not confirming it. When nobody has checked, publish null — it is a real answer, and consumers know what to do with it.',
     kicker: 'Verification',
     edited: {
       field: 'updated_at',
@@ -44,10 +43,6 @@ const i18n = {
     lesson: 'One field cannot answer both questions',
   },
   es: {
-    ariaLabel:
-      'Dos marcas de tiempo comparadas. updated_at registra cuándo se editó la fila por última vez; last_confirmed_at registra cuándo una persona verificó por última vez que el lugar está realmente abierto. Responden preguntas distintas, y last_confirmed_at puede ser null, lo que significa que nadie ha verificado: una respuesta válida y útil.',
-    caption:
-      'Editar un registro no es confirmarlo. Cuando nadie ha verificado, publica null — es una respuesta real, y los consumidores saben qué hacer con ella.',
     kicker: 'Verificación',
     edited: {
       field: 'updated_at',
@@ -68,7 +63,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 const COL_W = 282;
 const LEFT = 16;
@@ -77,10 +75,17 @@ const TOP = 42;
 const BOX_H = 150;
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

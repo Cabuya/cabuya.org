@@ -10,6 +10,7 @@
  * no-variants rule in the standard, and a narrow one: it changes emphasis, not
  * content, and the page that embeds it is the page that knows.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -21,12 +22,10 @@ interface Props {
 
 const { lang = 'en', current = 0, class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.quickstartPath;
+
+const strings = {
   en: {
-    ariaLabel:
-      'Five steps: write the manifest, export one feed, run the validator, fix what it reports, then open a registry pull request. The first three are typically under an hour; the whole path is an afternoon for a small application.',
-    caption:
-      'An afternoon, step by step. Each one produces a file or a result you can look at.',
     kicker: 'Quickstart',
     steps: [
       {
@@ -43,10 +42,6 @@ const i18n = {
     total: 'One afternoon for a small application',
   },
   es: {
-    ariaLabel:
-      'Cinco pasos: escribir el manifiesto, exportar un feed, correr el validador, arreglar lo que reporte y abrir un pull request al registro. Los primeros tres suelen tomar menos de una hora; el camino completo es una tarde para una aplicación pequeña.',
-    caption:
-      'Una tarde, paso a paso. Cada uno produce un archivo o un resultado que puedes mirar.',
     kicker: 'Guía rápida',
     steps: [
       {
@@ -72,7 +67,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 const STEP_W = 112;
 const GAP = 16;

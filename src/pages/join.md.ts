@@ -1,7 +1,10 @@
 import type { APIRoute } from 'astro';
 
 import { SITE_URL } from '@/lib/constances';
-import { serializeGenericToMarkdown } from '@/lib/markdown-for-agents';
+import {
+  rootDocSections,
+  serializeGenericToMarkdown,
+} from '@/lib/markdown-for-agents';
 import { rootDoc, rootDocSummary } from '@/lib/root-docs';
 
 /**
@@ -19,6 +22,7 @@ export const GET: APIRoute = () => {
       lang: 'en',
       canonical: `${SITE_URL}/join`,
       body: doc.body,
+      sections: rootDocSections('en', { contact: true }),
     }),
     {
       headers: {

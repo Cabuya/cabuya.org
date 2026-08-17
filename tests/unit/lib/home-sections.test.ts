@@ -200,9 +200,11 @@ describe('hero call-to-action honesty', () => {
 
   it('does not link to a route that does not exist', () => {
     /*
-     * Both targets are still unbuilt. Rather than link to a 404 or drop the
-     * buttons, they render as text with a line saying where those things are
-     * today. When Tasks 24 and 28 ship, CTA_TARGETS gets the real paths.
+     * Both routes ship, so both targets are real paths. They carry the
+     * language prefix: hardcoding the bare path sent a Spanish reader from
+     * `/es/` into the English quickstart, which the cross-language link audit
+     * caught. A target may also be `null`, which renders the label as text
+     * rather than a dead link — Rule 0 holds either way.
      */
     expect(source).toContain('CTA_TARGETS');
     const targets = source.match(/const CTA_TARGETS[\s\S]*?};/)?.[0] ?? '';
@@ -210,11 +212,13 @@ describe('hero call-to-action honesty', () => {
       ['/developers/quickstart', 'primary'],
       ['/registry', 'secondary'],
     ]) {
-      const live = new RegExp(`${marker}:\\s*'${path}'`).test(targets);
+      const live = new RegExp(
+        `${marker}:\\s*\`\\$\\{getUrlPrefix\\(lang\\)\\}${path}\``
+      ).test(targets);
       const commented = new RegExp(`${marker}:\\s*null`).test(targets);
       expect(
         live || commented,
-        `${marker} CTA must be either a real route or explicitly null`
+        `${marker} CTA must be a language-prefixed real route or explicitly null`
       ).toBe(true);
     }
   });

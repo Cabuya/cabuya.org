@@ -13,8 +13,6 @@ export const en: SiteTranslations = {
     home: 'Home',
     foundingRecord: 'Founding record',
     github: 'GitHub',
-    repoSite: 'Protocol and site repository on GitHub',
-    repoSkill: 'Agent skill repository on GitHub',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
     switchToLanguage: 'Cambiar a español',
@@ -170,6 +168,7 @@ export const en: SiteTranslations = {
     copyFailed: 'Select and copy',
     copyAsMarkdown: 'Copy as Markdown',
     viewMarkdown: 'View the Markdown',
+    diagram: 'Diagram',
     field: 'Field',
     type: 'Type',
     required: 'Required',
@@ -571,6 +570,7 @@ export const en: SiteTranslations = {
 
   rootDocs: {
     sourceLinkSuffix: 'on GitHub — the file this page renders',
+    sourceHeading: 'Source',
     sourceNote:
       'This page renders a file in the repository. The file is the source: it is what a fork carries, what a pull request changes, and what governs if the two ever disagree.',
   },

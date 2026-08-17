@@ -10,6 +10,7 @@
  * safe: an agent that cannot distinguish "your data is wrong" from "the
  * network failed" will eventually rewrite correct records after a DNS blip.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -19,12 +20,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.validatorLoop;
+
+const strings = {
   en: {
-    ariaLabel:
-      'A loop with four stations: run the validator, read a finding, apply the fix, run again. Exit code 1 means the data is wrong and sends the agent back around; exit code 3 means the network failed and stops the loop instead. A clean run exits to the registry pull request.',
-    caption:
-      'The loop terminates because every finding locates the problem and states the fix — and because a transport failure exits instead of looping.',
     kicker: 'The fix loop',
     stations: [
       { title: 'Run', sub: 'validate <url>' },
@@ -38,10 +37,6 @@ const i18n = {
     why: 'Never confuse bad data with a failed request',
   },
   es: {
-    ariaLabel:
-      'Un bucle con cuatro estaciones: correr el validador, leer un hallazgo, aplicar el arreglo, correr otra vez. El código de salida 1 significa que el dato está mal y devuelve al agente al bucle; el código 3 significa que la red falló y detiene el bucle. Una corrida limpia sale hacia el pull request del registro.',
-    caption:
-      'El bucle termina porque cada hallazgo ubica el problema y dice cómo arreglarlo — y porque un fallo de transporte sale en vez de reintentar en círculo.',
     kicker: 'El bucle de arreglo',
     stations: [
       { title: 'Correr', sub: 'validate <url>' },
@@ -56,7 +51,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 /*
  * Laid out as a line with a return arc, not as a ring.

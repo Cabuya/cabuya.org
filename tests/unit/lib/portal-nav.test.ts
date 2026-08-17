@@ -16,6 +16,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { LANGUAGE_CODES } from '@/lib/language-codes';
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import { portalSections } from '@/lib/portal-markdown';
 import {
   allPortalEntries,
@@ -144,34 +145,30 @@ describe('portal nav — active state and neighbours', () => {
   });
 });
 
-describe('portal twin — the diagram stand-in does not drift', () => {
+describe('portal twin — the diagram travels with the page', () => {
   /*
-   * `portal-markdown.ts` quotes the transports diagram's aria-label so an agent
-   * reading the twin gets the section's argument. That is a copied string, and
-   * copied strings rot — so it is compared against the component's source here.
+   * This used to compare a hand-copied paragraph in `portal-markdown.ts`
+   * against the component's `ariaLabel`, because a copied string rots. There is
+   * no copy now: both the page and the twin read `DIAGRAM_COPY`, so the test
+   * asserts the twin actually carries it rather than that two strings still
+   * agree.
    */
-  const source = readFileSync(
-    join(
-      ROOT,
-      'src/components/diagrams/protocol/OneSchemaFourTransports.astro'
-    ),
-    'utf-8'
-  );
+  it.each(LANGUAGE_CODES)('quotes the %s aria-label from the shared copy', (lang) => {
+    const copy = DIAGRAM_COPY.oneSchemaFourTransports[lang];
+    const lines = portalSections(lang).flatMap((entry) => entry.lines);
+    expect(lines.some((line) => line.includes(copy.ariaLabel))).toBe(true);
+    expect(lines.some((line) => line.includes(copy.caption))).toBe(true);
+  });
 
-  it.each(LANGUAGE_CODES)('matches the %s aria-label exactly', (lang) => {
-    const section = portalSections(lang).find((entry) =>
-      entry.lines.some((line) => line.startsWith('> '))
+  it('is the only place the diagram copy is written', () => {
+    const source = readFileSync(
+      join(ROOT, 'src/components/diagrams/protocol/OneSchemaFourTransports.astro'),
+      'utf-8'
     );
-    expect(section).toBeDefined();
-    const quoted = section?.lines
-      .find((line) => line.startsWith('> '))
-      ?.slice(2)
-      .trim();
-    expect(quoted).toBeTruthy();
     expect(
-      source.includes(quoted as string),
-      'the twin quotes an aria-label the component no longer has'
-    ).toBe(true);
+      source.includes('ariaLabel:'),
+      'the component declares its own aria-label again — the twin and the page can now drift'
+    ).toBe(false);
   });
 });
 

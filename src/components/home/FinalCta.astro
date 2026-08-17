@@ -18,6 +18,25 @@ interface Props {
 const { lang } = Astro.props;
 const t = getTranslations(lang);
 
+/**
+ * `HP-02` — the open knot, to the left of the contribution paths.
+ *
+ * Transparent, so it sits on the panel's forest fill (`#0B3D32`) as readily as
+ * on either page ground; verified against all three. The asset's own sides are
+ * feathered in the export because the generator ran the cords off the canvas —
+ * see the entry, which asks for a regeneration rather than treating the fade
+ * as the fix.
+ */
+const JOIN_ART = {
+  src: '/images/visuals/home/join-open-knot.webp',
+  srcset:
+    '/images/visuals/home/join-open-knot.webp 720w, /images/visuals/home/join-open-knot-2x.webp 1440w',
+  sizes: '(min-width: 1024px) 38vw, 90vw',
+  width: 720,
+  height: 480,
+  present: true,
+};
+
 const links = [
   {
     label: t.home.finalCta.developers,
@@ -34,29 +53,48 @@ const links = [
 ---
 
 <section class="main-container py-20 sm:py-28">
-  <div class="rounded-cabuya-lg bg-cabuya-fill px-6 py-12 text-cabuya-on-fill sm:px-12 sm:py-16">
-    <h2 class="max-w-3xl text-title">{t.home.finalCta.title}</h2>
-    <p class="mt-4 max-w-2xl text-base leading-relaxed text-cabuya-primary-light">
-      {t.home.finalCta.body}
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      {
-        links.map((link) => (
-          <a
-            href={link.href}
-            rel="noopener"
-            target="_blank"
-            class:list={[
-              'rounded-cabuya-sm px-6 py-3 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary-light',
-              link.primary
-                ? 'bg-cabuya-on-fill text-cabuya-fill hover:bg-cabuya-primary-light'
-                : 'border border-cabuya-primary-light/50 text-cabuya-on-fill hover:bg-cabuya-fill-strong',
-            ]}
-          >
-            {link.label}
-          </a>
-        ))
-      }
+  <div
+    class="grid items-center gap-10 rounded-cabuya-lg bg-cabuya-fill px-6 py-12 text-cabuya-on-fill sm:px-12 sm:py-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14"
+  >
+    {
+      JOIN_ART.present && (
+        <img
+          src={JOIN_ART.src}
+          srcset={JOIN_ART.srcset}
+          sizes={JOIN_ART.sizes}
+          alt=""
+          width={JOIN_ART.width}
+          height={JOIN_ART.height}
+          loading="lazy"
+          decoding="async"
+          class="order-last mx-auto w-full max-w-md lg:order-first lg:max-w-none"
+        />
+      )
+    }
+    <div>
+      <h2 class="max-w-3xl text-title">{t.home.finalCta.title}</h2>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-cabuya-primary-light">
+        {t.home.finalCta.body}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              rel="noopener"
+              target="_blank"
+              class:list={[
+                'rounded-cabuya-sm px-6 py-3 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary-light',
+                link.primary
+                  ? 'bg-cabuya-on-fill text-cabuya-fill hover:bg-cabuya-primary-light'
+                  : 'border border-cabuya-primary-light/50 text-cabuya-on-fill hover:bg-cabuya-fill-strong',
+              ]}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>

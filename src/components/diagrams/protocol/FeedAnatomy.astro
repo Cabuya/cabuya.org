@@ -10,6 +10,7 @@
  * Field names are English in every language: they are the schema's vocabulary,
  * and a translated field name would teach a reader a key that does not exist.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -19,12 +20,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.feedAnatomy;
+
+const strings = {
   en: {
-    ariaLabel:
-      'A feed envelope with five required fields — last_updated, ttl, version, publisher_id and license — wrapping an array of place records. Each field answers a question a consumer must be able to answer: how old, how long may I cache, which schema, who published, what may I do with it.',
-    caption:
-      'Five envelope fields and an array. Each field exists because a consumer has to answer a question without asking you.',
     kicker: 'Feed envelope',
     fields: [
       { key: 'last_updated', why: 'How old is this?' },
@@ -38,10 +37,6 @@ const i18n = {
     transport: 'Served with CORS, so a browser client can read it directly',
   },
   es: {
-    ariaLabel:
-      'Un sobre de feed con cinco campos obligatorios —last_updated, ttl, version, publisher_id y license— que envuelve un arreglo de registros place. Cada campo responde una pregunta que un consumidor debe poder responder: qué tan viejo es, cuánto puedo cachearlo, qué esquema, quién lo publicó, qué puedo hacer con él.',
-    caption:
-      'Cinco campos de sobre y un arreglo. Cada campo existe porque un consumidor tiene que responder una pregunta sin preguntarte a ti.',
     kicker: 'Sobre del feed',
     fields: [
       { key: 'last_updated', why: '¿Qué tan viejo es?' },
@@ -57,16 +52,26 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 const ROW_H = 34;
 const TOP = 52;
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

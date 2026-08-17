@@ -13,10 +13,11 @@
  * actually happen.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { basename, join, relative } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import { LANGUAGE_CODES } from '@/lib/language-codes';
 
 const ROOT = process.cwd();
@@ -62,8 +63,8 @@ describe('diagram components — the set exists', () => {
 describe.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
   '%s',
   (_name, source) => {
-    it('declares an i18n map with a key for every active language', () => {
-      expect(source).toContain('const i18n = {');
+    it('declares a strings map with a key for every active language', () => {
+      expect(source).toContain('const strings = {');
       for (const code of LANGUAGE_CODES) {
         expect(source, `missing "${code}" key`).toMatch(
           new RegExp(`\\n\\s{2}${code}:\\s*\\{`)
@@ -72,16 +73,25 @@ describe.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
     });
 
     it('falls back to English rather than rendering blank', () => {
-      expect(source).toContain('?? i18n.en');
+      expect(source).toContain('?? strings.en');
+      expect(source).toContain('?? copy.en');
+    });
+
+    /*
+     * The label and the caption moved to `src/lib/diagram-copy.ts` so the
+     * Markdown twins could reach them — an agent reading `/index.md` used to
+     * get no trace of the diagrams at all. The component must therefore no
+     * longer carry its own copy, or the page and the twin can disagree.
+     */
+    it('takes its label and caption from the shared copy, not its own', () => {
+      expect(source).toContain("from '@/lib/diagram-copy'");
+      expect(source).not.toContain('ariaLabel:');
+      expect(source).not.toContain('caption:');
     });
 
     it('is a labelled image, with the label coming from the map', () => {
       expect(source).toContain('role="img"');
       expect(source).toContain('aria-label={t.ariaLabel}');
-      // The label must say what the diagram argues, not name its shape.
-      expect(
-        source.match(/ariaLabel:\s*\n?\s*'([^']{60,})'/g)?.length
-      ).toBeGreaterThan(0);
     });
 
     it('reserves its own space', () => {
@@ -112,29 +122,56 @@ describe.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
 
     it('carries a caption', () => {
       expect(source).toContain('<figcaption>');
-      expect(source).toContain('caption:');
+      expect(source).toContain('{t.caption}');
     });
   }
 );
 
-describe('diagram components — Spanish is written, not copied', () => {
-  it.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
-    '%s has a distinct Spanish aria-label',
-    (_name, source) => {
-      const labels = [...source.matchAll(/ariaLabel:\s*\n?\s*'([^']+)'/g)].map(
-        (match) => match[1]
-      );
-      expect(labels.length).toBeGreaterThanOrEqual(2);
-      // Identical strings mean the English was pasted into the Spanish key.
-      expect(new Set(labels).size).toBe(labels.length);
-    }
-  );
+describe('diagram copy — Spanish is written, not copied', () => {
+  /*
+   * These read `DIAGRAM_COPY` rather than the component sources: the label and
+   * the caption moved there so the Markdown twins could carry them. The
+   * question is the same one, asked of the file that now answers it.
+   */
+  it.each(Object.keys(DIAGRAM_COPY))('%s has a distinct Spanish aria-label', (id) => {
+    const langs = DIAGRAM_COPY[id];
+    const labels = LANGUAGE_CODES.map((code) => langs[code].ariaLabel);
+    expect(labels.length).toBeGreaterThanOrEqual(2);
+    // Identical strings mean the English was pasted into the Spanish key.
+    expect(new Set(labels).size).toBe(labels.length);
+  });
 
-  it.each(FILES.map((file) => [named(file), readFileSync(file, 'utf-8')]))(
-    '%s carries Spanish diacritics',
-    (_name, source) => {
-      const spanish = source.slice(source.indexOf('\n  es: {'));
-      expect(spanish).toMatch(/[áéíóúñ¿¡]/i);
+  it.each(Object.keys(DIAGRAM_COPY))('%s carries Spanish diacritics', (id) => {
+    const { ariaLabel, caption } = DIAGRAM_COPY[id].es;
+    expect(`${ariaLabel} ${caption}`).toMatch(/[áéíóúñ¿¡]/i);
+  });
+});
+
+describe('the shared diagram copy', () => {
+  it('covers every diagram component, in every active language', () => {
+    const ids = FILES.map((file) => {
+      const name = basename(file, '.astro');
+      return name[0].toLowerCase() + name.slice(1);
+    });
+    for (const id of ids) {
+      expect(DIAGRAM_COPY[id], `no copy for "${id}"`).toBeDefined();
+      for (const code of LANGUAGE_CODES) {
+        expect(DIAGRAM_COPY[id]?.[code], `"${id}" has no ${code}`).toBeDefined();
+      }
     }
-  );
+  });
+
+  /*
+   * The label must say what the diagram argues, not name its shape — a reader
+   * who cannot see it gets this sentence and nothing else. Sixty characters is
+   * the threshold the component test used before the copy moved here.
+   */
+  it('describes each diagram rather than naming it', () => {
+    for (const [id, langs] of Object.entries(DIAGRAM_COPY)) {
+      for (const code of LANGUAGE_CODES) {
+        expect(langs[code].ariaLabel.length, `${id}.${code} aria-label`).toBeGreaterThan(60);
+        expect(langs[code].caption.length, `${id}.${code} caption`).toBeGreaterThan(20);
+      }
+    }
+  });
 });

@@ -22,8 +22,6 @@ export interface SiteTranslations {
     foundingRecord: string;
     github: string;
     /** Accessible names for the two repository links in the header. */
-    repoSite: string;
-    repoSkill: string;
     openMenu: string;
     closeMenu: string;
     switchToLanguage: string; // label for the language switcher target
@@ -140,6 +138,8 @@ export interface SiteTranslations {
     copyFailed: string;
     copyAsMarkdown: string;
     viewMarkdown: string;
+    /** Labels a diagram's spoken description inside a Markdown twin. */
+    diagram: string;
     field: string;
     type: string;
     required: string;
@@ -418,6 +418,8 @@ export interface SiteTranslations {
   rootDocs: {
     /** Screen-reader suffix on the link to the source file. */
     sourceLinkSuffix: string;
+    /** Heading for the provenance note in the Markdown twin. */
+    sourceHeading: string;
     /** The standing note explaining that the file, not the page, governs. */
     sourceNote: string;
   };

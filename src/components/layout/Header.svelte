@@ -22,11 +22,10 @@ import { onMount } from 'svelte';
 
 import type { Language } from '@/lib/i18n';
 import {
-  GITHUB_URL,
   liveGroups,
   type NavGroup,
   navHref,
-  SKILL_REPO_URL,
+  REPO_GROUP,
   switchLanguagePath,
 } from '@/lib/site-navigation';
 
@@ -53,25 +52,20 @@ export let labels: {
   openMenu: string;
   closeMenu: string;
   switchToLanguage: string;
-  /** Accessible names for the two repository links. */
-  repoSite: string;
-  repoSkill: string;
   /** Forwarded to the theme toggle, which is in this island's chunk. */
   toDark: string;
   toLight: string;
 };
 
 /**
- * The two repositories, in the header because this is a protocol project and
- * the source is the product. Names rather than two identical marks: the whole
- * point is that they are different repositories, and an icon repeated twice
- * says the opposite. The names collapse below `xl`, where the mark and the
- * accessible name carry it.
+ * The nav as rendered: the live groups, then the repositories.
+ *
+ * `REPO_GROUP` is appended here rather than living in `NAV_GROUPS` — see the
+ * note on it in `site-navigation.ts`. Appending means it inherits the
+ * disclosure markup, the hover and keyboard behaviour and the panel styling
+ * instead of growing a second copy of all three.
  */
-$: repos = [
-  { href: GITHUB_URL, name: 'cabuya.org', label: labels.repoSite },
-  { href: SKILL_REPO_URL, name: 'cabuya-skill', label: labels.repoSkill },
-];
+$: navGroups = [...groups, REPO_GROUP];
 $: other = (lang === 'es' ? 'en' : 'es') as Language;
 $: switchHref = switchLanguagePath(pathname, other);
 
@@ -97,6 +91,61 @@ function toggleGroup(id: string): void {
 
 function closeAll(): void {
   openGroup = null;
+}
+
+/**
+ * Hover opens the disclosures, click and keyboard still do everything.
+ *
+ * Two guards make this safe rather than the usual hover-menu trap:
+ *
+ * - **Pointer check.** `(hover: hover) and (pointer: fine)` keeps it to mice
+ *   and trackpads. On a touch screen a tap synthesises `mouseenter` right
+ *   before `click`, which would open and immediately close the panel.
+ * - **Close delay.** There is a 4px gap between the button and the panel, so
+ *   a straight-line pointer move fires `mouseleave` in transit. 150 ms of
+ *   patience covers the gap without the panel feeling stuck open.
+ *
+ * `aria-expanded` still tells the truth either way, and the button remains a
+ * real button: hover is an accelerator, never the only way in.
+ */
+let hoverTimer: ReturnType<typeof setTimeout> | undefined;
+
+const canHover = (): boolean =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+function hoverOpen(id: string): void {
+  if (!canHover()) return;
+  clearTimeout(hoverTimer);
+  openGroup = id;
+}
+
+function hoverClose(): void {
+  if (!canHover()) return;
+  clearTimeout(hoverTimer);
+  hoverTimer = setTimeout(closeAll, 150);
+}
+
+/**
+ * A pointer click on a trigger that hover already opened must not close it.
+ *
+ * Reaching the button with a mouse fires `mouseenter` first, so a plain
+ * toggle would open on approach and close on the click — the panel would
+ * appear to be broken for the most ordinary interaction there is. On a
+ * hover-capable pointer the click therefore only ever opens; leaving closes.
+ *
+ * `event.detail` separates the two callers: a real pointer click reports the
+ * click count, a keyboard-activated one reports 0. Enter and Space keep the
+ * toggle, so a keyboard user can still close what they opened without
+ * reaching for Escape.
+ */
+function onTriggerClick(event: MouseEvent, id: string): void {
+  if (event.detail > 0 && canHover()) {
+    clearTimeout(hoverTimer);
+    openGroup = id;
+    return;
+  }
+  toggleGroup(id);
 }
 
 function onKeydown(event: KeyboardEvent): void {
@@ -180,9 +229,23 @@ onMount(() => {
 
     <!-- Desktop navigation -->
     <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
-      {#each groups as group (group.id)}
+      {#each navGroups as group (group.id)}
         {#if group.children?.length}
-          <div class="relative" data-disclosure>
+          <!--
+            The hover handlers sit on a plain wrapper on purpose. They are a
+            pointer-only convenience: the disclosure's actual control is the
+            button below, which carries the role, the `aria-expanded` state and
+            the full click and keyboard path. Giving this div a role would put
+            an element in the accessibility tree that announces nothing and
+            does nothing for anyone not using a mouse.
+          -->
+          <!-- svelte-ignore a11y_no_static_element_interactions -->
+          <div
+            class="relative"
+            data-disclosure
+            on:mouseenter={() => hoverOpen(group.id)}
+            on:mouseleave={hoverClose}
+          >
             <button
               id="nav-disclosure-{group.id}"
               type="button"
@@ -190,8 +253,20 @@ onMount(() => {
               class:is-active={groupActive(group)}
               aria-expanded={openGroup === group.id}
               aria-controls="nav-panel-{group.id}"
-              on:click={() => toggleGroup(group.id)}
+              on:click={(event) => onTriggerClick(event, group.id)}
             >
+              {#if group.id === 'github'}
+                <svg
+                  class="h-[18px] w-[18px] shrink-0"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+                  />
+                </svg>
+              {/if}
               {group.label[lang] ?? group.label.en}
               <svg
                 class="h-3 w-3 transition-transform duration-150"
@@ -215,6 +290,8 @@ onMount(() => {
                     <li>
                       <a
                         href={navHref(child, lang)}
+                        rel={child.external ? 'noopener' : undefined}
+                        target={child.external ? '_blank' : undefined}
                         class="block rounded-lg px-3 py-2 transition-colors hover:bg-cabuya-bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary"
                         aria-current={isActive(child.path) ? 'page' : undefined}
                         on:click={closeAll}
@@ -247,36 +324,18 @@ onMount(() => {
       {/each}
     </nav>
 
-    <div class="flex items-center gap-1 sm:gap-2">
-      <span class="mr-1 hidden items-center gap-1 lg:flex">
-        {#each repos as repo (repo.href)}
-          <a
-            href={repo.href}
-            rel="noopener"
-            target="_blank"
-            title={repo.label}
-            aria-label={repo.label}
-            class="nav-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
-          >
-            <svg
-              class="h-[18px] w-[18px] shrink-0"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
-              />
-            </svg>
-            <span class="hidden xl:inline">{repo.name}</span>
-          </a>
-        {/each}
-      </span>
-
+    <!--
+      Keep `gap-2` (8px) as the floor: the responsive audit fails any pair of
+      touch targets closer than that, and on a 320px phone this cluster is the
+      densest row on the site. Only tighten from `lg`, where the repo links
+      join it and the pointer is a mouse.
+    -->
+    <div class="flex items-center gap-2 sm:gap-3 lg:gap-1.5">
       <a
         href={switchHref}
         class="nav-link inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
         hreflang={other}
+        data-language-switch
         lang={other}
         aria-label={labels.switchToLanguage}
       >
@@ -330,7 +389,7 @@ onMount(() => {
     >
       <nav aria-label="Main" class="main-container py-4">
         <ul class="flex flex-col gap-1">
-          {#each groups as group (group.id)}
+          {#each navGroups as group (group.id)}
             <li>
               {#if group.path}
                 <a
@@ -354,6 +413,8 @@ onMount(() => {
                     <li>
                       <a
                         href={navHref(child, lang)}
+                        rel={child.external ? 'noopener' : undefined}
+                        target={child.external ? '_blank' : undefined}
                         class="block rounded-lg px-3 py-2 text-sm text-cabuya-text-secondary hover:bg-cabuya-bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary"
                         aria-current={isActive(child.path) ? 'page' : undefined}
                         on:click={() => (drawerOpen = false)}
@@ -366,30 +427,6 @@ onMount(() => {
               {/if}
             </li>
           {/each}
-          <li class="mt-2 border-t border-cabuya-border pt-2">
-            {#each repos as repo (repo.href)}
-              <a
-                href={repo.href}
-                rel="noopener"
-                target="_blank"
-                aria-label={repo.label}
-                class="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-cabuya-text-secondary hover:bg-cabuya-bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary"
-                on:click={() => (drawerOpen = false)}
-              >
-                <svg
-                  class="h-4 w-4 shrink-0"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
-                  />
-                </svg>
-                {repo.name}
-              </a>
-            {/each}
-          </li>
         </ul>
       </nav>
     </div>

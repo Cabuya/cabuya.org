@@ -11,6 +11,7 @@
  *
  * Visualises spec §1.1. Effort figures come from that table, not from us.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -20,12 +21,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.conformanceLadder;
+
+const strings = {
   en: {
-    ariaLabel:
-      'A five-rung ladder. L0 Listed takes minutes, L1 Linked under an hour, L2 Publishes one afternoon, L3 Serves and consumes days, L4 Federates varies by app. Two further classes — directory-only and link-out-only — stop at L1 by choice or by rule, and are respected members.',
-    caption:
-      'A ladder, not a gate: every rung is a membership class, and stopping at one is a position, not a failure.',
     kicker: 'Conformance ladder',
     levels: [
       { id: 'L0', name: 'Listed', effort: 'One pull request' },
@@ -39,10 +38,6 @@ const i18n = {
     measured: 'Measured, never declared',
   },
   es: {
-    ariaLabel:
-      'Una escalera de cinco peldaños. L0 Listada toma minutos, L1 Enlazada menos de una hora, L2 Publica una tarde, L3 Sirve y consume días, L4 Federa según la app. Otras dos clases —solo directorio y solo enlace— se detienen en L1 por decisión o por regla, y son miembros respetados.',
-    caption:
-      'Una escalera, no una puerta: cada peldaño es una clase de membresía, y quedarse en uno es una posición, no un fracaso.',
     kicker: 'Escalera de conformidad',
     levels: [
       { id: 'L0', name: 'Listada', effort: 'Un pull request' },
@@ -57,7 +52,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 // Geometry: each rung sits one step right and one step up from the last.
 const STEP_W = 112;
@@ -91,10 +89,17 @@ const rungs = t.levels.map((level, index) => ({
 }));
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

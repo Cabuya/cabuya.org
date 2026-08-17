@@ -12,6 +12,7 @@
  * see it. A twin that silently dropped four diagrams would drop four beats.
  */
 import type { Language } from '@/lib/i18n';
+import { diagramLines } from '@/lib/markdown-for-agents';
 import { displayHost, publishersForDisplay } from '@/lib/registry-loader';
 import { getTranslations } from '@/lib/translations';
 
@@ -46,6 +47,7 @@ export function homeSections(lang: Language): TwinSection[] {
       heading: t.home.howItWorks.title,
       lines: [
         t.home.howItWorks.lead,
+        ...diagramLines('quickstartPath', lang),
         '',
         ...t.home.howItWorks.steps.map(
           (step, index) => `${index + 1}. **${step.title}** — ${step.body}`
@@ -54,12 +56,18 @@ export function homeSections(lang: Language): TwinSection[] {
     },
     {
       heading: t.home.ladder.title,
-      lines: [t.home.ladder.lead, '', t.home.ladder.respectNote],
+      lines: [
+        t.home.ladder.lead,
+        ...diagramLines('conformanceLadder', lang),
+        '',
+        t.home.ladder.respectNote,
+      ],
     },
     {
       heading: t.home.network.title,
       lines: [
         t.home.network.lead,
+        ...diagramLines('networkFlow', lang),
         '',
         ...publishers.map(
           (entry) =>

@@ -7,7 +7,10 @@ import {
   getUrlPrefix,
   type Language,
 } from '@/lib/i18n';
-import { serializeGenericToMarkdown } from '@/lib/markdown-for-agents';
+import {
+  rootDocSections,
+  serializeGenericToMarkdown,
+} from '@/lib/markdown-for-agents';
 import { rootDoc, rootDocSummary } from '@/lib/root-docs';
 
 export function getStaticPaths(): { params: { lang: Language } }[] {
@@ -26,6 +29,7 @@ export const GET: APIRoute = ({ params }) => {
       lang,
       canonical: `${SITE_URL}${getUrlPrefix(lang)}/trademark`,
       body: doc.body,
+      sections: rootDocSections(lang, {}),
     }),
     {
       headers: {

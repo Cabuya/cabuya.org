@@ -10,6 +10,7 @@
  * The registry is on the diagram but off the data path: it records who exists
  * and what was measured, and no record ever passes through it.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -19,12 +20,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.networkFlow;
+
+const strings = {
   en: {
-    ariaLabel:
-      'Three applications, each publishing a feed and reading the others. Records carry their publisher_id with them, so attribution survives every hop. The registry sits to one side, recording who exists and what was measured; no data passes through it.',
-    caption:
-      'No hub. Every app is a source and a reader at once, and attribution travels with the record.',
     kicker: 'The network',
     apps: ['App A', 'App B', 'App C'],
     publishes: 'publishes',
@@ -39,10 +38,6 @@ const i18n = {
     ],
   },
   es: {
-    ariaLabel:
-      'Tres aplicaciones, cada una publicando un feed y leyendo las de las otras. Los registros llevan su publisher_id consigo, así que la atribución sobrevive cada salto. El registro está a un lado, anotando quién existe y qué se midió; ningún dato pasa por él.',
-    caption:
-      'Sin centro. Cada app es fuente y lectora a la vez, y la atribución viaja con el registro.',
     kicker: 'La red',
     apps: ['App A', 'App B', 'App C'],
     publishes: 'publica',
@@ -57,7 +52,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 // Three apps on a triangle, so no position reads as "the middle one".
 const R = 96;
@@ -95,10 +93,17 @@ const edges = [
 ];
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

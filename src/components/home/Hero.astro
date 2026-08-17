@@ -21,7 +21,7 @@
  * art's absence costs nothing: flip `HERO_ART.present` off and the copy column
  * simply takes the width. No placeholder box, per the integration guide.
  */
-import type { Language } from '@/lib/i18n';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
 
 interface Props {
@@ -38,8 +38,8 @@ const t = getTranslations(lang);
  * dead link — Rule-0 holds either way.
  */
 const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
-  primary: '/developers/quickstart',
-  secondary: '/registry',
+  primary: `${getUrlPrefix(lang)}/developers/quickstart`,
+  secondary: `${getUrlPrefix(lang)}/registry`,
 };
 
 /**
@@ -72,7 +72,7 @@ const HERO_ART = {
   class="main-container flex flex-col justify-center pt-16 pb-20 sm:pt-24 sm:pb-28 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:py-0"
 >
   <div
-    class="grid items-center gap-12 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:gap-16"
+    class="grid items-center gap-12 lg:min-h-[calc(100dvh-var(--cabuya-chrome-height))] lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[minmax(0,38rem)_minmax(0,1fr)]"
   >
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.14em] text-cabuya-accent-strong">
@@ -138,5 +138,51 @@ const HERO_ART = {
         </div>
       )
     }
+
+    {
+      HERO_ART.present && (
+        <div class="hero-art-mobile -mx-4 mt-4 md:-mx-6 lg:hidden">
+          <img
+            src={HERO_ART.src}
+            alt=""
+            width={HERO_ART.width}
+            height={HERO_ART.height}
+            loading="lazy"
+            decoding="async"
+            class="h-52 w-full object-cover object-bottom sm:h-64"
+          />
+        </div>
+      )
+    }
   </div>
 </section>
+
+<style>
+  /*
+   * The phone gets the bottom of the drawing, not a shrunken copy of it.
+   *
+   * `object-cover` with `object-bottom` keeps the full width and crops height
+   * from the top, so what survives is the fan of fibres — the part that reads
+   * at 160px tall. Nothing is cropped horizontally, which is the crop that
+   * would actually damage this composition.
+   *
+   * The mask is what makes the crop honest: without it the rope would start
+   * at a hard horizontal edge in the middle of the page, which looks like a
+   * mistake rather than a choice. Fading the top third into the ground is the
+   * same "feather into the paper" the illustration brief asks of every edge.
+   */
+  .hero-art-mobile img {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 22%,
+      #000 55%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 22%,
+      #000 55%
+    );
+  }
+</style>

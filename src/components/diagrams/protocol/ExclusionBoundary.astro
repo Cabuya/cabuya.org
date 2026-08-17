@@ -11,6 +11,7 @@
  * it lives behind a link to the app that owns it, under that app's own duty of
  * care. A wall with no door would just describe a protocol nobody could use.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -20,12 +21,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.exclusionBoundary;
+
+const strings = {
   en: {
-    ariaLabel:
-      'A wall between two sides. Places, capacities, needs and org-level contacts cross it. Personal names, personal phone numbers, individual cases and moderation verdicts never do. A door in the wall marks the link-out: person-level help stays inside the app that owns it.',
-    caption:
-      'A join prohibition, not a field omission: the network must not be able to reconstruct a person’s situation, whatever fields it carries.',
     kicker: 'Normative exclusion §7',
     crossesTitle: 'Crosses the wire',
     crosses: [
@@ -51,10 +50,6 @@ const i18n = {
     ],
   },
   es: {
-    ariaLabel:
-      'Un muro entre dos lados. Los lugares, capacidades, necesidades y contactos institucionales lo cruzan. Los nombres personales, teléfonos personales, casos individuales y decisiones de moderación nunca lo hacen. Una puerta en el muro marca el enlace: la ayuda a nivel de persona se queda dentro de la app que la administra.',
-    caption:
-      'Una prohibición de cruce, no una omisión de campos: la red no debe poder reconstruir la situación de una persona, con los campos que sea.',
     kicker: 'Exclusión normativa §7',
     crossesTitle: 'Cruza el cable',
     crosses: [
@@ -79,7 +74,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 const WALL_X = 320;
 const COL_W = 268;
@@ -87,10 +85,17 @@ const TOP = 42;
 const ROW_H = 26;
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

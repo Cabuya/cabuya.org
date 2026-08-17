@@ -12,6 +12,7 @@
  * the specification look inconsistent — and a reader who later finds §4 would
  * be right to wonder what else was tidied away.
  */
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import type { Language } from '@/lib/i18n';
 
 interface Props {
@@ -21,12 +22,10 @@ interface Props {
 
 const { lang = 'en', class: className = '' } = Astro.props;
 
-const i18n = {
+const copy = DIAGRAM_COPY.oneSchemaFourTransports;
+
+const strings = {
   en: {
-    ariaLabel:
-      'One place record at the centre, feeding four equivalent transports: the static feed, which the validator measures today, and the read API, write API and MCP server, which are specified but not measured in version 0.1. All four carry the same schema.',
-    caption:
-      'One schema, four transports. Which one you serve is an operations decision — the record does not change.',
     kicker: 'Equivalence',
     center: 'One place record',
     centerSub: 'place-feed.schema.json',
@@ -39,10 +38,6 @@ const i18n = {
     plannedNote: 'Specified · not measured in 0.1',
   },
   es: {
-    ariaLabel:
-      'Un registro place en el centro que alimenta cuatro transportes equivalentes: el feed estático, que el validador mide hoy, y la API de lectura, la API de escritura y el servidor MCP, que están especificados pero no se miden en la versión 0.1. Los cuatro llevan el mismo esquema.',
-    caption:
-      'Un esquema, cuatro transportes. Cuál sirves es una decisión de operación — el registro no cambia.',
     kicker: 'Equivalencia',
     center: 'Un registro place',
     centerSub: 'place-feed.schema.json',
@@ -56,7 +51,10 @@ const i18n = {
   },
 } as const;
 
-const t = i18n[lang as keyof typeof i18n] ?? i18n.en;
+const t = {
+  ...(strings[lang as keyof typeof strings] ?? strings.en),
+  ...(copy[lang as keyof typeof copy] ?? copy.en),
+};
 
 const BOX_W = 210;
 const BOX_H = 62;
@@ -79,10 +77,17 @@ const nodes = t.transports.map((transport, index) => ({
 }));
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 340"

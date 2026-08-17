@@ -11,6 +11,7 @@
  * with their surfaces.
  */
 import { SITE_URL } from '@/lib/constances';
+import { DIAGRAM_COPY } from '@/lib/diagram-copy';
 import { getUrlPrefix, type Language } from '@/lib/i18n';
 import { agentNavEntries, navHref } from '@/lib/site-navigation';
 import { getTranslations } from '@/lib/translations';
@@ -82,4 +83,58 @@ export function serializeGenericToMarkdown(
 
   lines.push(...siteNavigationBlock(lang), '');
   return lines.join('\n');
+}
+
+/**
+ * A diagram, as a twin can carry it.
+ *
+ * The picture cannot travel, and neither can the eight SVGs this site draws.
+ * What can travel is the description already written for a screen reader —
+ * `ariaLabel` — plus the caption printed under the figure. A reader who cannot
+ * see the diagram and an agent that cannot render it need the same sentences.
+ *
+ * Emitted as a blockquote so it is visibly not body prose: the twin should not
+ * read as though the site said this in a paragraph.
+ */
+export function diagramLines(id: string, lang: Language): string[] {
+  const copy = DIAGRAM_COPY[id]?.[lang];
+  if (!copy) return [];
+  const label = getTranslations(lang).docs.diagram;
+  return ['', `> **${label}.** ${copy.caption}`, '>', `> ${copy.ariaLabel}`];
+}
+
+/**
+ * What a root document's page says that the file itself does not.
+ *
+ * `/join`, `/governance` and `/trademark` render a repository file verbatim,
+ * and their twins serve that file unchanged — re-serializing Markdown from its
+ * own rendered HTML would be a worse copy of something we already have. But the
+ * page wraps the file in two things the file cannot carry: where the source
+ * lives, and, on `/join`, what happens to anything you send through the form.
+ *
+ * The second is the one that had to move. The page states that a message is not
+ * stored, logged, measured or kept after the request; the twin said nothing, so
+ * an agent asked how to reach the maintainers could not repeat the one sentence
+ * that governs what it would be handing over.
+ */
+export function rootDocSections(
+  lang: Language,
+  options: { contact?: boolean } = {}
+): MarkdownSection[] {
+  const t = getTranslations(lang);
+  const sections: MarkdownSection[] = [
+    {
+      heading: t.rootDocs.sourceHeading,
+      lines: [t.rootDocs.sourceNote],
+    },
+  ];
+
+  if (options.contact) {
+    sections.push({
+      heading: t.contact.title,
+      lines: [t.contact.lead, '', t.contact.privacy],
+    });
+  }
+
+  return sections;
 }

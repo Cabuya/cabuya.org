@@ -17,6 +17,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 import { SITE_URL } from '@/lib/constances';
 import type { Language } from '@/lib/i18n';
 import { getUrlPrefix } from '@/lib/i18n';
+import { localizeInternalLinks } from '@/lib/localize-links';
 import {
   type SpecSection,
   sectionNeighbours,
@@ -37,6 +38,17 @@ const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
 const { previous, next } = sectionNeighbours(section.version, section.slug);
 const canonical = `${SITE_URL}${prefix}/developers/spec/${section.version}/${section.slug}`;
+
+/*
+ * The normative body is one set of files rendered under both trees, so its
+ * cross-references are canonical and unprefixed — right for an extracted copy
+ * of the spec directory, wrong under `/es`, where they dropped a Spanish reader
+ * into the
+ * English tree while this page's own previous/next nav kept them in `/es`.
+ * Rendering the slot to a string is the only place the two can be reconciled
+ * without editing normative text.
+ */
+const body = localizeInternalLinks(await Astro.slots.render('default'), lang);
 ---
 
 <DocsLayout
@@ -81,9 +93,7 @@ const canonical = `${SITE_URL}${prefix}/developers/spec/${section.version}/${sec
     )
   }
 
-  <div class="spec-body">
-    <slot />
-  </div>
+  <div class="spec-body" set:html={body} />
 
   {
     (previous || next) && (

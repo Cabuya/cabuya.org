@@ -456,6 +456,16 @@
     height: auto;
     overflow: visible;
   }
+  /*
+   * The figures carry `tabindex="0"` so the scroller is keyboard-reachable.
+   * A focusable element with no visible focus is the a11y failure that
+   * replaces the one it fixed, so give it the same ring the rest of the site
+   * uses. Only here, where the element is actually scrollable.
+   */
+  .cabuya-figure:focus-visible {
+    outline: 2px solid var(--color-cabuya-primary);
+    outline-offset: 2px;
+  }
 
   /*
    * A scrollable figure has to look scrollable, or nobody scrolls it. The
