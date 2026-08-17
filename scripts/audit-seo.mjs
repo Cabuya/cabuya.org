@@ -228,6 +228,38 @@ export function auditPage({ pagePath, seo, siblingExists }) {
     if (!value) push('twitter-missing', `twitter:${key} is empty`);
   }
 
+  /*
+   * The share card has to be absolute and it has to exist.
+   *
+   * A relative `og:image` is resolved by some crawlers against their own
+   * origin and by others not at all, so the card silently disappears from
+   * exactly the platforms nobody tests on. And a card that 404s is worse than
+   * no card: the platform renders the link with a broken-image frame instead
+   * of falling back to text.
+   *
+   * Checked against the build output rather than the source tree, because the
+   * build is what gets deployed.
+   */
+  if (seo.og.image) {
+    if (!/^https?:\/\//.test(seo.og.image)) {
+      push('og-image-relative', `og:image is not absolute: ${seo.og.image}`);
+    } else {
+      const imagePath = seo.og.image.replace(/^https?:\/\/[^/]+/, '');
+      if (!existsSync(join(DIST_DIR, imagePath.replace(/^\//, '')))) {
+        push(
+          'og-image-missing',
+          `og:image does not exist in the build: ${imagePath}`
+        );
+      }
+    }
+  }
+  if (seo.twitter.card && seo.twitter.card !== 'summary_large_image') {
+    push(
+      'twitter-card-kind',
+      `twitter:card is "${seo.twitter.card}"; a 1200x630 card needs summary_large_image`
+    );
+  }
+
   if (seo.jsonLdRaw.length === 0) {
     push('jsonld-missing', 'no JSON-LD block');
   }

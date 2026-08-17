@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "prebuild": "node scripts/generate-agent-skills-index.mjs",
+    "prebuild": "node scripts/generate-agent-skills-index.mjs && node scripts/generate-og-fallback.mjs",
     "generate:agent-skills-index": "node scripts/generate-agent-skills-index.mjs",
     "dns:aid:publish": "node scripts/publish-dns-aid.mjs",
     "dns:aid:dry-run": "DNS_AID_DRY_RUN=1 node scripts/publish-dns-aid.mjs",
@@ -33,7 +33,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "images:optimize": "node scripts/optimize-images.mjs",
-    "og:interim": "node scripts/generate-og-interim.mjs",
+    "og:fallback": "node scripts/generate-og-fallback.mjs",
+    "og:fallback:force": "node scripts/generate-og-fallback.mjs --force",
     "images:webp": "echo 'All images are natively WebP — no generation needed'",
     "md:check": "node scripts/check-md-parity.mjs",
     "md:check:strict": "node scripts/check-md-parity.mjs --strict",

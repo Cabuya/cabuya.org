@@ -55,6 +55,21 @@ function webpSize(buffer: Buffer): string | undefined {
   return undefined;
 }
 
+/** JPEG dimensions, from the SOF segment. */
+function jpegSize(buffer: Buffer): [number, number] | undefined {
+  if (buffer.readUInt16BE(0) !== 0xffd8) return undefined;
+  let offset = 2;
+  while (offset < buffer.length - 9) {
+    if (buffer[offset] !== 0xff) return undefined;
+    const marker = buffer[offset + 1];
+    if (marker === 0xc0 || marker === 0xc2) {
+      return [buffer.readUInt16BE(offset + 7), buffer.readUInt16BE(offset + 5)];
+    }
+    offset += 2 + buffer.readUInt16BE(offset + 2);
+  }
+  return undefined;
+}
+
 function inspect(asset: Asset): Asset & {
   exists: boolean;
   bytes: number;
@@ -157,6 +172,42 @@ const manifestIcons = manifest.icons.map((icon) => ({
 }));
 
 const kb = (bytes: number): string => `${(bytes / 1024).toFixed(1)} KB`;
+
+/**
+ * The share cards, inspected on disk.
+ *
+ * `isFallback` reads the same marker the generator's guard reads, so the page
+ * reports the state the build actually saw rather than what the filename
+ * suggests.
+ */
+const OG_FALLBACK_MARKER = 'cabuya-og-fallback';
+const ogCards = [
+  { path: '/images/og-default-en.jpg', label: 'Default — English' },
+  { path: '/images/og-default.jpg', label: 'Default — Spanish' },
+].map((card) => {
+  const full = join(PUBLIC, card.path.replace(/^\//, ''));
+  if (!existsSync(full)) {
+    return {
+      ...card,
+      bytes: 0,
+      dimensions: 'missing',
+      dimensionsOk: false,
+      sizeOk: false,
+      isFallback: false,
+    };
+  }
+  const buffer = readFileSync(full);
+  const size = jpegSize(buffer);
+  const bytes = statSync(full).size;
+  return {
+    ...card,
+    bytes,
+    dimensions: size ? `${size[0]}×${size[1]}` : 'unreadable',
+    dimensionsOk: size?.[0] === 1200 && size?.[1] === 630,
+    sizeOk: bytes < 300 * 1024,
+    isFallback: buffer.includes(OG_FALLBACK_MARKER),
+  };
+});
 const sizeOk = (asset: { expected?: string; dimensions: string }): boolean =>
   !asset.expected || asset.dimensions === asset.expected;
 
@@ -413,22 +464,56 @@ const allResolve =
     </div>
   </section>
 
-  <!-- ── OG image slot ───────────────────────────────────── -->
+  <!-- ── Share cards ─────────────────────────────────────── -->
   <section>
-    <h2 class="text-xl font-display font-bold mb-1">Open Graph image</h2>
+    <h2 class="text-xl font-display font-bold mb-1">Share cards</h2>
     <p class="text-sm text-cabuya-text-secondary mb-4 max-w-3xl">
-      The share card is generated in a later task; the frame below reserves the
-      exact dimensions so the layout that consumes it can be built against a
-      real box rather than a guess.
+      What a link to this site looks like in a chat client. These are the
+      generated <em>fallback</em> cards — austere, on-brand, and in place so no
+      page ever ships without a valid <code>og:image</code>. The real artwork
+      (<code>OG-01</code> in the prompt pack) replaces them at the same paths,
+      and the generator refuses to overwrite a file it did not produce.
     </p>
-    <div
-      class="rounded-xl border-2 border-dashed border-cabuya-border-strong bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated w-full max-w-[600px] aspect-[1200/630] flex flex-col items-center justify-center text-center px-6"
-    >
-      <p class="text-sm font-semibold">1200 × 630</p>
-      <p class="mt-1 text-xs text-cabuya-text-secondary max-w-xs">
-        Reserved for the Open Graph card. Generated in Task 22 of the migration
-        plan, together with the per-section variants.
-      </p>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      {
+        ogCards.map((card) => (
+          <figure class="rounded-xl border border-cabuya-border overflow-hidden">
+            <img
+              src={card.path}
+              alt={`Share card: ${card.label}`}
+              width="1200"
+              height="630"
+              class="h-auto w-full"
+            />
+            <figcaption class="border-t border-cabuya-border p-4">
+              <p class="text-sm font-semibold">{card.label}</p>
+              <code class="text-xs break-all">{card.path}</code>
+              <ul class="mt-3 space-y-1 text-xs">
+                <li class={card.dimensionsOk ? 'text-cabuya-success' : 'text-cabuya-danger'}>
+                  {card.dimensionsOk ? '✓' : '✗'} {card.dimensions} — must be 1200×630
+                </li>
+                <li class={card.sizeOk ? 'text-cabuya-success' : 'text-cabuya-danger'}>
+                  {card.sizeOk ? '✓' : '✗'} {kb(card.bytes)} — must be under 300 KB
+                </li>
+                <li class="text-cabuya-text-secondary">
+                  {card.isFallback
+                    ? 'Generated fallback — the real artwork replaces it in place'
+                    : 'Not a generated fallback: real artwork is in place'}
+                </li>
+              </ul>
+            </figcaption>
+          </figure>
+        ))
+      }
     </div>
+
+    <p class="mt-4 max-w-3xl text-xs text-cabuya-text-muted">
+      There is no dark variant, and there cannot be one: <code>og:image</code> is
+      resolved by a crawler that has no idea what colour scheme the eventual
+      viewer prefers, and <code>prefers-color-scheme</code> is not part of the
+      Open Graph protocol.
+    </p>
   </section>
+
 </InternalLayout>

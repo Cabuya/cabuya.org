@@ -81,3 +81,59 @@ the matrix (`seo:check`).
 retired Corag routes → closest surviving surface; `/en/*` → `/*`; legacy ES
 root URLs → `/es/*`. Every rule must resolve to a live page; no live page may
 be shadowed.
+
+## Share cards
+
+One card, 1200 × 630, on every page. The mechanism lives in
+`src/lib/og-image.ts` and resolves in three steps, most specific first: an
+explicit `image` prop on the page, a section card matched by route prefix, then
+the language default.
+
+| Card | Path | Serves |
+|---|---|---|
+| Default — English | `public/images/og-default-en.jpg` | Every `/` route |
+| Default — Spanish | `public/images/og-default.jpg` | Every `/es` route |
+
+### Adding a section card
+
+1. Generate the artwork per `docs/visuals/prompts/04-og-images.md` — same house
+   style, same dimensions, same safe area, wordless.
+2. Register it in `OG_CARDS`.
+3. Add a `{ prefix, card }` entry to `SECTION_CARDS`.
+
+Nothing else changes: pages in that section pick it up, including pages nobody
+has written yet. That is why the map is keyed on route prefix rather than on
+frontmatter — a per-page field is a field the next page forgets, and the page
+that forgets is the one that gets shared.
+
+### Why route prefixes and not frontmatter
+
+A section card is a property of the section. Frontmatter makes it a property of
+each page, which means it is only as correct as the last person's memory.
+
+### Why there is no dark variant
+
+`og:image` is fetched by a crawler that has no idea what colour scheme the
+eventual viewer prefers, and `prefers-color-scheme` is not part of the Open
+Graph protocol. A second file could never be selected, so the card is built on
+the light ground and has to read well when a dark client frames it.
+
+### The fallback
+
+`scripts/generate-og-fallback.mjs` runs in `prebuild` and composes an austere
+on-brand card so that no page ever ships without a valid `og:image`. It writes
+a marker into the file's EXIF description and **refuses to overwrite anything
+that does not carry it** — the real artwork arrives with the same filename, so
+the marker is the only signal that distinguishes it. `--force` regenerates the
+fallback but still will not touch real artwork.
+`tests/unit/scripts/og-fallback.test.ts` covers the guard, because "does not
+destroy the designer's work" is not a property to verify by hand.
+
+### What the gate enforces
+
+`pnpm run seo:check` asserts, on the built output, that every page carries
+`og:image` and `twitter:card`, that the image URL is absolute, that the file it
+points at **exists in the build**, and that the card kind is
+`summary_large_image`. A relative URL is resolved against the crawler's own
+origin by some platforms and not at all by others, and a 404 card renders as a
+broken-image frame rather than falling back to text.
