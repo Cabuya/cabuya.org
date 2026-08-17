@@ -15,6 +15,8 @@ import excludeInternal from './src/integrations/exclude-internal';
 import {
   satteriExternalLinks,
   satteriImageDefaults,
+  satteriRfc2119,
+  satteriSpecAnchors,
 } from './src/lib/satteri-plugins';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +54,12 @@ export default defineConfig({
     // plugins are ported to Sätteri HAST plugins. `@astrojs/mdx` inherits this
     // processor automatically, so `.md` and `.mdx` share the same pipeline.
     processor: satteri({
-      hastPlugins: [satteriExternalLinks(), satteriImageDefaults()],
+      hastPlugins: [
+        satteriExternalLinks(),
+        satteriImageDefaults(),
+        satteriSpecAnchors(),
+        satteriRfc2119(),
+      ],
     }),
   },
   integrations: [

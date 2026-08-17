@@ -288,6 +288,49 @@ export const en: SiteTranslations = {
       'Mapping a live database into the schema is an afternoon, sometimes two: your statuses have to be reconciled with the shared vocabulary, and somebody has to decide what your data actually means. That work is not avoidable and we would rather say so here than have you discover it at step 4.',
   },
 
+  spec: {
+    indexTitle: 'Specification',
+    indexDescription:
+      'The Cabuya protocol specification. Versioned, with stable section anchors, rendered from the same files the validator and the agent skill read.',
+    indexLead:
+      'Every version keeps its own URL forever. This page lists them; the text itself lives one level down.',
+    versionLabel: 'Version',
+    statusLabels: {
+      draft: 'Draft — under review',
+      rc: 'Release candidate',
+      normative: 'Normative',
+      superseded: 'Superseded',
+    },
+    permanenceTitle: 'Versioned URLs are permanent',
+    permanenceBody:
+      'A specification URL points at one version and keeps pointing at it. There is no "latest" alias, because a normative document that changes under its own address is a document nobody can cite.',
+    rcRuleTitle: 'What a release candidate means',
+    rcRuleBody:
+      'A release candidate is frozen except for defects. If it changes for any other reason, it becomes a new candidate rather than a quietly amended one.',
+    sectionsTitle: 'Sections',
+    sectionsCountLabel: 'sections',
+    normativeLanguageNotice:
+      'The normative text is published in English. This page shows it unchanged; the navigation around it is in Spanish. A translation, when one exists, will be informative — the English remains the text that governs.',
+    schemasTitle: 'Schemas',
+    schemasDescription:
+      'The JSON Schemas the validator enforces. Every field with its type, constraints, an example value, and the check ids that fire on it — generated from the schema files themselves.',
+    schemasLead:
+      'Generated from the schema files themselves, so this page cannot describe a field the validator does not enforce.',
+    schemaIdLabel: 'Schema id',
+    fieldsTitle: 'Fields',
+    checksColumn: 'Checks',
+    profileColumn: 'Profile',
+    exampleColumn: 'Example',
+    coreLabel: 'Core',
+    extendedLabel: 'Extended',
+    examplesTitle: 'Examples',
+    examplesLead:
+      'Two that conform and three that do not. The invalid ones state, in their own file, what they are demonstrating — and the validator’s tests assert against those exact strings.',
+    validLabel: 'Conforms',
+    invalidLabel: 'Does not conform',
+    teachingNote: 'What this example demonstrates',
+  },
+
   markdown: {
     siteNavigation: 'Site Navigation',
     languageNote: 'This page is also available in Spanish.',

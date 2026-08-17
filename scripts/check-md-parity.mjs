@@ -51,6 +51,7 @@ import {
   htmlPathFor,
 } from './lib/dist-pages.mjs';
 import { CONTRACT_TARGET, evaluatePage } from './lib/md-completeness.mjs';
+import { allowsEnglishBody } from './lib/normative-language.mjs';
 
 const STRICT = process.argv.includes('--strict');
 const EXISTENCE_ONLY = process.argv.includes('--existence-only');
@@ -132,8 +133,15 @@ if (!EXISTENCE_ONLY) {
     // `confident` is the defect tier; `review` is prose carrying an
     // untranslated proper noun and is never failed on — the same split the
     // audit script reports.
+    /*
+     * The specification and the schema reference render the English normative
+     * text on Spanish routes, with a notice saying so. That is a decision, not
+     * a gap — see `scripts/lib/normative-language.mjs` — and the exemption is
+     * conditional on the notice actually being present, so a Spanish page that
+     * silently served English still fails here.
+     */
     const language = analyzeDocument(markdownToText(markdown), expected);
-    if (language.flagged) {
+    if (language.flagged && !allowsEnglishBody(result.pagePath, markdown)) {
       const worst = language.confident[0];
       verdict.errors.push(
         `body classifies as "${worst.score.lang}" on a "${expected}" page: ` +

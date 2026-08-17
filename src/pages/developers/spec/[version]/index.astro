@@ -1,0 +1,12 @@
+---
+import SpecVersionPage from '@/components/pages/spec/SpecVersionPage.astro';
+import { specVersions } from '@/lib/spec-loader';
+
+export function getStaticPaths(): { params: { version: string } }[] {
+  return specVersions().map((version) => ({ params: { version } }));
+}
+
+const { version } = Astro.params as { version: string };
+---
+
+<SpecVersionPage lang="en" version={version} />

@@ -1,0 +1,17 @@
+---
+import SchemaPage from '@/components/pages/spec/SchemaPage.astro';
+import { specSchemas, specVersions } from '@/lib/spec-loader';
+
+export function getStaticPaths() {
+  return specVersions().flatMap((version) =>
+    specSchemas(version).map((schema) => ({
+      params: { version, name: schema.name },
+      props: { schema },
+    }))
+  );
+}
+
+const { schema } = Astro.props;
+---
+
+<SchemaPage lang="en" schema={schema} />

@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import SpecSectionPage from '@/components/pages/spec/SpecSectionPage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+import { specSection } from '@/lib/spec-loader';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('spec');
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .flatMap((lang) =>
+      entries.map((entry) => ({
+        params: {
+          lang,
+          version: entry.data.version,
+          section: entry.data.slug,
+        },
+        props: { entry },
+      }))
+    );
+}
+
+const {
+  lang,
+  version,
+  section: slug,
+} = Astro.params as {
+  lang: Language;
+  version: string;
+  section: string;
+};
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const section = specSection(version, slug);
+---
+
+{
+  section && (
+    <SpecSectionPage lang={lang} section={section} headings={headings}>
+      <Content />
+    </SpecSectionPage>
+  )
+}

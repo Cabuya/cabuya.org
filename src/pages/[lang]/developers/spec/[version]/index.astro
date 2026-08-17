@@ -1,0 +1,23 @@
+---
+import SpecVersionPage from '@/components/pages/spec/SpecVersionPage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+import { specVersions } from '@/lib/spec-loader';
+
+export function getStaticPaths(): {
+  params: { lang: Language; version: string };
+}[] {
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .flatMap((lang) =>
+      specVersions().map((version) => ({ params: { lang, version } }))
+    );
+}
+
+const { lang, version } = Astro.params as { lang: Language; version: string };
+---
+
+<SpecVersionPage lang={lang} version={version} />

@@ -30,11 +30,11 @@
 | Route | Job | Status |
 |---|---|---|
 | `/developers` | Portal home: the five-minute promise, four transports, choose-your-path | ✅ live |
-| `/developers/quickstart` | Publish your first feed — the single most important page | Task 24 |
-| `/developers/spec` | Version index with status badges + the RC rule | Task 25 |
-| `/developers/spec/{version}` | Spec TOC for one version | Task 25 |
-| `/developers/spec/{version}/{section}` | One normative section; stable `#N-M` anchors | Task 25 |
-| `/developers/schemas` · `/developers/schemas/{version}/{name}` | Generated field-by-field schema reference with check-id cross-links | Task 25 |
+| `/developers/quickstart` | Publish your first feed — the single most important page | ✅ live |
+| `/developers/spec` | Version index with status badges + the RC rule | ✅ live |
+| `/developers/spec/{version}` | Spec TOC for one version | ✅ live |
+| `/developers/spec/{version}/{section}` | One normative section; stable `#N-M` anchors | ✅ live |
+| `/developers/schemas` · `/developers/schemas/{version}/{name}` | Generated field-by-field schema reference with check-id cross-links | ✅ live |
 | `/developers/validator` | Live validator (URL mode + paste-JSON mode) | Tasks 26–27 |
 | `/developers/validator/checks` | The full check catalogue; stable anchors `#REC001` | Task 26 |
 | `/developers/validator/probe` | What our probe UA does and why (politeness page) | Task 27 |

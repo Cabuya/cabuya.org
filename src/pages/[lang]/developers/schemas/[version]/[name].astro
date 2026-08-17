@@ -1,0 +1,27 @@
+---
+import SchemaPage from '@/components/pages/spec/SchemaPage.astro';
+import {
+  DEFAULT_LANGUAGE,
+  getSupportedLanguages,
+  type Language,
+} from '@/lib/i18n';
+import { specSchemas, specVersions } from '@/lib/spec-loader';
+
+export function getStaticPaths() {
+  return getSupportedLanguages()
+    .filter((lang) => lang !== DEFAULT_LANGUAGE)
+    .flatMap((lang) =>
+      specVersions().flatMap((version) =>
+        specSchemas(version).map((schema) => ({
+          params: { lang, version, name: schema.name },
+          props: { schema },
+        }))
+      )
+    );
+}
+
+const { lang } = Astro.params as { lang: Language };
+const { schema } = Astro.props;
+---
+
+<SchemaPage lang={lang} schema={schema} />

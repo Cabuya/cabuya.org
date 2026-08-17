@@ -1,0 +1,226 @@
+---
+/**
+ * `/developers/schemas/{version}/{name}` — the generated field reference.
+ *
+ * Every row comes from the schema file. Nothing on this page is written by
+ * hand, which is the only way a reference stays true to the thing it
+ * documents: a hand-maintained table drifts, and the drift is invisible until
+ * somebody builds against the page and the validator rejects them.
+ *
+ * The `Checks` column is the cross-link that closes the agent loop — a field,
+ * the ids that fire on it, and one hop to the rule and the fix in the same
+ * vocabulary the validator's own output uses.
+ */
+import CodeBlock from '@/components/developers/CodeBlock.astro';
+import Callout from '@/components/editorial/Callout.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { SITE_URL } from '@/lib/constances';
+import { checkHref, checksForField } from '@/lib/field-checks';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { exampleValueFor, schemaFields } from '@/lib/schema-reference';
+import { type SpecSchema, specExamples } from '@/lib/spec-loader';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  schema: SpecSchema;
+}
+
+const { lang, schema } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const fields = schemaFields(schema.schema);
+
+/**
+ * Built from what the schema actually contains, so it is unique per schema and
+ * lands in the 130–160 band the SEO gate enforces. A hand-written description
+ * per schema would be two strings to keep in step with files that change.
+ */
+const requiredCount = fields.filter((field) => field.required).length;
+const metaDescription = [
+  schema.description ?? `${schema.title ?? schema.name}.`,
+  `${fields.length} fields, ${requiredCount} required, each with its type, an example value and the validator checks that fire on it.`,
+]
+  .join(' ')
+  .slice(0, 158);
+
+/**
+ * Example values come from the richest conforming example, so a reader sees
+ * what a populated field actually looks like rather than a placeholder we
+ * invented.
+ */
+const example = (() => {
+  const source = specExamples(schema.version).find(
+    (entry) => entry.kind === 'valid' && entry.name.includes('rich')
+  );
+  try {
+    return source ? JSON.parse(source.raw) : undefined;
+  } catch {
+    return undefined;
+  }
+})();
+
+const examples = specExamples(schema.version);
+const headings = buildToc([
+  { depth: 2, text: t.spec.fieldsTitle },
+  { depth: 2, text: t.spec.examplesTitle },
+]);
+---
+
+<DocsLayout
+  lang={lang}
+  title={schema.title ?? schema.name}
+  description={metaDescription}
+  trail={[
+    { label: t.spec.schemasTitle, href: `${prefix}/developers/schemas` },
+    { label: schema.version, href: `${prefix}/developers/schemas` },
+    { label: schema.name },
+  ]}
+  headings={headings}
+>
+  <JsonLd
+    data={{
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareSourceCode',
+      name: schema.title ?? schema.name,
+      description: schema.description,
+      programmingLanguage: 'JSON Schema',
+      codeRepository: 'https://github.com/Cabuya/cabuya.org',
+      url: `${SITE_URL}${prefix}/developers/schemas/${schema.version}/${schema.name}`,
+    }}
+  />
+
+  {
+    lang !== 'en' && (
+      <Callout tone="note" label={t.spec.versionLabel}>
+        <p>{t.spec.normativeLanguageNotice}</p>
+      </Callout>
+    )
+  }
+
+  <p class="not-prose mb-6 rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-4 text-sm">
+    <span class="text-cabuya-text-muted">{t.spec.schemaIdLabel}: </span>
+    <code class="text-xs">{schema.id}</code>
+  </p>
+
+  <h2 id={headings[0].slug}>{t.spec.fieldsTitle}</h2>
+
+  <div class="not-prose my-6 overflow-x-auto rounded-cabuya-sm border border-cabuya-border">
+    <table class="w-full min-w-[52rem] text-sm">
+      <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.field}</th>
+          <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.type}</th>
+          <th scope="col" class="px-4 py-2.5 font-semibold">{t.spec.profileColumn}</th>
+          <th scope="col" class="px-4 py-2.5 font-semibold">{t.spec.exampleColumn}</th>
+          <th scope="col" class="px-4 py-2.5 font-semibold">{t.spec.checksColumn}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+        {
+          fields.map((field) => {
+            const checks = checksForField(field.path);
+            const value = example ? exampleValueFor(example, field.path) : undefined;
+            return (
+              <tr id={`field-${field.path.replace(/[.[\]]/g, '-')}`}>
+                <td class="px-4 py-3 align-top" style={`padding-left:${1 + field.depth}rem`}>
+                  <code class="text-xs font-medium">{field.name}</code>
+                  {field.required && (
+                    <span class="ml-1.5 text-[0.65rem] font-semibold uppercase text-cabuya-text-muted">
+                      {t.docs.required}
+                    </span>
+                  )}
+                  {field.description && (
+                    <p class="mt-1 max-w-md text-xs text-cabuya-text-secondary">
+                      {field.description}
+                    </p>
+                  )}
+                  {field.enumValues && (
+                    <p class="mt-1 flex flex-wrap gap-1">
+                      {field.enumValues.map((value) => (
+                        <code class="rounded bg-cabuya-bg-brand-strong px-1 py-0.5 text-[0.65rem]">
+                          {value}
+                        </code>
+                      ))}
+                    </p>
+                  )}
+                  {field.notes.map((note) => (
+                    <p class="mt-1 text-[0.7rem] text-cabuya-text-muted">{note}</p>
+                  ))}
+                </td>
+                <td class="px-4 py-3 align-top">
+                  <code class="text-xs text-cabuya-text-secondary">{field.type}</code>
+                  {field.format && (
+                    <code class="mt-1 block text-[0.7rem] text-cabuya-text-muted">
+                      {field.format}
+                    </code>
+                  )}
+                </td>
+                <td class="px-4 py-3 align-top text-xs">
+                  {field.profile === 'core' ? t.spec.coreLabel : t.spec.extendedLabel}
+                </td>
+                <td class="px-4 py-3 align-top">
+                  {value ? (
+                    <code class="text-xs text-cabuya-text-secondary">{value}</code>
+                  ) : (
+                    <span class="text-xs text-cabuya-text-muted">—</span>
+                  )}
+                </td>
+                <td class="px-4 py-3 align-top">
+                  {checks.length > 0 ? (
+                    <span class="flex flex-wrap gap-1">
+                      {checks.map((id) => (
+                        <a
+                          href={checkHref(id, prefix)}
+                          class="rounded bg-cabuya-primary-soft px-1.5 py-0.5 font-mono text-[0.7rem] text-cabuya-primary"
+                        >
+                          {id}
+                        </a>
+                      ))}
+                    </span>
+                  ) : (
+                    <span class="text-xs text-cabuya-text-muted">—</span>
+                  )}
+                </td>
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id={headings[1].slug}>{t.spec.examplesTitle}</h2>
+  <p>{t.spec.examplesLead}</p>
+
+  {
+    examples.map((entry) => (
+      <div class="not-prose my-6">
+        <p class="mb-2 flex flex-wrap items-center gap-2 text-xs">
+          <span
+            class:list={[
+              'rounded px-2 py-0.5 font-semibold',
+              entry.kind === 'valid'
+                ? 'bg-cabuya-success-soft text-cabuya-success'
+                : 'bg-cabuya-danger-soft text-cabuya-danger',
+            ]}
+          >
+            {entry.kind === 'valid' ? t.spec.validLabel : t.spec.invalidLabel}
+          </span>
+          <code class="text-cabuya-text-muted">{entry.name}.json</code>
+        </p>
+        {entry.comment && (
+          <p class="mb-2 rounded-cabuya-sm border-l-2 border-cabuya-accent bg-cabuya-bg-brand/40 px-4 py-2 text-sm text-cabuya-text-secondary">
+            <span class="font-semibold">{t.spec.teachingNote}: </span>
+            {entry.comment}
+          </p>
+        )}
+        <CodeBlock code={entry.raw} lang="json" title={`${entry.name}.json`} uiLang={lang} />
+      </div>
+    ))
+  }
+</DocsLayout>

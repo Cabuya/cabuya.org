@@ -288,6 +288,49 @@ export const es: SiteTranslations = {
       'Mapear una base de datos viva al esquema es una tarde, a veces dos: hay que reconciliar tus estados con el vocabulario compartido, y alguien tiene que decidir qué significan tus datos en realidad. Ese trabajo no se puede evitar y preferimos decirlo aquí y no que lo descubras en el paso 4.',
   },
 
+  spec: {
+    indexTitle: 'Especificación',
+    indexDescription:
+      'La especificación del protocolo Cabuya. Versionada, con anclajes de sección estables, renderizada desde los mismos archivos que leen el validador y la skill.',
+    indexLead:
+      'Cada versión conserva su propia URL para siempre. Esta página las lista; el texto vive un nivel más abajo.',
+    versionLabel: 'Versión',
+    statusLabels: {
+      draft: 'Borrador — en revisión',
+      rc: 'Candidata a publicación',
+      normative: 'Normativa',
+      superseded: 'Reemplazada',
+    },
+    permanenceTitle: 'Las URL versionadas son permanentes',
+    permanenceBody:
+      'La URL de una especificación apunta a una versión y sigue apuntando a ella. No hay alias «última», porque un documento normativo que cambia bajo su propia dirección es un documento que nadie puede citar.',
+    rcRuleTitle: 'Qué significa una candidata a publicación',
+    rcRuleBody:
+      'Una candidata está congelada salvo por defectos. Si cambia por cualquier otra razón, se convierte en una candidata nueva y no en una enmendada en silencio.',
+    sectionsTitle: 'Secciones',
+    sectionsCountLabel: 'secciones',
+    normativeLanguageNotice:
+      'El texto normativo se publica en inglés. Esta página lo muestra sin cambios; la navegación alrededor está en español. Una traducción, cuando exista, será informativa — el inglés sigue siendo el texto que rige.',
+    schemasTitle: 'Esquemas',
+    schemasDescription:
+      'Los esquemas JSON que el validador aplica. Cada campo con su tipo, restricciones, un valor de ejemplo y los identificadores de verificación que se disparan en él.',
+    schemasLead:
+      'Generada desde los archivos de esquema, así que esta página no puede describir un campo que el validador no aplique.',
+    schemaIdLabel: 'Identificador del esquema',
+    fieldsTitle: 'Campos',
+    checksColumn: 'Verificaciones',
+    profileColumn: 'Perfil',
+    exampleColumn: 'Ejemplo',
+    coreLabel: 'Núcleo',
+    extendedLabel: 'Extendido',
+    examplesTitle: 'Ejemplos',
+    examplesLead:
+      'Dos que cumplen y tres que no. Los que no cumplen declaran, en su propio archivo, qué están demostrando — y las pruebas del validador se comparan contra esas cadenas exactas.',
+    validLabel: 'Cumple',
+    invalidLabel: 'No cumple',
+    teachingNote: 'Qué demuestra este ejemplo',
+  },
+
   markdown: {
     siteNavigation: 'Navegación del Sitio',
     languageNote: 'Esta página también está disponible en inglés.',

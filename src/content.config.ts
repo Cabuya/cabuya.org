@@ -15,6 +15,8 @@ import { glob } from 'astro/loaders';
 // Astro 7 deprecates its own `z` re-export; the project depends on zod directly.
 import { z } from 'zod';
 
+import { specSections, specVersions } from '@/lib/spec-loader';
+
 /**
  * Portal prose.
  *
@@ -51,4 +53,58 @@ const docs = defineCollection({
   }),
 });
 
-export const collections = { docs };
+/**
+ * The specification, as a collection — read through `spec-loader.ts`.
+ *
+ * A `glob()` loader aimed at the spec directory would be shorter and would
+ * break B2: the
+ * bounded directory must have exactly one site-side reader, so that lifting it
+ * into another repository is a copy rather than an archaeology exercise. A
+ * custom loader keeps the collection API (`getCollection`, `render`, the
+ * heading list, Sätteri's plugins) while every file read still goes through the
+ * adapter.
+ *
+ * `renderMarkdown` is the loader-context helper: it runs the same Markdown
+ * pipeline configured in `astro.config.mjs`, which is how the spec's headings
+ * get their §-numbered anchors and its MUSTs get marked.
+ */
+const specSectionsCollection = defineCollection({
+  loader: {
+    name: 'cabuya-spec',
+    async load({ store, renderMarkdown, parseData }) {
+      store.clear();
+      for (const version of specVersions()) {
+        for (const section of specSections(version)) {
+          const id = `${version}/${section.slug}`;
+          const data = await parseData({
+            id,
+            data: {
+              version: section.version,
+              slug: section.slug,
+              number: section.number,
+              title: section.title,
+              status: section.status,
+              order: section.order,
+            },
+          });
+          store.set({
+            id,
+            data,
+            body: section.body,
+            rendered: await renderMarkdown(section.body),
+          });
+        }
+      }
+    },
+  },
+  schema: z.object({
+    version: z.string(),
+    slug: z.string(),
+    number: z.string(),
+    title: z.string(),
+    status: z.enum(['draft', 'rc', 'normative', 'superseded']),
+    order: z.number(),
+  }),
+});
+
+export const collections = { docs, spec: specSectionsCollection };

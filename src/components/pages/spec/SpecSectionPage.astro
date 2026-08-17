@@ -1,0 +1,143 @@
+---
+/**
+ * `/developers/spec/{version}/{section}` — one normative section.
+ *
+ * The body is rendered from the Markdown file the repository ships and CI
+ * validates. There is no second copy: the site cannot publish a normative
+ * sentence the specification does not contain, because it has nothing else to
+ * render from.
+ *
+ * Anchors come from the §-numbering via a HAST plugin, not from the heading
+ * text, so a validator message that deep-links to `#3-1` keeps working after
+ * somebody fixes a typo in that heading.
+ */
+import Callout from '@/components/editorial/Callout.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { SITE_URL } from '@/lib/constances';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import {
+  type SpecSection,
+  sectionNeighbours,
+  sectionSummary,
+} from '@/lib/spec-loader';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  section: SpecSection;
+  /** Headings extracted from the body, for the contents rail. */
+  headings: Array<{ depth: number; text: string; slug?: string }>;
+}
+
+const { lang, section, headings } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+const { previous, next } = sectionNeighbours(section.version, section.slug);
+const canonical = `${SITE_URL}${prefix}/developers/spec/${section.version}/${section.slug}`;
+---
+
+<DocsLayout
+  lang={lang}
+  title={section.title}
+  description={sectionSummary(section)}
+  trail={[
+    { label: t.spec.indexTitle, href: `${prefix}/developers/spec` },
+    {
+      label: section.version,
+      href: `${prefix}/developers/spec/${section.version}`,
+    },
+    { label: `§${section.number}` },
+  ]}
+  headings={buildToc(headings)}
+>
+  <JsonLd
+    data={{
+      '@context': 'https://schema.org',
+      '@type': 'TechArticle',
+      headline: section.title,
+      /*
+       * Self-canonical, never "latest". A normative document that resolves to
+       * a moving target cannot be cited, and a citation that silently changes
+       * meaning is worse than a dead one.
+       */
+      url: canonical,
+      inLanguage: 'en',
+      isPartOf: {
+        '@type': 'TechArticle',
+        name: `Cabuya ${section.version}`,
+        url: `${SITE_URL}${prefix}/developers/spec/${section.version}`,
+      },
+    }}
+  />
+
+  {
+    lang !== 'en' && (
+      <Callout tone="note" label={t.spec.versionLabel}>
+        <p>{t.spec.normativeLanguageNotice}</p>
+      </Callout>
+    )
+  }
+
+  <div class="spec-body">
+    <slot />
+  </div>
+
+  {
+    (previous || next) && (
+      <nav class="not-prose mt-12 grid gap-3 border-t border-cabuya-border pt-8 sm:grid-cols-2">
+        {previous ? (
+          <a
+            href={`${prefix}/developers/spec/${section.version}/${previous.slug}`}
+            class="group rounded-cabuya-sm border border-cabuya-border p-4 transition-colors hover:border-cabuya-primary"
+          >
+            <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
+              {t.docs.previous} · §{previous.number}
+            </span>
+            <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
+              {previous.title}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a
+            href={`${prefix}/developers/spec/${section.version}/${next.slug}`}
+            class="group rounded-cabuya-sm border border-cabuya-border p-4 text-right transition-colors hover:border-cabuya-primary sm:col-start-2"
+          >
+            <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
+              {t.docs.next} · §{next.number}
+            </span>
+            <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
+              {next.title}
+            </span>
+          </a>
+        )}
+      </nav>
+    )
+  }
+</DocsLayout>
+
+<style is:global>
+  /*
+   * RFC 2119 keywords, marked by the `rfc-2119` HAST plugin.
+   *
+   * Small caps with a letterspace: how printed standards have signalled terms
+   * of art for a century. Uppercase alone reads as shouting, and bold alone
+   * does not distinguish MUST from ordinary emphasis.
+   */
+  .spec-body b.rfc2119 {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: var(--color-cabuya-text);
+  }
+
+  /* Section headings are link targets; keep them clear of the sticky header. */
+  .spec-body :is(h2, h3, h4)[id] {
+    scroll-margin-top: calc(var(--cabuya-chrome-height) + 1rem);
+  }
+</style>

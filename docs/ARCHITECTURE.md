@@ -149,3 +149,42 @@ The skill repo vendors `spec/schemas/`, the examples and the vocab with
 SHA-256 checksums (`sync-spec.sh` is the only writer; CI verifies). The
 skill's offline acceptance test asserts against the same five examples this
 repo's `spec:check` validates — one contract, two enforcement points.
+
+## Rendering the specification (Task 25)
+
+The spec's HTML is produced from the same Markdown the repository ships, the
+validator's snapshots assert against, and the skill vendors. There is no second
+copy, so the site cannot publish a normative sentence the specification does not
+contain.
+
+**The collection is loaded through the adapter, not by a glob.** `spec/` is a
+bounded directory (B2): one site-side reader, so lifting it into another
+repository is a copy rather than an excavation. A `glob()` loader pointed at it
+would be three lines shorter and would break that. Instead `src/content.config.ts`
+declares a custom Content Layer loader that calls `spec-loader.ts` and hands each
+body to the loader context's `renderMarkdown`, which runs the same Sätteri
+pipeline configured in `astro.config.mjs`. The collection API — `getCollection`,
+`render`, the heading list — works exactly as it would with a glob.
+
+**Anchors come from the §-numbering, not from the heading text.** The
+`spec-anchors` HAST plugin reads `§3.1` out of a heading and emits `id="3-1"`.
+Validator findings deep-link to those anchors, and a slugified title would move
+the moment somebody fixed a typo in it — breaking every message already in the
+wild.
+
+**RFC 2119 keywords are marked by a plugin**, not by authored markup: the spec
+files stay plain Markdown for every other consumer, and presentation belongs to
+whoever renders them.
+
+**Spanish spec and schema routes serve the English body**, with a notice saying
+so. `src/lib/normative-language.ts` (mirrored for the gate scripts at
+`scripts/lib/normative-language.mjs`, with a test asserting the two agree) makes
+that exemption conditional on the notice being present — a Spanish page that
+silently served English still fails the language gates.
+
+**The schema reference is generated.** `schema-reference.ts` walks the JSON
+Schema into a field table; `field-checks.ts` maps a field path to the check ids
+that fire on it, importing the ids from `@cabuya/validator` so a renamed check
+cannot leave a dead cross-link. That link is the last edge of the agent fix
+loop: field → check id → rule and fix, in the vocabulary the validator's own
+output uses.

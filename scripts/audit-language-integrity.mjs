@@ -42,6 +42,8 @@ import {
   htmlPathFor,
 } from './lib/dist-pages.mjs';
 
+import { allowsEnglishBody } from './lib/normative-language.mjs';
+
 const argv = process.argv.slice(2);
 const JSON_OUT = argv.includes('--json');
 const STRICT = argv.includes('--strict');
@@ -85,17 +87,28 @@ const results = checkable.map((pagePath) => {
   const { found: mdFound, mdPath } = checkMdExists(pagePath);
 
   const html = readFileSync(htmlPath, 'utf-8');
-  const htmlVerdict = analyzeDocument(htmlToText(html), expected);
+  const htmlText = htmlToText(html);
+  /*
+   * The spec and schema routes render the English normative text on Spanish
+   * pages, with a notice saying so. Conditional on the notice being present —
+   * a Spanish page that silently served English still flags.
+   */
+  const normativeExempt = allowsEnglishBody(pagePath, htmlText);
+  const rawHtmlVerdict = analyzeDocument(htmlText, expected);
+  const htmlVerdict = normativeExempt
+    ? { ...rawHtmlVerdict, flagged: false, exempt: 'normative-english' }
+    : rawHtmlVerdict;
 
   let mdVerdict = null;
   let mdBytes = 0;
   if (mdFound) {
     const mdFull = join(DIST_DIR, mdPath);
     mdBytes = sizeOf(mdFull);
-    mdVerdict = analyzeDocument(
-      markdownToText(readFileSync(mdFull, 'utf-8')),
-      expected
-    );
+    const mdText = markdownToText(readFileSync(mdFull, 'utf-8'));
+    const rawMdVerdict = analyzeDocument(mdText, expected);
+    mdVerdict = allowsEnglishBody(pagePath, mdText)
+      ? { ...rawMdVerdict, flagged: false, exempt: 'normative-english' }
+      : rawMdVerdict;
   }
 
   return {

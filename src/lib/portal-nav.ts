@@ -64,8 +64,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Specification', es: 'Especificación' },
         path: '/developers/spec',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
         blurb: {
           en: 'The normative text, versioned, with stable section anchors.',
           es: 'El texto normativo, versionado, con anclajes de sección estables.',
@@ -74,8 +73,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Schemas', es: 'Esquemas' },
         path: '/developers/schemas',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
         blurb: {
           en: 'Every field, what it means, and which checks fire on it.',
           es: 'Cada campo, qué significa y qué verificaciones se disparan en él.',

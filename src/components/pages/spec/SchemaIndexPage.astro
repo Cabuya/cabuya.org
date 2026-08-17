@@ -1,0 +1,63 @@
+---
+/**
+ * `/developers/schemas` — the schema index.
+ */
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { specSchemas, specVersions } from '@/lib/spec-loader';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+const versions = specVersions().map((version) => ({
+  version,
+  schemas: specSchemas(version),
+}));
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.spec.schemasTitle}
+  description={t.spec.schemasDescription}
+  trail={[{ label: t.spec.schemasTitle }]}
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.spec.schemasLead}</p>
+
+  {
+    versions.map((entry) => (
+      <section class="not-prose mt-8">
+        <h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+          {t.spec.versionLabel} {entry.version}
+        </h2>
+        <ul class="flex flex-col gap-3">
+          {entry.schemas.map((schema) => (
+            <li>
+              <a
+                href={`${prefix}/developers/schemas/${entry.version}/${schema.name}`}
+                class="group block rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5 transition-colors hover:border-cabuya-primary"
+              >
+                <span class="font-display text-base font-semibold group-hover:text-cabuya-primary">
+                  {schema.title ?? schema.name}
+                </span>
+                {schema.description && (
+                  <p class="mt-1 text-sm text-cabuya-text-secondary">
+                    {schema.description}
+                  </p>
+                )}
+                <code class="mt-2 block text-xs text-cabuya-text-muted">
+                  {schema.id}
+                </code>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</DocsLayout>

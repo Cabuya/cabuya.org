@@ -203,6 +203,39 @@ export interface SiteTranslations {
     honestyAfternoon: string;
   };
 
+  /** The specification reader and the schema reference. */
+  spec: {
+    indexTitle: string;
+    indexDescription: string;
+    indexLead: string;
+    versionLabel: string;
+    statusLabels: Record<string, string>;
+    permanenceTitle: string;
+    permanenceBody: string;
+    rcRuleTitle: string;
+    rcRuleBody: string;
+    sectionsTitle: string;
+    /** Mid-sentence form, e.g. "10 sections" — casing differs by language. */
+    sectionsCountLabel: string;
+    /** The notice on Spanish spec routes. */
+    normativeLanguageNotice: string;
+    schemasTitle: string;
+    schemasDescription: string;
+    schemasLead: string;
+    schemaIdLabel: string;
+    fieldsTitle: string;
+    checksColumn: string;
+    profileColumn: string;
+    exampleColumn: string;
+    coreLabel: string;
+    extendedLabel: string;
+    examplesTitle: string;
+    examplesLead: string;
+    validLabel: string;
+    invalidLabel: string;
+    teachingNote: string;
+  };
+
   markdown: {
     /** Heading labels used by the agent-Markdown serializer */
     siteNavigation: string;

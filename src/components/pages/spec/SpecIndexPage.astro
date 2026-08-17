@@ -1,0 +1,71 @@
+---
+/**
+ * `/developers/spec` — the version index.
+ *
+ * Short by design. The two rules a reader needs before they cite anything are
+ * on it: versioned URLs never move, and a release candidate is frozen except
+ * for defects. Everything else is one level down.
+ */
+import Callout from '@/components/editorial/Callout.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { specVersionSummary, specVersions } from '@/lib/spec-loader';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+const versions = specVersions().map((version) => specVersionSummary(version));
+
+const headings = buildToc([
+  { depth: 2, text: t.spec.permanenceTitle },
+  { depth: 2, text: t.spec.rcRuleTitle },
+]);
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.spec.indexTitle}
+  description={t.spec.indexDescription}
+  trail={[{ label: t.spec.indexTitle }]}
+  headings={headings}
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.spec.indexLead}</p>
+
+  <ul class="not-prose my-8 flex flex-col gap-3">
+    {
+      versions.map((version) => (
+        <li>
+          <a
+            href={`${prefix}/developers/spec/${version.version}`}
+            class="group flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5 transition-colors hover:border-cabuya-primary"
+          >
+            <span class="font-display text-xl font-bold group-hover:text-cabuya-primary">
+              {t.spec.versionLabel} {version.version}
+            </span>
+            <span class="rounded-full bg-cabuya-warning-soft px-2.5 py-0.5 text-xs font-semibold text-cabuya-warning">
+              {t.spec.statusLabels[version.status] ?? version.status}
+            </span>
+            <span class="ml-auto text-sm text-cabuya-text-muted">
+              {version.sections.length} {t.spec.sectionsCountLabel}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2 id={headings[0].slug}>{t.spec.permanenceTitle}</h2>
+  <p>{t.spec.permanenceBody}</p>
+
+  <h2 id={headings[1].slug}>{t.spec.rcRuleTitle}</h2>
+  <Callout tone="note" label={t.spec.rcRuleTitle}>
+    <p>{t.spec.rcRuleBody}</p>
+  </Callout>
+</DocsLayout>

@@ -78,8 +78,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: { en: 'Specification', es: 'Especificación' },
         path: '/developers/spec',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
         hint: {
           en: 'The normative text, versioned',
           es: 'El texto normativo, versionado',
@@ -88,8 +87,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: { en: 'Schemas', es: 'Esquemas' },
         path: '/developers/schemas',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
         hint: {
           en: 'Field-by-field reference',
           es: 'Referencia campo por campo',
@@ -164,14 +162,12 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       {
         label: { en: 'Specification', es: 'Especificación' },
         path: '/developers/spec',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
       },
       {
         label: { en: 'Schemas', es: 'Esquemas' },
         path: '/developers/schemas',
-        status: 'planned',
-        ships: 'Task 25',
+        status: 'live',
       },
       {
         label: { en: 'RFCs', es: 'RFCs' },

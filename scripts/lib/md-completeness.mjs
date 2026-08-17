@@ -31,13 +31,26 @@ export function stripHtml(html) {
 }
 
 /**
- * The `<main>` landmark when present, else the whole document.
- * Comparing against the whole document would make every page fail on nav and
- * footer chrome, which the contract explicitly excludes from the `.md`.
+ * The `<main>` landmark when present, else the whole document — with the
+ * navigation landmarks inside it removed.
+ *
+ * Comparing against the whole document would make every page fail on header and
+ * footer chrome, which the contract explicitly excludes from the `.md`. The
+ * portal added a second case: its sidebar, contents rail and copy bar live
+ * *inside* `<main>`, so a documentation page was being marked incomplete for
+ * not repeating the words "Quickstart", "On this page" and "Copy as Markdown"
+ * in its twin — which no twin should ever contain.
+ *
+ * `<nav>` and `<aside>` are landmarks whose definition is "not the main
+ * content", so dropping them is the same rule the function already applied,
+ * extended to where the portal actually puts its chrome.
  */
 export function mainOf(html) {
   const match = html.match(/<main[^>]*>([\s\S]*)<\/main>/i);
-  return match ? match[1] : html;
+  const main = match ? match[1] : html;
+  return main
+    .replace(/<nav[\s\S]*?<\/nav>/gi, ' ')
+    .replace(/<aside[\s\S]*?<\/aside>/gi, ' ');
 }
 
 /**
