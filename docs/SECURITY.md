@@ -51,7 +51,8 @@ exempt for embedding).
 | `CF_KV_TOKEN` (revalidation cron) | Workers KV Storage: **Edit**, one namespace | GitHub repo secret |
 | `CF_ACCOUNT_ID` · `CF_REGISTRY_KV_ID` | Identifiers, not credentials | GitHub repo secret |
 | `CF_KV_READ_TOKEN` (site build) | Workers KV Storage: **Read**, same namespace | Pages build env |
-| `DAILYBOT_FORMS_TOKEN` + form id | Form submission only | Pages env / `.dev.vars` |
+| `DAILYBOT_API_KEY` | Form submission only — no read scope needed | Pages env / `.dev.vars` |
+| `DAILYBOT_FORM_ID` · `DAILYBOT_FORM_QUESTIONS` | Identifiers for one form in one workspace, not credentials | Pages env / `.dev.vars` |
 | `PUBLIC_CF_BEACON_TOKEN` | Analytics beacon (public) | Pages env |
 
 Rules: names documented in `.dev.vars.example` with placeholders; values

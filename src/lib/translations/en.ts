@@ -515,6 +515,60 @@ export const en: SiteTranslations = {
     sourceLabel: 'The source file',
   },
 
+  contact: {
+    title: 'Write to us',
+    lead: 'One inbox, read by the maintainers. For anything that is not an issue — an institution asking how this would work, a team deciding whether to adopt it, a question the documentation did not answer.',
+    privacy:
+      'What you write goes to the maintainers\u2019 DailyBot workspace and is not stored by this site — not logged, not measured, not kept after the request. Use it for organisational questions; please do not send anyone\u2019s personal details, including your own beyond the address we reply to.',
+    nameLabel: 'Your name',
+    nameOptional: 'optional',
+    organizationLabel: 'Application or organisation',
+    organizationOptional: 'optional, and the most useful field here',
+    emailLabel: 'Email',
+    emailHint: 'So we can answer. Nothing else is done with it.',
+    messageLabel: 'Message',
+    messageHint: 'What you need, in as much or as little detail as you like.',
+    interestLabel: 'What is this about?',
+    interestOptions: {
+      implement: 'Publishing a feed from our application',
+      consume: 'Reading other applications\u2019 feeds',
+      contribute: 'Contributing to the protocol or the tooling',
+      institutional: 'An institutional or governance question',
+      other: 'Something else',
+    },
+    submit: 'Send',
+    submitting: 'Sending…',
+    successTitle: 'Sent',
+    successBody:
+      'It reached the maintainers. There is no automatic acknowledgement to your inbox, so nothing else will arrive until a person replies.',
+    errors: {
+      'email-required': 'An email address, so there is somewhere to answer.',
+      'email-invalid': 'That does not look like an email address.',
+      'email-too-long': 'That address is too long.',
+      'message-required': 'A message, in your own words.',
+      'message-too-short':
+        'A little more, please — enough for somebody to know what you need.',
+      'message-too-long': 'That is longer than the form accepts.',
+      'name-too-long': 'That name is too long.',
+      'organization-too-long': 'That name is too long.',
+      'interest-invalid': 'Pick the closest one.',
+    },
+    rateLimitedTitle: 'Too many messages from here',
+    rateLimitedBody:
+      'The limit is a few an hour, and it exists to stop scripts rather than people. If this caught you, the alternatives below reach the same maintainers.',
+    upstreamTitle: 'It did not send',
+    upstreamBody:
+      'The form service did not accept it, so your message did not arrive. Nothing was stored here either — the text is still in the box, and the alternatives below reach the same people.',
+    notConfiguredTitle: 'The form is not connected here',
+    notConfiguredBody:
+      'This deployment has no form configured — a fork, a preview, or a local build. Rather than accept a message it cannot deliver, it says so. The alternatives below work everywhere.',
+    alternativesTitle: 'These always work',
+    alternativesIssues: 'Open an issue — public, and the fastest route',
+    alternativesRepo: 'The repository',
+    noscript:
+      'This form needs JavaScript to submit. Without it, the two links below reach the same maintainers and are honestly the better route anyway.',
+  },
+
   rootDocs: {
     sourceLinkSuffix: 'on GitHub — the file this page renders',
     sourceNote:

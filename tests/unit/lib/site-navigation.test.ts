@@ -16,7 +16,7 @@
  * checked against `docs/INFORMATION_ARCHITECTURE.md` itself, which is the
  * document the nav is supposed to implement.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -46,8 +46,38 @@ const PAGES = join(ROOT, 'src', 'pages');
  * for a route file: a chrome entry pointing at a page that exists in English
  * and 404s on `/es` is exactly the defect this test is for.
  */
+/**
+ * Does an `#anchor` in a nav path point at something that exists?
+ *
+ * Greps the components for the id rather than the built HTML, so this stays a
+ * unit test. A chrome link to `/join#contact` that lands at the top of the page
+ * because the section was renamed is a small bug with a large tell: it means
+ * nobody clicked it.
+ */
+function anchorExists(fragment: string): boolean {
+  const roots = [join(ROOT, 'src', 'components'), join(ROOT, 'src', 'pages')];
+  const stack = [...roots];
+  while (stack.length > 0) {
+    const dir = stack.pop() as string;
+    if (!existsSync(dir)) continue;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(full);
+      } else if (/\.(astro|svelte)$/.test(entry.name)) {
+        if (readFileSync(full, 'utf-8').includes(`id="${fragment}"`)) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
 function routeExists(path: string): boolean {
-  const bare = path.replace(/^\//, '');
+  const [routePath, fragment] = path.split('#');
+  if (fragment && !anchorExists(fragment)) return false;
+  const bare = routePath.replace(/^\//, '');
   if (bare === '') return existsSync(join(PAGES, 'index.astro'));
   if (
     existsSync(join(PAGES, `${bare}.astro`)) ||

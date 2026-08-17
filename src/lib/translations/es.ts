@@ -515,6 +515,61 @@ export const es: SiteTranslations = {
     sourceLabel: 'El archivo fuente',
   },
 
+  contact: {
+    title: 'Escríbenos',
+    lead: 'Un solo buzón, que leen los maintainers. Para todo lo que no sea un issue — una institución preguntando cómo funcionaría esto, un equipo decidiendo si adoptarlo, una pregunta que la documentación no respondió.',
+    privacy:
+      'Lo que escribas llega al espacio de trabajo de DailyBot de los maintainers y este sitio no lo guarda — no se registra, no se mide y no queda después de la petición. Úsalo para preguntas de organización; por favor no mandes datos personales de nadie, incluidos los tuyos más allá de la dirección a la que respondemos.',
+    nameLabel: 'Tu nombre',
+    nameOptional: 'opcional',
+    organizationLabel: 'Aplicación u organización',
+    organizationOptional: 'opcional, y el campo más útil de aquí',
+    emailLabel: 'Correo',
+    emailHint: 'Para poder responderte. No se hace nada más con él.',
+    messageLabel: 'Mensaje',
+    messageHint:
+      'Lo que necesitas, con todo el detalle que quieras o con ninguno.',
+    interestLabel: '¿De qué se trata?',
+    interestOptions: {
+      implement: 'Publicar un feed desde nuestra aplicación',
+      consume: 'Leer los feeds de otras aplicaciones',
+      contribute: 'Contribuir al protocolo o a las herramientas',
+      institutional: 'Una pregunta institucional o de gobernanza',
+      other: 'Otra cosa',
+    },
+    submit: 'Enviar',
+    submitting: 'Enviando…',
+    successTitle: 'Enviado',
+    successBody:
+      'Llegó a los maintainers. No hay acuse de recibo automático a tu correo, así que no va a llegar nada más hasta que responda una persona.',
+    errors: {
+      'email-required': 'Un correo, para que haya a dónde responder.',
+      'email-invalid': 'Eso no parece una dirección de correo.',
+      'email-too-long': 'Esa dirección es demasiado larga.',
+      'message-required': 'Un mensaje, con tus palabras.',
+      'message-too-short':
+        'Un poco más, por favor — lo suficiente para que alguien sepa qué necesitas.',
+      'message-too-long': 'Eso es más largo de lo que acepta el formulario.',
+      'name-too-long': 'Ese nombre es demasiado largo.',
+      'organization-too-long': 'Ese nombre es demasiado largo.',
+      'interest-invalid': 'Elige la opción más cercana.',
+    },
+    rateLimitedTitle: 'Demasiados mensajes desde aquí',
+    rateLimitedBody:
+      'El límite son unos pocos por hora, y existe para detener scripts, no personas. Si te alcanzó a ti, las alternativas de abajo llegan a los mismos maintainers.',
+    upstreamTitle: 'No se envió',
+    upstreamBody:
+      'El servicio del formulario no lo aceptó, así que tu mensaje no llegó. Aquí tampoco se guardó nada — el texto sigue en la caja, y las alternativas de abajo llegan a las mismas personas.',
+    notConfiguredTitle: 'El formulario no está conectado aquí',
+    notConfiguredBody:
+      'Este despliegue no tiene formulario configurado — una bifurcación, una vista previa o una construcción local. En vez de aceptar un mensaje que no puede entregar, lo dice. Las alternativas de abajo funcionan en todas partes.',
+    alternativesTitle: 'Esto siempre funciona',
+    alternativesIssues: 'Abre un issue — público, y la vía más rápida',
+    alternativesRepo: 'El repositorio',
+    noscript:
+      'Este formulario necesita JavaScript para enviarse. Sin él, los dos enlaces de abajo llegan a los mismos maintainers y sinceramente son la mejor vía de todos modos.',
+  },
+
   rootDocs: {
     sourceLinkSuffix: 'en GitHub — el archivo que esta página renderiza',
     sourceNote:

@@ -376,6 +376,41 @@ export interface SiteTranslations {
     quotedNotice: string;
   };
 
+  /** The one contact form, on /join. */
+  contact: {
+    title: string;
+    lead: string;
+    /** What happens to what you write. Printed above the form, not below it. */
+    privacy: string;
+    nameLabel: string;
+    nameOptional: string;
+    organizationLabel: string;
+    organizationOptional: string;
+    emailLabel: string;
+    emailHint: string;
+    messageLabel: string;
+    messageHint: string;
+    interestLabel: string;
+    interestOptions: Record<string, string>;
+    submit: string;
+    submitting: string;
+    successTitle: string;
+    successBody: string;
+    /** Validation messages, keyed `{field}-{reason}`. */
+    errors: Record<string, string>;
+    rateLimitedTitle: string;
+    rateLimitedBody: string;
+    upstreamTitle: string;
+    upstreamBody: string;
+    notConfiguredTitle: string;
+    notConfiguredBody: string;
+    /** The paths that always work, with or without the form. */
+    alternativesTitle: string;
+    alternativesIssues: string;
+    alternativesRepo: string;
+    noscript: string;
+  };
+
   /** Pages that render a repository-root document. */
   rootDocs: {
     /** Screen-reader suffix on the link to the source file. */

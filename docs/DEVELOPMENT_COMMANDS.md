@@ -95,6 +95,11 @@ pnpm exec wrangler kv key put --local --binding REGISTRY_STATUS status:corag \
   '{"publisher_id":"corag","state":"conforming","level":"L2","checked_at":"2026-08-17T00:00:00Z","version":"0.1"}'
 ```
 
+`/api/contact` needs `DAILYBOT_API_KEY`, `DAILYBOT_FORM_ID` and
+`DAILYBOT_FORM_QUESTIONS` in `.dev.vars`. Without them it answers 503
+`not-configured` and the form on `/join` says so — which is what a fork and a
+local build should see, and worth exercising deliberately.
+
 `URL_MODE_AVAILABLE` in `src/lib/validate-api-contract.ts` is the one switch
 that turns the validator's URL mode off, for both the page and its Markdown
 twin. It ships `true` now that the Function is deployed; set it `false` and the

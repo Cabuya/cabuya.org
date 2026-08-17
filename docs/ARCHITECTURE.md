@@ -103,7 +103,7 @@ missing translation is a build error.
 |---|---|---|
 | `functions/_middleware.ts` | `Accept: text/markdown` negotiation → `.md` twins; schema content negotiation | Low |
 | `functions/api/validate.ts` | The live validator — fetches arbitrary URLs | **The attack surface.** Full SSRF control set; zero retention |
-| `functions/api/contact.ts` *(Task 31)* | Contact form → DailyBot Forms | Env-gated secret; honeypot; rate limit |
+| `functions/api/contact.ts` | The one inbox → DailyBot Forms | Env-gated; honeypot + timing; rate limit; **guarded by `retention:check`** — the message field is free text and the safest place for it is nowhere |
 | `functions/badge/[publisher].ts` | Measured badge SVG from KV | Read-only binding; cache 15 min; state as text; 404 for an unregistered id |
 | `functions/registry/status.json.ts` | Every measured state, so the static pages can refresh themselves | Read-only binding; same cache window as the badge |
 

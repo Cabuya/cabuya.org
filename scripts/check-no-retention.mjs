@@ -30,8 +30,18 @@ import { join } from 'node:path';
 const ROOT = process.cwd();
 const strict = process.argv.includes('--strict');
 
-/** Files that carry the zero-retention promise. */
-const GUARDED = ['functions/api/validate.ts', 'functions/lib/ssrf-guard.ts'];
+/**
+ * Files that carry the zero-retention promise.
+ *
+ * `contact.ts` matters here as much as the validator does, and arguably more:
+ * its message field is free text, somebody writing to an aid protocol may put
+ * something sensitive in it, and the safest place for that text is nowhere.
+ */
+const GUARDED = [
+  'functions/api/validate.ts',
+  'functions/lib/ssrf-guard.ts',
+  'functions/api/contact.ts',
+];
 
 /** The only keys the endpoint may write. */
 const ALLOWED_KEY_PREFIXES = ['rate:ip:', 'rate:host:'];
@@ -86,7 +96,7 @@ for (const relative of GUARDED) {
   // The response must forbid caching: an intermediary holding a report is
   // retention by a different party.
   if (
-    relative.endsWith('validate.ts') &&
+    /(validate|contact)\.ts$/.test(relative) &&
     !source.includes("'Cache-Control': 'no-store'")
   ) {
     findings.push(`${relative}: responses must set Cache-Control: no-store`);

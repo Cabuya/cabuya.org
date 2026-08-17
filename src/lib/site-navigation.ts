@@ -244,6 +244,11 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
         status: 'live',
       },
       {
+        label: { en: 'Contact', es: 'Contacto' },
+        path: '/join#contact',
+        status: 'live',
+      },
+      {
         label: { en: 'RFCs', es: 'RFC' },
         path: '/rfcs',
         status: 'live',

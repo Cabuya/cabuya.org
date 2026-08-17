@@ -2,9 +2,24 @@
 # Copy to `.dev.vars` (gitignored) and set DAILYBOT_API_KEY from
 # https://app.dailybot.com → User settings → API keys.
 #
-# Form + question UUIDs are baked into functions/api/_dailybot.ts.
+# Form and question ids are configuration, not code.
 
 DAILYBOT_API_KEY=
+
+# The target form, and the map from our field names to its question ids. Both
+# belong to a DailyBot workspace this repository does not own, which is why
+# neither is committed: a fork that inherited them would post into somebody
+# else's form.
+#
+#   DAILYBOT_FORM_QUESTIONS='{"email":"<uuid>","message":"<uuid>",
+#                             "interest":"<uuid>","lang":"<uuid>",
+#                             "name":"<uuid>","organization":"<uuid>"}'
+#
+# With any of the three absent, /api/contact answers 503 `not-configured` and
+# the page shows the issue tracker instead — a form that accepts a message it
+# cannot deliver is worse than no form.
+DAILYBOT_FORM_ID=
+DAILYBOT_FORM_QUESTIONS=
 
 # ── The validator endpoint ────────────────────────────────
 #
