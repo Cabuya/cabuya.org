@@ -133,13 +133,16 @@ describe('diagram copy — Spanish is written, not copied', () => {
    * the caption moved there so the Markdown twins could carry them. The
    * question is the same one, asked of the file that now answers it.
    */
-  it.each(Object.keys(DIAGRAM_COPY))('%s has a distinct Spanish aria-label', (id) => {
-    const langs = DIAGRAM_COPY[id];
-    const labels = LANGUAGE_CODES.map((code) => langs[code].ariaLabel);
-    expect(labels.length).toBeGreaterThanOrEqual(2);
-    // Identical strings mean the English was pasted into the Spanish key.
-    expect(new Set(labels).size).toBe(labels.length);
-  });
+  it.each(Object.keys(DIAGRAM_COPY))(
+    '%s has a distinct Spanish aria-label',
+    (id) => {
+      const langs = DIAGRAM_COPY[id];
+      const labels = LANGUAGE_CODES.map((code) => langs[code].ariaLabel);
+      expect(labels.length).toBeGreaterThanOrEqual(2);
+      // Identical strings mean the English was pasted into the Spanish key.
+      expect(new Set(labels).size).toBe(labels.length);
+    }
+  );
 
   it.each(Object.keys(DIAGRAM_COPY))('%s carries Spanish diacritics', (id) => {
     const { ariaLabel, caption } = DIAGRAM_COPY[id].es;
@@ -156,7 +159,10 @@ describe('the shared diagram copy', () => {
     for (const id of ids) {
       expect(DIAGRAM_COPY[id], `no copy for "${id}"`).toBeDefined();
       for (const code of LANGUAGE_CODES) {
-        expect(DIAGRAM_COPY[id]?.[code], `"${id}" has no ${code}`).toBeDefined();
+        expect(
+          DIAGRAM_COPY[id]?.[code],
+          `"${id}" has no ${code}`
+        ).toBeDefined();
       }
     }
   });
@@ -169,8 +175,14 @@ describe('the shared diagram copy', () => {
   it('describes each diagram rather than naming it', () => {
     for (const [id, langs] of Object.entries(DIAGRAM_COPY)) {
       for (const code of LANGUAGE_CODES) {
-        expect(langs[code].ariaLabel.length, `${id}.${code} aria-label`).toBeGreaterThan(60);
-        expect(langs[code].caption.length, `${id}.${code} caption`).toBeGreaterThan(20);
+        expect(
+          langs[code].ariaLabel.length,
+          `${id}.${code} aria-label`
+        ).toBeGreaterThan(60);
+        expect(
+          langs[code].caption.length,
+          `${id}.${code} caption`
+        ).toBeGreaterThan(20);
       }
     }
   });

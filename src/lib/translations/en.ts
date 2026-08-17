@@ -49,7 +49,7 @@ export const en: SiteTranslations = {
       kicker: 'The thesis',
       principle: '«Crecemos juntos: no competimos, nos alimentamos.»',
       gloss: 'We grow together: we don’t compete, we feed each other.',
-      body: 'Cabuya is the fibre you tie things with. A single thread holds nothing; twisted together, they carry anything. That is not a metaphor about collaboration in general — it is a description of what happens when two applications can read each other’s data.',
+      body: 'Cabuya is the fibre you tie things with. A single thread holds nothing; twisted together, they carry what no one of them could. That is not a metaphor about collaboration in general — it is a description of what happens when two applications can read each other’s data.',
       bodySecond:
         'Every app that joins keeps its own product, its own users and its own decisions. What it gains is that its records stop being trapped inside it, and that it can read everyone else’s without asking.',
       intentNote:
@@ -71,7 +71,7 @@ export const en: SiteTranslations = {
         },
         {
           title: 'Run the validator',
-          body: 'It fetches what you published and reports what it found. Every finding locates the problem and states the fix.',
+          body: 'It fetches what you published and reports what it found. Every finding locates the problem and states the correction.',
         },
         {
           title: 'Open a registry entry',
@@ -186,7 +186,7 @@ export const en: SiteTranslations = {
     lead: 'Cabuya is a document and a validator. There is no account to create, no key to request, and nobody to negotiate with — including us.',
     promiseTitle: 'The five-minute version',
     promiseBody:
-      'Put a JSON file describing your places at a stable URL, and a small manifest at a known path saying who you are. Run the validator against them and fix what it reports. That is conformance at L2, and for a small application it is an afternoon.',
+      'Publish a JSON file describing your places at a stable URL, and a small manifest at a known path stating who you are. Run the validator against both and correct what it reports. That is conformance at L2, and for a small application it is an afternoon.',
     transportsTitle: 'One schema, four transports',
     transportsLead:
       'The same place record moves four ways. Which one you serve is an operations decision; the record does not change, so a consumer written against one works against the others.',
@@ -213,7 +213,7 @@ export const en: SiteTranslations = {
     ],
     startTitle: 'Where to start',
     startBody:
-      'The specification and the validator are in the repository today. The quickstart, the rendered spec and the live validator are being written now — until they are up, the repository is the complete source.',
+      'The specification and the validator are in the repository today. The quickstart, the rendered specification and the live validator are being written now — until they ship, the repository is the complete source.',
   },
 
   quickstart: {
@@ -228,11 +228,11 @@ export const en: SiteTranslations = {
       'Install the skill and tell it to publish a Cabuya feed. The skill vendors the specification, so it works without network access and without guessing at field names.',
     handPathTitle: 'If you are doing it by hand',
     handPathBody:
-      'Five steps, below. Step 3 is the one that catches people — read it even if you are skimming.',
+      'Five steps. Step 3 is the most common point of failure, and is worth reading in full.',
 
     fileFirstTitle: 'Save this first',
     fileFirstBody:
-      'This is a complete, conforming manifest. Change the two URLs and the publisher id to yours, and you have finished step 1.',
+      'This is a complete, conforming manifest. Replace the two URLs and the publisher id with your own, and step 1 is done.',
 
     steps: [
       {
@@ -253,24 +253,24 @@ export const en: SiteTranslations = {
       },
       {
         title:
-          'Run the validator until it is green, then open a registry entry',
+          'Run the validator until it reports no findings, then open a registry entry',
         body: 'Every finding names the field and states the fix. When the run is clean, one pull request adds you to the registry.',
       },
     ],
 
     spaTitle: 'Step 3, per stack',
     spaLead:
-      'Find yours, apply the one line, then request the URL and check that what comes back is JSON.',
+      'Find yours, apply the single line, then request the URL and confirm that the response is JSON.',
     spaWhy:
       'Four of the twenty applications in the founding analysis failed here, and all four believed they had published. The manifest was reachable, returned 200, and contained their homepage.',
 
     piiTitle: 'Before you publish: the one decision that is yours',
     piiLead:
-      'Cabuya carries places, not people. Look at the fields you are about to map and confirm that none of them holds a person’s name, a personal phone or email, an individual case, or a moderation verdict about somebody.',
+      'Cabuya carries places, not people. Review the fields you are about to map and confirm that none of them holds a person’s name, a personal phone or email, an individual case, or a moderation verdict about an individual.',
     piiKeysLabel: 'Field names the validator rejects outright',
     piiPatternsLabel: 'Value shapes it flags wherever they appear',
     piiConfirm:
-      'A human makes this call once, when the mapping is written. The validator checks it on every run afterwards, and it reports the field, never the value it found.',
+      'A person makes this decision once, when the mapping is written. The validator checks it on every run afterwards, and it reports the field, never the value it found.',
 
     validatorTitle: 'Run it',
     validatorLead:
@@ -283,7 +283,7 @@ export const en: SiteTranslations = {
     honestyBody:
       'Five minutes is the honest number for the path above: two static files, copied, edited and uploaded. It is a real conformance level — L2 — and it is genuinely useful to consumers.',
     honestyAfternoon:
-      'Mapping a live database into the schema is an afternoon, sometimes two: your statuses have to be reconciled with the shared vocabulary, and somebody has to decide what your data actually means. That work is not avoidable and we would rather say so here than have you discover it at step 4.',
+      'Mapping a live database into the schema is an afternoon, sometimes two: your statuses have to be reconciled with the shared vocabulary, and somebody has to decide what your data actually means. That work is not avoidable, and stating it here is better than leaving it to surface at step 4.',
   },
 
   spec: {
@@ -337,7 +337,7 @@ export const en: SiteTranslations = {
     lead: 'The same engine the command line runs, and the same check ids. Every finding names the field, states the rule, and tells you what to change.',
     urlModeTitle: 'Check a live URL',
     urlModeLead:
-      'Point it at your manifest or a feed. The validator fetches what is published and reports what it found, including the transport behaviour a file on disk cannot show.',
+      'Point it at your manifest or a feed. The validator downloads what is published and reports what it found, including the transport behaviour a file on disk cannot show.',
     urlLabel: 'Manifest or feed URL',
     urlPlaceholder: 'https://example.org/.well-known/cabuya.json',
     run: 'Run the validator',
@@ -366,7 +366,7 @@ export const en: SiteTranslations = {
     checkLabel: 'About this check',
     unavailableTitle: 'URL checking is not deployed yet',
     unavailableBody:
-      'The service that fetches a URL is still being built. In the meantime the command line does the same job — and the paste mode below runs the identical engine in your browser.',
+      'The service that fetches a URL is still being built. In the meantime the command line does the same work, and the paste mode below runs the identical engine in your browser.',
     transportTitle: 'Could not reach it',
     transportBody:
       'This says nothing about your data. The request failed — DNS, TLS, a timeout, or the host refusing us — and the validator stops rather than guessing. Nothing here means your feed is wrong.',
@@ -397,14 +397,14 @@ export const en: SiteTranslations = {
     politenessItems: [
       'At most 60 requests an hour to any one host, across every caller.',
       'One attempt per request. It never retries a failure.',
-      'An eight-second timeout, then it gives up.',
-      'It stops reading at 5 MB rather than pulling whatever arrives.',
+      'An eight-second timeout, after which the request is abandoned.',
+      'It stops reading at 5 MB rather than accepting a response of any size.',
       'It sends no Referer, so it never reveals who asked.',
-      'It follows at most three redirects, checking each destination before going there.',
+      'It follows at most three redirects, checking each destination before following it.',
     ],
     retentionTitle: 'What it keeps',
     retentionBody:
-      'Nothing. The document is fetched, checked, and discarded with the request. No feed body is stored, no URL is logged by us, and no analytics event carries anything a publisher submitted. The only thing written anywhere is an anonymous counter used to enforce the limits above.',
+      'Nothing. The document is downloaded, checked, and discarded with the request. No feed body is stored, no URL is logged by us, and no analytics event carries anything a publisher submitted. The only thing written anywhere is an anonymous counter used to enforce the limits above.',
     optOutTitle: 'How to stop it',
     optOutBody:
       'Disallow the user agent in your robots.txt and it will not fetch you. We would rather you told us what went wrong first — a validator that has become a nuisance is a bug on our side — but the decision is yours and it does not need our agreement.',
@@ -449,12 +449,12 @@ export const en: SiteTranslations = {
     lead: 'Every notable change to the specification, newest first. Parsed from the repository rather than transcribed, so this page and the release it describes cannot disagree.',
     scopeTitle: 'What this covers',
     scopeBody:
-      'The specification: its sections, schemas, examples, profiles and vocabulary. Versioning follows SemVer with one extra rule — a release candidate becomes normative only after at least one publisher has shipped it publicly. The specification never outruns its implementers.',
+      'The specification: its sections, schemas, examples, profiles and vocabulary. Versioning follows SemVer with one extra rule — a release candidate becomes normative only after at least one publisher has shipped it publicly. The specification never moves ahead of its implementers.',
     unreleased: 'Unreleased',
     nothingYet: 'Nothing recorded under this version yet.',
     otherTracksTitle: 'The validator and the skill',
     otherTracksBody:
-      'They will appear on this timeline as they cut releases. They are not listed as empty tracks in the meantime: a timeline with blank rows reads as a project that stopped rather than one that has not started.',
+      'They will appear on this timeline as they publish releases. They are not listed as empty tracks in the meantime: a timeline with blank rows reads as a project that stopped rather than one that has not started.',
     quotedNotice:
       'Release entries are quoted from the repository, unchanged. The changelog itself is written in English like the rest of the repository, and a translated quotation would not be the record a reader checking a release needs.',
     groupLabels: {
@@ -478,7 +478,7 @@ export const en: SiteTranslations = {
       'Any change to a schema field, cardinality, enum, required or optional status, conformance level, or the meaning of a defined term. Plus governance and licensing. Everything else — typos, examples, documentation, tests, website copy — takes the fast path and needs one approval.',
     whoTitle: 'Who may open one',
     whoBody:
-      'Anyone. You do not have to be a maintainer and you do not have to have written any code. The person who has hit a wall implementing the specification is often the person best placed to describe what is wrong with it.',
+      'Anyone. You do not have to be a maintainer and you do not have to have written any code. Whoever has run into a problem implementing the specification is often best placed to describe what is wrong with it.',
     privacyTitle: 'The section that can decline an RFC on its own',
     privacyBody:
       'Every RFC states what person-level data its change could make reachable, directly or by joining with another source. An RFC that cannot answer that does not proceed, however useful the field would be. It is the only mandatory section that is not about the change itself.',
@@ -525,7 +525,7 @@ export const en: SiteTranslations = {
     emailLabel: 'Email',
     emailHint: 'So we can answer. Nothing else is done with it.',
     messageLabel: 'Message',
-    messageHint: 'What you need, in as much or as little detail as you like.',
+    messageHint: 'What you need, in whatever level of detail is useful.',
     interestLabel: 'What is this about?',
     interestOptions: {
       implement: 'Publishing a feed from our application',
@@ -538,14 +538,14 @@ export const en: SiteTranslations = {
     submitting: 'Sending…',
     successTitle: 'Sent',
     successBody:
-      'It reached the maintainers. There is no automatic acknowledgement to your inbox, so nothing else will arrive until a person replies.',
+      'The message reached the maintainers. There is no automatic acknowledgement, so nothing further will arrive until a person replies.',
     errors: {
       'email-required': 'An email address, so there is somewhere to answer.',
       'email-invalid': 'That does not look like an email address.',
       'email-too-long': 'That address is too long.',
       'message-required': 'A message, in your own words.',
       'message-too-short':
-        'A little more, please — enough for somebody to know what you need.',
+        'Please add more detail — enough to understand what you need.',
       'message-too-long': 'That is longer than the form accepts.',
       'name-too-long': 'That name is too long.',
       'organization-too-long': 'That name is too long.',
@@ -553,10 +553,10 @@ export const en: SiteTranslations = {
     },
     rateLimitedTitle: 'Too many messages from here',
     rateLimitedBody:
-      'The limit is a few an hour, and it exists to stop scripts rather than people. If this caught you, the alternatives below reach the same maintainers.',
+      'The limit is a few an hour, and it exists to stop scripts rather than people. If you reached it, the alternatives below reach the same maintainers.',
     upstreamTitle: 'It did not send',
     upstreamBody:
-      'The form service did not accept it, so your message did not arrive. Nothing was stored here either — the text is still in the box, and the alternatives below reach the same people.',
+      'The form service did not accept it, so your message did not arrive. Nothing was stored here either — the text is still in the field, and the alternatives below reach the same people.',
     notConfiguredTitle: 'The form is not connected here',
     notConfiguredBody:
       'This deployment has no form configured — a fork, a preview, or a local build. Rather than accept a message it cannot deliver, it says so. The alternatives below work everywhere.',
@@ -564,7 +564,7 @@ export const en: SiteTranslations = {
     alternativesIssues: 'Open an issue — public, and the fastest route',
     alternativesRepo: 'The repository',
     noscript:
-      'This form needs JavaScript to submit. Without it, the two links below reach the same maintainers and are honestly the better route anyway.',
+      'This form needs JavaScript to submit. Without it, the two links below reach the same maintainers, and are the better route in any case.',
   },
 
   rootDocs: {

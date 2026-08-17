@@ -18,7 +18,6 @@ export interface TwinSection {
   lines: string[];
 }
 
-
 export function portalSections(lang: Language): TwinSection[] {
   const t = getTranslations(lang);
 

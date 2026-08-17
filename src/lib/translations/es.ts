@@ -49,7 +49,7 @@ export const es: SiteTranslations = {
       kicker: 'La tesis',
       principle: '«Crecemos juntos: no competimos, nos alimentamos.»',
       gloss: 'La fibra con la que se amarra lo que nadie puede cargar solo.',
-      body: 'La cabuya es la fibra con la que se amarra. Un hilo solo no aguanta nada; torcidos juntos, cargan lo que sea. Eso no es una metáfora sobre colaborar en general: es la descripción de lo que pasa cuando dos aplicaciones pueden leer los datos de la otra.',
+      body: 'La cabuya es la fibra con la que se amarra. Un hilo solo no aguanta nada; torcidos juntos, cargan lo que ninguno soportaría por separado. Eso no es una metáfora sobre colaborar en general: es la descripción de lo que ocurre cuando dos aplicaciones pueden leer los datos de la otra.',
       bodySecond:
         'Cada app que entra conserva su producto, sus usuarios y sus decisiones. Lo que gana es que sus registros dejan de quedarse encerrados adentro, y que puede leer los de todos los demás sin pedir permiso.',
       intentNote:
@@ -59,7 +59,7 @@ export const es: SiteTranslations = {
     howItWorks: {
       kicker: 'Cómo funciona',
       title: 'Cuatro pasos, y ninguno nos necesita',
-      lead: 'Nada de esto requiere una cuenta, una aprobación ni una conversación con nadie. El protocolo es un documento; el validador es un programa que puedes correr tú.',
+      lead: 'Nada de esto requiere una cuenta, una aprobación ni una conversación con nadie. El protocolo es un documento; el validador es un programa que puedes ejecutar tú.',
       steps: [
         {
           title: 'Publica un manifiesto',
@@ -71,7 +71,7 @@ export const es: SiteTranslations = {
         },
         {
           title: 'Corre el validador',
-          body: 'Trae lo que publicaste y reporta lo que encontró. Cada hallazgo ubica el problema y dice cómo arreglarlo.',
+          body: 'Descarga lo que publicaste y reporta lo que encontró. Cada hallazgo ubica el problema y dice cómo corregirlo.',
         },
         {
           title: 'Abre una entrada en el registro',
@@ -101,7 +101,7 @@ export const es: SiteTranslations = {
       proposedExplainer:
         'Estas entradas se abrieron en nombre de cada equipo a partir del análisis público, y esperan a que ese equipo las confirme. Nadie aquí ha reclamado conformidad, y ninguna de estas es un aval.',
       measuredNote:
-        'Los estados de conformidad medidos aparecen aquí cuando el validador empiece a correr contra los feeds en vivo de forma programada.',
+        'Los estados de conformidad medidos aparecen aquí cuando el validador empiece a ejecutarse contra los feeds en vivo de forma programada.',
     },
 
     horizon: {
@@ -187,7 +187,7 @@ export const es: SiteTranslations = {
     lead: 'Cabuya es un documento y un validador. No hay cuenta que crear, ni llave que solicitar, ni con quién negociar — nosotros incluidos.',
     promiseTitle: 'La versión de cinco minutos',
     promiseBody:
-      'Pon un archivo JSON con tus lugares en una URL estable, y un manifiesto pequeño en una ruta conocida que diga quién eres. Corre el validador contra ambos y arregla lo que reporte. Eso es conformidad en L2, y para una aplicación pequeña es una tarde.',
+      'Publica un archivo JSON con tus lugares en una URL estable, y un manifiesto pequeño en una ruta conocida que declare quién eres. Ejecuta el validador contra ambos y corrige lo que reporte. Eso es conformidad en L2, y para una aplicación pequeña es una tarde.',
     transportsTitle: 'Un esquema, cuatro transportes',
     transportsLead:
       'El mismo registro place se mueve de cuatro maneras. Cuál sirves es una decisión de operación; el registro no cambia, así que un consumidor escrito contra uno funciona contra los otros.',
@@ -213,26 +213,26 @@ export const es: SiteTranslations = {
     ],
     startTitle: 'Por dónde empezar',
     startBody:
-      'La especificación y el validador ya están en el repositorio. La guía rápida, la especificación renderizada y el validador en vivo se están escribiendo ahora — mientras tanto, el repositorio es la fuente completa.',
+      'La especificación y el validador ya están en el repositorio. La guía rápida, la especificación renderizada y el validador en vivo se están escribiendo ahora — hasta que se publiquen, el repositorio es la fuente completa.',
   },
 
   quickstart: {
     metaTitle: 'Guía rápida — Cabuya',
     metaDescription:
-      'Publica tu primer feed de Cabuya: dos archivos, una corrida del validador y una entrada en el registro. Copiar y pegar toma cinco minutos.',
+      'Publica tu primer feed de Cabuya: dos archivos, una ejecución del validador y una entrada en el registro. Copiar y pegar toma cinco minutos.',
     title: 'Publica tu primer feed',
-    lead: 'Dos archivos y una corrida del validador. Todo lo de abajo está listo para copiar y pegar, y cumple con la especificación que enseña: los bloques de esta página los revisa la suite de pruebas contra el validador real.',
+    lead: 'Dos archivos y una ejecución del validador. Todo lo de abajo está listo para copiar y pegar, y cumple con la especificación que enseña: los bloques de esta página los revisa la suite de pruebas contra el validador real.',
 
     agentPathTitle: 'Si tienes un agente de código',
     agentPathBody:
       'Instala la skill y pídele que publique un feed de Cabuya. La skill incluye la especificación, así que funciona sin conexión y sin adivinar nombres de campo.',
     handPathTitle: 'Si lo vas a hacer a mano',
     handPathBody:
-      'Cinco pasos, abajo. El paso 3 es el que agarra a la gente desprevenida — léelo aunque vengas de afán.',
+      'Cinco pasos. El paso 3 es el punto de falla más frecuente, y conviene leerlo completo.',
 
     fileFirstTitle: 'Guarda esto primero',
     fileFirstBody:
-      'Este es un manifiesto completo y conforme. Cambia las dos URL y el identificador de publicador por los tuyos, y ya terminaste el paso 1.',
+      'Este es un manifiesto completo y conforme. Reemplaza las dos URL y el identificador de publicador por los tuyos, y el paso 1 queda hecho.',
 
     steps: [
       {
@@ -253,37 +253,37 @@ export const es: SiteTranslations = {
       },
       {
         title:
-          'Corre el validador hasta que quede limpio y abre una entrada en el registro',
-        body: 'Cada hallazgo nombra el campo y dice cómo arreglarlo. Cuando la corrida sale limpia, un pull request te agrega al registro.',
+          'Ejecuta el validador hasta que no reporte hallazgos y abre una entrada en el registro',
+        body: 'Cada hallazgo nombra el campo y dice cómo corregirlo. Cuando la ejecución sale limpia, un pull request te agrega al registro.',
       },
     ],
 
     spaTitle: 'El paso 3, según tu stack',
     spaLead:
-      'Busca el tuyo, aplica la línea y después pide la URL y comprueba que lo que vuelve es JSON.',
+      'Busca el tuyo, aplica la línea correspondiente y luego solicita la URL y confirma que la respuesta sea JSON.',
     spaWhy:
       'Cuatro de las veinte aplicaciones del análisis fundacional fallaron aquí, y las cuatro creían haber publicado. El manifiesto se alcanzaba, respondía 200 y contenía su página de inicio.',
 
     piiTitle: 'Antes de publicar: la única decisión que es tuya',
     piiLead:
-      'Cabuya lleva lugares, no personas. Mira los campos que estás por mapear y confirma que ninguno guarda el nombre de una persona, un teléfono o correo personal, un caso individual, o una decisión de moderación sobre alguien.',
+      'Cabuya lleva lugares, no personas. Revisa los campos que vas a mapear y confirma que ninguno guarda el nombre de una persona, un teléfono o correo personal, un caso individual, o una decisión de moderación sobre una persona.',
     piiKeysLabel: 'Nombres de campo que el validador rechaza de entrada',
     piiPatternsLabel: 'Formas de valor que marca dondequiera que aparezcan',
     piiConfirm:
-      'Una persona toma esta decisión una vez, cuando se escribe el mapeo. El validador la verifica en cada corrida posterior, y reporta el campo, nunca el valor que encontró.',
+      'Una persona toma esta decisión una vez, cuando se escribe el mapeo. El validador la verifica en cada ejecución posterior, y reporta el campo, nunca el valor que encontró.',
 
     validatorTitle: 'Córrelo',
     validatorLead:
       'Apunta el validador a la URL de tu manifiesto. Sigue los feeds que declara y reporta lo que encontró.',
     validatorOpen: 'Abrir el validador',
     validatorPending:
-      'El modo de pegar corre el mismo motor en tu navegador, sin subir nada. La revisión por URL —que además mide el comportamiento de transporte— necesita un servidor, y esa parte se está construyendo. La línea de comandos hace las dos cosas hoy:',
+      'El modo de pegado ejecuta el mismo motor en tu navegador, sin subir nada. La revisión por URL —que además mide el comportamiento de transporte— necesita un servidor, y esa parte está en construcción. La línea de comandos hace las dos cosas hoy:',
 
     honestyTitle: 'Cuánto toma esto de verdad',
     honestyBody:
       'Cinco minutos es el número honesto para el camino de arriba: dos archivos estáticos, copiados, editados y subidos. Es un nivel de conformidad real —L2— y les sirve de verdad a los consumidores.',
     honestyAfternoon:
-      'Mapear una base de datos viva al esquema es una tarde, a veces dos: hay que reconciliar tus estados con el vocabulario compartido, y alguien tiene que decidir qué significan tus datos en realidad. Ese trabajo no se puede evitar y preferimos decirlo aquí y no que lo descubras en el paso 4.',
+      'Mapear una base de datos viva al esquema es una tarde, a veces dos: hay que reconciliar tus estados con el vocabulario compartido, y alguien tiene que decidir qué significan tus datos en realidad. Ese trabajo no se puede evitar, y es preferible decirlo aquí a dejar que aparezca en el paso 4.',
   },
 
   spec: {
@@ -334,10 +334,10 @@ export const es: SiteTranslations = {
     metaDescription:
       'Revisa un feed o un manifiesto contra la especificación de Cabuya. Pega un documento para validarlo en tu navegador, o apunta el validador a una URL en vivo.',
     title: 'Validador',
-    lead: 'El mismo motor que corre la línea de comandos, y los mismos identificadores de verificación. Cada hallazgo nombra el campo, dice la regla y te dice qué cambiar.',
+    lead: 'El mismo motor que ejecuta la línea de comandos, y los mismos identificadores de verificación. Cada hallazgo nombra el campo, dice la regla y te dice qué cambiar.',
     urlModeTitle: 'Revisar una URL en vivo',
     urlModeLead:
-      'Apúntalo a tu manifiesto o a un feed. El validador trae lo que está publicado y reporta lo que encontró, incluido el comportamiento de transporte que un archivo en disco no puede mostrar.',
+      'Apúntalo a tu manifiesto o a un feed. El validador descarga lo que está publicado y reporta lo que encontró, incluido el comportamiento de transporte que un archivo en disco no puede mostrar.',
     urlLabel: 'URL del manifiesto o del feed',
     urlPlaceholder: 'https://ejemplo.org/.well-known/cabuya.json',
     run: 'Correr el validador',
@@ -346,7 +346,7 @@ export const es: SiteTranslations = {
     pasteModeLead:
       'Pega un feed o un manifiesto. Sirve antes de desplegar nada, y para un documento que preferirías no mandar a ninguna parte.',
     pastePrivacy:
-      'Esto corre completamente en tu navegador. El documento no se sube, no se registra y nunca sale de esta página.',
+      'Esto se ejecuta completamente en tu navegador. El documento no se sube, no se registra y nunca sale de esta página.',
     pasteLabel: 'El documento',
     pastePlaceholder: '{ "last_updated": "…", "ttl": 900, … }',
     kindLabel: '¿Qué es esto?',
@@ -366,7 +366,7 @@ export const es: SiteTranslations = {
     checkLabel: 'Sobre esta verificación',
     unavailableTitle: 'La revisión por URL todavía no está desplegada',
     unavailableBody:
-      'El servicio que trae una URL se está construyendo. Mientras tanto la línea de comandos hace lo mismo — y el modo de pegar, abajo, corre el motor idéntico en tu navegador.',
+      'El servicio que descarga una URL está en construcción. Mientras tanto la línea de comandos hace lo mismo, y el modo de pegado, abajo, ejecuta el motor idéntico en tu navegador.',
     transportTitle: 'No se pudo alcanzar',
     transportBody:
       'Esto no dice nada sobre tus datos. La petición falló — DNS, TLS, un tiempo agotado, o el host negándose — y el validador se detiene en vez de adivinar. Nada de esto significa que tu feed esté mal.',
@@ -397,14 +397,14 @@ export const es: SiteTranslations = {
     politenessItems: [
       'Como máximo 60 peticiones por hora a un mismo host, sumando a todos los que lo pidan.',
       'Un intento por petición. Nunca reintenta ante un fallo.',
-      'Un tiempo de espera de ocho segundos, y se rinde.',
-      'Deja de leer a los 5 MB en vez de tragarse lo que llegue.',
+      'Un tiempo de espera de ocho segundos, tras el cual abandona la petición.',
+      'Deja de leer a los 5 MB en vez de aceptar una respuesta de cualquier tamaño.',
       'No envía Referer, así que nunca revela quién preguntó.',
-      'Sigue como máximo tres redirecciones, y revisa cada destino antes de ir.',
+      'Sigue como máximo tres redirecciones, y revisa cada destino antes de seguirlo.',
     ],
     retentionTitle: 'Qué guarda',
     retentionBody:
-      'Nada. El documento se trae, se revisa y se descarta con la petición. No se guarda ningún cuerpo de feed, nosotros no registramos ninguna URL, y ningún evento de analítica lleva nada que un publicador haya enviado. Lo único que se escribe en alguna parte es un contador anónimo para aplicar los límites de arriba.',
+      'Nada. El documento se descarga, se revisa y se descarta con la petición. No se guarda ningún cuerpo de feed, nosotros no registramos ninguna URL, y ningún evento de analítica lleva nada que un publicador haya enviado. Lo único que se escribe en alguna parte es un contador anónimo para aplicar los límites de arriba.',
     optOutTitle: 'Cómo detenerlo',
     optOutBody:
       'Prohíbe el agente en tu robots.txt y no te traerá nada. Preferiríamos que primero nos contaras qué salió mal —un validador que se volvió una molestia es un error nuestro— pero la decisión es tuya y no necesita nuestro acuerdo.',
@@ -413,11 +413,11 @@ export const es: SiteTranslations = {
   checks: {
     metaTitle: 'Verificaciones — validador de Cabuya',
     metaDescription:
-      'Cada verificación que corre el validador de Cabuya: su identificador, severidad, nivel, la regla que aplica y cómo arreglar un documento que la incumple. Los anclajes son estables.',
+      'Cada verificación que ejecuta el validador de Cabuya: su identificador, severidad, nivel, la regla que aplica y cómo corregir un documento que la incumple. Los anclajes son estables.',
     title: 'Verificaciones',
     lead: 'Cada verificación que el validador puede reportar, con un anclaje estable. Los mensajes de error enlazan aquí, así que estas URL no se mueven.',
     stableNote:
-      'Un identificador de verificación es permanente. Renombrar uno rompería el bucle de arreglo de todo agente que guardó el anterior, así que las verificaciones retiradas conservan su identificador y se marcan en vez de borrarse.',
+      'Un identificador de verificación es permanente. Renombrar uno rompería el ciclo de corrección de todo agente que guardó el anterior, así que las verificaciones retiradas conservan su identificador y se marcan en vez de borrarse.',
     implementedLabel: 'Implementada',
     implementedCountLabel: 'implementadas',
     plannedLabel: 'Catalogada, todavía no implementada',
@@ -438,7 +438,7 @@ export const es: SiteTranslations = {
     specLabel: 'Especificación',
     countSummary: 'verificaciones catalogadas',
     untranslatedNote:
-      'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no corre.',
+      'Las verificaciones catalogadas pero todavía no implementadas se muestran en inglés. Sus reglas se traducen cuando la verificación entra en funcionamiento, para que un lector en español nunca vea la traducción de algo que aún no se ejecuta.',
   },
 
   changelog: {
@@ -449,12 +449,12 @@ export const es: SiteTranslations = {
     lead: 'Todo cambio notable de la especificación, del más reciente al más antiguo. Se lee del repositorio en vez de transcribirse, así que esta página y la versión que describe no pueden contradecirse.',
     scopeTitle: 'Qué cubre',
     scopeBody:
-      'La especificación: sus secciones, esquemas, ejemplos, perfiles y vocabulario. El versionado sigue SemVer con una regla extra — una candidata a versión se vuelve normativa solo después de que al menos un publicador la haya puesto en producción. La especificación nunca le saca ventaja a quienes la implementan.',
+      'La especificación: sus secciones, esquemas, ejemplos, perfiles y vocabulario. El versionado sigue SemVer con una regla extra — una candidata a versión se vuelve normativa solo después de que al menos un publicador la haya puesto en producción. La especificación nunca se adelanta a quienes la implementan.',
     unreleased: 'Sin publicar',
     nothingYet: 'Todavía no hay nada registrado bajo esta versión.',
     otherTracksTitle: 'El validador y la skill',
     otherTracksBody:
-      'Van a aparecer en esta línea de tiempo cuando saquen versiones. Mientras tanto no se listan como carriles vacíos: una línea de tiempo con filas en blanco se lee como un proyecto que se detuvo, no como uno que todavía no arranca.',
+      'Aparecerán en esta línea de tiempo cuando publiquen versiones. Mientras tanto no se listan como carriles vacíos: una línea de tiempo con filas en blanco se lee como un proyecto que se detuvo, no como uno que todavía no ha comenzado.',
     quotedNotice:
       'Las entradas de cada versión se citan del repositorio, sin cambios. El registro de cambios está escrito en inglés como el resto del repositorio, y una cita traducida no sería el registro que necesita quien viene a comprobar una versión.',
     groupLabels: {
@@ -478,7 +478,7 @@ export const es: SiteTranslations = {
       'Cualquier cambio a un campo del esquema, su cardinalidad, una enumeración, su obligatoriedad, un nivel de conformidad o el significado de un término definido. Más la gobernanza y las licencias. Todo lo demás — erratas, ejemplos, documentación, tests, texto del sitio — va por la vía rápida y necesita una aprobación.',
     whoTitle: 'Quién puede abrir uno',
     whoBody:
-      'Cualquiera. No hace falta ser maintainer y no hace falta haber escrito código. Quien se estrelló contra un muro implementando la especificación suele ser quien mejor puede describir qué tiene de malo.',
+      'Cualquiera. No hace falta ser maintainer y no hace falta haber escrito código. Quien encontró un obstáculo al implementar la especificación suele ser quien mejor puede describir qué le falla.',
     privacyTitle: 'La sección que puede rechazar un RFC por sí sola',
     privacyBody:
       'Cada RFC dice qué datos de personas podría volver alcanzables su cambio, de forma directa o cruzando con otra fuente. Un RFC que no pueda responder eso no avanza, por útil que fuera el campo. Es la única sección obligatoria que no trata del cambio en sí.',
@@ -525,8 +525,7 @@ export const es: SiteTranslations = {
     emailLabel: 'Correo',
     emailHint: 'Para poder responderte. No se hace nada más con él.',
     messageLabel: 'Mensaje',
-    messageHint:
-      'Lo que necesitas, con todo el detalle que quieras o con ninguno.',
+    messageHint: 'Lo que necesitas, con el nivel de detalle que resulte útil.',
     interestLabel: '¿De qué se trata?',
     interestOptions: {
       implement: 'Publicar un feed desde nuestra aplicación',
@@ -539,14 +538,14 @@ export const es: SiteTranslations = {
     submitting: 'Enviando…',
     successTitle: 'Enviado',
     successBody:
-      'Llegó a los maintainers. No hay acuse de recibo automático a tu correo, así que no va a llegar nada más hasta que responda una persona.',
+      'El mensaje llegó a los maintainers. No hay acuse de recibo automático, así que no llegará nada más hasta que responda una persona.',
     errors: {
       'email-required': 'Un correo, para que haya a dónde responder.',
       'email-invalid': 'Eso no parece una dirección de correo.',
       'email-too-long': 'Esa dirección es demasiado larga.',
       'message-required': 'Un mensaje, con tus palabras.',
       'message-too-short':
-        'Un poco más, por favor — lo suficiente para que alguien sepa qué necesitas.',
+        'Agrega más detalle — lo suficiente para entender qué necesitas.',
       'message-too-long': 'Eso es más largo de lo que acepta el formulario.',
       'name-too-long': 'Ese nombre es demasiado largo.',
       'organization-too-long': 'Ese nombre es demasiado largo.',
@@ -554,18 +553,18 @@ export const es: SiteTranslations = {
     },
     rateLimitedTitle: 'Demasiados mensajes desde aquí',
     rateLimitedBody:
-      'El límite son unos pocos por hora, y existe para detener scripts, no personas. Si te alcanzó a ti, las alternativas de abajo llegan a los mismos maintainers.',
+      'El límite son unos pocos por hora, y existe para detener scripts, no personas. Si alcanzaste el límite, las alternativas de abajo llegan a los mismos maintainers.',
     upstreamTitle: 'No se envió',
     upstreamBody:
-      'El servicio del formulario no lo aceptó, así que tu mensaje no llegó. Aquí tampoco se guardó nada — el texto sigue en la caja, y las alternativas de abajo llegan a las mismas personas.',
+      'El servicio del formulario no lo aceptó, así que tu mensaje no llegó. Aquí tampoco se guardó nada — el texto sigue en el campo, y las alternativas de abajo llegan a las mismas personas.',
     notConfiguredTitle: 'El formulario no está conectado aquí',
     notConfiguredBody:
-      'Este despliegue no tiene formulario configurado — una bifurcación, una vista previa o una construcción local. En vez de aceptar un mensaje que no puede entregar, lo dice. Las alternativas de abajo funcionan en todas partes.',
+      'Este despliegue no tiene formulario configurado — una bifurcación, una vista previa o una compilación local. En vez de aceptar un mensaje que no puede entregar, lo dice. Las alternativas de abajo funcionan en todas partes.',
     alternativesTitle: 'Esto siempre funciona',
     alternativesIssues: 'Abre un issue — público, y la vía más rápida',
     alternativesRepo: 'El repositorio',
     noscript:
-      'Este formulario necesita JavaScript para enviarse. Sin él, los dos enlaces de abajo llegan a los mismos maintainers y sinceramente son la mejor vía de todos modos.',
+      'Este formulario necesita JavaScript para enviarse. Sin él, los dos enlaces de abajo llegan a los mismos maintainers, y son la mejor vía en cualquier caso.',
   },
 
   rootDocs: {
@@ -614,7 +613,7 @@ export const es: SiteTranslations = {
       'Las entradas de abajo viven en este repositorio como JSON bajo CC0, un archivo por publicador, y se pueden leer sin esta página. El estado medido no vive allí: lo escribe el cron de validación en un almacén de claves y valores, porque un nivel de conformidad en un archivo es un nivel de conformidad que alguien puede editar en un pull request.',
     joinTitle: 'Cómo aparecer aquí',
     joinBody:
-      'Publica un feed, corre el validador contra él y abre un pull request agregando tu entrada. A nadie se le agrega por un formulario y a nadie se le agrega porque nosotros decidamos que le corresponde; la entrada es tuya y la corrección también, si está mal.',
+      'Publica un feed, ejecuta el validador contra él y abre un pull request agregando tu entrada. A nadie se le agrega por un formulario y a nadie se le agrega porque nosotros decidamos que le corresponde; la entrada es tuya y la corrección también, si está mal.',
     measuredTitle: 'Medido',
     measuredBody:
       'Lo que encontró el validador. Producido por una ejecución contra el feed en vivo, en la fecha que se muestra, sin intervención del publicador.',
@@ -651,7 +650,7 @@ export const es: SiteTranslations = {
     publisherMetaDescription:
       'Entrada de {id} ({host}) en el registro de Cabuya: {state} Dominios de entidad: {domains}. Medido por el validador, nunca autodeclarado.',
     buildTimeOnlyNote:
-      'Esta página se construyó sin conexión al almacén de mediciones, así que todas las entradas aparecen como aún sin medir. Eso es una propiedad de esta construcción, no de los publicadores.',
+      'Esta página se construyó sin conexión al almacén de mediciones, así que todas las entradas aparecen como aún sin medir. Eso es una propiedad de esta compilación, no de los publicadores.',
     domainLabels: {
       place: 'Lugares',
       need: 'Necesidades',

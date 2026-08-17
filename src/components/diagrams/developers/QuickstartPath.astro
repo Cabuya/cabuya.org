@@ -84,10 +84,17 @@ const steps = t.steps.map((step, index) => ({
 }));
 ---
 
+<!--
+  Below `md` this figure becomes a horizontal scroller (see `.cabuya-figure`
+  in global.css). A scrollable region needs keyboard access or axe fails it as
+  serious — and correctly: without `tabindex`, a keyboard user cannot reach the
+  right-hand half of the diagram at all. Focus also announces the aria-label.
+-->
 <figure
   class:list={['cabuya-figure', className]}
   role="img"
   aria-label={t.ariaLabel}
+  tabindex="0"
 >
   <svg
     viewBox="0 0 640 260"

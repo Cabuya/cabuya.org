@@ -9,7 +9,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { DENY_KEYS, SPA_EXCLUSIONS } from '@cabuya/validator';
+import { DENY_KEYS, DENY_PATTERNS, SPA_EXCLUSIONS } from '@cabuya/validator';
 
 import type { Language } from '@/lib/i18n';
 import { diagramLines } from '@/lib/markdown-for-agents';
@@ -49,9 +49,13 @@ export function quickstartSections(lang: Language): TwinSection[] {
     },
     {
       heading: t.quickstart.title,
-      lines: t.quickstart.steps.map(
-        (step, index) => `${index + 1}. **${step.title}** — ${step.body}`
-      ),
+      lines: [
+        `**${t.quickstart.handPathTitle}** — ${t.quickstart.handPathBody}`,
+        '',
+        ...t.quickstart.steps.map(
+          (step, index) => `${index + 1}. **${step.title}** — ${step.body}`
+        ),
+      ],
     },
     {
       heading: 'places.json',
@@ -78,6 +82,8 @@ export function quickstartSections(lang: Language): TwinSection[] {
         t.quickstart.piiLead,
         '',
         `${t.quickstart.piiKeysLabel}: ${DENY_KEYS.join(', ')}.`,
+        '',
+        `${t.quickstart.piiPatternsLabel}: ${DENY_PATTERNS.map((pattern) => pattern.class).join(', ')}.`,
         '',
         t.quickstart.piiConfirm,
       ],

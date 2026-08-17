@@ -67,6 +67,22 @@ const ACCEPTED = [
     why: 'The same link, in Spanish.',
   },
   {
+    match: 'does not conform invalid',
+    why: "A code block's header on the schema pages: a conformance badge, the example's filename and the language chip, run together as one line. The twin carries every example in full, and states the same verdict, on separate lines.",
+  },
+  {
+    match: 'no cumple invalid',
+    why: 'The same header, in Spanish.',
+  },
+  {
+    match: 'json copy',
+    why: 'The same header where the copy button falls inside it.',
+  },
+  {
+    match: 'json copiar',
+    why: 'The same header with the copy button, in Spanish.',
+  },
+  {
     match: 'this form needs javascript to submit',
     why: "The form's no-JavaScript fallback. There is no form in a Markdown twin.",
   },
@@ -112,9 +128,6 @@ const ACCEPTED = [
   },
 ];
 
-/** Fraction of a page's prose blocks that must survive into the twin. */
-const FLOOR = 0.95;
-
 // ── Normalization ─────────────────────────────────────────
 
 /** Lowercased, diacritics folded, punctuation dropped, single-spaced. */
@@ -133,36 +146,6 @@ const BLOCK =
 const BLOCK_OPEN = /<(p|li|h[1-6]|blockquote|dd|dt|figcaption|td|th)\b/i;
 
 /**
- * Remove every `not-prose` subtree.
- *
- * Tailwind's `not-prose` is this codebase's marker for interface furniture
- * inside content: a code block's "Does not conform / filename / Copy" header,
- * the registry's filter row, the spec's previous/next cards. None of it belongs
- * in a twin, and counting it as missing prose buried the blocks that do.
- *
- * Bracket-matched rather than regex-matched, because these subtrees nest.
- */
-function stripNotProse(html) {
-  let out = html;
-  for (;;) {
-    const open = out.search(/<div[^>]*\bnot-prose\b[^>]*>/i);
-    if (open === -1) return out;
-    const tagEnd = out.indexOf('>', open) + 1;
-    let depth = 1;
-    let i = tagEnd;
-    while (depth > 0 && i < out.length) {
-      const next = out.slice(i).search(/<\/?div\b/i);
-      if (next === -1) return out.slice(0, open);
-      i += next;
-      depth += /^<div\b/i.test(out.slice(i)) ? 1 : -1;
-      i += 4;
-    }
-    const close = out.indexOf('>', i) + 1;
-    out = out.slice(0, open) + ' ' + out.slice(close > 0 ? close : out.length);
-  }
-}
-
-/**
  * The page's prose blocks, and the chrome blocks behind them.
  *
  * Split on the closing tag of every block-level element that carries prose, so
@@ -171,31 +154,13 @@ function stripNotProse(html) {
  * document's structure, which is most of what an agent reads it for.
  */
 function blocksOf(html) {
-  const main = mainOf(html);
-  const prose = stripNotProse(main);
   const out = [];
-  for (const [source, region] of [
-    ['prose', prose],
-    ['chrome', main],
-  ]) {
-    for (const [, , inner] of region.matchAll(BLOCK)) {
-      if (BLOCK_OPEN.test(inner)) continue;
-      const w = words(stripHtml(inner));
-      if (w.length < MIN_WORDS) continue;
-      out.push({ words: w, source });
-    }
-    // The chrome pass sees everything; keeping only what the prose pass did
-    // not would need a second index, so it is filtered by membership below.
+  for (const [, , inner] of mainOf(html).matchAll(BLOCK)) {
+    if (BLOCK_OPEN.test(inner)) continue;
+    const w = words(stripHtml(inner));
+    if (w.length >= MIN_WORDS) out.push({ words: w });
   }
-  const proseKeys = new Set(
-    out.filter((b) => b.source === 'prose').map((b) => b.words.join(' '))
-  );
-  return [
-    ...out.filter((b) => b.source === 'prose'),
-    ...out.filter(
-      (b) => b.source === 'chrome' && !proseKeys.has(b.words.join(' '))
-    ),
-  ];
+  return out;
 }
 
 /** The twin as one normalized word string, link targets removed. */
@@ -225,9 +190,8 @@ for (const path of pages) {
   const markdown = readFileSync(join(DIST_DIR, twin.mdPath), 'utf-8');
 
   const haystack = twinWords(markdown);
-  const all = blocksOf(html);
+  const prose = blocksOf(html);
   const has = (b) => haystack.includes(` ${b.words.join(' ')} `);
-  const prose = all.filter((b) => b.source === 'prose');
   const notInTwin = prose.filter((b) => !has(b));
   const missing = notInTwin.filter((b) => {
     const text = b.words.join(' ');
@@ -235,13 +199,11 @@ for (const path of pages) {
     if (accepted) matchedAcceptances.add(accepted.match);
     return !accepted;
   });
-  const chromeMissing = all.filter((b) => b.source === 'chrome' && !has(b));
 
   results.push({
     path,
     blocks: prose.length,
     missing: missing.length,
-    chromeMissing: chromeMissing.length,
     accepted: notInTwin.length - missing.length,
     ratio: prose.length ? (prose.length - missing.length) / prose.length : 1,
     samples: missing.slice(0, 4).map((b) => b.words.join(' ').slice(0, 110)),
@@ -258,20 +220,22 @@ if (missingTwins.length > 0) {
 }
 
 const measured = results.filter((r) => r.blocks > 0);
+/*
+ * Any block missing from a twin fails, unless the ledger above accounts for
+ * it. A ratio floor was the first design and it was too weak to support the
+ * claim this gate makes: one dropped paragraph on a twenty-block page measures
+ * exactly 95%, which a 0.95 floor lets through. A seed test caught it —
+ * deleting a real sentence from a twin left the gate green. With an explicit
+ * ledger for furniture, a percentage says less than a count.
+ */
 const below = measured
-  .filter((r) => r.ratio < FLOOR)
-  .sort((a, b) => a.ratio - b.ratio);
+  .filter((r) => r.missing > 0)
+  .sort((a, b) => b.missing - a.missing);
 const totalBlocks = measured.reduce((n, r) => n + r.blocks, 0);
 const totalMissing = measured.reduce((n, r) => n + r.missing, 0);
 
 if (JSON_OUT) {
-  console.log(
-    JSON.stringify(
-      { floor: FLOOR, totalBlocks, totalMissing, results },
-      null,
-      2
-    )
-  );
+  console.log(JSON.stringify({ totalBlocks, totalMissing, results }, null, 2));
 } else {
   console.log('\n📄 Markdown twins — block-level completeness\n');
   console.log(
@@ -286,7 +250,7 @@ if (JSON_OUT) {
     `   ${(((totalBlocks - totalMissing) / totalBlocks) * 100).toFixed(1)}% ` +
       'of prose accounted for'
   );
-  console.log(`   floor: every page ≥ ${(FLOOR * 100).toFixed(0)}%\n`);
+  console.log('   every block not in the ledger must appear in its twin\n');
 
   if (below.length === 0) {
     console.log(
@@ -294,11 +258,12 @@ if (JSON_OUT) {
     );
     console.log('   a summary.\n');
   } else {
-    console.log(`❌ ${below.length} page(s) below the floor:\n`);
+    console.log(
+      `❌ ${below.length} page(s) with prose missing from the twin:\n`
+    );
     for (const r of below.slice(0, SHOW)) {
       console.log(
-        `   ${(r.ratio * 100).toFixed(1)}%  ${r.path}  ` +
-          `(${r.missing}/${r.blocks} blocks missing)`
+        `   ${r.path}  —  ${r.missing} of ${r.blocks} blocks missing`
       );
       for (const s of r.samples) console.log(`        · "${s}…"`);
     }

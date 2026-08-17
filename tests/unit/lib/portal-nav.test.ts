@@ -14,9 +14,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
-
-import { LANGUAGE_CODES } from '@/lib/language-codes';
 import { DIAGRAM_COPY } from '@/lib/diagram-copy';
+import { LANGUAGE_CODES } from '@/lib/language-codes';
 import { portalSections } from '@/lib/portal-markdown';
 import {
   allPortalEntries,
@@ -153,16 +152,22 @@ describe('portal twin — the diagram travels with the page', () => {
    * asserts the twin actually carries it rather than that two strings still
    * agree.
    */
-  it.each(LANGUAGE_CODES)('quotes the %s aria-label from the shared copy', (lang) => {
-    const copy = DIAGRAM_COPY.oneSchemaFourTransports[lang];
-    const lines = portalSections(lang).flatMap((entry) => entry.lines);
-    expect(lines.some((line) => line.includes(copy.ariaLabel))).toBe(true);
-    expect(lines.some((line) => line.includes(copy.caption))).toBe(true);
-  });
+  it.each(LANGUAGE_CODES)(
+    'quotes the %s aria-label from the shared copy',
+    (lang) => {
+      const copy = DIAGRAM_COPY.oneSchemaFourTransports[lang];
+      const lines = portalSections(lang).flatMap((entry) => entry.lines);
+      expect(lines.some((line) => line.includes(copy.ariaLabel))).toBe(true);
+      expect(lines.some((line) => line.includes(copy.caption))).toBe(true);
+    }
+  );
 
   it('is the only place the diagram copy is written', () => {
     const source = readFileSync(
-      join(ROOT, 'src/components/diagrams/protocol/OneSchemaFourTransports.astro'),
+      join(
+        ROOT,
+        'src/components/diagrams/protocol/OneSchemaFourTransports.astro'
+      ),
       'utf-8'
     );
     expect(

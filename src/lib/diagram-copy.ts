@@ -31,13 +31,13 @@ export const DIAGRAM_COPY: Record<string, Record<Language, DiagramCopy>> = {
       ariaLabel:
         'Five steps: write the manifest, export one feed, run the validator, fix what it reports, then open a registry pull request. The first three are typically under an hour; the whole path is an afternoon for a small application.',
       caption:
-        'An afternoon, step by step. Each one produces a file or a result you can look at.',
+        'An afternoon, step by step. Each step produces a file or a result you can inspect.',
     },
     es: {
       ariaLabel:
         'Cinco pasos: escribir el manifiesto, exportar un feed, correr el validador, arreglar lo que reporte y abrir un pull request al registro. Los primeros tres suelen tomar menos de una hora; el camino completo es una tarde para una aplicación pequeña.',
       caption:
-        'Una tarde, paso a paso. Cada uno produce un archivo o un resultado que puedes mirar.',
+        'Una tarde, paso a paso. Cada paso produce un archivo o un resultado que puedes inspeccionar.',
     },
   },
   validatorLoop: {
