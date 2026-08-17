@@ -50,8 +50,29 @@ const GROUPS: NavGroup[] = [
   },
 ];
 
+/**
+ * The labels the header renders, passed in as the component now requires.
+ *
+ * They are props rather than a lookup because `getTranslations` reaches both
+ * translation modules and cannot be tree-shaken by key — the header island was
+ * carrying 73 KB of site copy to render three words.
+ */
+const LABELS = {
+  openMenu: 'Open menu',
+  closeMenu: 'Close menu',
+  switchToLanguage: 'Cambiar a español',
+  toDark: 'Switch to dark mode',
+  toLight: 'Switch to light mode',
+};
+
 const mount = (props: Record<string, unknown> = {}) =>
-  render(Header, { lang: 'en', pathname: '/', groups: GROUPS, ...props });
+  render(Header, {
+    lang: 'en',
+    pathname: '/',
+    groups: GROUPS,
+    labels: LABELS,
+    ...props,
+  });
 
 describe('header — the disclosure pattern', () => {
   it('uses a button with aria-expanded, and no menu roles anywhere', () => {

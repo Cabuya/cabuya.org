@@ -77,6 +77,10 @@ const NO_FLIP = new Set([
   'cabuya-seedling-soft',
   'cabuya-primary-light',
   'cabuya-bg-dark',
+  // A code block is dark in both themes, so its comment colour is fixed for
+  // the same reason `bg-dark` is. Measured on both grounds it can sit on:
+  // 6.16:1 on `bg-dark`, 5.88:1 on the syntax theme's own `#24292E`.
+  'cabuya-code-comment',
   'cabuya-accent',
   // Aliases re-export via var(), so they inherit the flip without a .dark rule.
   'cabuya',

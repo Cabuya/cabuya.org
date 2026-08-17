@@ -197,6 +197,20 @@
   /* Always-dark canvas — identical in both modes, so hero sections can keep
    * a Night ground in light mode. Pair with ivory/seedling text. */
   --color-cabuya-bg-dark: #082a24;
+  /*
+   * Syntax-highlighting comments.
+   *
+   * Shiki writes inline `style="color:#…"` from its theme, which bypasses every
+   * token rule this project has — and `github-dark`'s comment colour is
+   * `#6A737D`, which measures **3.19:1** on `bg-dark`. Lighthouse caught it on
+   * the quickstart; it was on every code block with a comment on the site,
+   * which is most of the ones that teach anything.
+   *
+   * `#93A9A0` is the replacement: 6.16:1 on `bg-dark`, 5.88:1 on the theme's
+   * own `#24292E`, and still visibly quieter than the code around it — a
+   * comment that shouts is its own accessibility problem.
+   */
+  --color-cabuya-code-comment: #93a9a0;
 
   /* ── Hairlines & borders ───────────────────────────────────────────── */
   --color-cabuya-border: #e3e0d6;

@@ -1,8 +1,8 @@
 # Performance — normative budgets
 
 > Budgets are CI gates, not aspirations. A page over budget is a failing
-> build, and the fix is a design decision, not a waiver. (Gate: `perf:budgets`
-> + Lighthouse CI, *Task 34*.)
+> build, and the fix is a design decision, not a waiver. (Gates: `perf:budgets` and
+> Lighthouse CI.)
 
 ---
 
@@ -46,30 +46,38 @@
 
 ## 3. Measurement
 
-- `pnpm run perf:budgets` — per-route compressed-JS audit against the table
-  *(Task 34)*.
+- `pnpm run perf:budgets` — per-route gzipped-JS audit against the table, read
+  from the built chunk graph. Counts island `component-url` attributes, not just
+  `<script>` tags: an earlier version read only the latter and reported 1.1 KB
+  for every route while a browser measured 24, which is worse than no gate.
 - `pnpm run lighthouse` — LHCI on the eight routes (home EN/ES, quickstart,
   a spec section, schema ref, validator, registry index, publisher page).
 - Function latencies measured locally against the fixture server, recorded
   with methodology in `analysis_results/PERF_A11Y_BASELINE.md`.
 
-Measured after Task 28 (gzipped script bytes, every script the page fetches,
-Chromium, network-idle):
+Measured, and held by `perf:budgets`. Full numbers, method and the two fixes
+that produced them: `analysis_results/PERF_A11Y_BASELINE.md`.
 
-| Route | Budget | Measured |
+| Route | Budget | Measured (gz) |
 |---|---|---|
-| `/` | ≤ 40 KB | 40.9 KB |
-| `/developers` | 0 KB unless it carries an island | 41.9 KB — chrome only |
-| `/registry` | ≤ 60 KB | 40.9 KB |
-| `/registry/{id}` | ≤ 60 KB | 41.8 KB |
-| `/developers/validator` | ≤ 90 KB | 45.8 KB before a run |
+| `/`, `/es/` | ≤ 40 KB | **24.0 KB** |
+| Documentation pages | shared chrome only | 25.0–27.0 KB |
+| `/registry`, `/registry/{id}` | ≤ 60 KB | 24.0–24.9 KB |
+| `/developers/validator` | ≤ 90 KB | 29.9 KB before a run |
 
-Everything above the landing budget is the shared chrome — the header island
-(21.6 KB) and the Svelte runtime (15.7 KB) — carried identically by every page,
-including the documentation pages the table says should ship none. The registry
-pages add nothing measurable beyond it: the filter and the freshness refresh are
-plain module scripts under a kilobyte together. Closing the chrome baseline is
-Task 34's, and `perf:budgets` is the gate that will hold it closed.
+Everything on a documentation page is the shared chrome. The row in §1 reads
+*0 KB unless it carries an island*; every page carries the header island, which
+is the site's navigation and is not optional — so what a documentation page is
+actually held to is "the chrome and nothing else", and the gate's budget sits
+just above the chrome so that adding an island to one fails.
+
+**Two fixes got it here, both worth remembering.** The header island bundled 73
+KB of site copy in two languages to render three labels, because
+`getTranslations` reaches both translation modules and a lookup by key cannot be
+tree-shaken; it takes its strings as props now (26.4 KB → 4.3 KB). And Rollup
+had placed the CommonJS interop helper in the JSON Schema compiler's chunk, so a
+dependency-free analytics import pulled 61 KB onto every page. Together, ~83 KB
+gzipped off every route on the site.
 
 ## 4. When a budget and a feature collide
 

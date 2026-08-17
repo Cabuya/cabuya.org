@@ -27,7 +27,6 @@ import {
   navHref,
   switchLanguagePath,
 } from '@/lib/site-navigation';
-import { getTranslations } from '@/lib/translations';
 
 import ThemeToggle from './ThemeToggle.svelte';
 
@@ -37,7 +36,25 @@ export let pathname = '/';
 /** Injectable for tests; defaults to whatever is live today. */
 export let groups: NavGroup[] = liveGroups();
 
-$: t = getTranslations(lang);
+/**
+ * The three strings this component says, passed in rather than looked up.
+ *
+ * `getTranslations` reaches both translation modules, and a bundler cannot
+ * tree-shake a lookup by key out of an object literal — so importing it here
+ * put **73 KB of copy for two languages into the header island** to render
+ * three labels. 26 KB gzipped, on every page of the site, for the word "Menu".
+ *
+ * The Astro side has the translations at build time for free. Passing three
+ * strings across the island boundary costs three strings.
+ */
+export let labels: {
+  openMenu: string;
+  closeMenu: string;
+  switchToLanguage: string;
+  /** Forwarded to the theme toggle, which is in this island's chunk. */
+  toDark: string;
+  toLight: string;
+};
 $: other = (lang === 'es' ? 'en' : 'es') as Language;
 $: switchHref = switchLanguagePath(pathname, other);
 
@@ -219,11 +236,13 @@ onMount(() => {
         class="nav-link rounded-md px-2 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
         hreflang={other}
         lang={other}
-        aria-label={t.nav.switchToLanguage}
+        aria-label={labels.switchToLanguage}
       >
         {other.toUpperCase()}
       </a>
-      <ThemeToggle {lang} />
+      <ThemeToggle
+        labels={{ toDark: labels.toDark, toLight: labels.toLight }}
+      />
 
       {#if groups.length > 0}
         <button
@@ -232,7 +251,7 @@ onMount(() => {
           class="nav-link inline-flex h-9 w-9 items-center justify-center rounded-md lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
           aria-expanded={drawerOpen}
           aria-controls="mobile-drawer"
-          aria-label={drawerOpen ? t.nav.closeMenu : t.nav.openMenu}
+          aria-label={drawerOpen ? labels.closeMenu : labels.openMenu}
           on:click={() => (drawerOpen = !drawerOpen)}
         >
           <svg
@@ -265,7 +284,7 @@ onMount(() => {
       role="dialog"
       aria-modal="true"
       tabindex="-1"
-      aria-label={t.nav.openMenu}
+      aria-label={labels.openMenu}
     >
       <nav aria-label="Main" class="main-container py-4">
         <ul class="flex flex-col gap-1">

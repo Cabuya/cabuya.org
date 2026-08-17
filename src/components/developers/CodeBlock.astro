@@ -68,4 +68,19 @@ const trimmed = code.replace(/\n+$/, '');
   .astro-code {
     background-color: transparent !important;
   }
+
+  /*
+   * The one theme colour that fails against our ground.
+   *
+   * Shiki emits inline styles, so this is the only place it can be corrected
+   * without forking the theme. Matched on the value rather than on a class
+   * because the value is what Shiki writes — and `prose:check`'s sibling test
+   * measures every colour in every built code block, so a theme change that
+   * introduced a second failing token would fail there rather than here.
+   */
+  .astro-code span[style*="#6A737D"],
+  .astro-code span[style*="#6a737d"] {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat an inline style */
+    color: var(--color-cabuya-code-comment) !important;
+  }
 </style>

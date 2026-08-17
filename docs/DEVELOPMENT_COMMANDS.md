@@ -36,6 +36,8 @@
 | `pnpm run spec:boundary` | B1–B7 for `spec/` + `registry/` | ✅ live |
 | `pnpm run registry:check(:strict)` | Entries validate (measured fields refused by construction); ids/URLs unique; filename ≡ id; org-level contact; event refs resolve; no HTML (B6) | ✅ live |
 | `pnpm run prose:check(:strict)` | Every `--tw-prose-*` variable in the **compiled** CSS resolves to a Cabuya token, and the mapping is unlayered. Reads `dist/`, so it runs after the build | ✅ live |
+| `pnpm run perf:budgets(:strict)` | Per-route gzipped JS against the budget table. Reads `dist/`, follows each page's island and preload graph | ✅ live |
+| `pnpm run lighthouse` | LHCI on the eight representative routes, median of 3, against `dist/` | ✅ live |
 | `pnpm run llms:generate(:check)` — `llms:check` | Regenerates `public/llms.txt` and `llms-full.txt` from the nav registries, the spec loader, the registry and the check catalogue. `llms:check` fails when the committed copy has drifted | ✅ live |
 | `pnpm run issues:day-one(:check)` | Regenerates `docs/CONTRIBUTING-issues.md` from the catalogued checks that are not yet implemented — the backlog `/join` promises. `:check` fails when it has drifted | ✅ live |
 | `pnpm run registry:ids:check` | The badge endpoint's inlined id list still matches `registry/publishers/` — a new entry whose own badge would 404 fails here | ✅ live |
@@ -45,9 +47,8 @@
 
 | Command | Asserts | Ships |
 |---|---|---|
-| `pnpm run perf:budgets` | Per-route JS budgets (docs 0 KB, landing ≤40, validator ≤90, registry ≤60) | Task 34 |
 | `pnpm run a11y:check` | Playwright + axe over the route matrix × themes × viewports | Task 35 |
-| `pnpm run lighthouse` / `lighthouse:full` | LHCI ≥ 95/100/100/95 on the eight routes | Task 34 retargets |
+| `pnpm run lighthouse:full` | The wider LHCI surface, for a release check | ✅ live |
 | `pnpm exec playwright test tests/e2e/journeys/` | The five E2E journeys | Task 47 |
 
 ## Validator workspace *(Tasks 12–16)*

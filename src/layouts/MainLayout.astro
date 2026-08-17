@@ -101,7 +101,18 @@ const metaDescription = truncateToBand(description, DESCRIPTION_MAX);
       ]}
     >
       <SpecBanner lang={language} />
-      <Header client:idle lang={language} pathname={pathname} />
+      <Header
+        client:idle
+        lang={language}
+        pathname={pathname}
+        labels={{
+          openMenu: t.nav.openMenu,
+          closeMenu: t.nav.closeMenu,
+          switchToLanguage: t.nav.switchToLanguage,
+          toDark: t.theme.toDark,
+          toLight: t.theme.toLight,
+        }}
+      />
     </div>
     {/*
       Keep --cabuya-chrome-height in sync with sticky chrome (header ±

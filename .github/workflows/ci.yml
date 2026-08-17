@@ -111,6 +111,21 @@ jobs:
       - name: Design gate — prose uses the palette (strict)
         run: pnpm run prose:check:strict
 
+      # Reads the built site and follows each page's island and preload graph.
+      # An earlier version read only `<script type=module>` and reported 1.1 KB
+      # for every route while a browser measured 24 — Astro loads islands from
+      # `component-url` attributes, not from script tags.
+      - name: Performance gate — JavaScript budgets per route (strict)
+        run: pnpm run perf:budgets:strict
+
+      # Advisory on pull requests, blocking on main: a Lighthouse median swings
+      # about 0.03 on a shared runner, and a gate that flakes on a PR is a gate
+      # people learn to ignore. The deterministic half of the contract is
+      # `perf:budgets`, which is blocking everywhere.
+      - name: Performance — Lighthouse CI on the eight representative routes
+        run: pnpm run lighthouse
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+
       # Runs AFTER the site build on purpose: the gate's last assertion
       # cross-checks every check id against the anchors on the built
       # /developers/validator/checks page. That page arrives in Task 26, and

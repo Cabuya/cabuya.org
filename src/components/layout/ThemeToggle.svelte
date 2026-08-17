@@ -6,16 +6,26 @@
 import { onMount } from 'svelte';
 
 import { EVENTS, trackEvent } from '@/lib/analytics';
-import { getTranslations } from '@/lib/translations';
 
-export let lang: string = 'es';
+/**
+ * The two labels this button carries, passed in rather than looked up.
+ *
+ * Same reason as the header's: `getTranslations` reaches both translation
+ * modules, and a lookup by key cannot be tree-shaken out of an object literal.
+ * This one button was pulling 73 KB of site copy into the header island — and
+ * it was doing it even after the header stopped, because the toggle is
+ * imported by the header and a chunk is the union of what its members need.
+ */
+export let labels: { toDark: string; toLight: string } = {
+  toDark: 'Dark mode',
+  toLight: 'Light mode',
+};
 /** `header` sits in the desktop nav; `menu` is a larger mobile control. */
 export let placement: 'header' | 'menu' = 'header';
 
 let isDark = false;
 
-$: t = getTranslations(lang);
-$: ariaLabel = isDark ? t.theme.toLight : t.theme.toDark;
+$: ariaLabel = isDark ? labels.toLight : labels.toDark;
 
 onMount(() => {
   isDark = document.documentElement.classList.contains('dark');
