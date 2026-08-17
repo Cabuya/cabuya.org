@@ -380,6 +380,39 @@ export const es: SiteTranslations = {
       'Válido contra el esquema; conformidad no medida. Correr sin red significa que las verificaciones de transporte no corrieron, así que no se puede medir ningún nivel — eso es distinto de aprobarlas.',
   },
 
+  probe: {
+    metaTitle: 'Nuestro sondeo — validador de Cabuya',
+    metaDescription:
+      'Qué es el agente CabuyaValidator, exactamente qué peticiones hace y con qué frecuencia, qué guarda —nada en absoluto— y cómo impedir que traiga tu sitio.',
+    title: 'Nuestro sondeo',
+    lead: 'Si encontraste esta página en los registros de tu servidor, alguien le pidió al validador de Cabuya que revisara un feed en tu dominio. Esto es exactamente lo que eso significa.',
+    uaTitle: 'El agente de usuario',
+    uaBody:
+      'Cada petición que hace el validador se identifica y enlaza de vuelta a esta página, para que una línea de registro nunca sea un misterio. Es el único agente que enviamos y no lo variamos.',
+    whatTitle: 'Qué pide',
+    whatItems: [
+      'Un GET a la URL que alguien indicó — normalmente /.well-known/cabuya.json.',
+      'Un GET a cada feed que ese manifiesto declara, para revisar los documentos.',
+      'A veces un segundo GET a la misma URL unos segundos después. Esa es la verificación de «siempre ahora»: compara dos respuestas para ver si una marca de tiempo sigue al reloj en vez de al contenido.',
+      'Nada más. Sin rastreo, sin seguir enlaces más allá de los feeds declarados, sin intentar ninguna otra ruta.',
+    ],
+    politenessTitle: 'Cómo se comporta',
+    politenessItems: [
+      'Como máximo 60 peticiones por hora a un mismo host, sumando a todos los que lo pidan.',
+      'Un intento por petición. Nunca reintenta ante un fallo.',
+      'Un tiempo de espera de ocho segundos, y se rinde.',
+      'Deja de leer a los 5 MB en vez de tragarse lo que llegue.',
+      'No envía Referer, así que nunca revela quién preguntó.',
+      'Sigue como máximo tres redirecciones, y revisa cada destino antes de ir.',
+    ],
+    retentionTitle: 'Qué guarda',
+    retentionBody:
+      'Nada. El documento se trae, se revisa y se descarta con la petición. No se guarda ningún cuerpo de feed, nosotros no registramos ninguna URL, y ningún evento de analítica lleva nada que un publicador haya enviado. Lo único que se escribe en alguna parte es un contador anónimo para aplicar los límites de arriba.',
+    optOutTitle: 'Cómo detenerlo',
+    optOutBody:
+      'Prohíbe el agente en tu robots.txt y no te traerá nada. Preferiríamos que primero nos contaras qué salió mal —un validador que se volvió una molestia es un error nuestro— pero la decisión es tuya y no necesita nuestro acuerdo.',
+  },
+
   checks: {
     metaTitle: 'Verificaciones — validador de Cabuya',
     metaDescription:

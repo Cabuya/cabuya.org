@@ -65,6 +65,8 @@
     "validator:build": "pnpm --filter @cabuya/validator build",
     "validator:test": "pnpm --filter @cabuya/validator test",
     "validator:pack": "pnpm --filter @cabuya/validator exec npm pack --dry-run",
+    "retention:check": "node scripts/check-no-retention.mjs",
+    "retention:check:strict": "node scripts/check-no-retention.mjs --strict",
     "internal:check": "node scripts/check-internal-excluded.mjs",
     "internal:check:strict": "node scripts/check-internal-excluded.mjs --strict",
     "checks:catalogue": "node scripts/check-checks-catalogue.mjs",

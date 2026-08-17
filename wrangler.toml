@@ -1,0 +1,24 @@
+# Cloudflare Pages configuration.
+#
+# Only the validator endpoint needs a binding, and it needs exactly one: a KV
+# namespace holding two integer counters with TTLs. Nothing else about this
+# site is stateful, and the endpoint that fetches documents on request is
+# deliberately the one place with the least state of all — see
+# `functions/api/validate.ts` and `docs/SECURITY.md`.
+#
+# Local development:
+#   pnpm run build && pnpm exec wrangler pages dev dist --kv VALIDATE_RATE
+#
+# `--kv` creates a local namespace on the fly, so no account setup is needed to
+# work on the Function. In production the namespace id is set in the Pages
+# dashboard rather than committed here.
+
+name = "cabuya-org"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-08-01"
+
+# The rate counters. `preview_id` and `id` are configured in the dashboard;
+# leaving them out of the repository keeps a namespace id from being mistaken
+# for a secret that leaked, and there is nothing sensitive in one anyway.
+[[kv_namespaces]]
+binding = "VALIDATE_RATE"

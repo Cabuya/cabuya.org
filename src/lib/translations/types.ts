@@ -280,6 +280,24 @@ export interface SiteTranslations {
     degradedNote: string;
   };
 
+  /** The probe explanation page — the URL our User-Agent carries. */
+  probe: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    uaTitle: string;
+    uaBody: string;
+    whatTitle: string;
+    whatItems: string[];
+    politenessTitle: string;
+    politenessItems: string[];
+    retentionTitle: string;
+    retentionBody: string;
+    optOutTitle: string;
+    optOutBody: string;
+  };
+
   /** The check catalogue. */
   checks: {
     metaTitle: string;

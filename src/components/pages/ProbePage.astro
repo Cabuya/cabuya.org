@@ -1,0 +1,81 @@
+---
+/**
+ * `/developers/validator/probe` — the page our User-Agent links to.
+ *
+ * Someone finds `CabuyaValidator` in their logs and follows the URL. What they
+ * want, in order: what is this, what did it do, how often will it do it, what
+ * did it keep, and how do I stop it. The page answers those five in that order
+ * and does not try to sell anything on the way past.
+ *
+ * The opt-out is unconditional and stated without hedging. A probe that makes
+ * you argue to be left alone is a probe that deserves to be blocked.
+ */
+import CodeBlock from '@/components/developers/CodeBlock.astro';
+import Callout from '@/components/editorial/Callout.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+/** Kept identical to the string in `functions/api/validate.ts`, by a test. */
+const USER_AGENT =
+  'CabuyaValidator/0.1 (+https://cabuya.org/developers/validator/probe)';
+
+const headings = buildToc([
+  { depth: 2, text: t.probe.uaTitle },
+  { depth: 2, text: t.probe.whatTitle },
+  { depth: 2, text: t.probe.politenessTitle },
+  { depth: 2, text: t.probe.retentionTitle },
+  { depth: 2, text: t.probe.optOutTitle },
+]);
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.probe.title}
+  description={t.probe.metaDescription}
+  trail={[
+    { label: t.validator.title, href: `${prefix}/developers/validator` },
+    { label: t.probe.title },
+  ]}
+  headings={headings}
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.probe.lead}</p>
+
+  <h2 id={headings[0].slug}>{t.probe.uaTitle}</h2>
+  <p>{t.probe.uaBody}</p>
+  <CodeBlock code={USER_AGENT} lang="text" uiLang={lang} copyable={false} />
+
+  <h2 id={headings[1].slug}>{t.probe.whatTitle}</h2>
+  <ul>
+    {t.probe.whatItems.map((item) => <li>{item}</li>)}
+  </ul>
+
+  <h2 id={headings[2].slug}>{t.probe.politenessTitle}</h2>
+  <ul>
+    {t.probe.politenessItems.map((item) => <li>{item}</li>)}
+  </ul>
+
+  <h2 id={headings[3].slug}>{t.probe.retentionTitle}</h2>
+  <Callout tone="note" label={t.probe.retentionTitle}>
+    <p>{t.probe.retentionBody}</p>
+  </Callout>
+
+  <h2 id={headings[4].slug}>{t.probe.optOutTitle}</h2>
+  <p>{t.probe.optOutBody}</p>
+  <CodeBlock
+    code={'User-agent: CabuyaValidator\nDisallow: /'}
+    lang="text"
+    title="robots.txt"
+    uiLang={lang}
+  />
+</DocsLayout>

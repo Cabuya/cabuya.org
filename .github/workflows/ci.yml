@@ -78,6 +78,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Security gate — the validator endpoint keeps nothing (strict)
+        run: pnpm run retention:check:strict
+
       - name: Content gate — /internal never reaches production (strict)
         run: pnpm run internal:check:strict
 

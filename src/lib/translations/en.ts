@@ -380,6 +380,39 @@ export const en: SiteTranslations = {
       'Schema-valid; conformance unmeasured. Running without network means the transport checks did not run, so no level can be measured — that is different from passing them.',
   },
 
+  probe: {
+    metaTitle: 'Our probe — Cabuya validator',
+    metaDescription:
+      'What the CabuyaValidator user agent is, exactly which requests it makes and how often, what it keeps — nothing at all — and how to stop it fetching your site.',
+    title: 'Our probe',
+    lead: 'If you found this page in your server logs, something asked the Cabuya validator to check a feed on your domain. Here is precisely what that means.',
+    uaTitle: 'The user agent',
+    uaBody:
+      'Every request the validator makes identifies itself and links back to this page, so a log line is never a mystery. It is the only user agent we send, and we do not vary it.',
+    whatTitle: 'What it requests',
+    whatItems: [
+      'A GET of the URL somebody supplied — usually /.well-known/cabuya.json.',
+      'A GET of each feed that manifest declares, to check the documents themselves.',
+      'Occasionally a second GET of the same URL a few seconds later. That is the always-now check: it compares two responses to see whether a timestamp is following the clock rather than the content.',
+      'Nothing else. No crawl, no link following beyond the declared feeds, no attempt at any other path.',
+    ],
+    politenessTitle: 'How it behaves',
+    politenessItems: [
+      'At most 60 requests an hour to any one host, across every caller.',
+      'One attempt per request. It never retries a failure.',
+      'An eight-second timeout, then it gives up.',
+      'It stops reading at 5 MB rather than pulling whatever arrives.',
+      'It sends no Referer, so it never reveals who asked.',
+      'It follows at most three redirects, checking each destination before going there.',
+    ],
+    retentionTitle: 'What it keeps',
+    retentionBody:
+      'Nothing. The document is fetched, checked, and discarded with the request. No feed body is stored, no URL is logged by us, and no analytics event carries anything a publisher submitted. The only thing written anywhere is an anonymous counter used to enforce the limits above.',
+    optOutTitle: 'How to stop it',
+    optOutBody:
+      'Disallow the user agent in your robots.txt and it will not fetch you. We would rather you told us what went wrong first — a validator that has become a nuisance is a bug on our side — but the decision is yours and it does not need our agreement.',
+  },
+
   checks: {
     metaTitle: 'Checks — Cabuya validator',
     metaDescription:

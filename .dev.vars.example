@@ -5,3 +5,13 @@
 # Form + question UUIDs are baked into functions/api/_dailybot.ts.
 
 DAILYBOT_API_KEY=
+
+# ── The validator endpoint ────────────────────────────────
+#
+# `/api/validate` needs no secrets. Its only binding is the KV namespace
+# `VALIDATE_RATE`, which holds two counters and is created locally by
+# `wrangler pages dev dist --kv VALIDATE_RATE`.
+#
+# If the endpoint ever appears to need a credential, that is a design change
+# worth stopping for: a service that fetches arbitrary URLs and also holds a
+# secret is a considerably more attractive target than one that does not.

@@ -108,8 +108,7 @@ export const PORTAL_SECTIONS: PortalSection[] = [
       {
         label: { en: 'Our probe', es: 'Nuestro sondeo' },
         path: '/developers/validator/probe',
-        status: 'planned',
-        ships: 'Task 27',
+        status: 'live',
       },
       {
         label: { en: 'Agent skill', es: 'Skill para agentes' },

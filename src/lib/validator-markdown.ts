@@ -92,3 +92,40 @@ export function checksSections(lang: Language): TwinSection[] {
 
   return sections;
 }
+
+export function probeSections(lang: Language): TwinSection[] {
+  const t = getTranslations(lang);
+  return [
+    { heading: t.probe.title, lines: [t.probe.lead] },
+    {
+      heading: t.probe.uaTitle,
+      lines: [
+        t.probe.uaBody,
+        '',
+        '```',
+        'CabuyaValidator/0.1 (+https://cabuya.org/developers/validator/probe)',
+        '```',
+      ],
+    },
+    {
+      heading: t.probe.whatTitle,
+      lines: t.probe.whatItems.map((item) => `- ${item}`),
+    },
+    {
+      heading: t.probe.politenessTitle,
+      lines: t.probe.politenessItems.map((item) => `- ${item}`),
+    },
+    { heading: t.probe.retentionTitle, lines: [t.probe.retentionBody] },
+    {
+      heading: t.probe.optOutTitle,
+      lines: [
+        t.probe.optOutBody,
+        '',
+        '```',
+        'User-agent: CabuyaValidator',
+        'Disallow: /',
+        '```',
+      ],
+    },
+  ];
+}

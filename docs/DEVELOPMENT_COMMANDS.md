@@ -73,6 +73,20 @@
 
 ## Local Functions development
 
-`wrangler pages dev` runs the site with `functions/` (validate, contact,
-badge) against local KV *(documented fully in Task 27)*. Secrets come from
-`.dev.vars` — see `.dev.vars.example` for every name; never commit values.
+```bash
+pnpm run build
+pnpm exec wrangler pages dev dist --kv VALIDATE_RATE
+```
+
+`--kv` creates the namespace locally, so working on `/api/validate` needs no
+Cloudflare account setup. The endpoint takes no secrets — see
+`.dev.vars.example` for why that is a property worth keeping.
+
+To point the site's URL mode at the local Function, flip
+`URL_MODE_AVAILABLE` in `src/components/pages/ValidatorPage.astro` and rebuild.
+It ships `false` so the deployed page says the service is not up rather than
+failing on submit.
+
+| Command | Asserts |
+|---|---|
+| `pnpm run retention:check(:strict)` | The validator endpoint keeps nothing: no `console.*`, no storage binding beyond the two rate counters, no analytics in the validation path, `Cache-Control: no-store` on every response. A grep, and honest about being one — it cannot prove the absence of retention, only the absence of its common shapes |
