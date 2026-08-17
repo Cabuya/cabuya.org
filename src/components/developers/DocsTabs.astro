@@ -1,0 +1,95 @@
+---
+/**
+ * Per-stack snippets, as tabs — built from `<details>` and radio inputs, with
+ * no JavaScript.
+ *
+ * CSS-only because `docs/PERFORMANCE.md` says interactions CSS can express do
+ * not get JavaScript, and a tab set is the canonical example. Radio inputs give
+ * the keyboard behaviour for free — arrow keys move between tabs, which is
+ * exactly the ARIA tab pattern, implemented by the browser rather than by us.
+ *
+ * The panels are all in the DOM, so a reader with CSS disabled sees every
+ * snippet in sequence rather than one and a set of dead labels.
+ */
+interface Tab {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  /** Unique within the page — used to group the radio inputs. */
+  name: string;
+  tabs: Tab[];
+  legend: string;
+}
+
+const { name, tabs, legend } = Astro.props;
+---
+
+<div class="docs-tabs my-6 rounded-cabuya-sm border border-cabuya-border">
+  <fieldset class="flex flex-wrap gap-1 border-b border-cabuya-border p-2">
+    <legend class="sr-only">{legend}</legend>
+    {
+      tabs.map((tab, index) => (
+        <span>
+          <input
+            type="radio"
+            name={name}
+            id={`${name}-${tab.id}`}
+            value={tab.id}
+            checked={index === 0}
+            class="peer sr-only"
+          />
+          <label
+            for={`${name}-${tab.id}`}
+            class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-cabuya-text-secondary transition-colors hover:bg-cabuya-bg-brand peer-checked:bg-cabuya-primary-soft peer-checked:font-medium peer-checked:text-cabuya-primary peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-cabuya-primary"
+          >
+            {tab.label}
+          </label>
+        </span>
+      ))
+    }
+  </fieldset>
+
+  <div class="docs-tabs__panels p-1">
+    <slot />
+  </div>
+</div>
+
+<style>
+  /*
+   * Each panel is `<div data-tab="{id}">`. Only the one whose radio is checked
+   * is shown; the sibling selector walks from the checked input to the panel
+   * carrying the matching id.
+   */
+  .docs-tabs__panels > :global([data-tab]) {
+    display: none;
+  }
+  .docs-tabs:has(input:nth-of-type(1):checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-of-type(1)),
+  .docs-tabs:has(span:nth-child(1) input:checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-child(1)),
+  .docs-tabs:has(span:nth-child(2) input:checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-child(2)),
+  .docs-tabs:has(span:nth-child(3) input:checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-child(3)),
+  .docs-tabs:has(span:nth-child(4) input:checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-child(4)),
+  .docs-tabs:has(span:nth-child(5) input:checked)
+    .docs-tabs__panels
+    > :global([data-tab]:nth-child(5)) {
+    display: block;
+  }
+
+  /* Without :has(), show every panel rather than none. */
+  @supports not selector(:has(*)) {
+    .docs-tabs__panels > :global([data-tab]) {
+      display: block;
+    }
+  }
+</style>

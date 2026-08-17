@@ -1,0 +1,70 @@
+---
+/**
+ * A field reference table.
+ *
+ * "Required" is a word in its own column, not a red asterisk: an asterisk is a
+ * convention the reader has to already know, and it disappears entirely in a
+ * screen reader.
+ */
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+export interface Parameter {
+  name: string;
+  type: string;
+  required: boolean;
+  description: string;
+  /** Rendered as code beside the description. */
+  example?: string;
+}
+
+interface Props {
+  lang: Language;
+  parameters: Parameter[];
+  caption?: string;
+}
+
+const { lang, parameters, caption } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<div class="my-6 overflow-x-auto rounded-cabuya-sm border border-cabuya-border">
+  <table class="w-full text-sm">
+    {caption && <caption class="px-4 py-3 text-left text-xs text-cabuya-text-muted">{caption}</caption>}
+    <thead class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand text-left">
+      <tr>
+        <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.field}</th>
+        <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.type}</th>
+        <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.required}</th>
+        <th scope="col" class="px-4 py-2.5 font-semibold">{t.docs.description}</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-cabuya-border bg-cabuya-bg-elevated">
+      {
+        parameters.map((parameter) => (
+          <tr>
+            <td class="px-4 py-3 align-top">
+              <code class="text-xs">{parameter.name}</code>
+            </td>
+            <td class="px-4 py-3 align-top">
+              <code class="text-xs text-cabuya-text-secondary">{parameter.type}</code>
+            </td>
+            <td class="px-4 py-3 align-top text-xs">
+              {parameter.required ? (
+                <span class="font-semibold text-cabuya-text">{t.docs.yes}</span>
+              ) : (
+                <span class="text-cabuya-text-muted">{t.docs.no}</span>
+              )}
+            </td>
+            <td class="px-4 py-3 align-top text-cabuya-text-secondary">
+              {parameter.description}
+              {parameter.example && (
+                <code class="mt-1 block text-xs text-cabuya-text-muted">{parameter.example}</code>
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

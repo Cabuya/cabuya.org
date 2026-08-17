@@ -1,0 +1,114 @@
+---
+import AgentCopyBar from '@/components/developers/AgentCopyBar.svelte';
+/**
+ * The developers portal shell.
+ *
+ * Three regions on a wide screen — sidebar, article, contents — collapsing to
+ * one column with a disclosure for the sidebar below `lg`. Everything except
+ * that disclosure and the two copy buttons is server-rendered: a documentation
+ * page that ships a framework to draw a list of links has already failed the
+ * budget in `docs/PERFORMANCE.md`.
+ *
+ * Wraps `MainLayout`, so the portal keeps the site header, the spec banner and
+ * the footer. A portal with its own chrome reads as a different website, and a
+ * reader who arrived from the landing page should not have to re-orient.
+ */
+import DocsBreadcrumbs from '@/components/developers/DocsBreadcrumbs.astro';
+import DocsMobileMenu from '@/components/developers/DocsMobileMenu.svelte';
+import DocsPrevNext from '@/components/developers/DocsPrevNext.astro';
+import DocsSidebar from '@/components/developers/DocsSidebar.astro';
+import DocsTableOfContents from '@/components/developers/DocsTableOfContents.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import type { Language } from '@/lib/i18n';
+import type { TocEntry } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  title: string;
+  description: string;
+  /** Crumbs after "Developers"; the last is the current page. */
+  trail?: Array<{ label: string; href?: string }>;
+  headings?: TocEntry[];
+  /** ISO date the content last changed. Omit when there is nothing honest to show. */
+  updated?: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  trail = [],
+  headings = [],
+  updated,
+} = Astro.props;
+
+const t = getTranslations(lang);
+const pathname = Astro.url.pathname;
+/** Every page serves `{route}.md`; the copy bar and the link both use it. */
+const twinUrl = `${pathname.replace(/\/$/, '')}.md`;
+
+const updatedLabel = updated
+  ? new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(new Date(updated))
+  : null;
+---
+
+<MainLayout lang={lang} title={title} description={description}>
+  <div class="main-container py-8 lg:py-12">
+    <div class="grid gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_13rem]">
+      <!-- Sidebar: a plain list on desktop, a disclosure below lg -->
+      <div class="lg:contents">
+        <div class="lg:hidden">
+          <DocsMobileMenu
+            client:visible
+            labels={{ open: t.docs.openNav, close: t.docs.closeNav }}
+          >
+            <DocsSidebar lang={lang} pathname={pathname} variant="mobile" />
+          </DocsMobileMenu>
+        </div>
+        <aside class="hidden lg:block">
+          <DocsSidebar lang={lang} pathname={pathname} />
+        </aside>
+      </div>
+
+      <article class="min-w-0">
+        <DocsBreadcrumbs lang={lang} trail={trail} />
+
+        <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 class="text-title">{title}</h1>
+            {
+              updatedLabel && (
+                <p class="mt-2 text-xs text-cabuya-text-muted">
+                  {t.docs.updated} {updatedLabel}
+                </p>
+              )
+            }
+          </div>
+          <AgentCopyBar
+            client:visible
+            twinUrl={twinUrl}
+            labels={{
+              copy: t.docs.copyAsMarkdown,
+              copied: t.docs.copied,
+              failed: t.docs.copyFailed,
+              view: t.docs.viewMarkdown,
+            }}
+          />
+        </div>
+
+        <div class="prose max-w-none">
+          <slot />
+        </div>
+
+        <DocsPrevNext lang={lang} pathname={pathname} />
+      </article>
+
+      <DocsTableOfContents lang={lang} headings={headings} />
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,83 @@
+---
+/**
+ * The portal home.
+ *
+ * One screen that answers three questions a developer arrives with: what is
+ * this, what will it cost me, and where do I start. Everything else in the
+ * portal is reachable from the sidebar, so this page does not need to be a
+ * table of contents in prose.
+ *
+ * The honest note at the foot is not a disclaimer for its own sake. Most of
+ * the portal's routes are still being written, and a reader who follows the
+ * sidebar expecting six pages should know why there are two.
+ */
+import OneSchemaFourTransports from '@/components/diagrams/protocol/OneSchemaFourTransports.astro';
+import Callout from '@/components/editorial/Callout.astro';
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import type { Language } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { buildToc } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+
+/*
+ * The TOC is built from the same strings the headings render, so it cannot
+ * drift from them — the usual failure with a hand-written contents list.
+ */
+const headings = buildToc([
+  { depth: 2, text: t.portal.promiseTitle },
+  { depth: 2, text: t.portal.transportsTitle },
+  { depth: 2, text: t.portal.pathsTitle },
+  { depth: 2, text: t.portal.startTitle },
+]);
+---
+
+<DocsLayout
+  lang={lang}
+  title={t.portal.title}
+  description={t.portal.metaDescription}
+  headings={headings}
+>
+  <p class="lead !mt-0 text-lg text-cabuya-text-secondary">{t.portal.lead}</p>
+
+  <h2 id={headings[0].slug}>{t.portal.promiseTitle}</h2>
+  <p>{t.portal.promiseBody}</p>
+
+  <h2 id={headings[1].slug}>{t.portal.transportsTitle}</h2>
+  <p>{t.portal.transportsLead}</p>
+  <OneSchemaFourTransports lang={lang} class="not-prose" />
+
+  <h2 id={headings[2].slug}>{t.portal.pathsTitle}</h2>
+  <p>{t.portal.pathsLead}</p>
+  <ul class="not-prose mt-6 grid gap-4 sm:grid-cols-3">
+    {
+      t.portal.paths.map((path) => (
+        <li class="rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5">
+          <h3 class="font-display text-base font-semibold">{path.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-cabuya-text-secondary">
+            {path.body}
+          </p>
+          <p class="mt-3 border-t border-cabuya-border pt-3 text-xs text-cabuya-text-muted">
+            {path.forWhom}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2 id={headings[3].slug}>{t.portal.startTitle}</h2>
+  <Callout tone="note" label={t.portal.startTitle}>
+    <p>{t.portal.startBody}</p>
+    <p class="mt-2">
+      <a href={`${GITHUB_URL}/tree/main/spec`} rel="noopener" target="_blank">
+        {`${GITHUB_URL.replace('https://', '')}/tree/main/spec`}
+      </a>
+    </p>
+  </Callout>
+</DocsLayout>

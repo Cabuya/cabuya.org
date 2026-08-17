@@ -156,6 +156,69 @@ export const es: SiteTranslations = {
     otherExitLabel: 'Leer el registro fundacional',
   },
 
+  docs: {
+    portal: 'Desarrolladores',
+    sidebar: 'Documentación',
+    breadcrumb: 'Ruta de navegación',
+    pagination: 'Navegación entre páginas',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    onThisPage: 'En esta página',
+    openNav: 'Explorar la documentación',
+    closeNav: 'Cerrar',
+    updated: 'Actualizado',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    copyFailed: 'Selecciona y copia',
+    copyAsMarkdown: 'Copiar como Markdown',
+    viewMarkdown: 'Ver el Markdown',
+    field: 'Campo',
+    type: 'Tipo',
+    required: 'Obligatorio',
+    description: 'Descripción',
+    yes: 'Sí',
+    no: 'No',
+    specifiedNotMeasured: 'Especificado, pero no medido por la versión 0.1.',
+  },
+
+  portal: {
+    metaTitle: 'Desarrolladores — Cabuya',
+    metaDescription:
+      'Publica y lee datos de ayuda con un esquema compartido. La especificación, los esquemas y el validador, con una guía rápida de una tarde.',
+    eyebrow: 'Desarrolladores',
+    title: 'Todo lo que necesitas para publicar, y nada que tengas que pedir',
+    lead: 'Cabuya es un documento y un validador. No hay cuenta que crear, ni llave que solicitar, ni con quién negociar — nosotros incluidos.',
+    promiseTitle: 'La versión de cinco minutos',
+    promiseBody:
+      'Pon un archivo JSON con tus lugares en una URL estable, y un manifiesto pequeño en una ruta conocida que diga quién eres. Corre el validador contra ambos y arregla lo que reporte. Eso es conformidad en L2, y para una aplicación pequeña es una tarde.',
+    transportsTitle: 'Un esquema, cuatro transportes',
+    transportsLead:
+      'El mismo registro place se mueve de cuatro maneras. Cuál sirves es una decisión de operación; el registro no cambia, así que un consumidor escrito contra uno funciona contra los otros.',
+    pathsTitle: 'Tres maneras de entrar',
+    pathsLead:
+      'La mayoría de los equipos llegan queriendo una de estas. Son independientes: publicar no obliga a consumir, y ninguna de las dos necesita la skill.',
+    paths: [
+      {
+        title: 'Publicar',
+        body: 'Exporta lo que ya tienes en el esquema compartido y deja que cualquiera lo lea.',
+        forWhom: 'Tienes una aplicación con lugares, necesidades o capacidades',
+      },
+      {
+        title: 'Consumir',
+        body: 'Lee los feeds de otros bajo las reglas de consumo, con la atribución intacta.',
+        forWhom: 'Quieres más cobertura de la que te dan tus propios datos',
+      },
+      {
+        title: 'Enseñarle a un agente',
+        body: 'Instala la skill y tu agente de código conoce el protocolo, sin conexión, con la especificación incluida.',
+        forWhom: 'Prefieres que un agente haga la integración',
+      },
+    ],
+    startTitle: 'Por dónde empezar',
+    startBody:
+      'La especificación y el validador ya están en el repositorio. La guía rápida, la especificación renderizada y el validador en vivo se están escribiendo ahora — mientras tanto, el repositorio es la fuente completa.',
+  },
+
   markdown: {
     siteNavigation: 'Navegación del Sitio',
     languageNote: 'Esta página también está disponible en inglés.',

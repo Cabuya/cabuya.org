@@ -1,0 +1,68 @@
+---
+/**
+ * The portal sidebar, server-rendered.
+ *
+ * A list of links needs no JavaScript, and shipping a framework to render one
+ * would be the exact failure `docs/PERFORMANCE.md` opens with. The mobile
+ * drawer is the only interactive part, and it lives in its own island.
+ *
+ * Only live entries appear — see `src/lib/portal-nav.ts` for why.
+ */
+import type { Language } from '@/lib/i18n';
+import {
+  isPortalActive,
+  livePortalSections,
+  portalHref,
+} from '@/lib/portal-nav';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  pathname: string;
+  /** Denser type and no sticky positioning inside the mobile drawer. */
+  variant?: 'desktop' | 'mobile';
+}
+
+const { lang, pathname, variant = 'desktop' } = Astro.props;
+const t = getTranslations(lang);
+const sections = livePortalSections();
+---
+
+<nav
+  aria-label={t.docs.sidebar}
+  class:list={[
+    variant === 'desktop' &&
+      'sticky top-[calc(var(--cabuya-chrome-height)+1.5rem)] max-h-[calc(100vh-var(--cabuya-chrome-height)-3rem)] overflow-y-auto',
+  ]}
+>
+  {
+    sections.map((section) => (
+      <div class="mb-6">
+        <h2 class="mb-2 text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+          {section.label[lang] ?? section.label.en}
+        </h2>
+        <ul class="flex flex-col gap-0.5">
+          {section.entries.map((entry) => {
+            const active = isPortalActive(entry, pathname);
+            return (
+              <li>
+                <a
+                  href={portalHref(entry, lang)}
+                  aria-current={active ? 'page' : undefined}
+                  class:list={[
+                    'block rounded-md px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cabuya-primary',
+                    active
+                      ? 'bg-cabuya-primary-soft font-medium text-cabuya-primary'
+                      : 'text-cabuya-text-secondary hover:bg-cabuya-bg-brand hover:text-cabuya-text',
+                  ]}
+                >
+                  {entry.label[lang] ?? entry.label.en}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+</nav>

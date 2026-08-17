@@ -155,6 +155,70 @@ export const en: SiteTranslations = {
     otherExitLabel: 'Read the founding record',
   },
 
+  docs: {
+    portal: 'Developers',
+    sidebar: 'Documentation',
+    breadcrumb: 'Breadcrumb',
+    pagination: 'Page navigation',
+    previous: 'Previous',
+    next: 'Next',
+    onThisPage: 'On this page',
+    openNav: 'Browse the documentation',
+    closeNav: 'Close',
+    updated: 'Updated',
+    copy: 'Copy',
+    copied: 'Copied',
+    copyFailed: 'Select and copy',
+    copyAsMarkdown: 'Copy as Markdown',
+    viewMarkdown: 'View the Markdown',
+    field: 'Field',
+    type: 'Type',
+    required: 'Required',
+    description: 'Description',
+    yes: 'Yes',
+    no: 'No',
+    specifiedNotMeasured: 'Specified, but not measured by version 0.1.',
+  },
+
+  portal: {
+    metaTitle: 'Developers — Cabuya',
+    metaDescription:
+      'Publish and read aid data with one shared schema. The specification, the schemas and the validator, with a quickstart that takes an afternoon.',
+    eyebrow: 'Developers',
+    title: 'Everything you need to publish, and nothing you need to ask for',
+    lead: 'Cabuya is a document and a validator. There is no account to create, no key to request, and nobody to negotiate with — including us.',
+    promiseTitle: 'The five-minute version',
+    promiseBody:
+      'Put a JSON file describing your places at a stable URL, and a small manifest at a known path saying who you are. Run the validator against them and fix what it reports. That is conformance at L2, and for a small application it is an afternoon.',
+    transportsTitle: 'One schema, four transports',
+    transportsLead:
+      'The same place record moves four ways. Which one you serve is an operations decision; the record does not change, so a consumer written against one works against the others.',
+    pathsTitle: 'Three ways in',
+    pathsLead:
+      'Most teams arrive wanting one of these. They are independent — publishing does not require consuming, and neither requires the agent skill.',
+    paths: [
+      {
+        title: 'Publish',
+        body: 'Export what you already have in the shared schema, and let anyone read it.',
+        forWhom:
+          'You run an application with places, needs or capacities in it',
+      },
+      {
+        title: 'Consume',
+        body: 'Read other publishers’ feeds under the consumption rules, with attribution intact.',
+        forWhom: 'You want more coverage than your own data gives you',
+      },
+      {
+        title: 'Teach an agent',
+        body: 'Install the skill and your coding agent knows the protocol, offline, with the spec vendored.',
+        forWhom: 'You would rather have an agent do the integration',
+      },
+    ],
+    startTitle: 'Where to start',
+    startBody:
+      'The specification and the validator are in the repository today. The quickstart, the rendered spec and the live validator are being written now — until they are up, the repository is the complete source.',
+  },
+
   markdown: {
     siteNavigation: 'Site Navigation',
     languageNote: 'This page is also available in Spanish.',

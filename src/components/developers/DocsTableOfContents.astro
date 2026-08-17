@@ -1,0 +1,53 @@
+---
+/**
+ * On-page contents.
+ *
+ * No scroll-spy. Highlighting the current section as you scroll needs an
+ * IntersectionObserver, a hydrated island and a scroll listener's worth of
+ * main-thread work, on pages whose budget is zero JavaScript — for a nicety
+ * that tells the reader something the scrollbar already does. The links work,
+ * the anchors work, and `scroll-margin-top` keeps a target clear of the sticky
+ * header. Recorded as a deliberate floor in `docs/PERFORMANCE.md` terms.
+ *
+ * h2 and h3 only. Deeper than that is an outline of an outline.
+ */
+import type { Language } from '@/lib/i18n';
+import type { TocEntry } from '@/lib/toc';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  headings: TocEntry[];
+}
+
+const { lang, headings } = Astro.props;
+const t = getTranslations(lang);
+---
+
+{
+  headings.length > 1 && (
+    <nav
+      aria-label={t.docs.onThisPage}
+      class="sticky top-[calc(var(--cabuya-chrome-height)+1.5rem)] hidden max-h-[calc(100vh-var(--cabuya-chrome-height)-3rem)] overflow-y-auto xl:block"
+    >
+      <h2 class="mb-2 text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+        {t.docs.onThisPage}
+      </h2>
+      <ul class="flex flex-col gap-1 border-l border-cabuya-border">
+        {headings.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              class:list={[
+                'block border-l-2 border-transparent py-0.5 text-sm text-cabuya-text-secondary transition-colors hover:border-cabuya-primary hover:text-cabuya-primary',
+                heading.depth === 2 ? 'pl-3' : 'pl-6 text-xs',
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

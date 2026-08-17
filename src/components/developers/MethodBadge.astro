@@ -1,0 +1,32 @@
+---
+/**
+ * An HTTP method chip.
+ *
+ * The method name is the whole content, so this can never be colour-only —
+ * which is why it is a chip with text rather than a coloured dot beside a path.
+ */
+type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+interface Props {
+  method: Method;
+}
+
+const { method } = Astro.props;
+
+const TONE: Record<Method, string> = {
+  GET: 'bg-cabuya-info-soft text-cabuya-info',
+  POST: 'bg-cabuya-success-soft text-cabuya-success',
+  PUT: 'bg-cabuya-warning-soft text-cabuya-warning',
+  PATCH: 'bg-cabuya-warning-soft text-cabuya-warning',
+  DELETE: 'bg-cabuya-danger-soft text-cabuya-danger',
+};
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded px-2 py-0.5 font-mono text-xs font-bold',
+    TONE[method],
+  ]}
+>
+  {method}
+</span>

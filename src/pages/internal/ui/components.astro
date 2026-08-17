@@ -1,4 +1,10 @@
 ---
+import CodeBlock from '@/components/developers/CodeBlock.astro';
+import DocsTabs from '@/components/developers/DocsTabs.astro';
+import EndpointCard from '@/components/developers/EndpointCard.astro';
+import MethodBadge from '@/components/developers/MethodBadge.astro';
+import ParameterTable from '@/components/developers/ParameterTable.astro';
+import ResponseExample from '@/components/developers/ResponseExample.astro';
 import Callout from '@/components/editorial/Callout.astro';
 import Kicker from '@/components/editorial/Kicker.astro';
 import Lead from '@/components/editorial/Lead.astro';
@@ -25,6 +31,11 @@ import ShowcaseLayout from '@/layouts/ShowcaseLayout.astro';
  */
 
 const specimens = [
+  'Code block',
+  'Parameter table',
+  'Endpoint card',
+  'Response example',
+  'Docs tabs',
   'Editorial type scale',
   'Lead · Kicker · Rule',
   'Callout',
@@ -60,6 +71,154 @@ const specimens = [
 
   <!-- Each specimen: a titled row with two panels. -->
   <div class="space-y-6">
+    <!-- ── Portal: code block ──────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Code block
+      </h2>
+      <div class="p-6">
+        <p class="mb-4 text-sm text-cabuya-text-secondary">
+          Always dark, in both themes — a sample whose colours change with the
+          page is a sample that means something different depending on where the
+          reader is. Highlighted at build by Astro's bundled Shiki; the only
+          JavaScript is the copy button.
+        </p>
+        <CodeBlock
+          title="places.json"
+          lang="json"
+          code={`{
+  "last_updated": "2026-08-17T14:02:00Z",
+  "ttl": 900,
+  "version": "0.1.0",
+  "publisher_id": "example-app",
+  "license": "CC0-1.0",
+  "data": { "places": [] }
+}`}
+        />
+      </div>
+    </section>
+
+    <!-- ── Portal: parameter table ─────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Parameter table
+      </h2>
+      <div class="p-6">
+        <p class="mb-4 text-sm text-cabuya-text-secondary">
+          &ldquo;Required&rdquo; is a word in a column, not a red asterisk: an
+          asterisk is a convention the reader has to already know, and it
+          disappears entirely in a screen reader.
+        </p>
+        <ParameterTable
+          lang="en"
+          parameters={[
+            {
+              name: 'last_updated',
+              type: 'string (RFC 3339)',
+              required: true,
+              description: 'When the feed was last regenerated.',
+              example: '2026-08-17T14:02:00Z',
+            },
+            {
+              name: 'ttl',
+              type: 'integer',
+              required: true,
+              description: 'Seconds a consumer may cache before re-polling.',
+            },
+            {
+              name: 'last_confirmed_at',
+              type: 'string | null',
+              required: false,
+              description:
+                'When a human last verified the place. null means nobody has — a valid answer.',
+            },
+          ]}
+        />
+      </div>
+    </section>
+
+    <!-- ── Portal: endpoint card ───────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Endpoint card &amp; method badge
+      </h2>
+      <div class="p-6">
+        <p class="mb-4 text-sm text-cabuya-text-secondary">
+          Carries a status, because most of the API surface is specified and
+          unmeasured. A reference that looked uniformly available would send
+          somebody to build against something no validator can confirm.
+        </p>
+        <EndpointCard
+          lang="en"
+          method="GET"
+          path="/api/cabuya/places"
+          summary="Return the publisher's places, paginated."
+          level="L3"
+          status="specified"
+        />
+        <div class="mt-4 flex flex-wrap gap-2">
+          <MethodBadge method="GET" />
+          <MethodBadge method="POST" />
+          <MethodBadge method="PUT" />
+          <MethodBadge method="PATCH" />
+          <MethodBadge method="DELETE" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Portal: response example ────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Response example
+      </h2>
+      <div class="p-6">
+        <ResponseExample
+          lang="en"
+          status={200}
+          statusText="OK"
+          title="Response"
+          body={`{
+  "data": { "places": [] },
+  "next": null
+}`}
+        />
+      </div>
+    </section>
+
+    <!-- ── Portal: docs tabs ───────────────────────────── -->
+    <section class="rounded-xl border border-cabuya-border overflow-hidden">
+      <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">
+        Docs tabs
+      </h2>
+      <div class="p-6">
+        <p class="mb-4 text-sm text-cabuya-text-secondary">
+          Radio inputs and CSS, no JavaScript. The browser supplies the
+          arrow-key behaviour, which is the ARIA tab pattern implemented by
+          someone who has already got it right. With CSS off, every panel shows
+          in sequence rather than one panel and a row of dead labels.
+        </p>
+        <DocsTabs
+          name="specimen-tabs"
+          legend="Choose a stack"
+          tabs={[
+            { id: 'node', label: 'Node' },
+            { id: 'python', label: 'Python' },
+            { id: 'static', label: 'Static file' },
+          ]}
+        >
+          <div data-tab="node">
+            <CodeBlock lang="javascript" code={`res.json(feed);`} copyable={false} />
+          </div>
+          <div data-tab="python">
+            <CodeBlock lang="python" code={`return JsonResponse(feed)`} copyable={false} />
+          </div>
+          <div data-tab="static">
+            <CodeBlock lang="shellscript" code={`cp places.json public/`} copyable={false} />
+          </div>
+        </DocsTabs>
+      </div>
+    </section>
+
     <!-- ── Editorial type scale ────────────────────────── -->
     <section class="rounded-xl border border-cabuya-border overflow-hidden">
       <h2 class="bg-cabuya-bg-brand/60 dark:bg-cabuya-bg-brand px-4 py-2 text-sm font-semibold">

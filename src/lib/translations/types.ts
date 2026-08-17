@@ -122,6 +122,50 @@ export interface SiteTranslations {
     otherExitLabel: string;
   };
 
+  /** The developers portal's chrome. */
+  docs: {
+    portal: string;
+    sidebar: string;
+    breadcrumb: string;
+    pagination: string;
+    previous: string;
+    next: string;
+    onThisPage: string;
+    openNav: string;
+    closeNav: string;
+    updated: string;
+    copy: string;
+    copied: string;
+    copyFailed: string;
+    copyAsMarkdown: string;
+    viewMarkdown: string;
+    field: string;
+    type: string;
+    required: string;
+    description: string;
+    yes: string;
+    no: string;
+    specifiedNotMeasured: string;
+  };
+
+  /** The portal home page. */
+  portal: {
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    lead: string;
+    promiseTitle: string;
+    promiseBody: string;
+    transportsTitle: string;
+    transportsLead: string;
+    pathsTitle: string;
+    pathsLead: string;
+    paths: Array<{ title: string; body: string; forWhom: string }>;
+    startTitle: string;
+    startBody: string;
+  };
+
   markdown: {
     /** Heading labels used by the agent-Markdown serializer */
     siteNavigation: string;

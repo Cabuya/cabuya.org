@@ -29,7 +29,7 @@
 
 | Route | Job | Status |
 |---|---|---|
-| `/developers` | Portal home: the five-minute promise, four transports, choose-your-path | Task 23 |
+| `/developers` | Portal home: the five-minute promise, four transports, choose-your-path | ✅ live |
 | `/developers/quickstart` | Publish your first feed — the single most important page | Task 24 |
 | `/developers/spec` | Version index with status badges + the RC rule | Task 25 |
 | `/developers/spec/{version}` | Spec TOC for one version | Task 25 |

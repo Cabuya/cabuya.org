@@ -9,7 +9,13 @@
 #   - Old /en/... URLs (English used to live there) → the same path at root.
 #   - Old root URLs served Spanish; their route families are retired, so they
 #     301 to the closest surviving surface (refined per-task as Cabuya pages
-#     land: /developers T23, /registry T28, /join+/governance T30).
+#     land: /registry T28, /join+/governance T30).
+#
+# Task 23 removed the /developers rule: the route is now a live English page.
+# An old inbound link that expected Spanish content there lands on the English
+# portal with the language switcher one click away — which is the topology
+# working as designed, not a regression. Redirecting it to /es/ instead would
+# have sent a reader looking for developer documentation to the home page.
 
 # --- Retired Corag routes (old Spanish root URLs) → closest surface --------
 /about                       /es/    301
@@ -19,7 +25,6 @@
 /leaders                     /es/    301
 /partners                    /es/    301
 /ecosystem                   /es/    301
-/developers                  /es/    301
 /privacy                     /es/    301
 /contact                     /es/    301
 /movement                    /es/    301

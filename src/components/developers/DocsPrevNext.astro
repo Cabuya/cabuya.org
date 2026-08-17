@@ -1,0 +1,59 @@
+---
+/**
+ * The two links at the foot of a docs page.
+ *
+ * Derived from the sidebar's own order, so the sequence a reader is walked
+ * through is the sequence the sidebar shows. Nothing to maintain separately,
+ * and nothing that can disagree.
+ */
+import type { Language } from '@/lib/i18n';
+import { portalHref, portalNeighbours } from '@/lib/portal-nav';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+  pathname: string;
+}
+
+const { lang, pathname } = Astro.props;
+const t = getTranslations(lang);
+const { previous, next } = portalNeighbours(pathname);
+---
+
+{
+  (previous || next) && (
+    <nav
+      aria-label={t.docs.pagination}
+      class="mt-16 grid gap-3 border-t border-cabuya-border pt-8 sm:grid-cols-2"
+    >
+      {previous ? (
+        <a
+          href={portalHref(previous, lang)}
+          class="group rounded-cabuya-sm border border-cabuya-border p-4 transition-colors hover:border-cabuya-primary"
+        >
+          <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
+            {t.docs.previous}
+          </span>
+          <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
+            {previous.label[lang] ?? previous.label.en}
+          </span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next && (
+        <a
+          href={portalHref(next, lang)}
+          class="group rounded-cabuya-sm border border-cabuya-border p-4 text-right transition-colors hover:border-cabuya-primary sm:col-start-2"
+        >
+          <span class="text-xs uppercase tracking-wider text-cabuya-text-muted">
+            {t.docs.next}
+          </span>
+          <span class="mt-1 block font-medium group-hover:text-cabuya-primary">
+            {next.label[lang] ?? next.label.en}
+          </span>
+        </a>
+      )}
+    </nav>
+  )
+}

@@ -1,0 +1,38 @@
+---
+import type { Language } from '@/lib/i18n';
+/**
+ * A response body, with its status code.
+ *
+ * The status is stated as a number and a name, because "200" alone is fine for
+ * a reader who lives in HTTP and useless for one who does not — and this
+ * protocol is deliberately implementable by someone who does not.
+ */
+import CodeBlock from './CodeBlock.astro';
+
+interface Props {
+  lang: Language;
+  status: number;
+  statusText: string;
+  body: string;
+  title?: string;
+}
+
+const { lang, status, statusText, body, title } = Astro.props;
+
+const tone =
+  status < 300
+    ? 'bg-cabuya-success-soft text-cabuya-success'
+    : status < 500
+      ? 'bg-cabuya-warning-soft text-cabuya-warning'
+      : 'bg-cabuya-danger-soft text-cabuya-danger';
+---
+
+<div class="my-6">
+  <p class="mb-2 flex items-center gap-2 text-xs">
+    <span class:list={['rounded px-2 py-0.5 font-mono font-bold', tone]}>
+      {status}
+    </span>
+    <span class="text-cabuya-text-secondary">{statusText}</span>
+  </p>
+  <CodeBlock code={body} lang="json" title={title} uiLang={lang} />
+</div>

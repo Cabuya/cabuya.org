@@ -1,0 +1,57 @@
+---
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+/**
+ * One API endpoint: method, path, and what it is for.
+ *
+ * Carries a `status` because most of this protocol's API surface is specified
+ * and unmeasured — L3 and L4 arrive in v0.2. An endpoint reference that looked
+ * uniformly available would send someone to build against something no
+ * validator can confirm, and they would find out late.
+ */
+import MethodBadge from './MethodBadge.astro';
+
+interface Props {
+  lang: Language;
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  path: string;
+  summary: string;
+  /** The conformance level this endpoint belongs to. */
+  level?: string;
+  /** `specified` renders the "not measured in this version" note. */
+  status?: 'available' | 'specified';
+}
+
+const {
+  lang,
+  method,
+  path,
+  summary,
+  level,
+  status = 'available',
+} = Astro.props;
+const t = getTranslations(lang);
+---
+
+<article class="my-4 rounded-cabuya-sm border border-cabuya-border bg-cabuya-bg-elevated p-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <MethodBadge method={method} />
+    <code class="text-sm font-medium">{path}</code>
+    {
+      level && (
+        <span class="ml-auto text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+          {level}
+        </span>
+      )
+    }
+  </div>
+  <p class="mt-2 text-sm text-cabuya-text-secondary">{summary}</p>
+  {
+    status === 'specified' && (
+      <p class="mt-2 text-xs text-cabuya-warning">{t.docs.specifiedNotMeasured}</p>
+    )
+  }
+  <div class="mt-3 empty:hidden">
+    <slot />
+  </div>
+</article>

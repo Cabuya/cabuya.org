@@ -121,8 +121,7 @@ export const NAV_GROUPS: NavGroup[] = [
     id: 'developers',
     label: { en: 'Developers', es: 'Desarrolladores' },
     path: '/developers',
-    status: 'planned',
-    ships: 'Task 23',
+    status: 'live',
   },
   {
     id: 'registry',

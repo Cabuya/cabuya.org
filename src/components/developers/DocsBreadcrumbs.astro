@@ -1,0 +1,53 @@
+---
+/**
+ * Where the reader is, in the portal's own terms.
+ *
+ * Deliberately not the site-wide `Breadcrumbs` component: that one emits
+ * `BreadcrumbList` JSON-LD for search engines, and duplicating structured data
+ * on a docs page that already has its own would produce two competing trails.
+ * This is navigation only.
+ */
+import type { Language } from '@/lib/i18n';
+import { getUrlPrefix } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  lang: Language;
+  /** Everything after "Developers". The last one is the current page. */
+  trail: Crumb[];
+}
+
+const { lang, trail } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+const crumbs: Crumb[] = [
+  { label: t.docs.portal, href: `${prefix}/developers` },
+  ...trail,
+];
+---
+
+<nav aria-label={t.docs.breadcrumb} class="mb-6">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-cabuya-text-muted">
+    {
+      crumbs.map((crumb, index) => (
+        <li class="flex items-center gap-2">
+          {index > 0 && <span aria-hidden="true">/</span>}
+          {crumb.href && index < crumbs.length - 1 ? (
+            <a href={crumb.href} class="hover:text-cabuya-primary transition-colors">
+              {crumb.label}
+            </a>
+          ) : (
+            <span aria-current="page" class="text-cabuya-text-secondary">
+              {crumb.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

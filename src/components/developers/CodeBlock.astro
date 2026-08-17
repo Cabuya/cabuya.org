@@ -1,0 +1,71 @@
+---
+/**
+ * A code sample, highlighted at build time.
+ *
+ * Uses Astro's bundled `Code` component rather than a separate Shiki setup:
+ * the highlighter ships with the framework, runs at build, and adds nothing to
+ * the page. The only JavaScript here is the copy button, hydrated on idle.
+ *
+ * The block is always dark, in both themes. A code sample that inverts with the
+ * page is a code sample whose colours mean something different depending on
+ * where the reader is — and every editor these snippets get pasted into is
+ * dark anyway.
+ */
+import { Code } from 'astro:components';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+import CopyButton from './CopyButton.svelte';
+
+interface Props {
+  code: string;
+  /** Shiki language id. */
+  lang?: string;
+  /** Filename or a short description of what this is. */
+  title?: string;
+  /** Set false for a sample nobody would paste (an error message, say). */
+  copyable?: boolean;
+  uiLang?: Language;
+}
+
+const {
+  code,
+  lang = 'text',
+  title,
+  copyable = true,
+  uiLang = 'en',
+} = Astro.props;
+
+const t = getTranslations(uiLang);
+const trimmed = code.replace(/\n+$/, '');
+---
+
+<figure class="my-6 overflow-hidden rounded-cabuya-sm border border-cabuya-fill-strong bg-cabuya-bg-dark">
+  <figcaption class="flex items-center justify-between gap-3 border-b border-cabuya-fill-strong px-4 py-2">
+    <span class="font-mono text-xs text-cabuya-primary-light">
+      {title ?? lang}
+    </span>
+    {
+      copyable && (
+        <CopyButton
+          client:idle
+          text={trimmed}
+          labels={{
+            copy: t.docs.copy,
+            copied: t.docs.copied,
+            failed: t.docs.copyFailed,
+          }}
+        />
+      )
+    }
+  </figcaption>
+  <div class="overflow-x-auto p-4 text-sm">
+    <Code code={trimmed} lang={lang as never} theme="github-dark" />
+  </div>
+</figure>
+
+<style is:global>
+  /* Shiki writes its own background; the figure already provides one. */
+  .astro-code {
+    background-color: transparent !important;
+  }
+</style>
