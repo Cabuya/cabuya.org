@@ -43,44 +43,28 @@
   Cross-Origin-Opener-Policy: same-origin
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
-/
-  Link: </.well-known/api-catalog>; rel="api-catalog"
+# The agent-readiness surface.
+#
+# What the site publishes for agents is the `.md` twin of every page, and
+# `llms.txt`. That is the whole list, and it is deliberately short.
+#
+# Removed in the launch dry run: the OAuth metadata endpoints, `auth.md`, the
+# agent-skills index, an `api-catalog` link header pointing at a file that was
+# never generated, and `Link` headers on an `/en/` route that does not exist
+# under D-W1. All were Corag-era artifacts describing an authorization surface
+# this site does not have — `auth.md` documented `/agent/register`,
+# `/agent/claim` and `/oauth/revoke`, none of them implemented here.
+#
+# A published discovery document for endpoints that do not exist is precisely
+# the failure this project measures other people's manifests for.
 
-/en/
-  Link: </.well-known/api-catalog>; rel="api-catalog"
-
-# Agent-readiness .well-known endpoints (RFC 9727, RFC 8414, RFC 9728, SEP-1649, agent-skills v0.2.0)
-/.well-known/api-catalog
-  Content-Type: application/linkset+json
-  Cache-Control: public, max-age=300, must-revalidate
-
-/.well-known/oauth-authorization-server
-  Content-Type: application/json
-  Cache-Control: public, max-age=300, must-revalidate
-
-/.well-known/oauth-protected-resource
-  Content-Type: application/json
-  Cache-Control: public, max-age=300, must-revalidate
-
-# Agent-markdown twins. `text/markdown` is deliberate — the WorkOS auth.md /
-# isitagentready scanner expects it — but browsers have no renderer for that
-# type and download the file or show a blank viewport. `Content-Disposition:
-# inline` tells them to display it instead, without changing what agents fetch.
+# Agent-markdown twins. `text/markdown` is deliberate, and browsers have no
+# renderer for that type — they download the file or show a blank viewport.
+# `Content-Disposition: inline` tells them to display it instead, without
+# changing what an agent fetches.
 /*.md
   Content-Disposition: inline
   Cache-Control: public, max-age=3600, must-revalidate
-
-# auth.md — WorkOS auth.md / isitagentready scanner expects text/markdown
-/auth.md
-  Content-Type: text/markdown; charset=utf-8
-  Content-Disposition: inline
-  Cache-Control: public, max-age=300, must-revalidate
-
-/.well-known/mcp/server-card.json
-  Cache-Control: public, max-age=300, must-revalidate
-
-/.well-known/agent-skills/index.json
-  Cache-Control: public, max-age=300, must-revalidate
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

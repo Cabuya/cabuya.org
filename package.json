@@ -17,8 +17,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "prebuild": "node scripts/generate-agent-skills-index.mjs && node scripts/generate-og-fallback.mjs",
-    "generate:agent-skills-index": "node scripts/generate-agent-skills-index.mjs",
+    "prebuild": "node scripts/generate-og-fallback.mjs",
     "dns:aid:publish": "node scripts/publish-dns-aid.mjs",
     "dns:aid:dry-run": "DNS_AID_DRY_RUN=1 node scripts/publish-dns-aid.mjs",
     "astro": "astro",

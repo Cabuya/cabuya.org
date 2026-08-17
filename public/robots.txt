@@ -1,4 +1,4 @@
-# robots.txt for Corag — el ecosistema de impacto social
+# robots.txt for cabuya.org — the Cabuya Protocol
 # https://cabuya.org
 
 # Default: allow all crawlers

@@ -69,3 +69,6 @@ packages_upgrades_output.txt
 
 # Stray local clone of the sibling skill repo (canonical working copy: tmp/repositories/cabuya-skill)
 /cabuya-skill/
+
+# wrangler's local state (KV shims, build cache) — created by `pages dev`.
+.wrangler/
