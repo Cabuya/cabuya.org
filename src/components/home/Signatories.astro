@@ -1,0 +1,68 @@
+---
+/**
+ * The "who is in" section — built, and deliberately rendering nothing.
+ *
+ * The activation rule, which is the whole reason this file exists as code
+ * rather than as a note in a plan:
+ *
+ *   **An organisation appears here only after that organisation has given
+ *   written opt-in, in writing we can point at.**
+ *
+ * Not after we found their public repository, not after a conversation in a
+ * WhatsApp group, not after someone said they were interested. The registry
+ * (see `Network.astro`) lists applications with their entry state, which is a
+ * factual claim about a URL. This section would be something else — a claim
+ * that a named organisation has aligned itself with the project — and that is
+ * exactly the kind of claim Rule-0 exists to stop us making on someone else's
+ * behalf.
+ *
+ * Shipping the component empty rather than writing it later is deliberate:
+ * when the first opt-in arrives, the change is adding an entry to `SIGNATORIES`
+ * and nothing else. A version of this that had to be designed under the
+ * pressure of a real announcement would be the version that cuts the corner.
+ *
+ * `tests/unit/lib/home-sections.test.ts` asserts the list is empty and that the
+ * component renders nothing while it is.
+ */
+import type { Language } from '@/lib/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang: _lang } = Astro.props;
+
+export interface Signatory {
+  /** Organisation name, exactly as they write it themselves. */
+  name: string;
+  url: string;
+  /** Where the written opt-in lives. Required — no entry without one. */
+  optInReference: string;
+  /** ISO date the opt-in was given. */
+  optInDate: string;
+}
+
+/** Empty by design. See the activation rule above. */
+const SIGNATORIES: Signatory[] = [];
+---
+
+{
+  SIGNATORIES.length > 0 && (
+    <section class="main-container py-16 sm:py-24">
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {SIGNATORIES.map((signatory) => (
+          <li class="rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5">
+            <a
+              href={signatory.url}
+              rel="noopener"
+              target="_blank"
+              class="font-display text-base font-semibold text-cabuya-primary"
+            >
+              {signatory.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

@@ -1,0 +1,62 @@
+---
+/**
+ * The close.
+ *
+ * Every destination here exists today. The specification, the schemas and the
+ * validator are all in the repository under an open licence, so the page can
+ * end on something a reader can actually go and do — which is the only kind of
+ * call to action this project is allowed to make.
+ */
+import type { Language } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+
+const links = [
+  {
+    label: t.home.finalCta.developers,
+    href: `${GITHUB_URL}/tree/main/spec`,
+    primary: true,
+  },
+  {
+    label: t.home.finalCta.join,
+    href: `${GITHUB_URL}/blob/main/CONTRIBUTING.md`,
+    primary: false,
+  },
+  { label: t.home.finalCta.github, href: GITHUB_URL, primary: false },
+];
+---
+
+<section class="main-container py-20 sm:py-28">
+  <div class="rounded-cabuya-lg bg-cabuya-fill px-6 py-12 text-cabuya-on-fill sm:px-12 sm:py-16">
+    <h2 class="max-w-3xl text-title">{t.home.finalCta.title}</h2>
+    <p class="mt-4 max-w-2xl text-base leading-relaxed text-cabuya-primary-light">
+      {t.home.finalCta.body}
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            rel="noopener"
+            target="_blank"
+            class:list={[
+              'rounded-cabuya-sm px-6 py-3 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary-light',
+              link.primary
+                ? 'bg-cabuya-on-fill text-cabuya-fill hover:bg-cabuya-primary-light'
+                : 'border border-cabuya-primary-light/50 text-cabuya-on-fill hover:bg-cabuya-fill-strong',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+/**
+ * The founding sentence, and the argument behind it.
+ *
+ * Rule-0 constraint from the section table: this is stated as **intent, never
+ * as an achieved outcome**. The closing note is not hedging — the network does
+ * not exist yet, and a page that implied otherwise would be making exactly the
+ * kind of claim the protocol was built to stop other people making.
+ *
+ * The principle stays in Spanish in both languages. It is a phrase the working
+ * group said in Spanish; replacing it with an English sentence would quietly
+ * erase where the project came from.
+ */
+import Kicker from '@/components/editorial/Kicker.astro';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<section class="border-y border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated">
+  <div class="main-container py-16 sm:py-20">
+    <Kicker>{t.home.thesis.kicker}</Kicker>
+    <blockquote class="mt-4 max-w-3xl">
+      <p class="text-title text-cabuya-primary" lang="es">
+        {t.home.thesis.principle}
+      </p>
+      <footer class="mt-2 text-base text-cabuya-text-secondary">
+        {t.home.thesis.gloss}
+      </footer>
+    </blockquote>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <p class="text-base leading-relaxed text-cabuya-text-secondary">
+        {t.home.thesis.body}
+      </p>
+      <p class="text-base leading-relaxed text-cabuya-text-secondary">
+        {t.home.thesis.bodySecond}
+      </p>
+    </div>
+
+    <p class="mt-8 max-w-2xl border-l-2 border-cabuya-accent pl-4 text-sm text-cabuya-text-muted">
+      {t.home.thesis.intentNote}
+    </p>
+  </div>
+</section>

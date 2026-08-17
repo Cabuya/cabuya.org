@@ -1,0 +1,48 @@
+---
+/**
+ * Four steps, and the diagram that shows them as a path.
+ *
+ * Rule-0 constraint: this links to the ladder, not to a marketing funnel. The
+ * steps describe what a publisher produces, not what they should feel — and
+ * the section says plainly that none of it requires us, which is the actual
+ * differentiator and also simply true.
+ */
+import QuickstartPath from '@/components/diagrams/developers/QuickstartPath.astro';
+import Kicker from '@/components/editorial/Kicker.astro';
+import Lead from '@/components/editorial/Lead.astro';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<section class="main-container py-16 sm:py-24">
+  <Kicker>{t.home.howItWorks.kicker}</Kicker>
+  <h2 class="mt-3 text-title">{t.home.howItWorks.title}</h2>
+  <Lead class="mt-4">{t.home.howItWorks.lead}</Lead>
+
+  <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      t.home.howItWorks.steps.map((step, index) => (
+        <li class="rounded-cabuya-md border border-cabuya-border bg-cabuya-bg-elevated p-5">
+          <span class="text-xs font-semibold uppercase tracking-wider text-cabuya-text-muted">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <h3 class="mt-2 font-display text-base font-semibold">{step.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-cabuya-text-secondary">
+            {step.body}
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-12">
+    <QuickstartPath lang={lang} />
+  </div>
+</section>

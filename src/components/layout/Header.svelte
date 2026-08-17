@@ -264,6 +264,7 @@ onMount(() => {
       on:keydown={trapFocus}
       role="dialog"
       aria-modal="true"
+      tabindex="-1"
       aria-label={t.nav.openMenu}
     >
       <nav aria-label="Main" class="main-container py-4">

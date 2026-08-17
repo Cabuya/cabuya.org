@@ -1,0 +1,131 @@
+---
+/**
+ * The landing hero.
+ *
+ * Two columns from `lg`: the pitch and its two calls to action on the left,
+ * the flagship illustration on the right. The illustration is not here yet
+ * (`HP-01` in the prompt pack), and the layout is built so that its absence
+ * costs nothing — the copy column simply takes the width. No placeholder box,
+ * per the integration guide: an empty slot nobody notices beats a grey
+ * rectangle everybody does.
+ *
+ * The CTAs are the one place on this page where Rule-0 bites hardest. Both
+ * targets are still being built, so rather than link to a 404 or quietly drop
+ * them, they render as text with an honest line about where those things
+ * actually are today. `CTA_TARGETS` flips them to links the moment the routes
+ * exist, and the nav registry's own test will notice if that lags.
+ */
+import type { Language } from '@/lib/i18n';
+import { GITHUB_URL } from '@/lib/site-navigation';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+
+/**
+ * Flip these to the real routes when Tasks 24 and 28 ship them.
+ * `null` renders the label as plain emphasis rather than a dead link.
+ */
+const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
+  primary: null, // '/developers/quickstart' — Task 24
+  secondary: null, // '/registry' — Task 28
+};
+
+/** The illustration slot, wired for the day the file lands. */
+const HERO_ART = {
+  src: '/images/visuals/home/hero-cordage.webp',
+  darkSrc: '/images/visuals/home/hero-cordage-dark.webp',
+  width: 520,
+  height: 650,
+  present: false, // set true in the same commit that adds the files
+};
+---
+
+<section class="main-container pt-16 pb-20 sm:pt-24 sm:pb-28">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-cabuya-accent-strong">
+        {t.home.hero.eyebrow}
+      </p>
+      <h1 class="mt-4 max-w-3xl text-display text-cabuya-primary">
+        {t.home.hero.title}
+      </h1>
+      <p class="measure mt-7 text-lg leading-relaxed text-cabuya-text-secondary">
+        {t.home.hero.pitch}
+      </p>
+      <p class="measure mt-4 text-base leading-relaxed text-cabuya-text-secondary">
+        {t.home.hero.pitchSecond}
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        {
+          CTA_TARGETS.primary ? (
+            <a
+              href={CTA_TARGETS.primary}
+              class="rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+            >
+              {t.home.hero.ctaPrimary}
+            </a>
+          ) : (
+            <span class="rounded-cabuya-sm border border-dashed border-cabuya-border-strong px-6 py-3 font-medium text-cabuya-text-muted">
+              {t.home.hero.ctaPrimary}
+            </span>
+          )
+        }
+        {
+          CTA_TARGETS.secondary ? (
+            <a
+              href={CTA_TARGETS.secondary}
+              class="rounded-cabuya-sm border border-cabuya-border-interactive px-6 py-3 font-medium text-cabuya-primary transition-colors hover:bg-cabuya-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+            >
+              {t.home.hero.ctaSecondary}
+            </a>
+          ) : (
+            <span class="rounded-cabuya-sm border border-dashed border-cabuya-border-strong px-6 py-3 font-medium text-cabuya-text-muted">
+              {t.home.hero.ctaSecondary}
+            </span>
+          )
+        }
+      </div>
+
+      {
+        (!CTA_TARGETS.primary || !CTA_TARGETS.secondary) && (
+          <p class="measure mt-4 text-sm text-cabuya-text-muted">
+            {t.home.hero.ctaPending}{' '}
+            <a
+              href={GITHUB_URL}
+              rel="noopener"
+              target="_blank"
+              class="text-cabuya-primary underline underline-offset-2"
+            >
+              {t.home.finalCta.github}
+            </a>
+          </p>
+        )
+      }
+    </div>
+
+    {
+      HERO_ART.present && (
+        <div class="hidden lg:block">
+          <picture>
+            <source srcset={HERO_ART.darkSrc} media="(prefers-color-scheme: dark)" />
+            <img
+              src={HERO_ART.src}
+              alt=""
+              width={HERO_ART.width}
+              height={HERO_ART.height}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+        </div>
+      )
+    }
+  </div>
+</section>

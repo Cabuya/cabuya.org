@@ -42,12 +42,65 @@ export interface SiteTranslations {
   home: {
     metaTitle: string;
     metaDescription: string;
-    eyebrow: string;
-    title: string;
-    pitch: string;
-    pitchSecond: string;
-    principleGloss: string;
-    statusNote: string;
+
+    hero: {
+      eyebrow: string;
+      title: string;
+      pitch: string;
+      pitchSecond: string;
+      ctaPrimary: string;
+      ctaSecondary: string;
+      /** Shown under the CTAs while the routes they point at do not exist. */
+      ctaPending: string;
+    };
+
+    thesis: {
+      kicker: string;
+      principle: string;
+      gloss: string;
+      body: string;
+      bodySecond: string;
+      intentNote: string;
+    };
+
+    howItWorks: {
+      kicker: string;
+      title: string;
+      lead: string;
+      steps: Array<{ title: string; body: string }>;
+    };
+
+    ladder: {
+      kicker: string;
+      title: string;
+      lead: string;
+      respectNote: string;
+    };
+
+    network: {
+      kicker: string;
+      title: string;
+      lead: string;
+      tableHead: { publisher: string; domains: string; state: string };
+      proposedLabel: string;
+      proposedExplainer: string;
+      measuredNote: string;
+    };
+
+    horizon: {
+      kicker: string;
+      title: string;
+      ambitionLabel: string;
+      stages: Array<{ title: string; body: string }>;
+    };
+
+    finalCta: {
+      title: string;
+      body: string;
+      developers: string;
+      join: string;
+      github: string;
+    };
   };
 
   footer: {

@@ -1,0 +1,38 @@
+---
+/**
+ * The conformance ladder.
+ *
+ * Rule-0 constraint: the levels are membership classes, not grades, and the
+ * two tiers that never publish are named in the copy rather than left to the
+ * diagram alone. A reader who skims the drawing should still meet that
+ * sentence.
+ */
+import ConformanceLadder from '@/components/diagrams/protocol/ConformanceLadder.astro';
+import Kicker from '@/components/editorial/Kicker.astro';
+import Lead from '@/components/editorial/Lead.astro';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<section class="border-y border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated">
+  <div class="main-container py-16 sm:py-24">
+    <Kicker>{t.home.ladder.kicker}</Kicker>
+    <h2 class="mt-3 text-title">{t.home.ladder.title}</h2>
+    <Lead class="mt-4">{t.home.ladder.lead}</Lead>
+
+    <div class="mt-10">
+      <ConformanceLadder lang={lang} />
+    </div>
+
+    <p class="measure mt-8 text-sm text-cabuya-text-secondary">
+      {t.home.ladder.respectNote}
+    </p>
+  </div>
+</section>

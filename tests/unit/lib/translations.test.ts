@@ -40,7 +40,9 @@ describe('language integrity', () => {
   it('the Spanish carries Spanish orthography where expected', () => {
     // Spot checks on strings that must carry accents (the elevator pitch is
     // verbatim from the brand book and legitimately has none).
-    expect(es.home.statusNote).toMatch(/ó|í|é|á|ú|ñ/);
+    expect(es.home.hero.ctaPending).toMatch(/ó|í|é|á|ú|ñ/);
+    expect(es.home.network.proposedExplainer).toMatch(/ó|í|é|á|ú|ñ/);
+    expect(es.home.horizon.stages[0].body).toMatch(/ó|í|é|á|ú|ñ/);
     expect(es.nav.openMenu).toMatch(/ú/); // «menú»
     expect(es.notFoundPage.title).toMatch(/á|é|í|ó|ú|ñ/);
     // The bare-word failures the orthography gate greps for:

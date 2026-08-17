@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 
 import { SITE_URL } from '@/lib/constances';
+import { homeSections } from '@/lib/home-markdown';
 import { serializeGenericToMarkdown } from '@/lib/markdown-for-agents';
 import { getTranslations } from '@/lib/translations';
 
@@ -11,16 +12,11 @@ export const GET: APIRoute = () => {
 
   return new Response(
     serializeGenericToMarkdown({
-      title: t.home.title,
+      title: t.home.hero.title,
       description: t.home.metaDescription,
       lang,
       canonical: `${SITE_URL}/`,
-      sections: [
-        {
-          heading: t.home.eyebrow,
-          lines: [t.home.pitch, '', t.home.pitchSecond, '', t.home.statusNote],
-        },
-      ],
+      sections: homeSections(lang),
     }),
     {
       headers: {

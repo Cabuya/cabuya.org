@@ -1,12 +1,25 @@
 ---
 /**
- * Minimal migration placeholder for the cabuya.org landing.
+ * The landing page: eight sections, composed.
  *
- * The real homepage — the protocol story, the conformance ladder, the
- * network view — ships in migration Task 21 (see docs/MESSAGING.md for the
- * beat map). This placeholder keeps the site honest in the meantime: the
- * pitch, the founding principle, and a pointer to the founding record.
+ * Section order is the reader's journey through `docs/MESSAGING.md`: what it
+ * is, why it exists, how you join, what joining means, who is already there,
+ * where it could go, and then a way out to something real. Every section owns
+ * exactly one messaging beat, and each carries the Rule-0 constraint that beat
+ * came with — those constraints are in each component's own comment, next to
+ * the code that honours them, rather than in a document nobody opens while
+ * editing copy.
+ *
+ * `Signatories` renders nothing today, and that is not a bug. See its file.
  */
+import FinalCta from '@/components/home/FinalCta.astro';
+import Hero from '@/components/home/Hero.astro';
+import Horizon from '@/components/home/Horizon.astro';
+import HowItWorks from '@/components/home/HowItWorks.astro';
+import Ladder from '@/components/home/Ladder.astro';
+import Network from '@/components/home/Network.astro';
+import Signatories from '@/components/home/Signatories.astro';
+import Thesis from '@/components/home/Thesis.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import type { Language } from '@/lib/i18n';
 import { getTranslations } from '@/lib/translations';
@@ -24,33 +37,12 @@ const t = getTranslations(lang);
   title={t.home.metaTitle}
   description={t.home.metaDescription}
 >
-  <section class="main-container py-24 md:py-32">
-    <p
-      class="text-xs font-semibold uppercase tracking-[0.2em] text-cabuya-accent-strong"
-    >
-      {t.home.eyebrow}
-    </p>
-    <h1
-      class="mt-4 max-w-3xl font-display text-4xl font-bold text-cabuya-primary md:text-5xl"
-    >
-      {t.home.title}
-    </h1>
-    <p class="mt-6 max-w-2xl text-lg text-cabuya-secondary">
-      {t.home.pitch}
-    </p>
-    <p class="mt-4 max-w-2xl text-cabuya-secondary">
-      {t.home.pitchSecond}
-    </p>
-    <blockquote
-      class="mt-10 max-w-2xl border-l-2 border-cabuya-accent pl-4 text-cabuya-text"
-    >
-      «Crecemos juntos: no competimos, nos alimentamos.»
-      <span class="mt-1 block text-sm text-cabuya-text-muted"
-        >{t.home.principleGloss}</span
-      >
-    </blockquote>
-    <p class="mt-10 text-sm text-cabuya-text-muted">
-      {t.home.statusNote}
-    </p>
-  </section>
+  <Hero lang={lang} />
+  <Thesis lang={lang} />
+  <HowItWorks lang={lang} />
+  <Ladder lang={lang} />
+  <Network lang={lang} />
+  <Signatories lang={lang} />
+  <Horizon lang={lang} />
+  <FinalCta lang={lang} />
 </MainLayout>
