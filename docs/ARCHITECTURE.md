@@ -3,7 +3,7 @@
 > The technical shape of the repository. Companion to
 > [`AGENTS.md`](../AGENTS.md) (the entry point) and
 > [`docs/INFORMATION_ARCHITECTURE.md`](./INFORMATION_ARCHITECTURE.md) (the URL
-> surface). *(Ships in Task N)* markers track the migration plan.
+> surface).
 
 ---
 
@@ -36,7 +36,7 @@ of the standard is a set of URLs, not a repository layout.
 
 | # | Rule | Enforced by |
 |---|---|---|
-| B1 | `spec/` and `registry/` import/reference nothing outside themselves | `spec:boundary` *(Task 10)* |
+| B1 | `spec/` and `registry/` import/reference nothing outside themselves | `spec:boundary` |
 | B2 | Site code reads them ONLY via `src/lib/spec-loader.ts` / `src/lib/registry-loader.ts` | grep gate: at most those two files match |
 | B3 | Each carries its own LICENSE (CC0), README, CHANGELOG, CODEOWNERS entry | file-existence check |
 | B4 | No build step, no `package.json`, no generated files inside — `.md`/`.json` only | extension allowlist |
@@ -59,7 +59,7 @@ of the standard is a set of URLs, not a repository layout.
 | Tests | Vitest + Playwright | Unit + a11y/E2E |
 | Hosting | Cloudflare Pages + Functions + KV | Free at this scale; Functions = the same Workers runtime the validator core targets |
 
-### 3.2 Routing and i18n (D-W1) *(ships in Task 8)*
+### 3.2 Routing and i18n (D-W1)
 
 EN at `/`, ES at `/es`. Root routes are English pages; a single
 `src/pages/[lang]/` dynamic tree serves every other active language via
@@ -82,7 +82,7 @@ language-aware variants). Unknown paths 404 in production. **Every task that
 adds a route updates the allowlist in the same commit** — this is the repo's
 most common trap and it is documented everywhere on purpose.
 
-### 3.4 Content collections *(wired progressively, Tasks 23–30)*
+### 3.4 Content collections
 
 | Collection | Source | Loader path | Renders |
 |---|---|---|---|
@@ -119,7 +119,7 @@ appended to `registry/history/` by a reviewable bot pull request — measured
 state lives in KV because it must be current, and its record lives in git
 because it must be permanent.
 
-### 3.6 The agent-facing content layer *(Task 32 completes it)*
+### 3.6 The agent-facing content layer
 
 Every page has a complete `.md` twin (coverage ≥ 0.85, checked by
 `md:check`). **Spec twins are the source files** — served with a front block,
@@ -133,7 +133,7 @@ at build from the route manifest.
 component/diagram galleries). `InternalLayout`, English-only, excluded from
 production three ways: post-build deletion, sitemap filter, noindex meta.
 
-## 4. The validator (`packages/validator/`) *(Tasks 12–16)*
+## 4. The validator (`packages/validator/`)
 
 **One engine, four harnesses** — CLI, CI action, `/api/validate`, the
 registry cron — same checks, same ids, same messages, byte-identical JSON
@@ -146,7 +146,7 @@ behavioral probes → level → report.
 
 ## 5. Build pipeline
 
-`prebuild` (agent-skills index, og fallback guard *(Task 22)*) →
+`prebuild` (agent-skills index, og fallback guard) →
 `astro check && astro build` → post-build internal-hub deletion → gates.
 Everything a page shows is derived from checked sources at build time:
 schema reference from the JSON Schemas, check pages from the validator's
@@ -160,7 +160,7 @@ SHA-256 checksums (`sync-spec.sh` is the only writer; CI verifies). The
 skill's offline acceptance test asserts against the same five examples this
 repo's `spec:check` validates — one contract, two enforcement points.
 
-## Rendering the specification (Task 25)
+## Rendering the specification
 
 The spec's HTML is produced from the same Markdown the repository ships, the
 validator's snapshots assert against, and the skill vendors. There is no second

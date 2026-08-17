@@ -22,7 +22,7 @@ properties decide the format:
 | Selecting or searching the text | works | does not exist |
 
 The rule of thumb, verbatim from the brief: **needs text → HTML/CSS component;
-wordless atmosphere → generated image.** The illustration pack (Task 20) covers
+wordless atmosphere → generated image.** The illustration pack covers
 the second half.
 
 ## 2. The mandatory rules

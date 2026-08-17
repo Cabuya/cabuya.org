@@ -30,8 +30,8 @@ packages/validator/tests/   # the validator's own suites (see §4)
 
 | Surface | Bar | Where enforced |
 |---|---|---|
-| `src/lib/` | ≥ 80% | vitest coverage thresholds *(Task 46)* |
-| Validator core | ≥ 90% lines | package config *(Task 46)* |
+| `src/lib/` | ≥ 80% | vitest coverage thresholds |
+| Validator core | ≥ 90% lines | package config |
 | Every `E`-severity check | 1 must-fail + 1 near-miss fixture | structural invariant test |
 
 ## 4. The validator test strategy (the deep end)

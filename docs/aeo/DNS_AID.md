@@ -3,7 +3,7 @@
 > **Migration status (kept, retarget pending).** The mechanism applies to
 > cabuya.org unchanged; the Corag host split below (`ayuda.cabuya.org`) is
 > retired with Task 7, and the record set is finalized as a launch human
-> action (Task 49). Do not run the publish script until then.
+> action. Do not run the publish script until then.
 
 Publish HTTPS/SVCB records under the `_agents` namespace so AI agents can
 discover Corag before the first HTTP round-trip. This is the remaining gap in

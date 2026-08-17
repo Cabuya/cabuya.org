@@ -21,9 +21,9 @@
 
 | Command | Asserts |
 |---|---|
-| `pnpm run md:check` | Every page serves a COMPLETE `.md` twin (coverage ≥ 0.85, required sections) |
+| `pnpm run md:check` | Every page serves a COMPLETE `.md` twin (coverage ≥ 0.85, required sections). `md:check:existence` is the cheaper half — every page *has* a twin, without reading it |
 | `pnpm run lang:check` | `/` renders English, `/es` renders Spanish — HTML and twin |
-| `pnpm run seo:check` | Per-URL SEO + structured data (+ OG image existence *(Task 22)*, JSON-LD matrix *(Task 33)*) |
+| `pnpm run seo:check` | Per-URL SEO + structured data (+ OG image existence, JSON-LD matrix) |
 | `pnpm run parity:check` | EN and ES carry the SAME content |
 | `pnpm run redirects:check` | Every redirect resolves; no live page shadowed |
 | `pnpm run internal:check(:strict)` | The dev-only hub stayed out of the deployed artefact: no `dist/internal`, no internal route in any sitemap, no deployed page linking into it. Runs against `dist/`, so build first; skips itself (exit 0, with a message) when `INCLUDE_INTERNAL=true` marks a staging build |
@@ -42,7 +42,7 @@
 | `pnpm run llms:generate(:check)` — `llms:check` | Regenerates `public/llms.txt` and `llms-full.txt` from the nav registries, the spec loader, the registry and the check catalogue. `llms:check` fails when the committed copy has drifted | ✅ live |
 | `pnpm run issues:day-one(:check)` | Regenerates `docs/CONTRIBUTING-issues.md` from the catalogued checks that are not yet implemented — the backlog `/join` promises. `:check` fails when it has drifted | ✅ live |
 | `pnpm run registry:ids:check` | The badge endpoint's inlined id list still matches `registry/publishers/` — a new entry whose own badge would 404 fails here | ✅ live |
-| `pnpm run checks:catalogue(:strict)` | Ids unique, well-formed and never reused; every check has a title, rule and a spec anchor that resolves to a file on disk; every **implemented** check has its Spanish rule and fix; every **catalogued-but-unimplemented** check says where it is planned. Once `/developers/validator/checks` exists (Task 26) the same run cross-checks ids ↔ page anchors in both directions — it needs `pnpm run validator:build` first, and CI therefore runs it after the site build | ✅ live |
+| `pnpm run checks:catalogue(:strict)` | Ids unique, well-formed and never reused; every check has a title, rule and a spec anchor that resolves to a file on disk; every **implemented** check has its Spanish rule and fix; every **catalogued-but-unimplemented** check says where it is planned. Once `/developers/validator/checks` exists the same run cross-checks ids ↔ page anchors in both directions — it needs `pnpm run validator:build` first, and CI therefore runs it after the site build | ✅ live |
 
 ## Quality gates
 
@@ -51,7 +51,7 @@
 | `pnpm run lighthouse:full` | The wider LHCI surface, for a release check | ✅ live |
 | `pnpm exec playwright test tests/e2e/journeys/` | The five E2E journeys | Task 47 |
 
-## Validator workspace *(Tasks 12–16)*
+## Validator workspace
 
 | Command | What |
 |---|---|
@@ -65,6 +65,46 @@
 | `… explain <CHECK_ID>` | Offline: the rule, the fix, implementation status, and both links. Case-insensitive, and suggests neighbours for a typo |
 | `… checks` | The whole catalogue with implementation status |
 | `… init --publisher-id <id> [--framework nextjs\|…]` | Manifest + feed skeleton, including the honest `"last_confirmed_at": null` |
+
+## End-to-end and audits
+
+Everything here needs a build first — they run against `dist/` through
+`astro preview`, which Playwright starts for them.
+
+| Command | What | CI |
+|---|---|---|
+| `pnpm run test:e2e` | The five journeys plus the CSP suite. Unit tests prove modules; these prove the paths between them | blocking |
+| `pnpm run test:journeys` | Just the journeys: adoption, verification, language integrity, agent surface, theme + keyboard | — |
+| `pnpm run a11y:check` | axe over eight routes × two themes × two viewports, plus four interactive states | blocking |
+| `pnpm run test:responsive` | Layout snapshots and touch targets across the viewport matrix | **advisory** — a snapshot diff is a review signal, not a verdict |
+| `pnpm run test:responsive:update` | Accept the new snapshots, after looking at them |
+| `pnpm run responsive:capture(:quick)` | Screenshots for every route × viewport, for a human to page through |
+| `pnpm run responsive:audit(:quick)` | Overflow and layout heuristics over the same matrix |
+| `pnpm run responsive:inventory` | Rebuild the route list from `dist/` after adding a renderer |
+| `pnpm run lighthouse` | Performance, on the eight representative routes | advisory on PRs, blocking on main |
+
+## Coverage
+
+| Command | What |
+|---|---|
+| `pnpm run test:coverage` | Vitest with thresholds enforced — 80% across `src/lib` |
+| `pnpm run validator:coverage` | The validator package, held higher: 90% statements and lines, because it is the enforcement point of the protocol |
+
+## Generated artifacts
+
+These write files that are committed. Each has a `--check` counterpart in CI
+that fails when the committed copy no longer matches what the generator
+produces — a stale generated file is worse than none, because it looks
+authoritative.
+
+| Command | Regenerates | Checked by |
+|---|---|---|
+| `pnpm run csp:check` | — | Fails when `dist/_headers` no longer matches the built output. The policy itself is written by `postbuild` |
+| `pnpm run llms:generate` / `llms:check` | `public/llms.txt` | `llms:check` |
+| `pnpm run og:fallback(:force)` | The fallback social card | `seo:check` |
+| `pnpm --filter @cabuya/validator run schemas:precompile` | The ahead-of-time schema validators, so the browser never calls `new Function` | `schemas:check` |
+| `pnpm run issues:day-one(:check)` | The day-one issue set for the repository | `issues:day-one:check` |
+| `pnpm run dns:aid:dry-run` / `dns:aid:publish` | The DNS-AID records | dry-run first, always |
 
 ## Utilities
 

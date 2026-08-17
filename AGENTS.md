@@ -4,11 +4,13 @@
 Cursor AI, OpenAI Codex, Google Gemini, GitHub Copilot, and others) operating
 on the `cabuya.org` codebase.
 
-> **Migration note.** This repo is mid-migration (branch
-> `feat/cabuya-migration`, plan `PLAN_cabuya_website_and_skill`). Sections
-> marked *(ships in Task N)* describe the target contract before the artifact
-> exists — docs lead code here. The Corag-era content still present in
-> `src/` is scheduled for decommission (Task 7) and must not be extended.
+> **Status.** The migration is complete. Every artifact this document
+> describes exists: `spec/`, `registry/`, `packages/validator/`, the `[lang]`
+> tree, and the gates that enforce them. No Corag-era surface remains.
+>
+> Anything not yet built is listed under **Deferred** at the end of this file,
+> with what it is waiting on — never as a forward reference inside a section
+> that otherwise describes the present.
 
 ## Detailed Documentation
 
@@ -51,11 +53,11 @@ This repository holds four artifacts:
 1. **The website** — landing + `/developers` portal, bilingual (EN at `/`,
    ES at `/es`).
 2. **`spec/`** — the normative text, JSON Schemas, examples and RFCs. CC0,
-   bounded, extractable *(ships in Task 9)*.
+   bounded, extractable.
 3. **`registry/`** — reviewed publisher entries; measured badge state lives in
-   KV, never in git *(ships in Task 11)*.
+   KV, never in git.
 4. **`packages/validator/`** — `@cabuya/validator`: one engine, four
-   harnesses (CLI, CI, live web, cron) *(ships in Tasks 12–16)*.
+   harnesses (CLI, CI, live web, cron).
 
 Companion repo: **`Cabuya/cabuya-skill`** — the installable agent pack that
 vendors `spec/` (checksummed) and teaches any agent the protocol offline.
@@ -75,31 +77,31 @@ Functions + KV.
 ## Project Structure (target)
 
 ```
-spec/                      # CC0 · bounded · extractable (Task 9)
+spec/                      # CC0 · bounded · extractable
 │  ├── versions/0.1/       #   normative sections, stable §-anchors
 │  ├── schemas/0.1/        #   manifest + place-feed JSON Schemas
 │  ├── examples/0.1/       #   {valid,invalid}/ teaching examples
 │  ├── profiles/ vocab/ rfcs/
-registry/                  # CC0 · publisher entries + history (Task 11)
+registry/                  # CC0 · publisher entries + history
 packages/
-│  └── validator/          # @cabuya/validator (Tasks 12–16)
+│  └── validator/          # @cabuya/validator
 src/
 ├── components/
 │   ├── pages/             # *Page.astro (receive `lang`)
-│   ├── home/              # landing sections (Task 21)
-│   ├── developers/        # portal machinery: sidebar, TOC, code blocks (Task 23)
-│   ├── registry/          # registry table + publisher views (Task 28)
-│   ├── diagrams/          # HTML/CSS diagram components (Task 19)
+│   ├── home/              # landing sections
+│   ├── developers/        # portal machinery: sidebar, TOC, code blocks
+│   ├── registry/          # registry table + publisher views
+│   ├── diagrams/          # HTML/CSS diagram components
 │   ├── editorial/ ui/ layout/
-├── content/docs/{en,es}/  # portal prose (Task 23)
+├── content/docs/{en,es}/  # portal prose
 ├── layouts/               # MainLayout, DocsLayout, InternalLayout
 ├── lib/                   # i18n, language-codes, translations/, spec-loader,
 │                          #   registry-loader, markdown-for-agents, satteri-plugins
-├── pages/                 # EN at root · [lang]/ dynamic tree (Task 8) · internal/
+├── pages/                 # EN at root · [lang]/ dynamic tree · internal/
 ├── middleware.ts          # KNOWN_* allowlist — see the trap below
 └── styles/global.css      # the ONLY @theme token declaration site
-functions/                 # _middleware (Accept negotiation) · api/validate (Task 27)
-│                          #   · api/contact (Task 31) · badge/[publisher] (Task 28)
+functions/                 # _middleware (Accept negotiation) · api/validate
+│                          #   · api/contact · badge/[publisher]
 scripts/                   # gates + build utilities
 docs/                      # this documentation set · docs/context/ founding record
 .agents/  (.claude → .agents, CLAUDE.md → AGENTS.md)
@@ -138,8 +140,7 @@ grep -rn 'pequeno\|tamano\|diseno\|espanol\|manana\|companer\|analisis\|codigo\|
 
 ### 3. i18n topology (D-W1)
 
-**EN at `/`, ES at `/es`**, one `[lang]` dynamic tree *(ships in Task 8;
-until then the legacy ES-root layout still builds — do not add pages to it)*.
+**EN at `/`, ES at `/es`**, one `[lang]` dynamic tree.
 Route slugs are English in both languages. URL-first: no browser-language
 redirects. Translations are exhaustive-typed (`src/lib/translations/types.ts`
 — a missing key is a type error). Never hardcode user-visible strings; use
@@ -151,7 +152,7 @@ redirects. Translations are exhaustive-typed (`src/lib/translations/types.ts`
 site code reads them **only** through `src/lib/spec-loader.ts` and
 `src/lib/registry-loader.ts`. No build files inside them; absolute versioned
 `$id`s; directory-scoped CC0 licenses; no PII, even in examples. Enforced by
-`spec:boundary` *(ships in Task 10)*.
+`spec:boundary`.
 
 ### 5. Design tokens (MANDATORY — see docs/DESIGN.md for the full contract)
 
@@ -176,9 +177,9 @@ pnpm run test          # Vitest
 Five content gates (all `:strict` in CI): `md:check` (complete `.md` twins) ·
 `lang:check` (EN at root renders English, `/es` renders Spanish) · `seo:check`
 · `parity:check` (both languages carry the SAME content) · `redirects:check`.
-Protocol gates: `spec:check` + `spec:boundary` *(Task 10)* ·
-`registry:check` *(Task 11)* · `checks:catalogue` *(Task 16)* ·
-`perf:budgets` *(Task 34)* · `a11y:check` *(Task 35)*.
+Protocol gates: `spec:check` + `spec:boundary` ·
+`registry:check` · `checks:catalogue` ·
+`perf:budgets` · `a11y:check`.
 
 ### 8. Performance budgets (normative — docs/PERFORMANCE.md)
 
@@ -226,7 +227,7 @@ retention). No secrets in the repo, ever; env names documented in
    allowlist returns 404 in production for unknown paths. Update it in the
    same commit.
 2. Extending any Corag-era surface (blog, ecosystem, channels, institutional
-   pages) — they are scheduled for deletion (Task 7).
+   pages) — they are scheduled for deletion.
 3. `bg-cabuya-primary text-white` (breaks in dark mode — use the fill pair).
 4. `text-cabuya-accent` for text on light (fique fails AA — use
    `-strong`).

@@ -34,7 +34,7 @@ pattern another contributor will need.
    prevention; same rule as MESSAGING for content).
 2. **Docs lead code:** a future contract is written with its *(ships in Task
    N)* marker; the shipping task removes the marker. Markers are inventoried
-   at migration close (Task 48) — none may survive launch.
+   at migration close — none may survive launch.
 3. **Measured claims stay measured:** any number in BRAND_GUIDE/DESIGN/
    PERFORMANCE (a ratio, a budget) must match its enforcing test/gate. If you
    change one, change both.

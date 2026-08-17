@@ -52,7 +52,7 @@ Rules that never bend:
 5. Exception pattern — normative spec text is English-only; `/es` spec routes
    render the English body with a Spanish notice («El texto normativo se
    publica en inglés…»). This asymmetry is allowlisted in the parity gate
-   *(Task 25)*.
+  .
 
 ## 4. Adding language N (the whole procedure)
 

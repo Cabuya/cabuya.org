@@ -2,7 +2,7 @@
 
 > Threat model and controls for cabuya.org. The site is static-first on
 > purpose: the smaller the dynamic surface, the smaller the attack surface.
-> Disclosure policy: root `SECURITY.md` *(ships in Task 30)* — coordinated
+> Disclosure policy: root [`SECURITY.md`](../SECURITY.md) — coordinated
 > disclosure, 90-day posture, org-level contact.
 
 ---
@@ -49,9 +49,9 @@ outage with a good reason.
 | Surface | Threat | Posture |
 |---|---|---|
 | Static site | Content tampering via supply chain | Pinned deps, `pnpm audit` in CI, Dependabot, provenance publish |
-| **`/api/validate`** *(Task 27)* | **SSRF** — it fetches arbitrary URLs on request; also abuse-as-scanner against volunteers' servers | The full control set (§2). The highest-risk surface in the repo, reviewed as such |
-| `/api/contact` *(Task 31)* | Spam, header injection into the DailyBot payload, secret leakage | Server validation, honeypot + min-fill-time, KV rate limit, env-only secret, `no-store` |
-| `/badge/[publisher]` *(Task 28)* | Path traversal, SVG injection via registry strings | Id allowlist from registry entries; escape at composition; entries are HTML-free by gate (B6) |
+| **`/api/validate`** | **SSRF** — it fetches arbitrary URLs on request; also abuse-as-scanner against volunteers' servers | The full control set (§2). The highest-risk surface in the repo, reviewed as such |
+| `/api/contact` | Spam, header injection into the DailyBot payload, secret leakage | Server validation, honeypot + min-fill-time, KV rate limit, env-only secret, `no-store` |
+| `/badge/[publisher]` | Path traversal, SVG injection via registry strings | Id allowlist from registry entries; escape at composition; entries are HTML-free by gate (B6) |
 | Registry PRs | Malicious entries (impersonation, personal data, HTML) | `registry:check` gate + human identity review + the reviewer checklist |
 | Spec/examples | PII smuggled into fixtures | B7: deny-pattern pass over our own tree in CI |
 | The cron | Token theft → KV tampering | Single CF API token, scoped **write-only to one KV namespace**, repo secret, rotation documented in OPERATIONS |

@@ -24,7 +24,7 @@
 | Origin / the emergency | **skip** | — | Disaster imagery is banned (STYLE_GUIDE §8) and the prose is stronger alone |
 | Publisher logos | **skip** | — | Inclusion is not endorsement. Logos would read as partnership |
 
-## Developers portal — Tasks 23–29
+## Developers portal
 
 | Slot | Class | Asset / component | Notes |
 |---|---|---|---|
@@ -40,7 +40,7 @@
 | `/developers/skill` header | **illustration** | `DV-04` the handover | The skill is a thread passed to an agent |
 | `/developers/consume`, `/profiles`, `/mcp`, `/faq` | **skip** | — | Short reference pages; a header illustration on each would dilute the four that matter |
 
-## Registry and governance — Tasks 28–31
+## Registry and governance
 
 | Slot | Class | Asset / component | Notes |
 |---|---|---|---|

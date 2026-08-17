@@ -48,8 +48,8 @@
 
 | Route | What |
 |---|---|
-| `{route}.md` twins | Every HTML page serves a complete Markdown twin (Task 32) |
-| `/llms.txt` · `/llms-full.txt` | The agent map / the inlined protocol (Task 32) |
+| `{route}.md` twins | Every HTML page serves a complete Markdown twin |
+| `/llms.txt` · `/llms-full.txt` | The agent map / the inlined protocol |
 | `/api/validate` | The live validator Function | ✅ live |
 | `/badge/{publisher_id}.svg` | The measured badge (`?lang=`, `?style=`) | ✅ live |
 | `/registry/status.json` | Every measured state, live, so the static pages can refresh themselves | ✅ live |
@@ -113,7 +113,7 @@ redirect logic). Mobile: drawer with the same five groups.
 ## 4. Redirect posture
 
 Every retired Corag route 301s to its closest surviving surface (full table
-defined in migration Tasks 7–8 and recorded in
+defined in D-W1 and recorded in
 `analysis_results/I18N_MIGRATION.md`; enforced by `redirects:check`):
 
 - Old `/en/*` URLs → `/*` (English moved to root).
