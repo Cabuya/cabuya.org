@@ -31,7 +31,7 @@ export const en: SiteTranslations = {
       'An open format so aid apps publish and read the same data. One schema, four transports; conformance measured by a public validator, never declared.',
 
     hero: {
-      eyebrow: 'An open protocol for aid apps',
+      eyebrow: 'An open interoperability protocol',
       title: 'Aid apps that can finally read each other.',
       pitch:
         'An open format for the same data: collection points, needs, capacities and deliveries. A public validator measures conformance; the registry shows what it found.',

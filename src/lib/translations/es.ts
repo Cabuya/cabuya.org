@@ -31,7 +31,7 @@ export const es: SiteTranslations = {
       'Un formato abierto para que las apps de ayuda publiquen y lean los mismos datos. Un esquema, cuatro transportes; conformidad medida por un validador público.',
 
     hero: {
-      eyebrow: 'Un protocolo abierto para apps de ayuda',
+      eyebrow: 'Un protocolo abierto de interoperabilidad',
       title: 'Apps de ayuda que por fin se leen entre sí.',
       pitch:
         'Un formato abierto para los mismos datos: puntos de acopio, necesidades, capacidades y entregas. Un validador público mide la conformidad; el registro muestra lo que encontró.',
