@@ -106,16 +106,47 @@ describe('the illustration registry describes the files that exist', () => {
    * agree on aspect ratio: one `<picture>`, one `width`/`height` pair, so a
    * mismatch would be a layout shift on whichever viewport got the other file.
    */
-  it('the hero variant shares the desktop aspect ratio', async () => {
+  it('the hero variant is the same drawing, anchored to the other edge', async () => {
     const art = ILLUSTRATIONS['hero-cordage'];
     const variantSrc = art.mobile?.src;
     expect(variantSrc, 'the hero needs its narrow-viewport framing').toBeTypeOf(
       'string'
     );
     const mobile = await sharp(fileFor(variantSrc ?? '')).metadata();
+
+    /* Same aspect ratio: both framings are the ink box plus one margin, so the
+       declared box stays honest whichever the `<picture>` picks. */
     const desktop = art.width / art.height;
     const variant = (mobile.width ?? 0) / (mobile.height ?? 1);
-    expect(Math.abs(variant - desktop) / desktop).toBeLessThan(0.01);
+    expect(Math.abs(variant - desktop) / desktop).toBeLessThan(0.02);
+
+    /*
+     * And the anchoring is the point: the desktop framing bleeds off the top so
+     * the rope descends out of the site header, the narrow one is flush at the
+     * bottom so the frayed ends meet the edge of the band the phone crops it to.
+     * Measured on the alpha channel — a margin under the fibres is exactly the
+     * gap this framing exists to remove.
+     */
+    const inkRows = async (src: string) => {
+      const { data, info } = await sharp(fileFor(src))
+        .ensureAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const alphaAt = (x: number, y: number) =>
+        data[(y * info.width + x) * info.channels + 3];
+      const rowHasInk = (y: number) => {
+        for (let x = 0; x < info.width; x++)
+          if (alphaAt(x, y) > 12) return true;
+        return false;
+      };
+      return { top: rowHasInk(0), bottom: rowHasInk(info.height - 1) };
+    };
+
+    expect(await inkRows(art.src)).toEqual({ top: true, bottom: false });
+    expect(await inkRows(variantSrc ?? '')).toEqual({
+      top: false,
+      bottom: true,
+    });
   });
 
   it('no entry carries a mobile variant it did not build', async () => {

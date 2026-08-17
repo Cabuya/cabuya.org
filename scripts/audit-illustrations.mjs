@@ -176,6 +176,7 @@ const measure = () =>
            */
           declaredWidth: Number(el.getAttribute('width')) || 0,
           declaredHeight: Number(el.getAttribute('height')) || 0,
+          objectFit: styles.objectFit,
           currentSrc: el.currentSrc ?? el.src ?? '',
           display: styles.display,
           visibility: styles.visibility,
@@ -331,9 +332,22 @@ async function runJob({ viewport, theme }) {
           }
         }
 
+        /*
+         * `object-fit: cover` is a crop window, not a squash.
+         *
+         * The landing hero uses one below `lg`: a full-bleed band showing the fan
+         * of fibres with the rest faded out, so its box is deliberately a
+         * different shape from the file. `cover` preserves the drawing's own
+         * aspect ratio by construction — the only thing a ratio comparison could
+         * report there is the crop the designer asked for. `fill` and a missing
+         * `object-fit` still get checked, which is where an accidental `h-full`
+         * shows up.
+         */
         const declared = art.declaredWidth / art.declaredHeight;
         const rendered = art.width / art.height;
-        if (
+        if (art.objectFit === 'cover') {
+          /* nothing to compare: the box is a window, not the drawing */
+        } else if (
           !declared ||
           Math.abs(rendered - declared) / declared > RATIO_TOLERANCE
         ) {

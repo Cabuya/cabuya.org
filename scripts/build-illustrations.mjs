@@ -81,20 +81,25 @@ const ASSETS = [
     id: 'hero-cordage-mobile',
     master: '01-hp-01-hero-cordage.png',
     area: 'home',
-    slug: 'hero-cordage-full',
+    slug: 'hero-cordage-mobile',
     width: 480,
     budget: 96,
     /*
-     * Padded to the desktop variant's aspect ratio on purpose.
+     * Flush at the bottom, because below `lg` the hero shows the fan and fades
+     * the rest.
      *
-     * The hero serves the two through one `<picture>` with a `media` source, so
-     * exactly one file is fetched — two `<img>` elements toggled by CSS would
-     * download both on the site's LCP surface. A `<picture>` carries a single
-     * `width`/`height` pair, though, so if the variants disagreed on aspect the
-     * declared box would be wrong for one of them and the hero would shift on
-     * load. Matching the ratio makes the box correct for both.
+     * The narrow layout crops in CSS — a full-width band with
+     * `object-fit: cover` anchored to the bottom, masked into the ground above
+     * it — so what this file needs is fibre tips at its bottom edge rather than
+     * a margin under them. The 8% bottom padding the desktop framing carries
+     * would show up as a gap between the frayed ends and the edge of the band.
+     *
+     * Served through one `<picture>` with a `media` source, so exactly one file
+     * is fetched on the site's LCP surface. The two framings are free to
+     * disagree on aspect ratio: the narrow one's box is set by CSS (full width,
+     * fixed height), so the declared `width`/`height` never describes it.
      */
-    matchRatio: 'hero-cordage',
+    bleed: 'bottom',
   },
   {
     id: 'join-open-knot',
@@ -242,7 +247,12 @@ async function inkBox(file) {
 
 /**
  * The re-framed master: ink trimmed to its box, then padded back out to the
- * 8% margin. `bleed: 'top'` keeps the top edge flush, per HP-01's entry.
+ * 8% margin.
+ *
+ * `bleed` names the edge that stays flush, and only the hero uses it: `'top'`
+ * for the framing that sits under the site header, where the rope is meant to
+ * continue out of the chrome, and `'bottom'` for the narrow framing, which is
+ * cropped from the bottom in CSS and must not carry a margin under the fibres.
  */
 async function reframe(file, bleed) {
   const box = await inkBox(file);
@@ -250,12 +260,11 @@ async function reframe(file, bleed) {
 
   const padX = Math.round((box.width / MAX_INK_SHARE - box.width) / 2);
   const padY = Math.round((box.height / MAX_INK_SHARE - box.height) / 2);
-  const top = bleed === 'top' ? 0 : padY;
 
   return sharp(trimmed)
     .extend({
-      top,
-      bottom: padY,
+      top: bleed === 'top' ? 0 : padY,
+      bottom: bleed === 'bottom' ? 0 : padY,
       left: padX,
       right: padX,
       background: { r: 0, g: 0, b: 0, alpha: 0 },

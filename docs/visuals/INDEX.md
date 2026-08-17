@@ -22,7 +22,7 @@ one fique-gold strand per image. Wordless, always.
 | ID | Title | Surface | Priority | Aspect (delivered) | Strategy | Status |
 |---|---|---|---|---|---|---|
 | **OG-01** | The default share card | every page's `og:image` | **flagship** | 1200 × 630 | light only | **integrated**² |
-| **HP-01** | Hero: threads becoming cordage | landing hero | **flagship** | 0.88:1 + narrow variant | transparent¹ | **integrated** |
+| **HP-01** | Hero: threads becoming cordage | landing hero | **flagship** | 0.88:1, two framings⁴ | transparent¹ | **integrated** |
 | HP-02 | Join section: the open knot | landing close | high | 1.52:1 | transparent¹ | **integrated** |
 | DV-01 | Portal home: the loom | `/developers` | high | 1.39:1 | transparent¹ | **integrated** |
 | DV-02 | Quickstart: the first thread | `/developers/quickstart` | high | 1.67:1 | transparent¹ | **integrated** |
@@ -79,6 +79,14 @@ back. The wordless master exists and is what to fall back to.
 five things to keep consistent for a benefit nobody has measured. The mechanism
 is already built — `SECTION_CARDS` in `src/lib/og-image.ts` is an empty map with
 a comment explaining how to fill it — so the artwork is the only missing piece.
+
+⁴ HP-01 ships two framings of one drawing, chosen by width through a `media`
+source: flush at the top for `lg` and up, where the rope descends out of the site
+header, and flush at the bottom below it, where the phone shows a full-bleed band
+of the fan with everything above it masked into the ground. Same aspect ratio, so
+one declared box is honest for both, and one fetch either way. Its entry has the
+reasoning; the short version is that a 4:5 drawing shrunk into a phone column is
+a thumbnail of a hero, and `hidden lg:block` is not an option.
 
 ## What is left
 

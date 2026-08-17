@@ -240,13 +240,30 @@ describe('hero call-to-action honesty', () => {
 
   it('renders the hero art on a phone, not only from lg', () => {
     /*
-     * The regression this exists for shipped twice: first as `hidden lg:flex`,
-     * which meant the site's flagship drawing did not exist for most readers,
-     * and then as a bottom crop under a mask, which read as trimmed. The wrapper
-     * must therefore be visible by default and only *change* at `lg`.
+     * The regression this exists for: `hidden lg:flex`, which meant the site's
+     * flagship drawing did not exist for most readers. The wrapper must be
+     * visible by default and only *change* at `lg`.
      */
     const wrapper = source.match(/<div class="([^"]*lg:self-stretch[^"]*)"/);
     expect(wrapper, 'the art column wrapper').not.toBeNull();
     expect(wrapper?.[1]).not.toContain('hidden');
+  });
+
+  it('keeps the narrow hero a faded band, not a shrunken drawing', () => {
+    /*
+     * Below `lg` the art is a full-bleed band cropped to the fan of fibres, with
+     * everything above it masked into the ground. Three pieces make that work and
+     * all three are easy to drop by accident: the crop, the bottom anchor, and
+     * the fade — and the fade must come off at `lg`, where the art is the whole
+     * drawing hanging from the header.
+     */
+    expect(source).toContain('object-cover object-bottom');
+    expect(source).toContain('lg:object-contain lg:object-top');
+    expect(source).toMatch(
+      /\.hero-art img\s*\{[\s\S]*mask-image: linear-gradient/
+    );
+    expect(source).toMatch(
+      /@media \(min-width: 1024px\)[\s\S]*\.hero-art img\s*\{[\s\S]*mask-image: none/
+    );
   });
 });

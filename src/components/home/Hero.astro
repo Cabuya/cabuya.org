@@ -51,12 +51,15 @@ const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
  *
  * - **It renders on every viewport.** It used to be `hidden lg:flex`, which
  *   meant the site's one flagship drawing was invisible to a phone — the
- *   majority of readers. Below `lg` it sits under the copy at a capped height.
- * - **Two framings, one fetch.** Under the header the rope is meant to bleed
- *   off the top edge and read as descending out of the chrome; below the copy
- *   on a phone that same bleed reads as a drawing someone trimmed. The registry
- *   entry therefore carries a `mobile` variant framed with a margin on all four
- *   sides, served through a `media` source so only one file is downloaded.
+ *   majority of readers.
+ * - **Two framings, one fetch.** Under the header the rope bleeds off the top
+ *   edge and reads as descending out of the chrome. Below `lg` the art is a
+ *   full-bleed band showing the fan of fibres, with everything above it faded
+ *   into the ground: a whole 4:5 drawing shrunk to fit a phone column is a
+ *   thumbnail of a hero rather than a hero. The registry entry therefore carries
+ *   a `mobile` framing flush at its bottom edge, served through a `media` source
+ *   so only one file is downloaded — see the `<style>` block below for the crop
+ *   and the fade.
  *
  * Flip `present` off and the copy column simply takes the width: no
  * placeholder box, per the integration guide.
@@ -118,15 +121,57 @@ const HERO_ART = { present: true };
 
     {
       HERO_ART.present && (
-        <div class="flex justify-center lg:items-start lg:justify-end lg:self-stretch">
+        <div class="hero-art -mx-4 mt-2 md:-mx-6 lg:mx-0 lg:mt-0 lg:flex lg:items-start lg:justify-end lg:self-stretch">
           <Illustration
             id="hero-cordage"
             loading="eager"
             priority
-            class="h-auto max-h-[52vh] w-auto max-w-[19rem] object-contain object-top sm:max-h-[58vh] sm:max-w-sm lg:h-full lg:max-h-none lg:max-w-full"
+            class="h-52 w-full object-cover object-bottom sm:h-64 lg:h-full lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
           />
         </div>
       )
     }
   </div>
 </section>
+
+<style>
+  /*
+   * Below `lg` the phone gets the bottom of the drawing, not a shrunken copy.
+   *
+   * `object-cover` with `object-bottom` keeps the full width and crops height
+   * from the top, so what survives is the fan of fibres — the part that reads at
+   * 208px tall. Nothing is cropped horizontally, which is the crop that would
+   * actually damage this composition, and the narrow framing of the asset is
+   * flush at its bottom edge so the frayed ends meet the edge of the band.
+   *
+   * The mask is what makes the crop honest: without it the rope would start at a
+   * hard horizontal edge in the middle of the page, which looks like a mistake
+   * rather than a choice. Fading the top third into the ground is the same
+   * "feather into the paper" the illustration brief asks of every edge — and it
+   * works in both themes because it fades alpha, not a colour.
+   *
+   * From `lg` the mask comes off: there the art is the full drawing, hung from
+   * the header with its own top bleed, and a fade would erase the rope.
+   */
+  .hero-art img {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 22%,
+      #000 55%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 22%,
+      #000 55%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .hero-art img {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+</style>

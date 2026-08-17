@@ -41,10 +41,14 @@ export interface Illustration {
   /** What the browser should assume the rendered width is. */
   sizes: string;
   /**
-   * A narrow-viewport variant with the SAME aspect ratio, served through a
-   * `media` source. Only the hero has one: its rope bleeds off the top edge so
-   * it reads as descending out of the site header, which is true where the art
-   * sits under the header and false where it sits below the copy on a phone.
+   * A narrow-viewport framing of the same drawing, served through a `media`
+   * source so only one file is ever fetched.
+   *
+   * Only the hero has one. Under the site header its rope bleeds off the *top*
+   * edge and reads as descending out of the chrome; below the copy on a phone
+   * the hero shows the fan of fibres as a full-width band and fades the rest
+   * into the ground, so that framing is flush at the *bottom* instead — a margin
+   * under the frayed ends would show as a gap inside the band.
    */
   mobile?: { src: string; srcset: string; media: string };
 }
@@ -64,8 +68,8 @@ export const ILLUSTRATIONS = {
     height: 589,
     sizes: '(min-width: 1024px) 34vw, (min-width: 640px) 60vw, 84vw',
     mobile: {
-      src: `${VISUALS}/home/hero-cordage-full.webp`,
-      srcset: pair(`${VISUALS}/home/hero-cordage-full`, 480),
+      src: `${VISUALS}/home/hero-cordage-mobile.webp`,
+      srcset: pair(`${VISUALS}/home/hero-cordage-mobile`, 480),
       media: '(max-width: 1023px)',
     },
   },
