@@ -221,7 +221,7 @@ test.describe('the agent surface', () => {
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toMatch(/markdown|text\/plain/);
     const body = await response.text();
-    expect(body).toContain('There is none');
+    expect(body).toContain('There is no authentication');
     // The three routes the deleted version of this file invented.
     for (const invented of [
       '/agent/register',

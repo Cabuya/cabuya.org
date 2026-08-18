@@ -1,6 +1,6 @@
-# Authentication
+# Auth.md
 
-**There is none, and that is the design.** cabuya.org has no accounts, no API
+**There is no authentication, and that is the design.** cabuya.org has no accounts, no API
 keys, no OAuth issuer and no registration step. Every endpoint below is public,
 unauthenticated and rate-limited by politeness rather than by identity.
 

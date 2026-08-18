@@ -79,7 +79,7 @@ describe('auth.md', () => {
      * pointing at endpoints that 404.
      */
     const auth = read(AUTH_MD);
-    expect(auth).toContain('There is none');
+    expect(auth).toContain('There is no authentication');
     for (const absent of [
       '/.well-known/openid-configuration',
       '/.well-known/oauth-authorization-server',

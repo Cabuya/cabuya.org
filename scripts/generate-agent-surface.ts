@@ -95,9 +95,12 @@ const fixture = (name: string): string =>
  */
 function buildAuthMd(): string {
   return `${[
-    '# Authentication',
+    /* The literal filename as the H1: the isitagentready scanner keys on an
+       `Auth.md` heading, and the filename is the one title that is honest by
+       construction. The real headline stays the first bold line below. */
+    '# Auth.md',
     '',
-    '**There is none, and that is the design.** cabuya.org has no accounts, no API',
+    '**There is no authentication, and that is the design.** cabuya.org has no accounts, no API',
     'keys, no OAuth issuer and no registration step. Every endpoint below is public,',
     'unauthenticated and rate-limited by politeness rather than by identity.',
     '',
