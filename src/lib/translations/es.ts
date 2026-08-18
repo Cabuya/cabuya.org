@@ -139,57 +139,53 @@ export const es: SiteTranslations = {
   },
 
   about: {
-    metaTitle: 'Por qué Cabuya — el nombre, y a qué nos compromete',
+    metaTitle: 'Por qué Cabuya — a qué nos compromete el nombre',
     metaDescription:
-      'La cabuya es la fibra con la que se amarra, sacada del fique. Por qué un formato compartido lleva el nombre de un material de trabajo, y de quién queda siendo.',
+      'La cabuya es la fibra de cuerda que se saca del fique. Por qué un formato compartido lleva ese nombre, y qué significa para quien evalúe implementarlo.',
     title: 'Por qué Cabuya',
-    lead: 'La cabuya es la fibra con la que se amarra. El nombre se eligió antes de escribir la primera línea de la especificación, y resolvió bastante más que la apariencia del proyecto.',
+    lead: 'Un nombre es lo primero que un protocolo le pide adoptar a alguien, y es una decisión de gobernanza antes que de diseño. La cabuya es la fibra con la que se amarra lo que nadie puede cargar solo. No es de nadie, y esa es toda la razón por la que un formato compartido pudo llamarse así.',
 
-    fibreTitle: 'La fibra es una cosa real',
+    fibreTitle: 'De dónde viene la palabra',
     fibreBody:
       'La cabuya es la fibra —y la cuerda que se hace con ella— que se saca de las hojas del fique, un pariente del agave que crece a lo largo de los Andes y Centroamérica. Colombia es el mayor productor de fique del mundo.',
     fibreSource:
       'Registrado por la Real Academia Española y en la literatura sobre el fique, verificado contra esas fuentes el 2026-08-16.',
     fibreSecond:
-      'Es un material de trabajo y no un símbolo: poco vistoso, barato, omnipresente y capaz de cargar. Ese registro es el correcto para infraestructura y el equivocado para una campaña.',
+      'Nadie la inventó, ni la licenció, ni la lanzó. Es barata, corriente y capaz de cargar, y lleva sosteniendo cosas mucho más tiempo que cualquiera del software al que hoy está atada. La infraestructura se nombra mejor en ese registro que en el de una campaña.',
 
-    metaphorTitle: 'La metáfora es exacta, no decorativa',
+    metaphorTitle: 'Qué hace realmente una cuerda',
     metaphorBody:
-      'Una fibra sola no aguanta nada. Torcidas juntas cargan un peso que ninguna soportaría por separado, y lo único que se agregó fue la torsión. Eso no es una figura sobre colaborar en general: es la descripción de lo que ocurre cuando dos aplicaciones pueden leer los datos de la otra.',
+      'Una fibra sola no aguanta nada. Torcidas juntas cargan lo que ninguna soportaría por separado, y lo único que se agregó fue la torsión. Ninguna fibra se reemplaza, ninguna se mejora y ninguna manda sobre las demás.',
     metaphorSecond:
-      'Un protocolo no son las aplicaciones. Es el cordel entre ellas. Cada app es un hilo; el protocolo es la cuerda.',
+      'Eso es el diseño, no una figura. Dos aplicaciones que pueden leer los datos de la otra no se rehacen, no se fusionan y no quedan subordinadas: lo único nuevo es la conexión. Cada app es un hilo. El protocolo es la cuerda.',
 
-    neutralTitle: 'Un nombre que no es de nadie',
+    neutralTitle: 'Qué necesitas de nosotros para usarlo',
     neutralBody:
-      'El protocolo no lleva el nombre de una aplicación, ni de una ciudad, ni de un evento. Adoptarlo no le hace publicidad al producto de nadie, e implementarlo no requiere una conversación con nosotros.',
+      'Nada. No hay permiso que pedir, ni convenio que firmar, ni llave que te tengan que emitir, ni conversación previa a implementarlo. La especificación está publicada y el validador es un programa que puedes ejecutar tú.',
     neutralSecond:
-      'Esa fue la primera decisión de gobernanza, tomada antes que todas las demás. Un formato compartido que lleva el nombre de uno de sus participantes es un formato que los demás tienen que promocionar. Este no pide nada.',
+      'Para eso sirve el nombre. No es el de una aplicación, ni de una empresa, ni de una ciudad, ni de un evento, así que adoptarlo no le hace publicidad a nadie — y ninguna decisión posterior puede deshacer eso.',
 
-    verbTitle: 'El verbo ya estaba en el idioma',
-    verbIdiom: '«Coger la cabuya»',
-    verbGloss: 'entender, ponerse al tanto de un asunto',
+    verbTitle: 'La adopción ya tenía palabra',
     verbBody:
-      'El español ya tenía el verbo de la adopción antes de que el protocolo existiera. La Real Academia Española lo registra, y es casi un regalo: lo que uno hace cuando por fin entiende cómo funciona algo es, ya, cogerle la cabuya.',
+      'El español ya tenía una expresión para entender cómo funciona algo, para ponerse al tanto de un asunto: «coger la cabuya», registrada por la Real Academia Española. Un formato cuyo verbo de adopción ya existe en el idioma de la región donde arranca tiene una cosa menos que enseñar, y los formatos se propagan por lo que no hay que explicar.',
 
-    downsideTitle: 'Y el lado flaco, dicho',
-    downsideIdiom: '«Estar en la cabuya»',
-    downsideGloss: 'estar en un aprieto del que no se sale fácil',
+    downsideTitle: 'Qué más significa la palabra',
     downsideBody:
-      'Los mismos diccionarios registran esta, en uso en Colombia y Ecuador. La conocíamos antes de elegir el nombre, y queda dicha aquí en vez de esperar a que alguien la encuentre. Un proyecto cuyo argumento entero es que una afirmación que no se puede comprobar no vale nada no puede escoger cuáles hechos publica.',
+      'Los mismos diccionarios registran un segundo sentido, en uso en Colombia y Ecuador: «estar en la cabuya» es estar en un aprieto del que no se sale fácil. Lo conocíamos antes de elegir el nombre, y queda dicho aquí en vez de esperar a que alguien lo encuentre. Le pedimos a quien publica que deje que un validador lo mida en público, y un proyecto que se guardara calladamente la mitad incómoda de su propio nombre no tendría con qué pedirlo.',
 
-    notTakenTitle: 'Lo que no tomamos',
+    notTakenTitle: 'El nombre que no tomamos',
     notTakenBody:
-      'Se examinaron cuarenta y siete nombres. Uno de los más fuertes se descartó antes siquiera de mirar su disponibilidad: Aluna, la fuerza de pensamiento originaria en la cosmología kogi y arhuaca. Es el concepto sagrado de pueblos vivos, y no es nuestro para convertirlo en marca.',
+      'Se examinaron cuarenta y siete candidatos. El primero que se descartó ni siquiera se miró en disponibilidad: Aluna, la fuerza de pensamiento originaria en la cosmología kogi y arhuaca. Es el concepto sagrado de pueblos vivos y no un activo, y un proyecto cuya regla central trata sobre lo que no nos corresponde recoger no puede servirse de su cosmología.',
 
-    outlivesTitle: 'Una palabra que dura más que su motivo',
+    outlivesTitle: 'Qué pasa cuando la emergencia pase',
     outlivesBody:
-      'El protocolo se escribió bajo presión, y aquello para lo que sirve va a durar más de lo que duró la presión. Un nombre atado a un solo evento habría caducado con el evento; uno atado a un solo país habría hecho que el formato pareciera un programa nacional en vez de algo que otra ciudad puede tomar sin más.',
+      'El protocolo se escribió bajo presión, y la necesidad va a durar más que la presión. Un nombre atado a una emergencia caduca con ella, y uno atado a un país convierte el formato en un programa nacional: algo a lo que otros lugares se suman en vez de algo que simplemente usan.',
     outlivesSecond:
-      'La fibra existe en los Andes y en Centroamérica. La especificación es CC0. Entre las dos, nada en este nombre pide permiso para viajar.',
+      'La fibra crece en los Andes y en Centroamérica. La especificación es CC0. Ninguna de las dos pide permiso para viajar, y eso es lo que permite que una ciudad con la que nunca hemos hablado tome esto y lo ponga a andar.',
 
-    ctaTitle: 'El nombre es la parte fácil',
+    ctaTitle: 'A qué nos compromete el nombre',
     ctaBody:
-      'A lo que compromete al proyecto sí se puede medir: una especificación que cualquiera implementa sin pedir permiso, y una conformidad que decide un validador publicado.',
+      'Todo se puede comprobar: una especificación que cualquiera implementa sin pedir permiso, y un nivel de conformidad que decide un validador publicado y no quien publica. Si el nombre hace su trabajo, nada de eso exige confiar en nosotros.',
     ctaSpec: 'Leer la especificación',
     ctaJoin: 'Participar',
   },

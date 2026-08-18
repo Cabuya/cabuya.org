@@ -148,57 +148,53 @@ export const en: SiteTranslations = {
   },
 
   about: {
-    metaTitle: 'Why Cabuya — the name, and what it commits us to',
+    metaTitle: 'Why Cabuya — what the name commits us to',
     metaDescription:
-      'Cabuya is the fibre you tie things with, drawn from the fique plant. Why a shared format is named after a working material, and who that leaves it belonging to.',
+      'Cabuya is the rope fibre drawn from the fique plant. Why a shared format carries that name, and what it means for anyone deciding to implement it.',
     title: 'Why Cabuya',
-    lead: 'Cabuya is the fibre you tie things with. The name was chosen before the first line of the specification was written, and it settled more than how the project would look.',
+    lead: 'A name is the first thing a protocol asks anyone to adopt, and it is a governance decision before it is a design one. Cabuya is the fibre you tie together what no one can carry alone. It belongs to nobody, which is the whole reason a shared format could be named after it.',
 
-    fibreTitle: 'The fibre is a real thing',
+    fibreTitle: 'Where the word comes from',
     fibreBody:
-      'Cabuya is the fibre — and the rope made from it — drawn from the leaves of the fique plant, an agave relative that grows across the Andes and Central America. Colombia is the world\u2019s largest grower of it.',
+      'Cabuya is the fibre — and the rope made from it — drawn from the leaves of the fique plant, an agave relative that grows across the Andes and Central America. Colombia is the world’s largest grower of it.',
     fibreSource:
       'Recorded by the Real Academia Española and in the fique literature, checked against those sources on 2026-08-16.',
     fibreSecond:
-      'It is a working material rather than a symbol: unglamorous, cheap, everywhere, and load-bearing. That register is the right one for infrastructure and the wrong one for a campaign.',
+      'Nobody invented it, licensed it or launched it. It is cheap, ordinary and load-bearing, and it has been holding things together far longer than any of the software now attached to it. Infrastructure is better named in that register than in the register of a campaign.',
 
-    metaphorTitle: 'The metaphor is exact, not decorative',
+    metaphorTitle: 'What a rope actually does',
     metaphorBody:
-      'A single fibre holds nothing. Twisted together they carry a load none of them could carry alone, and the twist is the only thing added. That is not a figure of speech about collaboration in general — it is a description of what happens when two applications can read each other\u2019s data.',
+      'A single fibre carries no load. Twisted together they carry what none of them could alone, and the twist is the only thing added. No fibre is replaced, none is improved, and none of them is in charge.',
     metaphorSecond:
-      'A protocol is not the applications. It is the cordage between them. Each app is a thread; the protocol is the rope.',
+      'That is the design, not a figure of speech. Two applications that can read each other’s data are not rebuilt, not merged and not subordinated — the connection is the only new thing. Each app is a thread. The protocol is the rope.',
 
-    neutralTitle: 'A name that belongs to nobody',
+    neutralTitle: 'What you need from us to use it',
     neutralBody:
-      'The protocol is not named after an application, a city or an event. Adopting it advertises no one\u2019s product, and implementing it requires no conversation with us.',
+      'Nothing. There is no permission to request, no partnership to sign, no key to be issued and no conversation to have before you implement it. The specification is published and the validator is a program you can run yourself.',
     neutralSecond:
-      'That was the first governance decision, taken before any of the others. A shared format named after one of its participants is a format the rest are asked to promote. This one asks for nothing.',
+      'That is what the name buys. It is not an application’s, a company’s, a city’s or an event’s, so adopting it advertises nobody — and no later decision is allowed to take that back.',
 
-    verbTitle: 'The verb was already in the language',
-    verbIdiom: '«Coger la cabuya»',
-    verbGloss: 'to catch on; to pick up the thread of a matter',
+    verbTitle: 'Adoption already had a word',
     verbBody:
-      'Spanish had the adoption verb before the protocol existed. The Real Academia Española records it, and it is close to a gift: what you do when you finally understand how something works is, already, to catch the cabuya.',
+      'Spanish already had an expression for catching on to how something works — for picking up the thread of a matter — and the phrase for it, recorded by the Real Academia Española, is to catch the cabuya. A format whose verb of adoption already exists in the language of the region it starts in has one less thing to teach, and formats spread on what they do not have to explain.',
 
-    downsideTitle: 'And the honest downside',
-    downsideIdiom: '«Estar en la cabuya»',
-    downsideGloss: 'to be in a jam you cannot easily get out of',
+    downsideTitle: 'What else the word means',
     downsideBody:
-      'The same dictionaries record this one, used in Colombia and Ecuador. We knew it before choosing the name, and it is stated here rather than left for somebody to find. A project whose whole argument is that an unverifiable claim is worth nothing does not get to be selective about which facts it publishes.',
+      'The same dictionaries record a second sense, used in Colombia and Ecuador: to be in the cabuya is to be in a jam you cannot easily get out of. We knew about it before choosing the name, and it is on this page rather than left for somebody else to find. We ask publishers to let a validator measure them in public, and a project that quietly kept the unflattering half of its own name would have no standing to ask.',
 
-    notTakenTitle: 'What we did not take',
+    notTakenTitle: 'The name we did not take',
     notTakenBody:
-      'Forty-seven names were examined. One of the strongest was rejected before its availability was even checked: Aluna, the originating thought-force in Kogi and Arhuaco cosmology. It is the sacred concept of living peoples, and it is not ours to turn into a brand.',
+      'Forty-seven candidates were examined. The one rejected first was never checked for availability at all: Aluna, the originating thought-force in Kogi and Arhuaco cosmology. It is the sacred concept of living peoples rather than an asset, and a project whose central rule is about what is not ours to collect does not get to help itself to their cosmology.',
 
-    outlivesTitle: 'A word that outlives the reason for it',
+    outlivesTitle: 'What happens when the emergency ends',
     outlivesBody:
-      'The protocol was written under pressure, and the thing it is for will last longer than the pressure did. A name tied to one event would have expired with the event; a name tied to one country would have made the format look like a national programme rather than something another city can simply pick up.',
+      'The protocol was written under pressure, and the need will outlast the pressure. A name tied to one emergency expires with the emergency, and a name tied to one country turns a format into a national programme — something other places join rather than simply use.',
     outlivesSecond:
-      'The fibre exists across the Andes and Central America. The specification is CC0. Between the two, nothing about this name asks permission to travel.',
+      'The fibre grows across the Andes and Central America. The specification is CC0. Neither one asks permission to travel, which is what lets a city we have never spoken to pick this up and run it.',
 
-    ctaTitle: 'The name is the easy part',
+    ctaTitle: 'What the name commits us to',
     ctaBody:
-      'What it commits the project to is measurable: a specification anyone can implement without asking, and conformance a published validator decides.',
+      'All of it is checkable: a specification anyone can implement without asking, and a conformance level a published validator decides rather than the publisher. If the name is doing its job, none of that requires trusting us.',
     ctaSpec: 'Read the specification',
     ctaJoin: 'Take part',
   },
