@@ -204,7 +204,8 @@ describe('auth.md documents the absence of authentication, not an invented flow'
 
   it('exists, because an agent asking "do I need a credential" deserves an answer', () => {
     expect(auth.length).toBeGreaterThan(400);
-    expect(auth).toMatch(/^# Authentication/);
+    /* The H1 is the literal filename — the isitagentready scanner keys on it. */
+    expect(auth).toMatch(/^# Auth\.md/);
   });
 
   it('advertises none of the routes the deleted version invented', () => {
@@ -248,7 +249,7 @@ describe('auth.md documents the absence of authentication, not an invented flow'
     ]) {
       expect(auth, absent).toContain(absent);
     }
-    expect(auth).toContain('There is none');
+    expect(auth).toContain('There is no authentication');
   });
 });
 
