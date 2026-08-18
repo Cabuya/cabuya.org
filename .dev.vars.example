@@ -64,3 +64,11 @@ CF_KV_READ_TOKEN=
 #   PUBLIC_UMAMI_ENABLE      — "true" to load it outside production, to verify
 #   PUBLIC_CF_BEACON_TOKEN   — dash.cloudflare.com → Web Analytics → JS snippet
 #   PUBLIC_CF_BEACON_ENABLE  — "true" to load it outside production, to verify
+
+# ── OAuth agent tier (functions/oauth/, functions/lib/oauth.ts) ──────────────
+# ES256 private JWK as one JSON line. The public half is committed at
+# functions/lib/oauth-public.ts and served as /.well-known/jwks.json.
+# Generate a pair:  node scripts/generate-oauth-key.mjs
+# Unset → /oauth/register and /oauth/token answer 503 not_configured, and
+# /api/validate serves the anonymous tier only.
+OAUTH_SIGNING_KEY=

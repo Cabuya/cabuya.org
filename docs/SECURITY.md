@@ -101,6 +101,7 @@ exempt for embedding).
 | `DAILYBOT_API_KEY` | Form submission only — no read scope needed | Pages env / `.dev.vars` |
 | `DAILYBOT_FORM_ID` · `DAILYBOT_FORM_QUESTIONS` | Identifiers for one form in one workspace, not credentials | Pages env / `.dev.vars` |
 | `PUBLIC_CF_BEACON_TOKEN` | Analytics beacon (public) | Pages env |
+| `OAUTH_SIGNING_KEY` | ES256 private JWK — signs agent-tier tokens and derives client secrets (§4b) | Pages env secret |
 
 Rules: names documented in `.dev.vars.example` with placeholders; values
 never in git; **a pushed secret is a leaked secret — rotate it, don't just
@@ -141,6 +142,36 @@ same token: a build environment is a more exposed place than a workflow secret,
 and nothing that builds the site needs to be able to write a measurement.
 Without it the build still succeeds and every entry renders as *not yet
 measured*, which is the honest fallback rather than a broken one.
+
+## 4b. The OAuth agent tier (`functions/oauth/`, 2026-08-18)
+
+One optional credential exists, and its blast radius is deliberately tiny:
+a `client_credentials`-only authorization server whose tokens buy exactly one
+thing — the `validate:extended` rate tier on `/api/validate` (60/min instead
+of 10/min). **Quota, never content**: no data, no page, no endpoint requires
+a token to read, and the day a scope gates content is the day this section
+has been violated.
+
+The design properties that keep it small:
+
+- **No client store.** `client_secret = HMAC(derived_key, client_id)`,
+  verified by recomputation. Nothing to leak, nothing to retain — the
+  zero-retention posture survives intact (the only KV keys remain `rate:*`
+  counters, now including `rate:reg:{ip}` and `rate:client:{id}`).
+- **No per-client revocation**, stated rather than implied: rotating
+  `OAUTH_SIGNING_KEY` (the one secret, an ES256 private JWK — see
+  `.dev.vars.example`; rotate with `scripts/generate-oauth-key.mjs`) revokes
+  every client and token at once. Acceptable because the credential's only
+  power is a bigger rate bucket.
+- **Tokens are 15-minute ES256 JWTs** verified against the committed public
+  JWK (`functions/lib/oauth-public.ts` ≡ `/.well-known/jwks.json` — one
+  module, asserted by test). A bad bearer is a 401 with the RFC 9728
+  `resource_metadata` pointer, never a silent downgrade.
+- **Unconfigured is honest:** without the secret, `/oauth/*` answers 503
+  `not_configured` and the anonymous tier is unaffected.
+- Registration is open, anonymous, collects nothing, and is rate-limited
+  (10/hour/IP) — an id mill gains nothing because ids are free and quota is
+  per client id *with a verified secret*.
 
 ## 5. Repository & supply chain
 
