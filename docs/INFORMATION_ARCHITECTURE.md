@@ -19,7 +19,7 @@
 | `/registry/{publisher_id}` | One publisher: claimed vs measured, history | — | ✅ live |
 | `/rfcs`, `/rfcs/{number}` | RFC index + individual RFCs | `TechArticle` | ✅ live |
 | `/changelog` | Spec + validator + skill releases, one timeline | — | ✅ live |
-| `/about` | Why the protocol is called Cabuya: the fibre, the neutrality argument, the two idioms, the name that was refused | — | ✅ live |
+| `/about` | Why the protocol is called Cabuya: the fibre, the neutrality argument, the two idioms | — | ✅ live |
 | `/start` | Install the pack, say `/cabuya`: the guided adoption in two lines, who plans (own methodology → DWP → plan mode), the PII gate, the refusals. Hero's primary CTA lands here | — | ✅ live |
 | `/governance` | The governance model, maintainers, continuity | — | ✅ live |
 | `/trademark` | Badge + name policy (bilingual body) | — | ✅ live |

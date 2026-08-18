@@ -47,7 +47,9 @@ describe('auth.md', () => {
     };
 
     const auth = read(AUTH_MD);
-    expect(auth).toContain(`${number('perIpPerMinute')}/minute per caller`);
+    expect(auth).toContain(
+      `${number('perIpPerMinute')}/minute anonymous, ${number('perClientPerMinute')}/minute with a bearer token`
+    );
     expect(auth).toContain(`${number('perHostPerHour')}/hour per probed host`);
     expect(auth).toContain(
       `following at most ${number('maxRedirects')} redirects`
@@ -79,18 +81,52 @@ describe('auth.md', () => {
      * pointing at endpoints that 404.
      */
     const auth = read(AUTH_MD);
-    expect(auth).toContain('There is no authentication');
-    for (const absent of [
-      '/.well-known/openid-configuration',
-      '/.well-known/oauth-authorization-server',
-      '/.well-known/oauth-protected-resource',
-    ]) {
-      expect(auth, absent).toContain(absent);
-      expect(
-        existsSync(join(ROOT, `public${absent}`)),
-        `${absent} must not be served while the thing it describes does not exist`
-      ).toBe(false);
-    }
+    expect(auth).toContain('There is no authentication required to read');
+    /* Still absent, still explained: OIDC. There is nobody to sign in as. */
+    expect(auth).toContain('/.well-known/openid-configuration');
+    expect(
+      existsSync(join(ROOT, 'public/.well-known/openid-configuration'))
+    ).toBe(false);
+  });
+
+  it('the OAuth documents exist together with the machinery they describe', () => {
+    /* These three lived in the absent list until functions/oauth/ shipped.
+       The invariant that survives the flip: metadata and machinery move
+       together, so each endpoint the documents name is asserted against the
+       source that serves it. */
+    const metadata = JSON.parse(
+      read('public/.well-known/oauth-authorization-server')
+    );
+    expect(existsSync(join(ROOT, 'functions/oauth/token.ts'))).toBe(true);
+    expect(existsSync(join(ROOT, 'functions/oauth/register.ts'))).toBe(true);
+    expect(metadata.token_endpoint).toBe('https://cabuya.org/oauth/token');
+    expect(metadata.registration_endpoint).toBe(
+      'https://cabuya.org/oauth/register'
+    );
+    expect(metadata.grant_types_supported).toEqual(['client_credentials']);
+    expect(metadata.agent_auth.register_uri).toBe(
+      'https://cabuya.org/oauth/register'
+    );
+
+    const resource = JSON.parse(
+      read('public/.well-known/oauth-protected-resource')
+    );
+    expect(resource.authorization_servers).toEqual(['https://cabuya.org']);
+    expect(resource.scopes_supported).toEqual(['validate:extended']);
+
+    /* The JWKS the world sees is the JWK the endpoint verifies against. */
+    const jwks = JSON.parse(read('public/.well-known/jwks.json'));
+    const committed = read('functions/lib/oauth-public.ts');
+    expect(committed).toContain(jwks.keys[0].x);
+    expect(committed).toContain(jwks.keys[0].y);
+    expect(jwks.keys[0].d, 'a private parameter in the public JWKS').toBe(
+      undefined
+    );
+
+    /* And the credential buys quota, never content — the scope appears in
+       validate.ts as a rate tier and nowhere as an access gate. */
+    const validate = read('functions/api/validate.ts');
+    expect(validate).toContain('perClientPerMinute');
   });
 });
 

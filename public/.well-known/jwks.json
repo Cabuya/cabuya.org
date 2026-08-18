@@ -1,0 +1,17 @@
+{
+  "keys": [
+    {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "9R9T1r7wpTqeZunBX0gDCwMB5rJU8j7y-qN54q4IRmQ",
+      "y": "GETp1E_7x6dvatWOaYCHqK03xT2tC-Ea75T4rGSZd20",
+      "kid": "cabuya-2026-08",
+      "alg": "ES256",
+      "use": "sig",
+      "key_ops": [
+        "verify"
+      ],
+      "ext": true
+    }
+  ]
+}

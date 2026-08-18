@@ -61,7 +61,6 @@
 | *A name that belongs to nobody* | **illustration** | `AB-03` five cords, no centre | Neutrality drawn as a shape — no strand is the hub |
 | *«Coger la cabuya»* | **illustration** | `AB-04` the open bight | A loop held open and offered, which is what the idiom means |
 | *Estar en la cabuya* (the downside) | **skip** | — | The honest cost of the name. Illustrating a jam would make a joke of the one section that exists to be unflattering |
-| *What we did not take* (Aluna) | **skip** | — | It names a sacred concept of living peoples in order to say it is not ours to use. Any drawing beside it would do the appropriating the section refuses |
 | Where the plant grows | **skip** | — | No maps, no flags, no borders — a fact about a plant must not become a territorial claim (prompts/README §06) |
 
 ## Machine and utility surfaces

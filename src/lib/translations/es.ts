@@ -167,15 +167,11 @@ export const es: SiteTranslations = {
 
     verbTitle: 'La adopción ya tenía palabra',
     verbBody:
-      'El español ya tenía una expresión para entender cómo funciona algo, para ponerse al tanto de un asunto: «coger la cabuya», registrada por la Real Academia Española. Un formato cuyo verbo de adopción ya existe en el idioma de la región donde arranca tiene una cosa menos que enseñar, y los formatos se propagan por lo que no hay que explicar.',
+      'El español ya tenía una expresión para entender cómo funciona algo, para ponerse al tanto de un asunto: «coger la cabuya», registrada por la Real Academia Española. Un formato cuyo verbo de adopción ya existe en el idioma de la región donde arranca tiene una cosa menos que enseñar. Los formatos se propagan por lo que no hay que explicar.',
 
     downsideTitle: 'Qué más significa la palabra',
     downsideBody:
       'Los mismos diccionarios registran un segundo sentido, en uso en Colombia y Ecuador: «estar en la cabuya» es estar en un aprieto del que no se sale fácil. Lo conocíamos antes de elegir el nombre, y queda dicho aquí en vez de esperar a que alguien lo encuentre. Le pedimos a quien publica que deje que un validador lo mida en público, y un proyecto que se guardara calladamente la mitad incómoda de su propio nombre no tendría con qué pedirlo.',
-
-    notTakenTitle: 'El nombre que no tomamos',
-    notTakenBody:
-      'Se examinaron cuarenta y siete candidatos. El primero que se descartó ni siquiera se miró en disponibilidad: Aluna, la fuerza de pensamiento originaria en la cosmología kogi y arhuaca. Es el concepto sagrado de pueblos vivos y no un activo, y un proyecto cuya regla central trata sobre lo que no nos corresponde recoger no puede servirse de su cosmología.',
 
     outlivesTitle: 'Qué pasa cuando la emergencia pase',
     outlivesBody:

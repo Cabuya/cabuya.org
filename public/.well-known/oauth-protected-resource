@@ -1,0 +1,14 @@
+{
+  "resource": "https://cabuya.org",
+  "resource_name": "cabuya.org validator",
+  "authorization_servers": [
+    "https://cabuya.org"
+  ],
+  "scopes_supported": [
+    "validate:extended"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "resource_documentation": "https://cabuya.org/auth.md"
+}

@@ -125,8 +125,6 @@ export interface SiteTranslations {
     verbBody: string;
     downsideTitle: string;
     downsideBody: string;
-    notTakenTitle: string;
-    notTakenBody: string;
     outlivesTitle: string;
     outlivesBody: string;
     outlivesSecond: string;

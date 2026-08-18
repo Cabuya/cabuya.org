@@ -42,6 +42,7 @@ import { CHECKS, DENY_KEYS, DENY_PATTERNS } from '@cabuya/validator';
 import { SKILL_REPO_URL } from '@/lib/site-navigation';
 import { specSchemas, specSections, specVersions } from '@/lib/spec-loader';
 import { START_COMMANDS } from '@/lib/start-commands';
+import { PUBLIC_JWK } from '../functions/lib/oauth-public';
 
 const ROOT = process.cwd();
 const check = process.argv.includes('--check');
@@ -65,6 +66,7 @@ const url = (path: string): string => `${SITE_URL}${path}`;
  */
 const LIMITS = {
   perIpPerMinute: 10,
+  perClientPerMinute: 60,
   perHostPerHour: 60,
   maxBytes: 5 * 1024 * 1024,
   runBudgetMs: 25_000,
@@ -101,18 +103,42 @@ function buildAuthMd(): string {
        construction. The real headline stays the first bold line below. */
     '# Auth.md',
     '',
-    '**There is no authentication, and that is the design.** cabuya.org has no accounts, no API',
-    'keys, no OAuth issuer and no registration step. Every endpoint below is public,',
-    'unauthenticated and rate-limited by politeness rather than by identity.',
+    '**There is no authentication required to read anything, and that is the design.**',
+    'cabuya.org has no accounts and no OpenID provider. Every endpoint below works',
+    'anonymously, rate-limited by politeness rather than by identity.',
     '',
-    'This file follows the `auth.md` convention so an agent can stop looking for a',
-    'credential it will not find.',
+    '**One optional credential exists, and it buys exactly one thing:** a higher',
+    '`/api/validate` rate tier for registered agents (`validate:extended`) — useful',
+    'for bulk validation runs, and nothing else. It gates quota, never content.',
+    '',
+    '## Agent registration, in three calls',
+    '',
+    '```bash',
+    `curl -X POST ${url('/oauth/register')}          # → client_id + client_secret`,
+    `curl -X POST ${url('/oauth/token')} \\`,
+    "  -d 'grant_type=client_credentials&client_id=…&client_secret=…'",
+    `curl -X POST ${url('/api/validate')} -H 'Authorization: Bearer …' \\`,
+    '  -H \'Content-Type: application/json\' -d \'{"url":"…"}\'',
+    '```',
+    '',
+    'Registration is open, anonymous and collects nothing — no name, no email. The',
+    'honest particulars, stated up front:',
+    '',
+    `- **Nothing is stored about you.** Client secrets are HMAC-derived from the`,
+    '  client id and verified by recomputation. There is no client table to leak.',
+    '- **Therefore no per-client revocation.** Rotating the signing key revokes',
+    '  every client at once; that is the only lever, and for a credential whose',
+    '  only power is a bigger rate bucket, it is enough.',
+    `- Discovery: [\`/.well-known/oauth-authorization-server\`](${url('/.well-known/oauth-authorization-server')}) ·`,
+    `  [\`/.well-known/oauth-protected-resource\`](${url('/.well-known/oauth-protected-resource')}) ·`,
+    `  [\`/.well-known/jwks.json\`](${url('/.well-known/jwks.json')}). Grant: \`client_credentials\` only —`,
+    '  there are no users to authorize.',
     '',
     '## What you can call',
     '',
     '| Endpoint | Method | What it does | Limits |',
     '|---|---|---|---|',
-    `| [\`/api/validate\`](${url('/developers/validator')}) | POST | Validates a manifest or feed and returns findings with stable check ids | ${LIMITS.perIpPerMinute}/minute per caller · ${LIMITS.perHostPerHour}/hour per probed host |`,
+    `| [\`/api/validate\`](${url('/developers/validator')}) | POST | Validates a manifest or feed and returns findings with stable check ids | ${LIMITS.perIpPerMinute}/minute anonymous, ${LIMITS.perClientPerMinute}/minute with a bearer token · ${LIMITS.perHostPerHour}/hour per probed host |`,
     `| [\`/mcp\`](${url('/developers/mcp')}) | POST | MCP server (Streamable HTTP, stateless): the validate tool and the read-as-Markdown tool over JSON-RPC | same limits as \`/api/validate\` for the validate tool |`,
     `| [\`/badge/{publisher}.svg\`](${url('/registry')}) | GET | The measured badge for a registry entry | none |`,
     `| [\`/openapi.json\`](${url('/openapi.json')}) | GET | OpenAPI 3.1 description of the above | none |`,
@@ -141,19 +167,14 @@ function buildAuthMd(): string {
     '',
     '## What is deliberately absent',
     '',
-    'These are the documents an agent-readiness scanner expects next, and why this',
-    'site does not serve them:',
-    '',
     '| Not published | Because |',
     '|---|---|',
-    '| `/.well-known/openid-configuration` | No OpenID Provider exists. There is nothing to sign in to. |',
-    '| `/.well-known/oauth-authorization-server` | No OAuth authorization server exists. |',
-    '| `/.well-known/oauth-protected-resource` | Nothing here is a protected resource. Every byte is public. |',
+    '| `/.well-known/openid-configuration` | No OpenID Provider exists. The authorization server above is pure OAuth 2.0 (RFC 8414), `client_credentials` only — there is nobody to sign in as. |',
     '',
-    'Each of those would raise an automated score and would describe infrastructure',
-    'that does not exist. If any of them appears here later, it will be because the',
-    'thing itself does — as happened with the MCP server card below, on the day',
-    'the server it describes was deployed.',
+    'A document here would describe infrastructure that does not exist. When one',
+    'leaves this table, it is because the thing itself shipped — as happened with',
+    'the MCP server card and the OAuth documents, each on the day its machinery',
+    'deployed.',
     '',
     '## The protocol, not this site',
     '',
@@ -431,6 +452,73 @@ function buildServerCard(): string {
   )}\n`;
 }
 
+// ── OAuth: the authorization server that exists now ───────
+
+/**
+ * These three documents describe running machinery, not aspiration — they
+ * landed in the same change as `functions/oauth/` and the bearer tier in
+ * `functions/api/validate.ts`. What the credential buys is exactly one
+ * thing: the `validate:extended` rate tier. Reading this site still needs
+ * nothing, and auth.md still leads with that.
+ *
+ * The public JWK is committed; the private half is the `OAUTH_SIGNING_KEY`
+ * Cloudflare secret (`.dev.vars.example`). Registration stores nothing —
+ * client secrets are HMAC-derived and verified by recomputation — so there
+ * is no per-client revocation, only key rotation, and the metadata says so
+ * in `agent_auth.revocation`.
+ */
+// Imported from the same module the endpoint verifies against — see below.
+
+function buildAuthorizationServerMetadata(): string {
+  return `${JSON.stringify(
+    {
+      issuer: SITE_URL,
+      token_endpoint: url('/oauth/token'),
+      registration_endpoint: url('/oauth/register'),
+      jwks_uri: url('/.well-known/jwks.json'),
+      grant_types_supported: ['client_credentials'],
+      response_types_supported: [],
+      token_endpoint_auth_methods_supported: [
+        'client_secret_post',
+        'client_secret_basic',
+      ],
+      scopes_supported: ['validate:extended'],
+      service_documentation: url('/auth.md'),
+      agent_auth: {
+        register_uri: url('/oauth/register'),
+        identity_types_supported: ['anonymous-machine-client'],
+        credential_types_supported: ['client_secret'],
+        registration_authentication: 'none',
+        what_the_credential_buys:
+          'A higher /api/validate rate tier (validate:extended). Nothing on this site requires authentication to read.',
+        revocation:
+          'No per-client revocation: credentials are HMAC-verified, never stored. Rotating the signing key revokes every client at once.',
+      },
+    },
+    null,
+    2
+  )}\n`;
+}
+
+function buildProtectedResourceMetadata(): string {
+  return `${JSON.stringify(
+    {
+      resource: SITE_URL,
+      resource_name: 'cabuya.org validator',
+      authorization_servers: [SITE_URL],
+      scopes_supported: ['validate:extended'],
+      bearer_methods_supported: ['header'],
+      resource_documentation: url('/auth.md'),
+    },
+    null,
+    2
+  )}\n`;
+}
+
+function buildJwks(): string {
+  return `${JSON.stringify({ keys: [PUBLIC_JWK] }, null, 2)}\n`;
+}
+
 // ── Write or check ────────────────────────────────────────
 
 const skill = buildSkill();
@@ -448,6 +536,15 @@ const outputs: Array<{ file: string; contents: string }> = [
     file: 'public/.well-known/mcp/server-card.json',
     contents: buildServerCard(),
   },
+  {
+    file: 'public/.well-known/oauth-authorization-server',
+    contents: buildAuthorizationServerMetadata(),
+  },
+  {
+    file: 'public/.well-known/oauth-protected-resource',
+    contents: buildProtectedResourceMetadata(),
+  },
+  { file: 'public/.well-known/jwks.json', contents: buildJwks() },
 ];
 
 if (check) {

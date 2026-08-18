@@ -1,0 +1,30 @@
+{
+  "issuer": "https://cabuya.org",
+  "token_endpoint": "https://cabuya.org/oauth/token",
+  "registration_endpoint": "https://cabuya.org/oauth/register",
+  "jwks_uri": "https://cabuya.org/.well-known/jwks.json",
+  "grant_types_supported": [
+    "client_credentials"
+  ],
+  "response_types_supported": [],
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_post",
+    "client_secret_basic"
+  ],
+  "scopes_supported": [
+    "validate:extended"
+  ],
+  "service_documentation": "https://cabuya.org/auth.md",
+  "agent_auth": {
+    "register_uri": "https://cabuya.org/oauth/register",
+    "identity_types_supported": [
+      "anonymous-machine-client"
+    ],
+    "credential_types_supported": [
+      "client_secret"
+    ],
+    "registration_authentication": "none",
+    "what_the_credential_buys": "A higher /api/validate rate tier (validate:extended). Nothing on this site requires authentication to read.",
+    "revocation": "No per-client revocation: credentials are HMAC-verified, never stored. Rotating the signing key revokes every client at once."
+  }
+}

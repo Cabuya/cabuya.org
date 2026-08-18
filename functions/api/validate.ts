@@ -37,6 +37,8 @@ import {
   translateFinding,
 } from '@cabuya/validator';
 
+import { verifyToken } from '../lib/oauth';
+import { PUBLIC_JWK } from '../lib/oauth-public';
 import type { KvReadWrite, PagesContext } from '../lib/pages-runtime';
 import { assertAllowedUrl, REJECTION_MESSAGES } from '../lib/ssrf-guard';
 
@@ -56,8 +58,13 @@ const LIMITS = {
   maxBytes: 5 * 1024 * 1024,
   /** Redirects followed, each re-guarded. */
   maxRedirects: 3,
-  /** Validations per minute, per caller. */
+  /** Validations per minute, per anonymous caller. */
   perIpPerMinute: 10,
+  /**
+   * Per registered agent (functions/lib/oauth.ts) — the one thing the
+   * optional credential buys. Quota, never content.
+   */
+  perClientPerMinute: 60,
   /** Requests per hour to any single probed host, across all callers. */
   perHostPerHour: 60,
 } as const;
@@ -110,7 +117,7 @@ function failure(
  */
 async function checkRate(
   kv: KvReadWrite | undefined,
-  scope: 'ip' | 'host',
+  scope: 'ip' | 'host' | 'client',
   subject: string,
   limit: number,
   ttlSeconds: number
@@ -317,14 +324,37 @@ export const onRequestPost = async (
   // Per-caller, then per-host. The second one protects the publisher, and it
   // applies across all callers rather than per caller — a hundred people
   // checking one feed is still a hundred requests to that feed.
+  // A bearer token, if presented, must verify: a bad token is a 401 with the
+  // pointer RFC 9728 asks for, never a silent downgrade to anonymous — an
+  // agent that believes it is on the extended tier deserves to find out it
+  // is not. A valid one moves the caller to the per-client tier.
   const ip = context.request.headers.get('cf-connecting-ip') ?? 'unknown';
-  const perIp = await checkRate(
-    context.env.VALIDATE_RATE,
-    'ip',
-    ip,
-    LIMITS.perIpPerMinute,
-    60
-  );
+  const authorization = context.request.headers.get('authorization') ?? '';
+  let clientId: string | null = null;
+  if (authorization.startsWith('Bearer ')) {
+    clientId = await verifyToken(authorization.slice(7), PUBLIC_JWK);
+    if (!clientId) {
+      return failure('unauthorized', 'The bearer token did not verify.', 401, {
+        'WWW-Authenticate':
+          'Bearer resource_metadata="https://cabuya.org/.well-known/oauth-protected-resource"',
+      });
+    }
+  }
+  const perIp = clientId
+    ? await checkRate(
+        context.env.VALIDATE_RATE,
+        'client',
+        clientId,
+        LIMITS.perClientPerMinute,
+        60
+      )
+    : await checkRate(
+        context.env.VALIDATE_RATE,
+        'ip',
+        ip,
+        LIMITS.perIpPerMinute,
+        60
+      );
   if (!perIp.ok) {
     return failure(
       'rate-limited',

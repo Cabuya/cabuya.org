@@ -185,13 +185,23 @@ describe('the endpoints this site does not have stay undocumented', () => {
    */
   it.each([
     ['public/.well-known/openid-configuration', 'no OIDC provider exists'],
-    ['public/.well-known/oauth-authorization-server', 'no OAuth server exists'],
-    [
-      'public/.well-known/oauth-protected-resource',
-      'nothing here is protected — every read is public',
-    ],
   ])('%s is absent — %s', (path) => {
     expect(existsSync(join(ROOT, path))).toBe(false);
+  });
+
+  it('the OAuth documents exist — because the endpoints do', () => {
+    /* Formerly pinned absent. The flip happened the day functions/oauth/
+       shipped: the credential is real, and what it buys is a rate tier,
+       never content. */
+    for (const path of [
+      'public/.well-known/oauth-authorization-server',
+      'public/.well-known/oauth-protected-resource',
+      'public/.well-known/jwks.json',
+      'functions/oauth/register.ts',
+      'functions/oauth/token.ts',
+    ]) {
+      expect(existsSync(join(ROOT, path)), path).toBe(true);
+    }
   });
 
   it('the MCP server card exists — because the server does', () => {
@@ -248,14 +258,8 @@ describe('auth.md documents the absence of authentication, not an invented flow'
   });
 
   it('states, for each document it does not serve, why not', () => {
-    for (const absent of [
-      '/.well-known/openid-configuration',
-      '/.well-known/oauth-authorization-server',
-      '/.well-known/oauth-protected-resource',
-    ]) {
-      expect(auth, absent).toContain(absent);
-    }
-    expect(auth).toContain('There is no authentication');
+    expect(auth).toContain('/.well-known/openid-configuration');
+    expect(auth).toContain('There is no authentication required to read');
   });
 });
 
