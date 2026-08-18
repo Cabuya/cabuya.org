@@ -178,7 +178,11 @@ jobs:
       # about 0.03 on a shared runner, and a gate that flakes on a PR is a gate
       # people learn to ignore. The deterministic half of the contract is
       # `perf:budgets`, which is blocking everywhere.
-      - name: Performance — Lighthouse CI on the eight representative routes
+      # Two routes, by decision: this was the slowest step in the job at ~5
+      # minutes over eight. The deterministic budgets (perf:budgets) still
+      # cover every route above; the eight-route Lighthouse run stays
+      # available as `pnpm run lighthouse:full`.
+      - name: Performance — Lighthouse CI on two routes (home + quickstart)
         run: pnpm run lighthouse
         continue-on-error: ${{ github.event_name == 'pull_request' }}
 
