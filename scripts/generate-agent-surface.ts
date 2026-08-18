@@ -25,13 +25,14 @@
  * ## The one thing this file must never do
  *
  * Advertise something that is not there. The scanner at isitagentready.com also
- * asks for `/.well-known/openid-configuration`,
- * `/.well-known/oauth-protected-resource` and an MCP server card, and this site
- * publishes none of them **because it has no OAuth issuer, no protected
- * resource and no deployed MCP server** — `/developers/mcp` says so in its first
- * paragraph. Publishing those documents would score four more points and would
- * be a lie in a machine-readable format, which is the worst kind. `auth.md`
- * states the absence instead; that is the honest answer to the same question.
+ * asks for `/.well-known/openid-configuration` and
+ * `/.well-known/oauth-protected-resource`, and this site publishes neither
+ * **because it has no OAuth issuer and no protected resource**. Publishing
+ * them would score two more points and would be a lie in a machine-readable
+ * format, which is the worst kind. `auth.md` states the absence instead; that
+ * is the honest answer to the same question. (The MCP server card stopped
+ * being on this list the day `functions/mcp.ts` deployed — the rule was never
+ * "no card"; it was "no card without a server".)
  */
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -112,6 +113,7 @@ function buildAuthMd(): string {
     '| Endpoint | Method | What it does | Limits |',
     '|---|---|---|---|',
     `| [\`/api/validate\`](${url('/developers/validator')}) | POST | Validates a manifest or feed and returns findings with stable check ids | ${LIMITS.perIpPerMinute}/minute per caller · ${LIMITS.perHostPerHour}/hour per probed host |`,
+    `| [\`/mcp\`](${url('/developers/mcp')}) | POST | MCP server (Streamable HTTP, stateless): the validate tool and the read-as-Markdown tool over JSON-RPC | same limits as \`/api/validate\` for the validate tool |`,
     `| [\`/badge/{publisher}.svg\`](${url('/registry')}) | GET | The measured badge for a registry entry | none |`,
     `| [\`/openapi.json\`](${url('/openapi.json')}) | GET | OpenAPI 3.1 description of the above | none |`,
     `| [\`/.well-known/api-catalog\`](${url('/.well-known/api-catalog')}) | GET | RFC 9727 link set for the same API | none |`,
@@ -147,11 +149,11 @@ function buildAuthMd(): string {
     '| `/.well-known/openid-configuration` | No OpenID Provider exists. There is nothing to sign in to. |',
     '| `/.well-known/oauth-authorization-server` | No OAuth authorization server exists. |',
     '| `/.well-known/oauth-protected-resource` | Nothing here is a protected resource. Every byte is public. |',
-    `| \`/.well-known/mcp/server-card.json\` | The reference MCP server is [specified and not deployed](${url('/developers/mcp')}). It ships when at least two live conforming feeds exist to federate over. |`,
     '',
     'Each of those would raise an automated score and would describe infrastructure',
     'that does not exist. If any of them appears here later, it will be because the',
-    'thing itself does.',
+    'thing itself does — as happened with the MCP server card below, on the day',
+    'the server it describes was deployed.',
     '',
     '## The protocol, not this site',
     '',
@@ -392,6 +394,43 @@ function buildIndex(skill: string, adoptSkill: string): string {
   )}\n`;
 }
 
+// ── The MCP server card (SEP-1649) ────────────────────────
+
+/**
+ * Describes the server `functions/mcp.ts` actually runs — same names, same
+ * schemas, same version string, asserted against that file by
+ * `tests/unit/lib/agent-surface.test.ts` so the card cannot drift from the
+ * endpoint. This file exists because the server does; the day it appeared is
+ * the day the deployment did.
+ */
+function buildServerCard(): string {
+  return `${JSON.stringify(
+    {
+      serverInfo: {
+        name: 'cabuya-org',
+        title: 'cabuya.org site tools',
+        version: '0.1.0',
+        description:
+          'The two public tools of cabuya.org over MCP: validate a published Cabuya manifest or feed (conformance is measured, never declared — this is the measurement), and read any page of the site as Markdown. This is the site server, not the network-level federation server, which is specified and not deployed.',
+        websiteUrl: url('/'),
+      },
+      transport: {
+        type: 'streamable-http',
+        endpoint: url('/mcp'),
+      },
+      capabilities: { tools: {} },
+      tools: [
+        { name: 'validate_cabuya_feed' },
+        { name: 'read_cabuya_page_as_markdown' },
+      ],
+      authentication: { type: 'none' },
+      documentation: url('/developers/mcp'),
+    },
+    null,
+    2
+  )}\n`;
+}
+
 // ── Write or check ────────────────────────────────────────
 
 const skill = buildSkill();
@@ -405,6 +444,10 @@ const outputs: Array<{ file: string; contents: string }> = [
     contents: buildIndex(skill, adoptSkill),
   },
   { file: 'public/auth.md', contents: buildAuthMd() },
+  {
+    file: 'public/.well-known/mcp/server-card.json',
+    contents: buildServerCard(),
+  },
 ];
 
 if (check) {

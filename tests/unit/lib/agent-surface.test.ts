@@ -84,13 +84,53 @@ describe('auth.md', () => {
       '/.well-known/openid-configuration',
       '/.well-known/oauth-authorization-server',
       '/.well-known/oauth-protected-resource',
-      '/.well-known/mcp/server-card.json',
     ]) {
       expect(auth, absent).toContain(absent);
       expect(
         existsSync(join(ROOT, `public${absent}`)),
         `${absent} must not be served while the thing it describes does not exist`
       ).toBe(false);
+    }
+  });
+});
+
+describe('the MCP server card', () => {
+  /*
+   * The card left the deliberately-absent list on the day functions/mcp.ts
+   * was deployed — the rule was never "no card"; it was "no card without a
+   * server". These assertions keep the card honest against the endpoint's
+   * own source, so the two cannot drift apart.
+   */
+  const CARD = 'public/.well-known/mcp/server-card.json';
+  const card = JSON.parse(read(CARD));
+  const server = read('functions/mcp.ts');
+
+  it('describes the server that is actually deployed', () => {
+    expect(card.transport.endpoint).toBe('https://cabuya.org/mcp');
+    expect(card.transport.type).toBe('streamable-http');
+    expect(existsSync(join(ROOT, 'functions/mcp.ts'))).toBe(true);
+  });
+
+  it('names exactly the tools the endpoint serves, and its version', () => {
+    const names = card.tools.map((tool: { name: string }) => tool.name);
+    expect(names).toEqual([
+      'validate_cabuya_feed',
+      'read_cabuya_page_as_markdown',
+    ]);
+    for (const name of names) expect(server).toContain(`'${name}'`);
+    expect(server).toContain(`SERVER_VERSION = '${card.serverInfo.version}'`);
+  });
+
+  it('claims no authentication, which matches auth.md', () => {
+    expect(card.authentication.type).toBe('none');
+  });
+
+  it('does not claim the federation server', () => {
+    /* The site server and the network-level server are different things,
+       and the card must say which one it is. */
+    expect(card.serverInfo.description).toContain('not the network-level');
+    for (const federationTool of ['list_publishers', 'search_places']) {
+      expect(JSON.stringify(card)).not.toContain(federationTool);
     }
   });
 });

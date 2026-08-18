@@ -39,6 +39,7 @@ const strict = process.argv.includes('--strict');
  */
 const GUARDED = [
   'functions/api/validate.ts',
+  'functions/mcp.ts',
   'functions/lib/ssrf-guard.ts',
   'functions/api/contact.ts',
 ];

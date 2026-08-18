@@ -190,12 +190,19 @@ describe('the endpoints this site does not have stay undocumented', () => {
       'public/.well-known/oauth-protected-resource',
       'nothing here is protected — every read is public',
     ],
-    [
-      'public/.well-known/mcp/server-card.json',
-      'the MCP server is specified and not deployed',
-    ],
   ])('%s is absent — %s', (path) => {
     expect(existsSync(join(ROOT, path))).toBe(false);
+  });
+
+  it('the MCP server card exists — because the server does', () => {
+    /* This path lived in the absent list above until functions/mcp.ts was
+       deployed. The rule was never "no card"; it was "no card without a
+       server" — so the card and the endpoint are asserted together, and
+       removing either should fail this test. */
+    expect(
+      existsSync(join(ROOT, 'public/.well-known/mcp/server-card.json'))
+    ).toBe(true);
+    expect(existsSync(join(ROOT, 'functions/mcp.ts'))).toBe(true);
   });
 });
 
@@ -245,7 +252,6 @@ describe('auth.md documents the absence of authentication, not an invented flow'
       '/.well-known/openid-configuration',
       '/.well-known/oauth-authorization-server',
       '/.well-known/oauth-protected-resource',
-      '/.well-known/mcp/server-card.json',
     ]) {
       expect(auth, absent).toContain(absent);
     }

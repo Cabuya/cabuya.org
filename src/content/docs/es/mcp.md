@@ -1,17 +1,16 @@
 ---
 title: Servidor MCP
-description: El servidor MCP de referencia está especificado y no desplegado. Qué expondrá, la frontera que no debe cruzar y la condición de dos feeds que lo habilita.
+description: cabuya.org corre un servidor MCP con sus dos herramientas — validar un feed y leer páginas como Markdown. El servidor de federación sigue sin desplegar.
 section: consuming
 order: 1
-updated: 2026-08-17
+updated: 2026-08-18
 ---
 
-> **Estado: especificado, no desplegado.** Todavía no existe ningún endpoint.
-> Sale cuando existan al menos dos feeds conformes en vivo sobre los cuales
-> federar, y no antes — [por qué, más abajo](#por-que-todavia-no-esta-construido).
-> Nada en esta página describe software en ejecución. Describe un contrato al que
-> nos comprometimos, para que cualquiera que construya sobre el protocolo pueda
-> ver hacia dónde va la superficie para agentes.
+> **Estado del servidor de red: especificado, no desplegado.** Sale cuando
+> existan al menos dos feeds conformes en vivo sobre los cuales federar, y no
+> antes. Lo que sí corre hoy es más pequeño y distinto: el servidor propio de
+> cabuya.org, descrito primero, que sirve las dos herramientas públicas del
+> sitio y nada de la red.
 
 MCP es una **capa opcional por encima del protocolo, nunca el piso de
 conformidad** ([§4.5](/es/developers/spec/0.1/4-api-surface#4-5)). Una
@@ -20,6 +19,23 @@ referencia es una comodidad que la iniciativa ejecuta sobre la red, no una quint
 cosa que implementar.
 
 ## La frontera que no debe cruzar
+
+## Qué está desplegado hoy
+
+cabuya.org sirve un servidor MCP pequeño en `https://cabuya.org/mcp`
+(Streamable HTTP, sin estado, sin autenticación — no hay, por diseño;
+lo declara `/auth.md`). Expone exactamente las dos herramientas que cada página ya ofrece en
+el navegador vía WebMCP:
+
+| Herramienta | Qué hace |
+|---|---|
+| `validate_cabuya_feed` | Corre el validador público contra la URL de un manifiesto o feed — el mismo endpoint, los mismos límites, la misma retención cero |
+| `read_cabuya_page_as_markdown` | Devuelve cualquier página de este sitio como su gemelo Markdown completo |
+
+Su tarjeta está en `/.well-known/mcp/server-card.json`. Esa
+es toda la superficie: **este es el servidor del sitio, no el servidor de red
+que esta página describe abajo** — nunca toca el registro, nunca consulta a un
+publicador, y nunca le crecerán herramientas de federación bajo este endpoint.
 
 Hay dos tipos de servidor MCP en este ecosistema, y confundirlos desharía el
 sentido del protocolo.
