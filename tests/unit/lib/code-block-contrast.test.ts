@@ -23,6 +23,8 @@ import { describe, expect, it } from 'vitest';
 import { contrastRatio } from '@/lib/contrast';
 
 const DIST = join(process.cwd(), 'dist');
+/** Where the build writes its stylesheets. */
+const BUILT_CSS = join(DIST, '_astro');
 
 /**
  * The two backgrounds a code block sits on.
@@ -58,11 +60,12 @@ function htmlFiles(dir = DIST, out: string[] = []): string[] {
  */
 function overrides(tokens: Record<string, string>): Map<string, string> {
   const map = new Map<string, string>();
+  if (!existsSync(BUILT_CSS)) return map;
   const sources = [
     ...htmlFiles().map((file) => readFileSync(file, 'utf-8')),
-    ...readdirSync(join(DIST, '_astro'))
+    ...readdirSync(BUILT_CSS)
       .filter((file) => file.endsWith('.css'))
-      .map((file) => readFileSync(join(DIST, '_astro', file), 'utf-8')),
+      .map((file) => readFileSync(join(BUILT_CSS, file), 'utf-8')),
   ];
 
   for (const source of sources) {
@@ -81,9 +84,10 @@ function overrides(tokens: Record<string, string>): Map<string, string> {
 
 /** `--color-cabuya-*` values as the build declared them. */
 function builtTokens(): Record<string, string> {
-  const css = readdirSync(join(DIST, '_astro'))
+  if (!existsSync(BUILT_CSS)) return {};
+  const css = readdirSync(BUILT_CSS)
     .filter((file) => file.endsWith('.css'))
-    .map((file) => readFileSync(join(DIST, '_astro', file), 'utf-8'))
+    .map((file) => readFileSync(join(BUILT_CSS, file), 'utf-8'))
     .join('\n');
 
   const tokens: Record<string, string> = {};
@@ -118,7 +122,17 @@ function codeColours(): Map<string, string> {
   return found;
 }
 
-describe.skipIf(!existsSync(DIST))('syntax highlighting contrast', () => {
+/*
+ * Guarded on `dist/_astro`, not on `dist`, because that is the directory
+ * `builtTokens` reads — and guarded twice.
+ *
+ * `describe.skipIf` marks the registered tests as skipped; it does not stop
+ * the callback body from running during collection. `builtTokens()` is called
+ * there, so an absent directory threw `ENOENT` before a single test was
+ * evaluated, and the whole file failed rather than skipping. CI runs the unit
+ * tests before the build, so that was every CI run.
+ */
+describe.skipIf(!existsSync(BUILT_CSS))('syntax highlighting contrast', () => {
   const colours = codeColours();
   const tokens = builtTokens();
   const redirected = overrides(tokens);

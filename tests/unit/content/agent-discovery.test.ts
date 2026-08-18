@@ -143,12 +143,35 @@ describe('the API catalog points at real routes', () => {
       .filter((path) => /\.(json|txt)$/.test(path));
 
     for (const path of staticTargets) {
-      const served =
-        existsSync(join(ROOT, 'public', path)) ||
-        existsSync(join(ROOT, 'dist', path));
+      /*
+       * Checked against the source, never against `dist/`. CI runs the unit
+       * tests before the build, so a `dist/` assertion passes only on a
+       * machine that already built — which is how the first version of this
+       * test went green here and red on every CI run.
+       *
+       * `/schemas/{version}/{file}` is produced from the bounded spec
+       * directory by `src/pages/schemas/[version]/[...file].ts`. Asserting the
+       * schema file and the route that emits it is stronger than asserting a
+       * build artifact: it fails when the source of truth moves, not when
+       * somebody forgot to build.
+       */
+      const schema = path.match(/^\/schemas\/([^/]+)\/(.+)$/);
+      if (schema) {
+        const [, version, file] = schema;
+        expect(
+          existsSync(join(ROOT, 'spec', 'schemas', version, file)),
+          `the catalog names ${path}, and spec/schemas/${version}/${file} does not exist`
+        ).toBe(true);
+        expect(
+          existsSync(join(ROOT, 'src/pages/schemas/[version]/[...file].ts')),
+          `the catalog names ${path}, and the route that serves it is gone`
+        ).toBe(true);
+        continue;
+      }
+
       expect(
-        served,
-        `the catalog names ${path}, which is neither in public/ nor produced into dist/`
+        existsSync(join(ROOT, 'public', path)),
+        `the catalog names ${path}, which is not in public/`
       ).toBe(true);
     }
   });
