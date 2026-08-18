@@ -250,9 +250,7 @@ describe('the adopt skill', () => {
     const urls = skill.match(/https:\/\/cabuya\.org[a-zA-Z0-9/._-]*/g) ?? [];
     expect(urls.length).toBeGreaterThan(0);
     for (const target of urls) {
-      const [first = ''] = new URL(target).pathname
-        .split('/')
-        .filter(Boolean);
+      const [first = ''] = new URL(target).pathname.split('/').filter(Boolean);
       expect(known.has(first), `${target} is outside KNOWN_PATHS`).toBe(true);
     }
   });
