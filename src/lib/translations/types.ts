@@ -122,12 +122,8 @@ export interface SiteTranslations {
     neutralBody: string;
     neutralSecond: string;
     verbTitle: string;
-    verbIdiom: string;
-    verbGloss: string;
     verbBody: string;
     downsideTitle: string;
-    downsideIdiom: string;
-    downsideGloss: string;
     downsideBody: string;
     notTakenTitle: string;
     notTakenBody: string;

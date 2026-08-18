@@ -37,22 +37,8 @@ export function aboutSections(lang: Language): MarkdownSection[] {
       heading: t.about.neutralTitle,
       lines: [t.about.neutralBody, '', t.about.neutralSecond],
     },
-    {
-      heading: t.about.verbTitle,
-      lines: [
-        `**${t.about.verbIdiom}** — ${t.about.verbGloss}`,
-        '',
-        t.about.verbBody,
-      ],
-    },
-    {
-      heading: t.about.downsideTitle,
-      lines: [
-        `**${t.about.downsideIdiom}** — ${t.about.downsideGloss}`,
-        '',
-        t.about.downsideBody,
-      ],
-    },
+    { heading: t.about.verbTitle, lines: [t.about.verbBody] },
+    { heading: t.about.downsideTitle, lines: [t.about.downsideBody] },
     { heading: t.about.notTakenTitle, lines: [t.about.notTakenBody] },
     {
       heading: t.about.outlivesTitle,
