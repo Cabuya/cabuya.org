@@ -1,16 +1,16 @@
 ---
 title: MCP server
-description: The reference MCP server is specified and not yet deployed. What it will expose, the boundary it must not cross, and the two-feed condition that gates it.
+description: cabuya.org runs a small MCP server with its two tools — validate a feed, read any page as Markdown. The network federation server stays undeployed.
 section: consuming
 order: 1
-updated: 2026-08-17
+updated: 2026-08-18
 ---
 
-> **Status: specified, not deployed.** No endpoint exists yet. It ships when at
+> **Status of the network server: specified, not deployed.** It ships when at
 > least two live conforming feeds exist to federate over, and not before —
-> [why below](#why-it-is-not-built-yet). Nothing on this page describes running
-> software. It describes a contract we have committed to, so that anyone
-> building against the protocol can see where the agent surface is going.
+> [why below](#why-it-is-not-built-yet). What *is* running today is smaller
+> and different: cabuya.org's own site server, described first, which serves
+> the site's two public tools and nothing of the network.
 
 MCP is an **optional layer above the protocol, never the conformance floor**
 ([§4.5](/developers/spec/0.1/4-api-surface#4-5)). An application at L2 is
@@ -19,6 +19,24 @@ is a convenience the initiative runs over the network, not a fifth thing to
 implement.
 
 ## The boundary it must not cross
+
+## What is deployed today
+
+cabuya.org itself serves a small MCP server at `https://cabuya.org/mcp`
+(Streamable HTTP, stateless, no authentication — [there is
+none](/auth.md), by design). It exposes exactly the two tools every page
+already offers browser-side through WebMCP:
+
+| Tool | What it does |
+|---|---|
+| `validate_cabuya_feed` | Runs the public validator against a manifest or feed URL — the same endpoint, the same rate limits, the same zero retention |
+| `read_cabuya_page_as_markdown` | Returns any page of this site as its complete Markdown twin |
+
+Its card is at
+[`/.well-known/mcp/server-card.json`](/.well-known/mcp/server-card.json). That
+is the whole surface: **this is the site server, not the network server this
+page describes below** — it never touches the registry, never queries a
+publisher, and never will grow federation tools under this endpoint.
 
 There are two kinds of MCP server in this ecosystem and confusing them would
 undo the point of the protocol.

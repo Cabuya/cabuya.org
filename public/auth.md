@@ -12,6 +12,7 @@ credential it will not find.
 | Endpoint | Method | What it does | Limits |
 |---|---|---|---|
 | [`/api/validate`](https://cabuya.org/developers/validator) | POST | Validates a manifest or feed and returns findings with stable check ids | 10/minute per caller · 60/hour per probed host |
+| [`/mcp`](https://cabuya.org/developers/mcp) | POST | MCP server (Streamable HTTP, stateless): the validate tool and the read-as-Markdown tool over JSON-RPC | same limits as `/api/validate` for the validate tool |
 | [`/badge/{publisher}.svg`](https://cabuya.org/registry) | GET | The measured badge for a registry entry | none |
 | [`/openapi.json`](https://cabuya.org/openapi.json) | GET | OpenAPI 3.1 description of the above | none |
 | [`/.well-known/api-catalog`](https://cabuya.org/.well-known/api-catalog) | GET | RFC 9727 link set for the same API | none |
@@ -47,11 +48,11 @@ site does not serve them:
 | `/.well-known/openid-configuration` | No OpenID Provider exists. There is nothing to sign in to. |
 | `/.well-known/oauth-authorization-server` | No OAuth authorization server exists. |
 | `/.well-known/oauth-protected-resource` | Nothing here is a protected resource. Every byte is public. |
-| `/.well-known/mcp/server-card.json` | The reference MCP server is [specified and not deployed](https://cabuya.org/developers/mcp). It ships when at least two live conforming feeds exist to federate over. |
 
 Each of those would raise an automated score and would describe infrastructure
 that does not exist. If any of them appears here later, it will be because the
-thing itself does.
+thing itself does — as happened with the MCP server card below, on the day
+the server it describes was deployed.
 
 ## The protocol, not this site
 

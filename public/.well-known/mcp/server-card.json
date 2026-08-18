@@ -1,0 +1,28 @@
+{
+  "serverInfo": {
+    "name": "cabuya-org",
+    "title": "cabuya.org site tools",
+    "version": "0.1.0",
+    "description": "The two public tools of cabuya.org over MCP: validate a published Cabuya manifest or feed (conformance is measured, never declared — this is the measurement), and read any page of the site as Markdown. This is the site server, not the network-level federation server, which is specified and not deployed.",
+    "websiteUrl": "https://cabuya.org/"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://cabuya.org/mcp"
+  },
+  "capabilities": {
+    "tools": {}
+  },
+  "tools": [
+    {
+      "name": "validate_cabuya_feed"
+    },
+    {
+      "name": "read_cabuya_page_as_markdown"
+    }
+  ],
+  "authentication": {
+    "type": "none"
+  },
+  "documentation": "https://cabuya.org/developers/mcp"
+}
