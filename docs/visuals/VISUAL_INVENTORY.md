@@ -52,6 +52,18 @@
 | `/join` header | **illustration** | `RG-03` the added strand | The funnel's one warm image |
 | `/rfcs`, `/changelog` | **skip** | — | Indexes. They should look like indexes |
 
+## Why Cabuya (`/about`, `/es/about`)
+
+| Slot | Class | Asset / component | Notes |
+|------|-------|-------------------|-------|
+| Hero, right column | **illustration** | `AB-01` the fique plant | A specimen plate, not a motif: the page's first claim is that the name comes from a real plant. `hidden` below `lg` |
+| *It is made, not found* | **illustration** | `AB-02` leaf to fibre to cord | The metaphor is exact, and this is the proof of it |
+| *A name that belongs to nobody* | **illustration** | `AB-03` five cords, no centre | Neutrality drawn as a shape — no strand is the hub |
+| *«Coger la cabuya»* | **illustration** | `AB-04` the open bight | A loop held open and offered, which is what the idiom means |
+| *Estar en la cabuya* (the downside) | **skip** | — | The honest cost of the name. Illustrating a jam would make a joke of the one section that exists to be unflattering |
+| *What we did not take* (Aluna) | **skip** | — | It names a sacred concept of living peoples in order to say it is not ours to use. Any drawing beside it would do the appropriating the section refuses |
+| Where the plant grows | **skip** | — | No maps, no flags, no borders — a fact about a plant must not become a territorial claim (prompts/README §06) |
+
 ## Machine and utility surfaces
 
 | Slot | Class | Asset | Notes |
@@ -69,9 +81,9 @@
 
 | Class | Count |
 |---|---|
-| Illustrations, all generated and integrated | **13** (2 flagship, 5 high, 4 medium, 2 low) + the two share cards |
+| Illustrations, all generated and integrated | **17** (3 flagship, 7 high, 5 medium, 2 low) + the two share cards |
 | Diagram components | 8 (all built) |
-| Deliberate skip decisions | 10 (covering 15 surfaces — some rows group a family of pages) |
+| Deliberate skip decisions | 13 (covering 18 surfaces — some rows group a family of pages) |
 
 Thirteen generated images for a site with thirty-odd surfaces, against ten
 skip decisions covering fifteen of them. That ratio is the point: each image has to earn its place, and

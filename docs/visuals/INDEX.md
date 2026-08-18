@@ -1,6 +1,6 @@
 # Illustration prompt pack — index
 
-> The founder generates the artwork; this pack is the brief. Thirteen prompts,
+> The founder generates the artwork; this pack is the brief. Seventeen prompts,
 > each self-contained: hand the **Prompt** field to an image agent with no other
 > context and the result should be usable.
 >
@@ -31,12 +31,16 @@ one fique-gold strand per image. Wordless, always.
 | RG-01 | Registry: the woven net | `/registry` | high | 1.43:1 | transparent¹ | **integrated** |
 | RG-02 | Governance: hands and cords | `/governance` | medium | 1.58:1 | transparent¹ | **integrated** |
 | RG-03 | Join: the added strand | `/join` | medium | 1.76:1 | transparent¹ | **integrated** |
+| **AB-01** | The fique plant | `/about` hero | **flagship** | 0.74:1 | transparent | **integrated** |
+| AB-02 | Leaf to fibre to cord | `/about` | high | 2.68:1⁵ | transparent | **integrated** |
+| AB-03 | Five cords, no centre | `/about` | high | 1.01:1 | transparent | **integrated** |
+| AB-04 | The open bight | `/about` | medium | 2.13:1⁵ | transparent | **integrated** |
 | MK-01 | 404: the re-tied thread | 404 page | medium | 4.78:1 | transparent | **integrated** |
 | MK-02 | Empty state: the waiting thread | `EmptyState.astro` + registry note | low | 1.53:1 | transparent | **integrated** |
 | MK-03 | Section ornament | landing, 3× | low | 15:1 | transparent | **integrated** |
 | OG-02 | Per-section share cards | section `og:image` | low | 1200 × 630 | light only | deferred³ |
 
-**All thirteen illustrations and the share cards are live.** The whole pack is
+**All seventeen illustrations and the share cards are live.** The whole pack is
 placed through one component (`src/components/editorial/Illustration.astro`) and
 one registry (`src/lib/illustrations.ts`), converted by
 `scripts/build-illustrations.mjs`, and held by two gates:
@@ -79,6 +83,14 @@ back. The wordless master exists and is what to fall back to.
 five things to keep consistent for a benefit nobody has measured. The mechanism
 is already built — `SECTION_CARDS` in `src/lib/og-image.ts` is an empty map with
 a comment explaining how to fill it — so the artwork is the only missing piece.
+
+⁵ **AB-02 and AB-04 came back much wider than their entries brief.** Both ask
+for 3:2 and both were drawn as long horizontal bands — 2.68:1 and 2.13:1. They
+are kept rather than regenerated: the subject of each is a *sequence* read left
+to right (leaf → loose fibre → twist → cord; and a bight offered along a running
+line), and a band is the honest shape for that. The layout absorbs it, since both
+sit full-width under their prose rather than beside it. Recorded here because the
+entry and the file disagree, and the file is what ships.
 
 ⁴ HP-01 ships two framings of one drawing, chosen by width through a `media`
 source: flush at the top for `lg` and up, where the rope descends out of the site

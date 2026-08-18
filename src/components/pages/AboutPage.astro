@@ -12,13 +12,12 @@
  * Every figure here is sourced. `docs/context/BRAND_AND_NAMING.md` carries the
  * naming analysis and the dictionary references behind the two idioms.
  *
- * Illustrations are `docs/visuals/` pack 06 and are not yet generated; each
- * slot renders only when its file exists, so the page ships complete either
- * way rather than showing a placeholder.
+ * The four illustrations are `docs/visuals/` pack 06, placed through the same
+ * component and registry as every other asset on the site — which is what keeps
+ * their declared boxes measured by `illustrations.test.ts` and their delivery
+ * measured by `illustrations:check` at fifteen viewports.
  */
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-
+import Illustration from '@/components/editorial/Illustration.astro';
 import PageSection from '@/components/pages/PageSection.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { getUrlPrefix, type Language } from '@/lib/i18n';
@@ -31,17 +30,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = getTranslations(lang);
 const prefix = getUrlPrefix(lang);
-
-/** A visual renders only once its file is on disk — never a grey box. */
-const art = (name: string): string | null => {
-  const path = `/images/visuals/about/${name}.webp`;
-  return existsSync(join(process.cwd(), 'public', path.slice(1))) ? path : null;
-};
-
-const plant = art('fique-plant');
-const leafToFibre = art('leaf-to-fibre');
-const splice = art('splice-no-centre');
-const bight = art('the-bight');
 ---
 
 <MainLayout
@@ -59,18 +47,11 @@ const bight = art('the-bight');
           {t.about.lead}
         </p>
       </div>
-      {
-        plant && (
-          <img
-            src={plant}
-            alt=""
-            width="560"
-            height="700"
-            class="hidden w-[22rem] justify-self-end lg:block"
-            loading="eager"
-          />
-        )
-      }
+      <Illustration
+        id="about-fique-plant"
+        class="hidden w-[22rem] justify-self-end lg:block"
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -89,18 +70,10 @@ const bight = art('the-bight');
         {t.about.metaphorSecond}
       </p>
     </div>
-    {
-      leafToFibre && (
-        <img
-          src={leafToFibre}
-          alt=""
-          width="720"
-          height="480"
-          class="mt-10 w-full max-w-3xl"
-          loading="lazy"
-        />
-      )
-    }
+    <Illustration
+      id="about-leaf-to-fibre"
+      class="mt-10 w-full max-w-3xl"
+    />
   </PageSection>
 
   <PageSection title={t.about.neutralTitle}>
@@ -109,18 +82,10 @@ const bight = art('the-bight');
         <p>{t.about.neutralBody}</p>
         <p class="mt-5">{t.about.neutralSecond}</p>
       </div>
-      {
-        splice && (
-          <img
-            src={splice}
-            alt=""
-            width="560"
-            height="560"
-            class="w-full max-w-sm justify-self-end"
-            loading="lazy"
-          />
-        )
-      }
+      <Illustration
+        id="about-splice-no-centre"
+        class="w-full max-w-sm justify-self-end"
+      />
     </div>
   </PageSection>
 
@@ -132,18 +97,7 @@ const bight = art('the-bight');
       <p class="mt-1 text-cabuya-text-muted">{t.about.verbGloss}</p>
       <p class="mt-5">{t.about.verbBody}</p>
     </div>
-    {
-      bight && (
-        <img
-          src={bight}
-          alt=""
-          width="720"
-          height="480"
-          class="mt-10 w-full max-w-3xl"
-          loading="lazy"
-        />
-      )
-    }
+    <Illustration id="about-the-bight" class="mt-10 w-full max-w-3xl" />
   </PageSection>
 
   <PageSection title={t.about.downsideTitle}>

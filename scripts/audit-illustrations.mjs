@@ -105,6 +105,23 @@ const SURFACES = [
   },
   { url: '/developers/validator/', expect: ['validator-gauge'] },
   { url: '/developers/skill/', expect: ['skill-handover'] },
+  {
+    url: '/about/',
+    expect: [
+      'about-fique-plant',
+      'about-leaf-to-fibre',
+      'about-splice-no-centre',
+      'about-the-bight',
+    ],
+    /*
+     * The plant is `hidden` below `lg` on purpose — a 352 px botanical plate
+     * stacked under the hero copy on a phone is a thumbnail of itself, and the
+     * three cordage drawings carry the page there. Declared rather than left to
+     * the visibility rule, so the *other* three staying visible is still a
+     * requirement at every width.
+     */
+    rules: { 'about-fique-plant': { fromWidth: 1024 } },
+  },
   { url: '/registry/', expect: ['registry-net', 'empty-coil'] },
   { url: '/governance/', expect: ['governance-hands'] },
   { url: '/join/', expect: ['join-splice'] },
@@ -300,6 +317,8 @@ async function runJob({ viewport, theme }) {
           continue;
         }
 
+        const rule = surface.rules?.[id];
+
         const hidden =
           art.display === 'none' ||
           art.visibility === 'hidden' ||
@@ -307,6 +326,18 @@ async function runJob({ viewport, theme }) {
           art.width === 0 ||
           art.height === 0;
         if (hidden) {
+          /*
+           * `fromWidth` declares a drawing desktop-only, and below it a hidden
+           * element is the design rather than the defect this check exists for.
+           *
+           * It is a narrow exemption on purpose: the asset must still be in the
+           * DOM and must still have decoded, both already asserted above, and at
+           * `fromWidth` and up every rule below applies to it unchanged. The
+           * failure the check was written for — a drawing that disappears on a
+           * phone because nobody looked — is only excused where a surface says
+           * out loud that it meant to.
+           */
+          if (rule?.fromWidth && viewport.width < rule.fromWidth) continue;
           record('invisible', {
             ...where,
             id,
@@ -340,7 +371,6 @@ async function runJob({ viewport, theme }) {
            clipping, not to a minimum width. */
         const isMark = id === 'ornament-braid' || id === 'empty-coil';
         if (!isMark) {
-          const rule = surface.rules?.[id];
           if (
             rule?.minFoldShare &&
             viewport.width >= (rule.fromWidth ?? 0) &&
