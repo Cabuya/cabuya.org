@@ -147,6 +147,58 @@ export const en: SiteTranslations = {
     specStatus: 'Specification 0.1',
   },
 
+  about: {
+    metaTitle: 'Why Cabuya — what the name commits us to',
+    metaDescription:
+      'Cabuya is the rope fibre drawn from the fique plant. Why a shared format carries that name, and what it means for anyone deciding to implement it.',
+    title: 'Why Cabuya',
+    lead: 'A name is the first thing a protocol asks anyone to adopt, and it is a governance decision before it is a design one. Cabuya is the fibre you tie together what no one can carry alone. It belongs to nobody, which is the whole reason a shared format could be named after it.',
+
+    fibreTitle: 'Where the word comes from',
+    fibreBody:
+      'Cabuya is the fibre — and the rope made from it — drawn from the leaves of the fique plant, an agave relative that grows across the Andes and Central America. Colombia is the world’s largest grower of it.',
+    fibreSource:
+      'Recorded by the Real Academia Española and in the fique literature, checked against those sources on 2026-08-16.',
+    fibreSecond:
+      'Nobody invented it, licensed it or launched it. It is cheap, ordinary and load-bearing, and it has been holding things together far longer than any of the software now attached to it. Infrastructure is better named in that register than in the register of a campaign.',
+
+    metaphorTitle: 'What a rope actually does',
+    metaphorBody:
+      'A single fibre carries no load. Twisted together they carry what none of them could alone, and the twist is the only thing added. No fibre is replaced, none is improved, and none of them is in charge.',
+    metaphorSecond:
+      'That is the design, not a figure of speech. Two applications that can read each other’s data are not rebuilt, not merged and not subordinated — the connection is the only new thing. Each app is a thread. The protocol is the rope.',
+
+    neutralTitle: 'What you need from us to use it',
+    neutralBody:
+      'Nothing. There is no permission to request, no partnership to sign, no key to be issued and no conversation to have before you implement it. The specification is published and the validator is a program you can run yourself.',
+    neutralSecond:
+      'That is what the name buys. It is not an application’s, a company’s, a city’s or an event’s, so adopting it advertises nobody — and no later decision is allowed to take that back.',
+
+    verbTitle: 'Adoption already had a word',
+    verbBody:
+      'Spanish already had an expression for catching on to how something works — for picking up the thread of a matter — and the phrase for it, recorded by the Real Academia Española, is to catch the cabuya. A format whose verb of adoption already exists in the language of the region it starts in has one less thing to teach, and formats spread on what they do not have to explain.',
+
+    downsideTitle: 'What else the word means',
+    downsideBody:
+      'The same dictionaries record a second sense, used in Colombia and Ecuador: to be in the cabuya is to be in a jam you cannot easily get out of. We knew about it before choosing the name, and it is on this page rather than left for somebody else to find. We ask publishers to let a validator measure them in public, and a project that quietly kept the unflattering half of its own name would have no standing to ask.',
+
+    notTakenTitle: 'The name we did not take',
+    notTakenBody:
+      'Forty-seven candidates were examined. The one rejected first was never checked for availability at all: Aluna, the originating thought-force in Kogi and Arhuaco cosmology. It is the sacred concept of living peoples rather than an asset, and a project whose central rule is about what is not ours to collect does not get to help itself to their cosmology.',
+
+    outlivesTitle: 'What happens when the emergency ends',
+    outlivesBody:
+      'The protocol was written under pressure, and the need will outlast the pressure. A name tied to one emergency expires with the emergency, and a name tied to one country turns a format into a national programme — something other places join rather than simply use.',
+    outlivesSecond:
+      'The fibre grows across the Andes and Central America. The specification is CC0. Neither one asks permission to travel, which is what lets a city we have never spoken to pick this up and run it.',
+
+    ctaTitle: 'What the name commits us to',
+    ctaBody:
+      'All of it is checkable: a specification anyone can implement without asking, and a conformance level a published validator decides rather than the publisher. If the name is doing its job, none of that requires trusting us.',
+    ctaSpec: 'Read the specification',
+    ctaJoin: 'Take part',
+  },
+
   notFoundPage: {
     metaTitle: 'Page not found — Cabuya',
     title: 'This page does not exist',

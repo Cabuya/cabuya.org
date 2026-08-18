@@ -131,10 +131,52 @@ export const NAV_GROUPS: NavGroup[] = [
     status: 'live',
   },
   {
-    id: 'governance',
-    label: { en: 'Governance', es: 'Gobernanza' },
-    path: '/governance',
+    /*
+     * `About` rather than a seventh top-level entry.
+     *
+     * `/about`, `/governance` and `/trademark` answer the same question from
+     * three angles — who this belongs to — and each was reachable only from
+     * the footer or not at all. A seventh sibling would have crowded the row
+     * on a laptop and buried the newest page at the end of it; a disclosure
+     * keeps the row at six and gives the three a parent that names what they
+     * have in common.
+     *
+     * The group's own `path` is `/about`, so the label is a link on touch,
+     * where a hover disclosure has nothing to hover.
+     */
+    id: 'about',
+    label: { en: 'About', es: 'Acerca de' },
+    path: '/about',
     status: 'live',
+    children: [
+      {
+        label: { en: 'Why Cabuya', es: 'Por qué Cabuya' },
+        path: '/about',
+        status: 'live',
+        hint: {
+          en: 'Where the name comes from',
+          es: 'De dónde viene el nombre',
+        },
+      },
+      {
+        label: { en: 'Governance', es: 'Gobernanza' },
+        path: '/governance',
+        status: 'live',
+        hint: {
+          en: 'Who decides, and how',
+          es: 'Quién decide, y cómo',
+        },
+      },
+      {
+        label: { en: 'Trademark & badge', es: 'Marca e insignia' },
+        path: '/trademark',
+        status: 'live',
+        hint: {
+          en: 'What you may call your implementation',
+          es: 'Cómo puedes llamar tu implementación',
+        },
+      },
+    ],
   },
   {
     id: 'join',
@@ -211,6 +253,11 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     id: 'governance',
     label: { en: 'Governance', es: 'Gobernanza' },
     entries: [
+      {
+        label: { en: 'Why Cabuya', es: 'Por qué Cabuya' },
+        path: '/about',
+        status: 'live',
+      },
       {
         label: { en: 'Governance model', es: 'Modelo de gobernanza' },
         path: '/governance',

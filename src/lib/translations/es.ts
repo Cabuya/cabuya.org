@@ -138,6 +138,58 @@ export const es: SiteTranslations = {
     specStatus: 'Especificación 0.1',
   },
 
+  about: {
+    metaTitle: 'Por qué Cabuya — a qué nos compromete el nombre',
+    metaDescription:
+      'La cabuya es la fibra de cuerda que se saca del fique. Por qué un formato compartido lleva ese nombre, y qué significa para quien evalúe implementarlo.',
+    title: 'Por qué Cabuya',
+    lead: 'Un nombre es lo primero que un protocolo le pide adoptar a alguien, y es una decisión de gobernanza antes que de diseño. La cabuya es la fibra con la que se amarra lo que nadie puede cargar solo. No es de nadie, y esa es toda la razón por la que un formato compartido pudo llamarse así.',
+
+    fibreTitle: 'De dónde viene la palabra',
+    fibreBody:
+      'La cabuya es la fibra —y la cuerda que se hace con ella— que se saca de las hojas del fique, un pariente del agave que crece a lo largo de los Andes y Centroamérica. Colombia es el mayor productor de fique del mundo.',
+    fibreSource:
+      'Registrado por la Real Academia Española y en la literatura sobre el fique, verificado contra esas fuentes el 2026-08-16.',
+    fibreSecond:
+      'Nadie la inventó, ni la licenció, ni la lanzó. Es barata, corriente y capaz de cargar, y lleva sosteniendo cosas mucho más tiempo que cualquiera del software al que hoy está atada. La infraestructura se nombra mejor en ese registro que en el de una campaña.',
+
+    metaphorTitle: 'Qué hace realmente una cuerda',
+    metaphorBody:
+      'Una fibra sola no aguanta nada. Torcidas juntas cargan lo que ninguna soportaría por separado, y lo único que se agregó fue la torsión. Ninguna fibra se reemplaza, ninguna se mejora y ninguna manda sobre las demás.',
+    metaphorSecond:
+      'Eso es el diseño, no una figura. Dos aplicaciones que pueden leer los datos de la otra no se rehacen, no se fusionan y no quedan subordinadas: lo único nuevo es la conexión. Cada app es un hilo. El protocolo es la cuerda.',
+
+    neutralTitle: 'Qué necesitas de nosotros para usarlo',
+    neutralBody:
+      'Nada. No hay permiso que pedir, ni convenio que firmar, ni llave que te tengan que emitir, ni conversación previa a implementarlo. La especificación está publicada y el validador es un programa que puedes ejecutar tú.',
+    neutralSecond:
+      'Para eso sirve el nombre. No es el de una aplicación, ni de una empresa, ni de una ciudad, ni de un evento, así que adoptarlo no le hace publicidad a nadie — y ninguna decisión posterior puede deshacer eso.',
+
+    verbTitle: 'La adopción ya tenía palabra',
+    verbBody:
+      'El español ya tenía una expresión para entender cómo funciona algo, para ponerse al tanto de un asunto: «coger la cabuya», registrada por la Real Academia Española. Un formato cuyo verbo de adopción ya existe en el idioma de la región donde arranca tiene una cosa menos que enseñar, y los formatos se propagan por lo que no hay que explicar.',
+
+    downsideTitle: 'Qué más significa la palabra',
+    downsideBody:
+      'Los mismos diccionarios registran un segundo sentido, en uso en Colombia y Ecuador: «estar en la cabuya» es estar en un aprieto del que no se sale fácil. Lo conocíamos antes de elegir el nombre, y queda dicho aquí en vez de esperar a que alguien lo encuentre. Le pedimos a quien publica que deje que un validador lo mida en público, y un proyecto que se guardara calladamente la mitad incómoda de su propio nombre no tendría con qué pedirlo.',
+
+    notTakenTitle: 'El nombre que no tomamos',
+    notTakenBody:
+      'Se examinaron cuarenta y siete candidatos. El primero que se descartó ni siquiera se miró en disponibilidad: Aluna, la fuerza de pensamiento originaria en la cosmología kogi y arhuaca. Es el concepto sagrado de pueblos vivos y no un activo, y un proyecto cuya regla central trata sobre lo que no nos corresponde recoger no puede servirse de su cosmología.',
+
+    outlivesTitle: 'Qué pasa cuando la emergencia pase',
+    outlivesBody:
+      'El protocolo se escribió bajo presión, y la necesidad va a durar más que la presión. Un nombre atado a una emergencia caduca con ella, y uno atado a un país convierte el formato en un programa nacional: algo a lo que otros lugares se suman en vez de algo que simplemente usan.',
+    outlivesSecond:
+      'La fibra crece en los Andes y en Centroamérica. La especificación es CC0. Ninguna de las dos pide permiso para viajar, y eso es lo que permite que una ciudad con la que nunca hemos hablado tome esto y lo ponga a andar.',
+
+    ctaTitle: 'A qué nos compromete el nombre',
+    ctaBody:
+      'Todo se puede comprobar: una especificación que cualquiera implementa sin pedir permiso, y un nivel de conformidad que decide un validador publicado y no quien publica. Si el nombre hace su trabajo, nada de eso exige confiar en nosotros.',
+    ctaSpec: 'Leer la especificación',
+    ctaJoin: 'Participar',
+  },
+
   notFoundPage: {
     metaTitle: 'Página no encontrada — Cabuya',
     title: 'Esta página no existe',

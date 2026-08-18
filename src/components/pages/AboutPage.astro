@@ -1,0 +1,131 @@
+---
+/**
+ * `/about` — where the name comes from, and what it committed the project to.
+ *
+ * The page argues that the name is not decoration. Two of its sections exist
+ * because leaving them out would make it a brochure: the idiom that means *to
+ * be in a jam*, which is the honest cost of the word, and the name that was
+ * rejected because it belongs to living peoples. A project whose founding
+ * argument is that an unverifiable claim is worth nothing does not get to be
+ * selective about which facts it publishes about itself.
+ *
+ * Every figure here is sourced. `docs/context/BRAND_AND_NAMING.md` carries the
+ * naming analysis and the dictionary references behind the two idioms.
+ *
+ * The four illustrations are `docs/visuals/` pack 06, placed through the same
+ * component and registry as every other asset on the site — which is what keeps
+ * their declared boxes measured by `illustrations.test.ts` and their delivery
+ * measured by `illustrations:check` at fifteen viewports.
+ */
+import Illustration from '@/components/editorial/Illustration.astro';
+import PageSection from '@/components/pages/PageSection.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+---
+
+<MainLayout
+  lang={lang}
+  title={t.about.metaTitle}
+  description={t.about.metaDescription}
+>
+  <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+    <div class="main-container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_auto] lg:items-center">
+      <div>
+        <h1 class="max-w-3xl font-display text-3xl font-bold text-balance md:text-5xl">
+          {t.about.title}
+        </h1>
+        <p class="measure mt-6 text-lg leading-relaxed text-white/80 md:text-xl">
+          {t.about.lead}
+        </p>
+      </div>
+      <Illustration
+        id="about-fique-plant"
+        class="hidden w-[22rem] justify-self-end lg:block"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <PageSection title={t.about.fibreTitle}>
+    <div class="measure">
+      <p>{t.about.fibreBody}</p>
+      <p class="mt-3 text-sm text-cabuya-text-muted">{t.about.fibreSource}</p>
+      <p class="mt-5">{t.about.fibreSecond}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.about.metaphorTitle} background="gray">
+    <div class="measure">
+      <p>{t.about.metaphorBody}</p>
+      <p class="mt-5 font-display text-lg text-cabuya-text">
+        {t.about.metaphorSecond}
+      </p>
+    </div>
+    <Illustration
+      id="about-leaf-to-fibre"
+      class="mt-10 w-full max-w-3xl"
+    />
+  </PageSection>
+
+  <PageSection title={t.about.neutralTitle}>
+    <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
+      <div class="measure">
+        <p>{t.about.neutralBody}</p>
+        <p class="mt-5">{t.about.neutralSecond}</p>
+      </div>
+      <Illustration
+        id="about-splice-no-centre"
+        class="w-full max-w-sm justify-self-end"
+      />
+    </div>
+  </PageSection>
+
+  <PageSection title={t.about.verbTitle} background="gray">
+    <p class="measure">{t.about.verbBody}</p>
+    <Illustration id="about-the-bight" class="mt-10 w-full max-w-3xl" />
+  </PageSection>
+
+  <PageSection title={t.about.downsideTitle}>
+    <p class="measure">{t.about.downsideBody}</p>
+  </PageSection>
+
+  <PageSection title={t.about.notTakenTitle} background="gray">
+    <p class="measure">{t.about.notTakenBody}</p>
+  </PageSection>
+
+  <PageSection title={t.about.outlivesTitle}>
+    <div class="measure">
+      <p>{t.about.outlivesBody}</p>
+      <p class="mt-5">{t.about.outlivesSecond}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.about.ctaTitle} background="gray">
+    <div class="measure">
+      <p>{t.about.ctaBody}</p>
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a
+          href={`${prefix}/developers/spec`}
+          class="rounded-cabuya-sm bg-cabuya-fill px-6 py-3 font-medium text-cabuya-on-fill transition-colors hover:bg-cabuya-fill-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+        >
+          {t.about.ctaSpec}
+        </a>
+        <a
+          href={`${prefix}/join`}
+          class="rounded-cabuya-sm border border-cabuya-border px-6 py-3 font-medium text-cabuya-text transition-colors hover:border-cabuya-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cabuya-primary"
+        >
+          {t.about.ctaJoin}
+        </a>
+      </div>
+    </div>
+  </PageSection>
+</MainLayout>
