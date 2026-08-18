@@ -13,6 +13,14 @@
  * Cloudflare Function, every anchor in the catalog must be a real route, and
  * the endpoints this site does not have must stay undocumented.
  *
+ * `public/auth.md` is back too, and it is the inverse of the file that was
+ * deleted: it documents that there is **no** registration flow, no issuer and no
+ * credential, and it lists the absent OAuth documents with the reason each is
+ * absent. That is a different claim from the one that got the old file removed,
+ * so the assertion changed shape rather than disappearing — the block below
+ * requires the file to exist *and* to name only endpoints a Function serves, and
+ * it still forbids the three routes the deleted version advertised.
+ *
  * "Manifests lie, behaviour doesn't" is the sentence the whole project rests
  * on. It applies to ours first.
  */
@@ -135,12 +143,35 @@ describe('the API catalog points at real routes', () => {
       .filter((path) => /\.(json|txt)$/.test(path));
 
     for (const path of staticTargets) {
-      const served =
-        existsSync(join(ROOT, 'public', path)) ||
-        existsSync(join(ROOT, 'dist', path));
+      /*
+       * Checked against the source, never against `dist/`. CI runs the unit
+       * tests before the build, so a `dist/` assertion passes only on a
+       * machine that already built — which is how the first version of this
+       * test went green here and red on every CI run.
+       *
+       * `/schemas/{version}/{file}` is produced from the bounded spec
+       * directory by `src/pages/schemas/[version]/[...file].ts`. Asserting the
+       * schema file and the route that emits it is stronger than asserting a
+       * build artifact: it fails when the source of truth moves, not when
+       * somebody forgot to build.
+       */
+      const schema = path.match(/^\/schemas\/([^/]+)\/(.+)$/);
+      if (schema) {
+        const [, version, file] = schema;
+        expect(
+          existsSync(join(ROOT, 'spec', 'schemas', version, file)),
+          `the catalog names ${path}, and spec/schemas/${version}/${file} does not exist`
+        ).toBe(true);
+        expect(
+          existsSync(join(ROOT, 'src/pages/schemas/[version]/[...file].ts')),
+          `the catalog names ${path}, and the route that serves it is gone`
+        ).toBe(true);
+        continue;
+      }
+
       expect(
-        served,
-        `the catalog names ${path}, which is neither in public/ nor produced into dist/`
+        existsSync(join(ROOT, 'public', path)),
+        `the catalog names ${path}, which is not in public/`
       ).toBe(true);
     }
   });
@@ -160,15 +191,64 @@ describe('the endpoints this site does not have stay undocumented', () => {
       'nothing here is protected — every read is public',
     ],
     [
-      'public/auth.md',
-      'deleted in the launch dry run; no registration flow exists',
-    ],
-    [
       'public/.well-known/mcp/server-card.json',
       'the MCP server is specified and not deployed',
     ],
   ])('%s is absent — %s', (path) => {
     expect(existsSync(join(ROOT, path))).toBe(false);
+  });
+});
+
+describe('auth.md documents the absence of authentication, not an invented flow', () => {
+  const auth = read('public/auth.md');
+
+  it('exists, because an agent asking "do I need a credential" deserves an answer', () => {
+    expect(auth.length).toBeGreaterThan(400);
+    expect(auth).toMatch(/^# Authentication/);
+  });
+
+  it('advertises none of the routes the deleted version invented', () => {
+    /*
+     * The exact three paths the launch dry run found in the previous
+     * `auth.md`. None was ever implemented, and none is implemented now.
+     */
+    for (const route of ['/agent/register', '/agent/claim', '/oauth/revoke']) {
+      expect(auth, route).not.toContain(route);
+    }
+    expect(auth.toLowerCase()).not.toContain('register_uri');
+  });
+
+  it('names only endpoints a Function actually serves', () => {
+    /*
+     * Every `/api/…` or `/badge/…` path mentioned in the document has to map to
+     * a real Cloudflare Function, by the same translation the OpenAPI block
+     * above uses. This is the check that would have caught the deleted file.
+     */
+    const paths = new Set(
+      (auth.match(/\/(?:api|badge)\/[A-Za-z0-9{}._/-]+/g) ?? []).map((path) =>
+        path.replace(/[.,)]+$/, '')
+      )
+    );
+    expect(paths.size).toBeGreaterThan(0);
+    for (const path of paths) {
+      const file = functionFileFor(path);
+      expect(
+        existsSync(join(ROOT, file)),
+        `auth.md names ${path} but ${file} does not exist`
+      ).toBe(true);
+    }
+  });
+
+  it('states, for each document it does not serve, why not', () => {
+    for (const absent of [
+      '/.well-known/openid-configuration',
+      '/.well-known/oauth-authorization-server',
+      '/.well-known/oauth-protected-resource',
+      '/.well-known/mcp/server-card.json',
+    ]) {
+      expect(auth, absent).toContain(absent);
+    }
+    expect(auth).toContain('There is none');
   });
 });
 

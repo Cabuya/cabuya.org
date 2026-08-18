@@ -91,6 +91,22 @@ asserts the `Dataset` carries none of them.
   URLs serve the actual files.
 - Registry data is CC0 and says so where agents look (llms.txt + the Dataset
   JSON-LD).
+- `/auth.md` answers the credentials question before an agent goes looking:
+  there are none, here is every public endpoint, here are the enforced limits.
+  Generated (`agents:generate`) and gated (`agents:check`), so the published
+  limits are the ones `functions/api/validate.ts` applies.
+- `/.well-known/agent-skills/index.json` (Agent Skills Discovery RFC v0.2.0)
+  lists one skill this site serves itself, with a `sha256` of the exact bytes.
+  It does **not** list `Cabuya/cabuya-skill`: that pack is in development, and an
+  index entry for an unpublished download is a broken promise in JSON.
+- WebMCP (`navigator.modelContext.provideContext()`) declares the site's two
+  actions — validate a feed, read any page as Markdown — inline and
+  feature-detected, on every page.
+- **What is deliberately not served:** `openid-configuration`,
+  `oauth-authorization-server`, `oauth-protected-resource` and an MCP server
+  card. There is no OAuth issuer, nothing protected, and the reference MCP server
+  is specified and not deployed. `auth.md` states each absence with its reason;
+  `docs/aeo/CHECKLIST.md` §8b tracks what would unlock each one.
 
 ## 7. Redirects
 

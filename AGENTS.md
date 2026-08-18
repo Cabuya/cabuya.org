@@ -178,7 +178,8 @@ Five content gates (all `:strict` in CI): `md:check` (complete `.md` twins) ·
 `lang:check` (EN at root renders English, `/es` renders Spanish) · `seo:check`
 · `parity:check` (both languages carry the SAME content) · `redirects:check`.
 Protocol gates: `spec:check` + `spec:boundary` ·
-`registry:check` · `checks:catalogue` ·
+`registry:check` · `checks:catalogue` · `agents:check` (`/auth.md` and the
+agent-skills index match the repository) ·
 `perf:budgets` · `a11y:check` · `illustrations:check` (every drawing present,
 unclipped, undistorted and legible at 15 viewports in both themes) ·
 `responsive:full`.

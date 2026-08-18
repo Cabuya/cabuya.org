@@ -12,6 +12,8 @@
  * for exactly the readers this project is built for — and it fails in a way no
  * human visit would ever reveal.
  */
+import { createHash } from 'node:crypto';
+
 import { expect, test } from '@playwright/test';
 
 /** One per renderer, in the shape a reader actually navigates. */
@@ -41,6 +43,17 @@ test.describe('language integrity', () => {
        * page.
        */
       const target = `/es${route === '/' ? '' : route.replace(/\/$/, '')}`;
+      /*
+       * The switcher is a disclosure now — a button showing the current language,
+       * opening onto the other one. The link exists in the markup while the panel
+       * is closed (`lang:check` reads it out of the built HTML on every page), so
+       * a visibility assertion has to open the panel first. Clicking the trigger
+       * is also what a reader does, which is the point of testing it this way.
+       */
+      const trigger = page.locator('#nav-disclosure-language');
+      await expect(trigger, `no language switcher on ${route}`).toBeVisible();
+      await trigger.click();
+
       const switcher = page
         .locator(`a[href="${target}"], a[href="${target}/"]`)
         .first();
@@ -63,11 +76,13 @@ test.describe('language integrity', () => {
         `${route} switched to the wrong page`
       ).toBe(norm(route));
 
-      // And back, to the page we started on.
+      // And back, to the page we started on — the same disclosure, reopened.
+      await page.locator('#nav-disclosure-language').click();
       const backTarget = route === '/' ? '/' : route.replace(/\/$/, '');
       const back = page
         .locator(`a[href="${backTarget}"], a[href="${backTarget}/"]`)
         .first();
+      await expect(back, `no switcher back to ${backTarget}`).toBeVisible();
       await back.click();
       await page.waitForLoadState('networkidle');
       await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -184,9 +199,102 @@ test.describe('the agent surface', () => {
     const response = await request.get('/.well-known/api-catalog');
     expect([200, 404]).toContain(response.status());
     if (response.status() === 200) {
-      // If we publish one, it must be JSON rather than an HTML shell — the
-      // same soft-404 rule we hold publishers to.
-      expect(response.headers()['content-type']).toMatch(/json|linkset/);
+      /*
+       * It must be a link set rather than an HTML shell — the same soft-404 rule
+       * we hold publishers to. Asserted on the body, not the header: the
+       * `Content-Type` comes from `public/_headers`, which Cloudflare applies and
+       * `astro preview` does not, so a header assertion here would only ever be
+       * testing which server the suite happened to run against.
+       */
+      const body = JSON.parse(await response.text());
+      expect(Array.isArray(body.linkset)).toBe(true);
+      expect(body.linkset.length).toBeGreaterThan(0);
+      const type = response.headers()['content-type'];
+      if (type) expect(type).toMatch(/json|linkset/);
+    }
+  });
+
+  test('auth.md answers the credentials question with a real answer', async ({
+    request,
+  }) => {
+    const response = await request.get('/auth.md');
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toMatch(/markdown|text\/plain/);
+    const body = await response.text();
+    expect(body).toContain('There is none');
+    // The three routes the deleted version of this file invented.
+    for (const invented of [
+      '/agent/register',
+      '/agent/claim',
+      '/oauth/revoke',
+    ]) {
+      expect(body).not.toContain(invented);
+    }
+  });
+
+  test('the skills index points at a skill that is actually served', async ({
+    request,
+  }) => {
+    const index = await request.get('/.well-known/agent-skills/index.json');
+    expect(index.status()).toBe(200);
+    const body = await index.json();
+    expect(body.skills.length).toBeGreaterThan(0);
+
+    for (const skill of body.skills) {
+      const skillResponse = await request.get(new URL(skill.url).pathname);
+      expect(skillResponse.status(), skill.url).toBe(200);
+      /*
+       * The digest is the point of the entry: an agent that cannot verify it has
+       * no reason to trust a file it fetched over a URL somebody could rewrite.
+       */
+      const bytes = await skillResponse.body();
+      const digest = createHash('sha256').update(bytes).digest('hex');
+      expect(digest, `${skill.url} digest`).toBe(skill.sha256);
+    }
+  });
+
+  test('WebMCP declares the site tools when the browser has the API', async ({
+    page,
+  }) => {
+    /*
+     * No browser ships `navigator.modelContext` on by default yet, so the API is
+     * stubbed before the page's own script runs. That is the whole contract: the
+     * page must call `provideContext` when the API exists, and must not throw
+     * when it does not — every other test in this suite runs without the stub and
+     * would fail on an exception.
+     */
+    await page.addInitScript(() => {
+      const w = window as unknown as {
+        __tools?: unknown[];
+        navigator: Navigator & {
+          modelContext?: {
+            provideContext: (arg: { tools: unknown[] }) => void;
+          };
+        };
+      };
+      w.__tools = [];
+      w.navigator.modelContext = {
+        provideContext: ({ tools }) => {
+          (w.__tools as unknown[]).push(...tools);
+        },
+      };
+    });
+
+    await page.goto('/');
+    const tools = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            __tools: Array<{ name: string; inputSchema?: unknown }>;
+          }
+        ).__tools
+    );
+
+    const names = tools.map((tool) => tool.name);
+    expect(names).toContain('validate_cabuya_feed');
+    expect(names).toContain('read_cabuya_page_as_markdown');
+    for (const tool of tools) {
+      expect(tool.inputSchema, tool.name).toBeTruthy();
     }
   });
 });

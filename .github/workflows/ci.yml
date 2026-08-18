@@ -95,6 +95,14 @@ jobs:
       - name: Agent gate — llms.txt matches the site
         run: pnpm run llms:check
 
+      # `/auth.md` publishes the validator's real limits and the agent-skills
+      # index publishes a sha256 of the skill it points at. Both are only useful
+      # while they are true: a stale digest makes an agent distrust the file it
+      # just fetched, and stale limits send it into a 429 it was told would not
+      # happen. Same generator, same gate as llms.txt.
+      - name: Agent gate — auth.md and the skills index match the repository
+        run: pnpm run agents:check
+
       # Coverage, not just green tests. The thresholds live in the vitest
       # configs (src/lib 80; the validator package higher, because it is the
       # enforcement point of the protocol and a defect there is wrong in the

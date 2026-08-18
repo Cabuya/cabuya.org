@@ -108,14 +108,24 @@ test.describe('the shipped policy', () => {
     expect(scriptSrc).toMatch(/'sha256-[A-Za-z0-9+/=]{43,}'/);
   });
 
-  test('allows exactly one third-party script origin', () => {
+  test('allows only the analytics origins, and names them', () => {
+    /*
+     * Two, and both are analytics: the Cloudflare Web Analytics beacon and the
+     * Umami Cloud script wired in `feat(analytics)`. Named rather than counted,
+     * so adding a third origin is a decision somebody has to write down here —
+     * which is the same shape `tests/unit/lib/analytics-posture.test.ts` asserts
+     * against the built `_headers`.
+     */
     const origins = POLICY.split(';')
       .map((part) => part.trim())
       .filter((part) => part.startsWith('script-src'))
       .flatMap((part) => part.split(/\s+/))
       .filter((token) => token.startsWith('https://'));
 
-    expect(origins).toEqual(['https://static.cloudflareinsights.com']);
+    expect(origins.sort()).toEqual([
+      'https://cloud.umami.is',
+      'https://static.cloudflareinsights.com',
+    ]);
   });
 
   test('locks down the directives that matter when something is injected', () => {
