@@ -237,20 +237,23 @@ describe('the adopt skill', () => {
     expect(skill).toContain('never a declaration');
   });
 
-  it('links only to pages this site serves', () => {
+  it('links only to routes this site serves', () => {
+    /* Against the middleware allowlist rather than dist/ — unit tests run
+       before the build in CI, and a route outside KNOWN_PATHS 404s in
+       production whatever dist contains. */
+    const middleware = readFileSync(join(ROOT, 'src/middleware.ts'), 'utf-8');
+    const known = new Set(
+      [...middleware.matchAll(/^\s*'([a-z0-9-]*)',$/gm)].map(
+        (match) => match[1]
+      )
+    );
     const urls = skill.match(/https:\/\/cabuya\.org[a-zA-Z0-9/._-]*/g) ?? [];
     expect(urls.length).toBeGreaterThan(0);
     for (const target of urls) {
-      const path = new URL(target).pathname.replace(/\/$/, '');
-      const candidates = [
-        join(ROOT, 'dist', path, 'index.html'),
-        join(ROOT, 'dist', `${path}.html`),
-        join(ROOT, 'public', path),
-      ];
-      expect(
-        candidates.some((candidate) => existsSync(candidate)),
-        `${target} is not served`
-      ).toBe(true);
+      const [first = ''] = new URL(target).pathname
+        .split('/')
+        .filter(Boolean);
+      expect(known.has(first), `${target} is outside KNOWN_PATHS`).toBe(true);
     }
   });
 });
