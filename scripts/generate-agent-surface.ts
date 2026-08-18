@@ -38,7 +38,9 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 import { CHECKS, DENY_KEYS, DENY_PATTERNS } from '@cabuya/validator';
+import { SKILL_REPO_URL } from '@/lib/site-navigation';
 import { specSchemas, specSections, specVersions } from '@/lib/spec-loader';
+import { START_COMMANDS } from '@/lib/start-commands';
 
 const ROOT = process.cwd();
 const check = process.argv.includes('--check');
@@ -286,20 +288,76 @@ function buildSkill(): string {
   ].join('\n')}`;
 }
 
+// ── The adopt skill ───────────────────────────────────────
+
+/**
+ * The entry, not a copy: an agent that discovers this learns the two lines and
+ * where the real procedures live (the installable pack, and `/start` for its
+ * human). Duplicating the pack's flow here would be a second copy that rots —
+ * the pack vendors the specification and carries the guardrails; this skill's
+ * whole job is to route to it. The commands come from `start-commands.ts`,
+ * the module pinned against the pack's own install proof.
+ */
+function buildAdoptSkill(): string {
+  return `${[
+    '---',
+    'name: adopt-cabuya',
+    'description: Adopt the Cabuya Protocol with a guided, resumable flow — install the cabuya-skill pack, say /cabuya, and the agent orients, asks who plans the work, and runs the adoption task by task. Use when asked to adopt Cabuya, get started with the protocol, or implement it end to end.',
+    `version: ${LATEST}`,
+    'license: CC0-1.0',
+    '---',
+    '',
+    '# Adopt Cabuya',
+    '',
+    'Two lines. The pack teaches any coding agent the whole protocol — schema,',
+    'levels, exclusions, validator — and works offline, because the specification',
+    'is vendored inside it, checksummed.',
+    '',
+    '```bash',
+    START_COMMANDS.install,
+    '# or, vendored into the repository:',
+    START_COMMANDS.installVendored,
+    '```',
+    '',
+    `Then say \`${START_COMMANDS.invoke}\` (or, in words: "adopt Cabuya").`,
+    '',
+    '## What happens, in four lines',
+    '',
+    '1. **If the team already has a spec-driven methodology**, the pack briefs it',
+    '   with the full context — ordered tasks, acceptance criteria, validation',
+    '   commands — and that methodology plans. Theirs outranks anything the pack brings.',
+    '2. **If DeepWorkPlan is installed**, the adoption renders as a reviewable plan',
+    '   on disk and `/dwp-execute cabuya_adoption` runs it.',
+    '3. **Otherwise the pack offers to install DeepWorkPlan (with onboarding), and a',
+    '   "no" is final**: the agent plans in its own plan mode over the same task list.',
+    '4. **Whoever plans, one thing stays fixed**: the PII decision is made by a',
+    '   human, and the level is whatever the validator measures — never a declaration.',
+    '',
+    '## Where everything lives',
+    '',
+    `- The installable pack: ${SKILL_REPO_URL}`,
+    `- The page for your human: ${url('/start')}`,
+    `- The validator this ends at: ${url('/developers/validator')}`,
+    '',
+  ].join('\n')}`;
+}
+
 // ── The index ─────────────────────────────────────────────
 
 const SKILL_PATH = '/.well-known/agent-skills/publish-a-feed/SKILL.md';
+const ADOPT_SKILL_PATH = '/.well-known/agent-skills/adopt-cabuya/SKILL.md';
 
 /**
  * The discovery index, per the Agent Skills Discovery RFC v0.2.0.
  *
- * One entry, and it is the one we serve ourselves. A `sha256` is part of the
- * entry schema, which is only meaningful if the digest is computed from the
- * bytes actually published — so the skill and the index are written by the same
- * script, in that order, and `agents:check` compares both.
+ * Two entries, both served by this site. A `sha256` is part of the entry
+ * schema, which is only meaningful if each digest is computed from the bytes
+ * actually published — so the skills and the index are written by the same
+ * script, in that order, and `agents:check` compares all three.
  */
-function buildIndex(skill: string): string {
-  const digest = createHash('sha256').update(skill, 'utf-8').digest('hex');
+function buildIndex(skill: string, adoptSkill: string): string {
+  const digestOf = (contents: string): string =>
+    createHash('sha256').update(contents, 'utf-8').digest('hex');
   return `${JSON.stringify(
     {
       $schema:
@@ -307,12 +365,21 @@ function buildIndex(skill: string): string {
       version: '0.2.0',
       skills: [
         {
+          name: 'adopt-cabuya',
+          type: 'skill',
+          description:
+            'The guided adoption: install the cabuya-skill pack, say /cabuya, and the agent orients, asks who plans (the team\u2019s own methodology first), and runs the adoption task by task — resumable, with the one PII decision always human.',
+          url: url(ADOPT_SKILL_PATH),
+          sha256: digestOf(adoptSkill),
+          license: 'CC0-1.0',
+        },
+        {
           name: 'publish-a-cabuya-feed',
           type: 'skill',
           description:
             'Publish emergency-aid data as a conforming Cabuya feed and measure it with the public validator. No account, no key: the specification, the schemas and the validator are all public.',
           url: url(SKILL_PATH),
-          sha256: digest,
+          sha256: digestOf(skill),
           license: 'CC0-1.0',
         },
       ],
@@ -325,12 +392,14 @@ function buildIndex(skill: string): string {
 // ── Write or check ────────────────────────────────────────
 
 const skill = buildSkill();
+const adoptSkill = buildAdoptSkill();
 
 const outputs: Array<{ file: string; contents: string }> = [
   { file: `public${SKILL_PATH}`, contents: skill },
+  { file: `public${ADOPT_SKILL_PATH}`, contents: adoptSkill },
   {
     file: 'public/.well-known/agent-skills/index.json',
-    contents: buildIndex(skill),
+    contents: buildIndex(skill, adoptSkill),
   },
   { file: 'public/auth.md', contents: buildAuthMd() },
 ];

@@ -90,9 +90,11 @@ infrastructure that does not exist.
 
 - [ ] `/auth.md` → `200`, states there is no authentication, and lists every
       public endpoint with the limits `functions/api/validate.ts` enforces
-- [ ] `/.well-known/agent-skills/index.json` → `200`, RFC v0.2.0 shape, and the
-      `sha256` matches the skill it points at
+- [ ] `/.well-known/agent-skills/index.json` → `200`, RFC v0.2.0 shape, and
+      every `sha256` matches the skill it points at
 - [ ] `/.well-known/agent-skills/publish-a-feed/SKILL.md` → `200`
+- [ ] `/.well-known/agent-skills/adopt-cabuya/SKILL.md` → `200`, quotes only
+      commands proven in the pack's release transcript
 - [ ] WebMCP: `navigator.modelContext.provideContext()` declares
       `validate_cabuya_feed` and `read_cabuya_page_as_markdown` on every page
       (`src/components/agents/WebMcpTools.astro`, inline + feature-detected)

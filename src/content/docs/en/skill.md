@@ -3,13 +3,13 @@ title: Agent skill
 description: Install the protocol into a coding agent. It vendors the specification, so it works with no network, and there are five rules it will not reason its way around.
 section: tools
 order: 3
-updated: 2026-08-17
+updated: 2026-08-18
 ---
 
-> **Status: in development.** The repository is `Cabuya/cabuya-skill` and the
-> install paths below are the decided ones, but the pack is not published yet.
-> This page will stop carrying this notice on the day it is. Nothing here
-> describes something you can install today.
+> **Status: installable** — release 0.1.0, specification 0.1 vendored. Both
+> install paths below were proven on a clean machine before this notice
+> changed; the transcript ships with the release in `Cabuya/cabuya-skill`.
+> The fastest way in is [/start](/start): install, say `/cabuya`, done.
 
 The skill is a set of instructions and vendored files that teaches a coding
 agent this protocol. Install it and your agent knows the schema, the levels,
@@ -22,11 +22,13 @@ cannot be hallucinated.
 
 ## What it does
 
-Five sub-skills, each reachable directly, routed to by a small router that does
-nothing itself:
+Seven sub-skills, each reachable directly, routed to by a small router that
+does nothing itself:
 
 | You say | It runs |
 |---|---|
+| "adopt Cabuya", <span lang="es">"adopta el protocolo"</span>, "get us started" — or anything ambiguous | **adopt** — the front door: orients, asks who plans (your own spec-driven methodology outranks anything it brings; DeepWorkPlan is offered, never required), and hands off. Resumes without re-asking anything recorded |
+| "what is Cabuya?", <span lang="es">"explícame el protocolo"</span> | **explain** — answers from the vendored spec, with citations, and previews what adoption would mean in your repository without writing a file |
 | "implement Cabuya", <span lang="es">"publica un feed"</span>, "get us to L2" | **implement** — from your data model to a conforming feed |
 | "consume peers", <span lang="es">"lee los feeds de las otras apps"</span> | **consume** — the six [consumption rules](/developers/consume) as generated code with tests |
 | "validate", "why is my badge red?" | **validate** — runs the validator, parses the JSON report, groups by what to do next |

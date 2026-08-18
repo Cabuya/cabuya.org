@@ -49,6 +49,7 @@ const KNOWN_PATHS = new Set([
   'internal',
   '404',
   'about',
+  'start',
   'developers',
   'registry',
   'governance',

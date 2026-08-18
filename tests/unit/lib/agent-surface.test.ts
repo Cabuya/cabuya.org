@@ -25,6 +25,7 @@ const read = (path: string): string => readFileSync(join(ROOT, path), 'utf-8');
 const AUTH_MD = 'public/auth.md';
 const INDEX = 'public/.well-known/agent-skills/index.json';
 const SKILL = 'public/.well-known/agent-skills/publish-a-feed/SKILL.md';
+const ADOPT_SKILL = 'public/.well-known/agent-skills/adopt-cabuya/SKILL.md';
 
 describe('auth.md', () => {
   it('exists at the root, where the convention puts it', () => {
@@ -110,10 +111,29 @@ describe('the agent-skills index', () => {
     }
   });
 
-  it('digests the bytes it actually serves', () => {
-    const skill = read(SKILL);
-    const digest = createHash('sha256').update(skill, 'utf-8').digest('hex');
-    expect(index.skills[0].sha256).toBe(digest);
+  it('lists exactly the two skills this site teaches', () => {
+    expect(index.skills.map((entry: { name: string }) => entry.name)).toEqual([
+      'adopt-cabuya',
+      'publish-a-cabuya-feed',
+    ]);
+  });
+
+  it('digests the bytes it actually serves, per skill', () => {
+    const byName = new Map(
+      index.skills.map((entry: { name: string; sha256: string }) => [
+        entry.name,
+        entry.sha256,
+      ])
+    );
+    for (const [name, file] of [
+      ['publish-a-cabuya-feed', SKILL],
+      ['adopt-cabuya', ADOPT_SKILL],
+    ] as const) {
+      const digest = createHash('sha256')
+        .update(read(file), 'utf-8')
+        .digest('hex');
+      expect(byName.get(name), name).toBe(digest);
+    }
   });
 
   it('points only at skills this site serves', () => {
@@ -188,5 +208,50 @@ describe('WebMCP', () => {
 
   it('is inline, because the landing page has a JS budget', () => {
     expect(source).toContain('<script is:inline>');
+  });
+});
+
+describe('the adopt skill', () => {
+  const skill = read(ADOPT_SKILL);
+
+  it('quotes only the commands pinned against the install proof', () => {
+    /* The same strings `/start` renders — one proof, three surfaces. */
+    expect(skill).toContain('npx skills add Cabuya/cabuya-skill');
+    expect(skill).toContain(
+      'git clone --depth 1 https://github.com/Cabuya/cabuya-skill .agents/skills/cabuya'
+    );
+    expect(skill).toContain('`/cabuya`');
+  });
+
+  it('is the entry, not a copy of the pack', () => {
+    /* Under 60 lines by design: it routes to the pack and to /start rather
+       than duplicating a flow that would rot here. */
+    expect(skill.split('\n').length).toBeLessThan(60);
+    expect(skill).toContain('https://github.com/Cabuya/cabuya-skill');
+    expect(skill).toContain('https://cabuya.org/start');
+  });
+
+  it('states the precedence and the human gate', () => {
+    expect(skill).toContain('Theirs outranks anything the pack brings');
+    expect(skill).toContain('PII decision is made by a');
+    expect(skill).toContain('never a declaration');
+  });
+
+  it('links only to routes this site serves', () => {
+    /* Against the middleware allowlist rather than dist/ — unit tests run
+       before the build in CI, and a route outside KNOWN_PATHS 404s in
+       production whatever dist contains. */
+    const middleware = readFileSync(join(ROOT, 'src/middleware.ts'), 'utf-8');
+    const known = new Set(
+      [...middleware.matchAll(/^\s*'([a-z0-9-]*)',$/gm)].map(
+        (match) => match[1]
+      )
+    );
+    const urls = skill.match(/https:\/\/cabuya\.org[a-zA-Z0-9/._-]*/g) ?? [];
+    expect(urls.length).toBeGreaterThan(0);
+    for (const target of urls) {
+      const [first = ''] = new URL(target).pathname.split('/').filter(Boolean);
+      expect(known.has(first), `${target} is outside KNOWN_PATHS`).toBe(true);
+    }
   });
 });

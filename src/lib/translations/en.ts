@@ -36,8 +36,8 @@ export const en: SiteTranslations = {
       pitch:
         'An open format for the same data: collection points, needs, capacities and deliveries. A public validator measures conformance; the registry shows what it found.',
       pitchSecond: 'Conformance is measured, never declared.',
-      ctaPrimary: 'Publish a feed',
-      ctaSecondary: 'See who publishes',
+      ctaPrimary: 'Start in minutes',
+      ctaSecondary: 'How it works',
     },
 
     thesis: {
@@ -199,6 +199,49 @@ export const en: SiteTranslations = {
     ctaJoin: 'Take part',
   },
 
+  start: {
+    metaTitle: 'Start',
+    metaDescription:
+      'Install the Cabuya skill, say one sentence, and your coding agent plans and runs the adoption — with your own methodology, DeepWorkPlan, or its own plan mode.',
+    title: 'Two lines, and your agent knows the protocol',
+    lead: 'The pack teaches any coding agent the Cabuya Protocol — schema, levels, exclusions, validator — and works with no network, because the specification travels inside it. You install it once and say one sentence.',
+    installTitle: '1. Install the pack',
+    installBody:
+      'Either line works; both are proven on a clean machine. The second vendors the pack into your repository, reviewable in a pull request.',
+    sayTitle: '2. Say the sentence',
+    sayBody:
+      'That is the whole interface. In agents that intercept the slash, say it in words: “adopt Cabuya”.',
+    whatTitle: 'What happens next',
+    whatBody:
+      'The agent reads your repository — it writes nothing yet — and tells you, in plain language, what implementing Cabuya means here: which files, which endpoints, roughly how much work, and the one decision that will be yours. Then it plans the adoption and runs it one task at a time, validating each.',
+    asksTitle: 'It asks before it proposes',
+    asksBody:
+      'If your team already plans work with a spec-driven methodology, the agent hands it the whole context — ordered tasks, acceptance criteria, validation commands — and your workflow keeps planning. Yours outranks anything it would bring.',
+    asksDwp:
+      'With DeepWorkPlan, the plan lands on disk as task files you can review in a pull request, each with its own validation, and it survives across sessions — the pack offers to install and onboard it.',
+    asksPlanMode:
+      'Without it, the agent plans in its own plan mode over the same task list. The decisions survive either way; the task detail lives in the session. It is lighter, and the pack says so. Neither tool is required.',
+    gateTitle: 'The one thing it will ask you',
+    gateBody:
+      'What may be published. The agent presents every column that could carry personal data and waits: that decision is yours by design, and there is no flag that skips it.',
+    gateCeiling:
+      'If your records describe people rather than places, the specification caps the app at L1 permanently — a fact about the data, not a verdict on the app.',
+    questionsTitle: 'Not ready? Ask it questions',
+    questionsBody:
+      'The pack answers “what is Cabuya”, “why a protocol”, and “what would this take in our app” from the specification it carries, with citations — and previews the work without writing a file.',
+    refusesTitle: 'What it will not do',
+    refuses: [
+      'Claim a conformance level the validator did not measure — and it never uses the word “certified”.',
+      'Publish a contact value, anywhere, in any encoding. Contact reaches people through each record\u2019s public page.',
+      'Open a pull request, or write any file, without asking first.',
+      'Send your data anywhere. It has no telemetry and calls no one home.',
+    ],
+    linksTitle: 'Prefer to read first?',
+    linkQuickstart: 'The quickstart, step by step',
+    linkSkill: 'What the skill installs, exactly',
+    linkValidator: 'Run the validator yourself',
+  },
+
   notFoundPage: {
     metaTitle: 'Page not found — Cabuya',
     title: 'This page does not exist',
@@ -283,6 +326,7 @@ export const en: SiteTranslations = {
     agentPathTitle: 'If you have a coding agent',
     agentPathBody:
       'Install the skill and tell it to publish a Cabuya feed. The skill vendors the specification, so it works without network access and without guessing at field names.',
+    agentPathStart: 'Or take the guided path: install, say /cabuya, done →',
     handPathTitle: 'If you are doing it by hand',
     handPathBody:
       'Five steps. Step 3 is the most common point of failure, and is worth reading in full.',

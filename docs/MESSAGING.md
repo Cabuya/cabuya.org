@@ -54,6 +54,8 @@ the full argument lives in one place — that is how the site stays consistent.
 | Beat | The claim | Owner | Rule-0 constraint |
 |---|---|---|---|
 | The pitch | What Cabuya is, in two sentences | Landing hero | No adoption count until the registry proves it per-app with a timestamp |
+| The two doors | Start now (`/start`) or understand it first (`/#how-it-works`) | Landing hero CTAs | Both targets must exist and say nothing the pack has not shipped |
+| The guided start | Install, say `/cabuya`, the agent plans and runs the adoption | `/start` | Quotes only commands proven in the pack's release transcript; the team's own methodology outranks DWP; DWP offered, never required; the PII decision stays human |
 | «Crecemos juntos» | Many weak feeds, twisted together, carry a load none carries alone — and the apps *feed each other* | Landing thesis section | Stated as intent, never as achieved outcome |
 | How it works | Manifest → feed → validator → registry | Landing four-boxes | Links to the ladder, not a marketing funnel |
 | The ladder | Five measured levels; two respected non-publishing classes | Landing ladder section + `/developers/spec/0.1/1-architecture` | Directory-only and link-out-only shown as **membership classes**, not failures |

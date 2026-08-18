@@ -27,6 +27,15 @@
  *
  * Nothing here is a new capability or a new claim: if `navigator.modelContext`
  * is absent, the script does nothing and the page is unchanged.
+ *
+ * ## Why the guided adoption added no tool here
+ *
+ * Considered and declined when `/start` shipped: installing a skill pack is
+ * not a browser action — it happens in the adopter's own repository, through
+ * their own agent. A `start_cabuya_adoption` tool here could only print the
+ * two commands the page already shows, and a tool that renders instructions
+ * is a link wearing a schema. The discovery surface for agents is
+ * `/.well-known/agent-skills/index.json`, which now lists `adopt-cabuya`.
  */
 ---
 
