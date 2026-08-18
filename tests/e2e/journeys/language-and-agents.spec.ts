@@ -239,6 +239,10 @@ test.describe('the agent surface', () => {
     expect(index.status()).toBe(200);
     const body = await index.json();
     expect(body.skills.length).toBeGreaterThan(0);
+    // The guided adoption is discoverable, not only the publish flow.
+    expect(body.skills.map((skill: { name: string }) => skill.name)).toContain(
+      'adopt-cabuya'
+    );
 
     for (const skill of body.skills) {
       const skillResponse = await request.get(new URL(skill.url).pathname);

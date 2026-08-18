@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "skills": [
     {
+      "name": "adopt-cabuya",
+      "type": "skill",
+      "description": "The guided adoption: install the cabuya-skill pack, say /cabuya, and the agent orients, asks who plans (the team’s own methodology first), and runs the adoption task by task — resumable, with the one PII decision always human.",
+      "url": "https://cabuya.org/.well-known/agent-skills/adopt-cabuya/SKILL.md",
+      "sha256": "e7937bb1d71c7217875b467f97966b649665267a4fde97d0b679570de14aa4c3",
+      "license": "CC0-1.0"
+    },
+    {
       "name": "publish-a-cabuya-feed",
       "type": "skill",
       "description": "Publish emergency-aid data as a conforming Cabuya feed and measure it with the public validator. No account, no key: the specification, the schemas and the validator are all public.",

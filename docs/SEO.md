@@ -96,9 +96,10 @@ asserts the `Dataset` carries none of them.
   Generated (`agents:generate`) and gated (`agents:check`), so the published
   limits are the ones `functions/api/validate.ts` applies.
 - `/.well-known/agent-skills/index.json` (Agent Skills Discovery RFC v0.2.0)
-  lists one skill this site serves itself, with a `sha256` of the exact bytes.
-  It does **not** list `Cabuya/cabuya-skill`: that pack is in development, and an
-  index entry for an unpublished download is a broken promise in JSON.
+  lists the two skills this site serves itself, each with a `sha256` of the
+  exact bytes: `adopt-cabuya` (the guided adoption — install the pack, say
+  `/cabuya`; the pack shipped as 0.1.0, which is what made this entry
+  honest) and `publish-a-cabuya-feed` (the direct flow).
 - WebMCP (`navigator.modelContext.provideContext()`) declares the site's two
   actions — validate a feed, read any page as Markdown — inline and
   feature-detected, on every page.
