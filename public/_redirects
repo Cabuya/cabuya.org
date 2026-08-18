@@ -11,11 +11,12 @@
 #     301 to the closest surviving surface, refined per-task as Cabuya pages
 #     land.
 #
-# Task 23 removed the /developers rule, and Task 30 removed /governance,
-# /conduct and /contributing: those routes are now live English pages, and a
-# redirect to the Spanish home would have shadowed them. `redirects:check`
-# caught it, which is what a shadow check is for — a rule that hides a page is
-# invisible in a diff and total in production.
+# Task 23 removed the /developers rule, Task 30 removed /governance, /conduct
+# and /contributing, and /about went the same way when the origin page landed:
+# those routes are now live English pages, and a redirect to the Spanish home
+# would have shadowed them. `redirects:check` caught every one, which is what a
+# shadow check is for — a rule that hides a page is invisible in a diff and
+# total in production.
 #
 # The retired ones point at the surviving surface: /conduct and /contributing
 # are the community files, which now live at /join and on GitHub.
@@ -25,7 +26,6 @@
 # have sent a reader looking for developer documentation to the home page.
 
 # --- Retired routes (old Spanish root URLs) → closest surface --------------
-/about                       /es/    301
 /how-it-works                /es/    301
 /transparency                /es/    301
 /emergencies                 /es/    301
