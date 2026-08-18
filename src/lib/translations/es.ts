@@ -138,6 +138,62 @@ export const es: SiteTranslations = {
     specStatus: 'Especificación 0.1',
   },
 
+  about: {
+    metaTitle: 'Por qué Cabuya — el nombre, y a qué nos compromete',
+    metaDescription:
+      'La cabuya es la fibra con la que se amarra, sacada del fique. Por qué un formato compartido lleva el nombre de un material de trabajo, y de quién queda siendo.',
+    title: 'Por qué Cabuya',
+    lead: 'La cabuya es la fibra con la que se amarra. El nombre se eligió antes de escribir la primera línea de la especificación, y resolvió bastante más que la apariencia del proyecto.',
+
+    fibreTitle: 'La fibra es una cosa real',
+    fibreBody:
+      'La cabuya es la fibra —y la cuerda que se hace con ella— que se saca de las hojas del fique, un pariente del agave que crece a lo largo de los Andes y Centroamérica. Colombia es el mayor productor de fique del mundo.',
+    fibreSource:
+      'Registrado por la Real Academia Española y en la literatura sobre el fique, verificado contra esas fuentes el 2026-08-16.',
+    fibreSecond:
+      'Es un material de trabajo y no un símbolo: poco vistoso, barato, omnipresente y capaz de cargar. Ese registro es el correcto para infraestructura y el equivocado para una campaña.',
+
+    metaphorTitle: 'La metáfora es exacta, no decorativa',
+    metaphorBody:
+      'Una fibra sola no aguanta nada. Torcidas juntas cargan un peso que ninguna soportaría por separado, y lo único que se agregó fue la torsión. Eso no es una figura sobre colaborar en general: es la descripción de lo que ocurre cuando dos aplicaciones pueden leer los datos de la otra.',
+    metaphorSecond:
+      'Un protocolo no son las aplicaciones. Es el cordel entre ellas. Cada app es un hilo; el protocolo es la cuerda.',
+
+    neutralTitle: 'Un nombre que no es de nadie',
+    neutralBody:
+      'El protocolo no lleva el nombre de una aplicación, ni de una ciudad, ni de un evento. Adoptarlo no le hace publicidad al producto de nadie, e implementarlo no requiere una conversación con nosotros.',
+    neutralSecond:
+      'Esa fue la primera decisión de gobernanza, tomada antes que todas las demás. Un formato compartido que lleva el nombre de uno de sus participantes es un formato que los demás tienen que promocionar. Este no pide nada.',
+
+    verbTitle: 'El verbo ya estaba en el idioma',
+    verbIdiom: '«Coger la cabuya»',
+    verbGloss: 'entender, ponerse al tanto de un asunto',
+    verbBody:
+      'El español ya tenía el verbo de la adopción antes de que el protocolo existiera. La Real Academia Española lo registra, y es casi un regalo: lo que uno hace cuando por fin entiende cómo funciona algo es, ya, cogerle la cabuya.',
+
+    downsideTitle: 'Y el lado flaco, dicho',
+    downsideIdiom: '«Estar en la cabuya»',
+    downsideGloss: 'estar en un aprieto del que no se sale fácil',
+    downsideBody:
+      'Los mismos diccionarios registran esta, en uso en Colombia y Ecuador. La conocíamos antes de elegir el nombre, y queda dicha aquí en vez de esperar a que alguien la encuentre. Un proyecto cuyo argumento entero es que una afirmación que no se puede comprobar no vale nada no puede escoger cuáles hechos publica.',
+
+    notTakenTitle: 'Lo que no tomamos',
+    notTakenBody:
+      'Se examinaron cuarenta y siete nombres. Uno de los más fuertes se descartó antes siquiera de mirar su disponibilidad: Aluna, la fuerza de pensamiento originaria en la cosmología kogi y arhuaca. Es el concepto sagrado de pueblos vivos, y no es nuestro para convertirlo en marca.',
+
+    outlivesTitle: 'Una palabra que dura más que su motivo',
+    outlivesBody:
+      'El protocolo se escribió bajo presión, y aquello para lo que sirve va a durar más de lo que duró la presión. Un nombre atado a un solo evento habría caducado con el evento; uno atado a un solo país habría hecho que el formato pareciera un programa nacional en vez de algo que otra ciudad puede tomar sin más.',
+    outlivesSecond:
+      'La fibra existe en los Andes y en Centroamérica. La especificación es CC0. Entre las dos, nada en este nombre pide permiso para viajar.',
+
+    ctaTitle: 'El nombre es la parte fácil',
+    ctaBody:
+      'A lo que compromete al proyecto sí se puede medir: una especificación que cualquiera implementa sin pedir permiso, y una conformidad que decide un validador publicado.',
+    ctaSpec: 'Leer la especificación',
+    ctaJoin: 'Participar',
+  },
+
   notFoundPage: {
     metaTitle: 'Página no encontrada — Cabuya',
     title: 'Esta página no existe',
