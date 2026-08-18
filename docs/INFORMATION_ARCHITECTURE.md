@@ -19,6 +19,7 @@
 | `/registry/{publisher_id}` | One publisher: claimed vs measured, history | — | ✅ live |
 | `/rfcs`, `/rfcs/{number}` | RFC index + individual RFCs | `TechArticle` | ✅ live |
 | `/changelog` | Spec + validator + skill releases, one timeline | — | ✅ live |
+| `/about` | Why the protocol is called Cabuya: the fibre, the neutrality argument, the two idioms, the name that was refused | — | ✅ live |
 | `/governance` | The governance model, maintainers, continuity | — | ✅ live |
 | `/trademark` | Badge + name policy (bilingual body) | — | ✅ live |
 | `/join` | Contribution funnel (the contact form lands in Task 31) | — | ✅ live |
@@ -64,18 +65,25 @@ English-only, `InternalLayout`, no page-wrapper pattern.
 
 ## 2. Navigation
 
-### Header (5 items max + language switcher + theme toggle)
+### Header (6 items max + language switcher + theme toggle)
 
 | Item | Target | Notes |
 |---|---|---|
 | **Protocol** | disclosure → Spec, Schemas, RFCs, Changelog | The standard itself |
 | **Developers** | `/developers` | The portal (its own sidebar takes over inside) |
 | **Registry** | `/registry` | Public, not dev-only — badges link here |
-| **Governance** | `/governance` | Trust surface |
+| **About** | disclosure → Why Cabuya, Governance, Trademark | Who this belongs to |
 | **Join** | `/join` | The funnel |
 
+**Why `About` is a disclosure and not a sixth sibling.** `/about`,
+`/governance` and `/trademark` answer one question from three angles — who the
+protocol belongs to — and two of them were reachable only from the footer. A
+flat seventh entry would have crowded the row on a laptop and put the newest
+page at the end of it. The group's own target is `/about`, so the label is a
+link on touch, where a hover disclosure has nothing to hover.
+
 Logo → `/`. Language switcher: same route, other language (URL-first, no
-redirect logic). Mobile: drawer with the same five groups.
+redirect logic). Mobile: drawer with the same groups.
 
 ### Portal sidebar (order = the adoption journey)
 

@@ -147,6 +147,62 @@ export const en: SiteTranslations = {
     specStatus: 'Specification 0.1',
   },
 
+  about: {
+    metaTitle: 'Why Cabuya — the name, and what it commits us to',
+    metaDescription:
+      'Cabuya is the fibre you tie things with, drawn from the fique plant. Why a shared format is named after a working material, and who that leaves it belonging to.',
+    title: 'Why Cabuya',
+    lead: 'Cabuya is the fibre you tie things with. The name was chosen before the first line of the specification was written, and it settled more than how the project would look.',
+
+    fibreTitle: 'The fibre is a real thing',
+    fibreBody:
+      'Cabuya is the fibre — and the rope made from it — drawn from the leaves of the fique plant, an agave relative that grows across the Andes and Central America. Colombia is the world\u2019s largest grower of it.',
+    fibreSource:
+      'Recorded by the Real Academia Española and in the fique literature, checked against those sources on 2026-08-16.',
+    fibreSecond:
+      'It is a working material rather than a symbol: unglamorous, cheap, everywhere, and load-bearing. That register is the right one for infrastructure and the wrong one for a campaign.',
+
+    metaphorTitle: 'The metaphor is exact, not decorative',
+    metaphorBody:
+      'A single fibre holds nothing. Twisted together they carry a load none of them could carry alone, and the twist is the only thing added. That is not a figure of speech about collaboration in general — it is a description of what happens when two applications can read each other\u2019s data.',
+    metaphorSecond:
+      'A protocol is not the applications. It is the cordage between them. Each app is a thread; the protocol is the rope.',
+
+    neutralTitle: 'A name that belongs to nobody',
+    neutralBody:
+      'The protocol is not named after an application, a city or an event. Adopting it advertises no one\u2019s product, and implementing it requires no conversation with us.',
+    neutralSecond:
+      'That was the first governance decision, taken before any of the others. A shared format named after one of its participants is a format the rest are asked to promote. This one asks for nothing.',
+
+    verbTitle: 'The verb was already in the language',
+    verbIdiom: '«Coger la cabuya»',
+    verbGloss: 'to catch on; to pick up the thread of a matter',
+    verbBody:
+      'Spanish had the adoption verb before the protocol existed. The Real Academia Española records it, and it is close to a gift: what you do when you finally understand how something works is, already, to catch the cabuya.',
+
+    downsideTitle: 'And the honest downside',
+    downsideIdiom: '«Estar en la cabuya»',
+    downsideGloss: 'to be in a jam you cannot easily get out of',
+    downsideBody:
+      'The same dictionaries record this one, used in Colombia and Ecuador. We knew it before choosing the name, and it is stated here rather than left for somebody to find. A project whose whole argument is that an unverifiable claim is worth nothing does not get to be selective about which facts it publishes.',
+
+    notTakenTitle: 'What we did not take',
+    notTakenBody:
+      'Forty-seven names were examined. One of the strongest was rejected before its availability was even checked: Aluna, the originating thought-force in Kogi and Arhuaco cosmology. It is the sacred concept of living peoples, and it is not ours to turn into a brand.',
+
+    outlivesTitle: 'A word that outlives the reason for it',
+    outlivesBody:
+      'The protocol was written under pressure, and the thing it is for will last longer than the pressure did. A name tied to one event would have expired with the event; a name tied to one country would have made the format look like a national programme rather than something another city can simply pick up.',
+    outlivesSecond:
+      'The fibre exists across the Andes and Central America. The specification is CC0. Between the two, nothing about this name asks permission to travel.',
+
+    ctaTitle: 'The name is the easy part',
+    ctaBody:
+      'What it commits the project to is measurable: a specification anyone can implement without asking, and conformance a published validator decides.',
+    ctaSpec: 'Read the specification',
+    ctaJoin: 'Take part',
+  },
+
   notFoundPage: {
     metaTitle: 'Page not found — Cabuya',
     title: 'This page does not exist',
