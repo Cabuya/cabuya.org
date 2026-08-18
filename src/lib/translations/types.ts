@@ -105,6 +105,41 @@ export interface SiteTranslations {
     specStatus: string;
   };
 
+  /** `/about` — where the name comes from, and what it commits the project to. */
+  about: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    fibreTitle: string;
+    fibreBody: string;
+    fibreSource: string;
+    fibreSecond: string;
+    metaphorTitle: string;
+    metaphorBody: string;
+    metaphorSecond: string;
+    neutralTitle: string;
+    neutralBody: string;
+    neutralSecond: string;
+    verbTitle: string;
+    verbIdiom: string;
+    verbGloss: string;
+    verbBody: string;
+    downsideTitle: string;
+    downsideIdiom: string;
+    downsideGloss: string;
+    downsideBody: string;
+    notTakenTitle: string;
+    notTakenBody: string;
+    outlivesTitle: string;
+    outlivesBody: string;
+    outlivesSecond: string;
+    ctaTitle: string;
+    ctaBody: string;
+    ctaSpec: string;
+    ctaJoin: string;
+  };
+
   notFoundPage: {
     metaTitle: string;
     title: string;
