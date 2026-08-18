@@ -7,7 +7,7 @@
       "type": "skill",
       "description": "The guided adoption: install the cabuya-skill pack, say /cabuya, and the agent orients, asks who plans (the team’s own methodology first), and runs the adoption task by task — resumable, with the one PII decision always human.",
       "url": "https://cabuya.org/.well-known/agent-skills/adopt-cabuya/SKILL.md",
-      "sha256": "e7937bb1d71c7217875b467f97966b649665267a4fde97d0b679570de14aa4c3",
+      "sha256": "b03191dcdaf80691b528de0fd81a2046000551b1a0415b1254910100058c705b",
       "license": "CC0-1.0"
     },
     {

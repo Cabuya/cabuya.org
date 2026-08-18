@@ -14,7 +14,7 @@ is vendored inside it, checksummed.
 ```bash
 npx skills add Cabuya/cabuya-skill
 # or, vendored into the repository:
-git clone --depth 1 https://github.com/Cabuya/cabuya-skill .agents/skills/cabuya
+git clone --depth 1 https://github.com/Cabuya/cabuya-skill vendor/cabuya-skill && bash vendor/cabuya-skill/setup.sh
 ```
 
 Then say `/cabuya` (or, in words: "adopt Cabuya").
