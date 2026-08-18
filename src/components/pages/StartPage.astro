@@ -1,0 +1,122 @@
+---
+/**
+ * `/start` — install the pack, say the sentence, and the agent does the rest.
+ *
+ * Short on purpose: the two lines at the top ARE the page, and everything
+ * below them exists to make those lines believable — what the command does,
+ * what it asks (and in which order: the team's own methodology outranks
+ * anything the pack brings), the one decision that stays human, and the
+ * refusals. Every command quoted here is pinned in `src/lib/start-commands.ts`
+ * against the pack's own install proof; this page quotes installs, it does
+ * not aspire to them.
+ *
+ * No illustration: no pack entry depicts "an agent begins", and the
+ * placeholder policy forbids reserving the space.
+ */
+import CodeBlock from '@/components/developers/CodeBlock.astro';
+import PageSection from '@/components/pages/PageSection.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { getUrlPrefix, type Language } from '@/lib/i18n';
+import { START_COMMANDS } from '@/lib/start-commands';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const prefix = getUrlPrefix(lang);
+
+const INSTALL = `${START_COMMANDS.install}
+# or, vendored into your repository:
+${START_COMMANDS.installVendored}`;
+---
+
+<MainLayout
+  lang={lang}
+  title={t.start.metaTitle}
+  description={t.start.metaDescription}
+>
+  <section class="border-b border-cabuya-border bg-cabuya-bg-dark text-white">
+    <div class="main-container py-16 md:py-24">
+      <h1 class="max-w-3xl font-display text-3xl font-bold text-balance md:text-5xl">
+        {t.start.title}
+      </h1>
+      <p class="measure mt-6 text-lg leading-relaxed text-white/80 md:text-xl">
+        {t.start.lead}
+      </p>
+    </div>
+  </section>
+
+  <PageSection title={t.start.installTitle}>
+    <div class="measure">
+      <p>{t.start.installBody}</p>
+    </div>
+    <div class="mt-4 max-w-2xl">
+      <CodeBlock code={INSTALL} lang="shellscript" uiLang={lang} />
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.sayTitle}>
+    <div class="mt-2 max-w-2xl">
+      <CodeBlock code={START_COMMANDS.invoke} lang="shellscript" uiLang={lang} />
+    </div>
+    <div class="measure mt-4">
+      <p>{t.start.sayBody}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.whatTitle}>
+    <div class="measure">
+      <p>{t.start.whatBody}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.asksTitle}>
+    <div class="measure space-y-4">
+      <p>{t.start.asksBody}</p>
+      <p>{t.start.asksDwp}</p>
+      <p>{t.start.asksPlanMode}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.gateTitle}>
+    <div class="measure space-y-4">
+      <p>{t.start.gateBody}</p>
+      <p>{t.start.gateCeiling}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.questionsTitle}>
+    <div class="measure">
+      <p>{t.start.questionsBody}</p>
+    </div>
+  </PageSection>
+
+  <PageSection title={t.start.refusesTitle}>
+    <ul class="measure list-disc space-y-2 pl-5">
+      {t.start.refuses.map((line) => <li>{line}</li>)}
+    </ul>
+  </PageSection>
+
+  <PageSection title={t.start.linksTitle}>
+    <ul class="measure space-y-2">
+      <li>
+        <a class="text-cabuya-primary underline underline-offset-4 hover:text-cabuya-accent-strong" href={`${prefix}/developers/quickstart`}>
+          {t.start.linkQuickstart}
+        </a>
+      </li>
+      <li>
+        <a class="text-cabuya-primary underline underline-offset-4 hover:text-cabuya-accent-strong" href={`${prefix}/developers/skill`}>
+          {t.start.linkSkill}
+        </a>
+      </li>
+      <li>
+        <a class="text-cabuya-primary underline underline-offset-4 hover:text-cabuya-accent-strong" href={`${prefix}/developers/validator`}>
+          {t.start.linkValidator}
+        </a>
+      </li>
+    </ul>
+  </PageSection>
+</MainLayout>

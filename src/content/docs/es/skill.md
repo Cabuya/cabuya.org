@@ -3,13 +3,14 @@ title: Skill para agentes
 description: Instala el protocolo dentro de un agente de código. Incluye la especificación, así que funciona sin red, y hay cinco reglas que no va a razonar para saltarse.
 section: tools
 order: 3
-updated: 2026-08-17
+updated: 2026-08-18
 ---
 
-> **Estado: en desarrollo.** El repositorio es `Cabuya/cabuya-skill` y las rutas
-> de instalación de abajo son las decididas, pero el paquete todavía no está
-> publicado. Esta página va a dejar de llevar este aviso el día que lo esté.
-> Nada de lo que hay aquí describe algo que puedas instalar hoy.
+> **Estado: instalable** — versión 0.1.0, con la especificación 0.1 incluida.
+> Las dos rutas de instalación de abajo se probaron en una máquina limpia
+> antes de cambiar este aviso; la transcripción viaja con la versión en
+> `Cabuya/cabuya-skill`. La entrada más rápida es [/es/start](/es/start):
+> instala, di `/cabuya`, listo.
 
 La skill es un conjunto de instrucciones y archivos incluidos que le enseña este
 protocolo a un agente de código. La instalas y tu agente conoce el esquema, los
@@ -23,11 +24,13 @@ especificación en disco no se puede alucinar.
 
 ## Qué hace
 
-Cinco sub-skills, cada una alcanzable directamente, con un enrutador pequeño que
+Siete sub-skills, cada una alcanzable directamente, con un enrutador pequeño que
 no hace nada por sí mismo:
 
 | Tú dices | Ejecuta |
 |---|---|
+| «adopta Cabuya», «adopta el protocolo», «empecemos» — o cualquier cosa ambigua | **adopt** — la puerta de entrada: se orienta, pregunta quién planifica (tu propia metodología de spec-driven development está por encima de cualquiera que él traiga; DeepWorkPlan se ofrece, nunca se exige) y entrega. Reanuda sin volver a preguntar nada registrado |
+| «¿qué es Cabuya?», «explícame el protocolo» | **explain** — responde desde la especificación incluida, con citas, y muestra qué implicaría adoptar en tu repositorio sin escribir un archivo |
 | «implementa Cabuya», «publica un feed», «llévanos a L2» | **implement** — de tu modelo de datos a un feed conforme |
 | «consume a los pares», «lee los feeds de las otras apps» | **consume** — las seis [reglas de consumo](/es/developers/consume) como código generado con pruebas |
 | «valida», «¿por qué está roja mi insignia?» | **validate** — corre el validador, parsea el reporte JSON y agrupa por qué hacer después |

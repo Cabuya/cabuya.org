@@ -21,7 +21,8 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 ---
 
-<section class="main-container py-16 sm:py-24">
+{/* `id`: the hero's secondary CTA lands here — "understand it first". */}
+<section id="how-it-works" class="main-container py-16 sm:py-24">
   <Kicker>{t.home.howItWorks.kicker}</Kicker>
   <h2 class="mt-3 text-title">{t.home.howItWorks.title}</h2>
   <Lead class="mt-4">{t.home.howItWorks.lead}</Lead>

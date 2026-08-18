@@ -36,8 +36,8 @@ export const es: SiteTranslations = {
       pitch:
         'Un formato abierto para los mismos datos: puntos de acopio, necesidades, capacidades y entregas. Un validador público mide la conformidad; el registro muestra lo que encontró.',
       pitchSecond: 'La conformidad se mide, nunca se declara.',
-      ctaPrimary: 'Publicar un feed',
-      ctaSecondary: 'Ver quién publica',
+      ctaPrimary: 'Empieza en minutos',
+      ctaSecondary: 'Cómo funciona',
     },
 
     thesis: {
@@ -190,6 +190,49 @@ export const es: SiteTranslations = {
     ctaJoin: 'Participar',
   },
 
+  start: {
+    metaTitle: 'Empezar',
+    metaDescription:
+      'Instala la skill de Cabuya, di una frase, y tu agente de código planifica y ejecuta la adopción — con tu propia metodología, con DeepWorkPlan o con su propio modo plan.',
+    title: 'Dos líneas, y tu agente conoce el protocolo',
+    lead: 'El paquete le enseña el Protocolo Cabuya a cualquier agente de código — esquema, niveles, exclusiones, validador — y funciona sin red, porque la especificación viaja dentro. Lo instalas una vez y dices una frase.',
+    installTitle: '1. Instala el paquete',
+    installBody:
+      'Cualquiera de las dos líneas funciona; ambas están probadas en una máquina limpia. La segunda deja el paquete dentro de tu repositorio, revisable en un pull request.',
+    sayTitle: '2. Di la frase',
+    sayBody:
+      'Esa es toda la interfaz. En agentes que interceptan la barra, dilo con palabras: «adopta Cabuya».',
+    whatTitle: 'Qué pasa después',
+    whatBody:
+      'El agente lee tu repositorio — todavía no escribe nada — y te dice, en lenguaje claro, qué significa implementar Cabuya aquí: qué archivos, qué endpoints, cuánto trabajo aproximado, y la única decisión que será tuya. Después planifica la adopción y la ejecuta tarea por tarea, validando cada una.',
+    asksTitle: 'Pregunta antes de proponer',
+    asksBody:
+      'Si tu equipo ya planifica con una metodología de spec-driven development, el agente le entrega todo el contexto — tareas ordenadas, criterios de aceptación, comandos de validación — y tu flujo sigue planificando. El tuyo está por encima de cualquiera que él traiga.',
+    asksDwp:
+      'Con DeepWorkPlan, el plan queda en disco como archivos de tarea que puedes revisar en un pull request, cada uno con su validación, y sobrevive entre sesiones — el paquete ofrece instalarlo y hacer su onboarding.',
+    asksPlanMode:
+      'Sin él, el agente planifica en su propio modo plan sobre la misma lista de tareas. Las decisiones sobreviven igual; el detalle de las tareas vive en la sesión. Es más liviano, y el paquete lo dice. Ninguna herramienta es obligatoria.',
+    gateTitle: 'Lo único que te va a preguntar',
+    gateBody:
+      'Qué se puede publicar. El agente presenta cada columna que podría llevar datos personales y espera: esa decisión es tuya por diseño, y no existe bandera que la salte.',
+    gateCeiling:
+      'Si tus registros describen personas y no lugares, la especificación limita la app a L1 de forma permanente — un hecho sobre los datos, no un veredicto sobre la app.',
+    questionsTitle: '¿No estás listo? Hazle preguntas',
+    questionsBody:
+      'El paquete responde «qué es Cabuya», «por qué un protocolo» y «qué implicaría en nuestra app» desde la especificación que lleva consigo, con citas — y te muestra el trabajo sin escribir un archivo.',
+    refusesTitle: 'Lo que no va a hacer',
+    refuses: [
+      'Declarar un nivel de conformidad que el validador no midió — y nunca usa la palabra «certificado».',
+      'Publicar un dato de contacto, en ningún lugar, en ninguna codificación. El contacto llega por la página pública de cada registro.',
+      'Abrir un pull request, o escribir un archivo, sin preguntar primero.',
+      'Enviar tus datos a ninguna parte. No tiene telemetría y no llama a casa.',
+    ],
+    linksTitle: '¿Prefieres leer primero?',
+    linkQuickstart: 'La guía rápida, paso a paso',
+    linkSkill: 'Qué instala la skill, exactamente',
+    linkValidator: 'Corre el validador tú mismo',
+  },
+
   notFoundPage: {
     metaTitle: 'Página no encontrada — Cabuya',
     title: 'Esta página no existe',
@@ -273,6 +316,7 @@ export const es: SiteTranslations = {
     agentPathTitle: 'Si tienes un agente de código',
     agentPathBody:
       'Instala la skill y pídele que publique un feed de Cabuya. La skill incluye la especificación, así que funciona sin conexión y sin adivinar nombres de campo.',
+    agentPathStart: 'O toma el camino guiado: instala, di /cabuya, listo →',
     handPathTitle: 'Si lo vas a hacer a mano',
     handPathBody:
       'Cinco pasos. El paso 3 es el punto de falla más frecuente, y conviene leerlo completo.',

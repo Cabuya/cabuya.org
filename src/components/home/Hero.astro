@@ -47,14 +47,17 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 
 /**
- * Both routes ship now (Tasks 24 and 28), so both CTAs are links and the
- * honest "these are still being written" note underneath them is gone. Set a
- * target back to `null` and the label renders as plain emphasis rather than a
- * dead link — Rule-0 holds either way.
+ * The hero's two doors, the way deepworkplan.com does it: a visitor deciding
+ * in five seconds either starts now or understands it first, and both are one
+ * click. Primary → `/start` (install the pack, say the sentence); secondary →
+ * the landing's own how-it-works section, which owns that beat per
+ * MESSAGING.md — an anchor, not a new page. Set a target back to `null` and
+ * the label renders as plain emphasis rather than a dead link — Rule-0 holds
+ * either way.
  */
 const CTA_TARGETS: { primary: string | null; secondary: string | null } = {
-  primary: `${getUrlPrefix(lang)}/developers/quickstart`,
-  secondary: `${getUrlPrefix(lang)}/registry`,
+  primary: `${getUrlPrefix(lang)}/start`,
+  secondary: `${getUrlPrefix(lang)}/#how-it-works`,
 };
 
 /**

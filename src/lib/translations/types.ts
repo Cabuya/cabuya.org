@@ -136,6 +136,42 @@ export interface SiteTranslations {
     ctaJoin: string;
   };
 
+  /** `/start` — install the pack, say the sentence, and the agent does the rest. */
+  start: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    /** The two-line beginning. */
+    installTitle: string;
+    installBody: string;
+    sayTitle: string;
+    sayBody: string;
+    /** What the command does, honestly. */
+    whatTitle: string;
+    whatBody: string;
+    /** Who plans: methodology → DWP → plan mode. */
+    asksTitle: string;
+    asksBody: string;
+    asksDwp: string;
+    asksPlanMode: string;
+    /** The PII gate, and the L1 ceiling as a fact about data. */
+    gateTitle: string;
+    gateBody: string;
+    gateCeiling: string;
+    /** Ask before you build. */
+    questionsTitle: string;
+    questionsBody: string;
+    /** The refusals. */
+    refusesTitle: string;
+    refuses: string[];
+    /** Cross-links out. */
+    linksTitle: string;
+    linkQuickstart: string;
+    linkSkill: string;
+    linkValidator: string;
+  };
+
   notFoundPage: {
     metaTitle: string;
     title: string;
@@ -201,6 +237,8 @@ export interface SiteTranslations {
     /** The two entry paths, agent first. */
     agentPathTitle: string;
     agentPathBody: string;
+    /** Cross-link to /start — the guided path. */
+    agentPathStart: string;
     handPathTitle: string;
     handPathBody: string;
 

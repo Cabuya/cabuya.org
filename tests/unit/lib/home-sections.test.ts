@@ -209,17 +209,19 @@ describe('hero call-to-action honesty', () => {
 
   it('does not link to a route that does not exist', () => {
     /*
-     * Both routes ship, so both targets are real paths. They carry the
-     * language prefix: hardcoding the bare path sent a Spanish reader from
-     * `/es/` into the English quickstart, which the cross-language link audit
-     * caught. A target may also be `null`, which renders the label as text
-     * rather than a dead link — Rule 0 holds either way.
+     * The two doors: start now, or understand it first. Both targets are
+     * real — `/start` ships with the guided-adoption work, and the secondary
+     * is the landing's own how-it-works anchor (whose `id` is asserted
+     * below). They carry the language prefix: hardcoding the bare path sent
+     * a Spanish reader from `/es/` into the English quickstart once. A
+     * target may also be `null`, which renders the label as text rather
+     * than a dead link — Rule 0 holds either way.
      */
     expect(source).toContain('CTA_TARGETS');
     const targets = source.match(/const CTA_TARGETS[\s\S]*?};/)?.[0] ?? '';
     for (const [path, marker] of [
-      ['/developers/quickstart', 'primary'],
-      ['/registry', 'secondary'],
+      ['/start', 'primary'],
+      ['/#how-it-works', 'secondary'],
     ]) {
       const live = new RegExp(
         `${marker}:\\s*\`\\$\\{getUrlPrefix\\(lang\\)\\}${path}\``
@@ -230,6 +232,11 @@ describe('hero call-to-action honesty', () => {
         `${marker} CTA must be a language-prefixed real route or explicitly null`
       ).toBe(true);
     }
+  });
+
+  it('the secondary CTA lands on an anchor that exists', () => {
+    const howItWorks = read('HowItWorks.astro');
+    expect(howItWorks).toContain('id="how-it-works"');
   });
 
   it('keeps the illustration slot layout-safe while the art is absent', () => {
