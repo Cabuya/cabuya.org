@@ -151,6 +151,50 @@ export const ILLUSTRATIONS = {
     sizes: '(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 78vw',
   },
 
+  /**
+   * AB-01 — `/about`, beside the hero copy.
+   *
+   * The only entry that is a *specimen* rather than a motif: the page opens by
+   * saying the name comes from a plant, and the plant is on the page. It is
+   * `hidden` below `lg`, where the hero is a single column and a 352 px botanical
+   * plate under two paragraphs would be a thumbnail of itself.
+   */
+  'about-fique-plant': {
+    src: `${VISUALS}/about/fique-plant.webp`,
+    srcset: pair(`${VISUALS}/about/fique-plant`, 400),
+    width: 400,
+    height: 538,
+    /* Fixed 352 px column from `lg`; never painted below it. */
+    sizes: '352px',
+  },
+
+  /** AB-02 — the metaphor section: leaf, fibre, twist, cord. */
+  'about-leaf-to-fibre': {
+    src: `${VISUALS}/about/leaf-to-fibre.webp`,
+    srcset: pair(`${VISUALS}/about/leaf-to-fibre`, 720),
+    width: 720,
+    height: 268,
+    sizes: '(min-width: 768px) 720px, 88vw',
+  },
+
+  /** AB-03 — five cords spliced with no centre, beside the neutrality section. */
+  'about-splice-no-centre': {
+    src: `${VISUALS}/about/splice-no-centre.webp`,
+    srcset: pair(`${VISUALS}/about/splice-no-centre`, 420),
+    width: 420,
+    height: 415,
+    sizes: '(min-width: 1024px) 384px, (min-width: 640px) 45vw, 84vw',
+  },
+
+  /** AB-04 — the open bight, under «coger la cabuya». */
+  'about-the-bight': {
+    src: `${VISUALS}/about/the-bight.webp`,
+    srcset: pair(`${VISUALS}/about/the-bight`, 720),
+    width: 720,
+    height: 338,
+    sizes: '(min-width: 768px) 720px, 88vw',
+  },
+
   /** MK-01 — the 404, in place of the isologo. */
   '404-retied': {
     src: `${VISUALS}/marks/404-retied.webp`,

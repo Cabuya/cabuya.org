@@ -77,6 +77,27 @@ a size we do not choose, next to text we did not write. It gets its own rules.
 | OG-01 — The default share card | [04-og-01-default-share-card.md](04-og-01-default-share-card.md) | flagship |
 | OG-02 — Per-section cards | [04-og-02-per-section-cards.md](04-og-02-per-section-cards.md) | deferred (guidance only) |
 
+## 06 · Why Cabuya (`/about`)
+
+Four illustrations for the origin page. It has eight sections and only these
+four earn art: the rest are carried by type and white space, because a page
+that illustrates every paragraph is a brochure.
+
+**The one rule this pack adds: no maps, no flags, no borders.** The page states,
+with a source, that Colombia is the world's largest grower of fique — a fact
+about a plant, inside an argument that the *fibre travels*. An illustrated map
+or a flag would convert a checkable fact into a territorial claim and make a
+portable format look like a national programme. The plant is the only thing
+that carries the origin, and it carries it the way a monograph does: by being
+drawn accurately.
+
+| Entry | File | Priority |
+|-------|------|----------|
+| AB-01 — The fique plant | [06-ab-01-fique-plant.md](06-ab-01-fique-plant.md) | flagship |
+| AB-02 — Leaf to fibre to cord | [06-ab-02-leaf-to-fibre.md](06-ab-02-leaf-to-fibre.md) | high |
+| AB-03 — Five cords, no centre | [06-ab-03-splice-no-centre.md](06-ab-03-splice-no-centre.md) | high |
+| AB-04 — The open bight | [06-ab-04-the-bight.md](06-ab-04-the-bight.md) | medium |
+
 ## 05 · Marks and ornaments
 
 Small transparent pieces. All of these must read at 96 pixels, which means very

@@ -2,13 +2,20 @@
 /**
  * Turn the illustration masters into the site's WebP assets.
  *
- *   node scripts/build-illustrations.mjs --masters <dir> [--only <id>] [--dry-run]
+ *   node scripts/build-illustrations.mjs --masters <dir>[,<dir>…] [--only <id>] [--dry-run]
  *
  * The masters are the founder's generated PNGs (1000–2500 px, alpha), which do
  * not live in this repository: `docs/visuals/README.md` says the pack is the
  * brief and the artwork is generated from it. Point `--masters` at the
  * directory holding them — the file names are declared per entry below, so the
  * only thing this script needs from the outside is where they are.
+ *
+ * `--masters` takes a comma-separated list and each master is resolved from the
+ * first directory that has it. Packs arrive one at a time and land in whatever
+ * directory the generator wrote them to; requiring a single directory meant
+ * either moving somebody's files or running the script once per pack with
+ * `--only`, and the second option silently skips the cross-asset `matchRatio`
+ * ordering below.
  *
  * ## What it does, and why it is not just a resize
  *
@@ -172,6 +179,47 @@ const ASSETS = [
     width: 460,
     budget: 80,
   },
+  /*
+   * Pack 06 — `/about`. The masters keep the generator's own file names rather
+   * than the `NN-xx-NN-slug` convention of the earlier packs: renaming somebody
+   * else's exports to satisfy a lookup table is a step that gets skipped, and
+   * the table is the place that already knows which file is which.
+   */
+  {
+    id: 'about-fique-plant',
+    master: 'AB-01-fique-plant.png',
+    area: 'about',
+    slug: 'fique-plant',
+    /* The hero's right column caps at `w-[22rem]` — 352 CSS px — from `lg`. */
+    width: 400,
+    budget: 96,
+  },
+  {
+    id: 'about-leaf-to-fibre',
+    master: 'AB-02-leaf-to-fibre.png',
+    area: 'about',
+    slug: 'leaf-to-fibre',
+    /* Full `measure`-width band under the metaphor section: `max-w-3xl`. */
+    width: 720,
+    budget: 96,
+  },
+  {
+    id: 'about-splice-no-centre',
+    master: 'AB-03-splice-no-centre.png',
+    area: 'about',
+    slug: 'splice-no-centre',
+    /* Beside the prose, capped at `max-w-sm`. */
+    width: 420,
+    budget: 80,
+  },
+  {
+    id: 'about-the-bight',
+    master: 'AB-04-the-bight.png',
+    area: 'about',
+    slug: 'the-bight',
+    width: 720,
+    budget: 96,
+  },
   {
     id: '404-retied',
     master: '05-mk-01-404-retied.png',
@@ -199,16 +247,26 @@ const ASSETS = [
 ];
 
 const args = process.argv.slice(2);
-const mastersDir = args.find((a) => a.startsWith('--masters='))?.split('=')[1];
+const mastersDirs = (
+  args.find((a) => a.startsWith('--masters='))?.split('=')[1] ?? ''
+)
+  .split(',')
+  .map((dir) => dir.trim())
+  .filter(Boolean);
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1];
 const dryRun = args.includes('--dry-run');
 
-if (!mastersDir) {
+if (!mastersDirs.length) {
   console.error(
-    '\n❌ --masters=<dir> is required: the generated PNGs are not in this repo.\n'
+    '\n❌ --masters=<dir>[,<dir>…] is required: the generated PNGs are not in this repo.\n'
   );
   process.exit(1);
 }
+
+/** The first directory that actually holds this master, or null. */
+const findMaster = (name) =>
+  mastersDirs.map((dir) => join(dir, name)).find((path) => existsSync(path)) ??
+  null;
 
 /** The drawing's bounding box, ignoring the encoder's feathered edge. */
 async function inkBox(file) {
@@ -308,9 +366,11 @@ const ratios = new Map();
 
 for (const asset of ASSETS) {
   if (only && asset.id !== only) continue;
-  const master = join(mastersDir, asset.master);
-  if (!existsSync(master)) {
-    console.error(`❌ ${asset.id}: master not found at ${master}`);
+  const master = findMaster(asset.master);
+  if (!master) {
+    console.error(
+      `❌ ${asset.id}: ${asset.master} is in none of ${mastersDirs.join(', ')}`
+    );
     process.exitCode = 1;
     continue;
   }
