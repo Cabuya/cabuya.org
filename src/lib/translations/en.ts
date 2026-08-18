@@ -176,15 +176,11 @@ export const en: SiteTranslations = {
 
     verbTitle: 'Adoption already had a word',
     verbBody:
-      'Spanish already had an expression for catching on to how something works — for picking up the thread of a matter — and the phrase for it, recorded by the Real Academia Española, is to catch the cabuya. A format whose verb of adoption already exists in the language of the region it starts in has one less thing to teach, and formats spread on what they do not have to explain.',
+      'Spanish already had an expression for catching on to how something works — for picking up the thread of a matter — and the phrase for it, recorded by the Real Academia Española, is to catch the cabuya. A format whose verb of adoption already exists in the language of the region it starts in has one less thing to teach. Formats spread on what they do not have to explain.',
 
     downsideTitle: 'What else the word means',
     downsideBody:
       'The same dictionaries record a second sense, used in Colombia and Ecuador: to be in the cabuya is to be in a jam you cannot easily get out of. We knew about it before choosing the name, and it is on this page rather than left for somebody else to find. We ask publishers to let a validator measure them in public, and a project that quietly kept the unflattering half of its own name would have no standing to ask.',
-
-    notTakenTitle: 'The name we did not take',
-    notTakenBody:
-      'Forty-seven candidates were examined. The one rejected first was never checked for availability at all: Aluna, the originating thought-force in Kogi and Arhuaco cosmology. It is the sacred concept of living peoples rather than an asset, and a project whose central rule is about what is not ours to collect does not get to help itself to their cosmology.',
 
     outlivesTitle: 'What happens when the emergency ends',
     outlivesBody:

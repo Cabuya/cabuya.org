@@ -2,12 +2,11 @@
 /**
  * `/about` — where the name comes from, and what it committed the project to.
  *
- * The page argues that the name is not decoration. Two of its sections exist
- * because leaving them out would make it a brochure: the idiom that means *to
- * be in a jam*, which is the honest cost of the word, and the name that was
- * rejected because it belongs to living peoples. A project whose founding
- * argument is that an unverifiable claim is worth nothing does not get to be
- * selective about which facts it publishes about itself.
+ * The page argues that the name is not decoration. The second idiom — *estar
+ * en la cabuya*, to be in a jam — stays on the page because leaving it out
+ * would make the naming story a brochure. A project that asks publishers to
+ * be measured in public does not get to be selective about which facts it
+ * publishes about itself.
  *
  * Every figure here is sourced. `docs/context/BRAND_AND_NAMING.md` carries the
  * naming analysis and the dictionary references behind the two idioms.
@@ -98,18 +97,14 @@ const prefix = getUrlPrefix(lang);
     <p class="measure">{t.about.downsideBody}</p>
   </PageSection>
 
-  <PageSection title={t.about.notTakenTitle} background="gray">
-    <p class="measure">{t.about.notTakenBody}</p>
-  </PageSection>
-
-  <PageSection title={t.about.outlivesTitle}>
+  <PageSection title={t.about.outlivesTitle} background="gray">
     <div class="measure">
       <p>{t.about.outlivesBody}</p>
       <p class="mt-5">{t.about.outlivesSecond}</p>
     </div>
   </PageSection>
 
-  <PageSection title={t.about.ctaTitle} background="gray">
+  <PageSection title={t.about.ctaTitle}>
     <div class="measure">
       <p>{t.about.ctaBody}</p>
       <div class="mt-7 flex flex-wrap items-center gap-3">
