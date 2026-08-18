@@ -3,24 +3,19 @@ module.exports = {
     collect: {
       staticDistDir: './dist',
       /*
-       * The eight representative routes (`docs/PERFORMANCE.md`): one per page
-       * *renderer*, not one per page. A regression lives in a renderer, so
-       * covering each once catches everything and keeps a CI run to minutes.
+       * Two routes in CI, by decision (2026-08-18): Lighthouse was the single
+       * slowest CI step at ~5 minutes over eight routes. The home page (the
+       * heaviest budget and the landing renderer) and the quickstart (the
+       * portal renderer and the most important page) keep a Lighthouse signal
+       * on every push at a fraction of the cost.
        *
-       * Both languages are here because they are different documents — natively
-       * written rather than translated — and Spanish prose is reliably longer,
-       * which is where a layout shift would show first.
+       * This is a *sample*, and the deterministic contract does not shrink
+       * with it: `perf:budgets` stays blocking over every route, and the
+       * eight-representative-routes run — one per page renderer, both
+       * languages (`docs/PERFORMANCE.md`) — remains available as
+       * `pnpm run lighthouse:full` for local runs and release checks.
        */
-      url: [
-        '/',
-        '/es/',
-        '/developers/quickstart/',
-        '/developers/spec/0.1/3-the-feed/',
-        '/developers/schemas/0.1/place-feed/',
-        '/developers/validator/',
-        '/registry/',
-        '/registry/corag/',
-      ],
+      url: ['/', '/developers/quickstart/'],
       // Median of 3 reduces LHCI noise around the 0.99↔1.00 boundary.
       numberOfRuns: 3,
       settings: {

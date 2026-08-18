@@ -64,7 +64,7 @@ there, including when the consumer is an AI system.
 - [Consumption rules](https://cabuya.org/developers/consume) — Six rules for reading someone else’s feed without harming them. · https://cabuya.org/developers/consume.md
 - [MCP server](https://cabuya.org/developers/mcp) · https://cabuya.org/developers/mcp.md
 - [FAQ](https://cabuya.org/developers/faq) · https://cabuya.org/developers/faq.md
-- [Start](https://cabuya.org/start) · https://cabuya.org/start.md
+- [Get started](https://cabuya.org/start) · https://cabuya.org/start.md
 - [llms.txt](https://cabuya.org/llms.txt) · https://cabuya.org/llms.txt.md
 
 ## Specification 0.1

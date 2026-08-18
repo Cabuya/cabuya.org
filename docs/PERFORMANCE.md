@@ -16,7 +16,7 @@
 | Registry | ≤ 60 KB JS; table server-rendered; **works with JS disabled** | Public-interest data degrades gracefully |
 | Badge endpoint | < 50 ms p95, `max-age=900, stale-while-revalidate=3600` | A slow badge is a badge people remove |
 | `/api/validate` | < 3 s p50 single-feed run | The quickstart's promise depends on it |
-| Lighthouse CI | ≥ 95 perf / 100 a11y / 100 best-practices / ≥ 95 SEO on the eight representative routes | Advisory on PRs, blocking on main |
+| Lighthouse CI | ≥ 95 perf / 100 a11y / 100 best-practices / ≥ 95 SEO. CI samples two routes (home + quickstart — the two heaviest renderers) so the job stays fast; the eight representative routes run as `pnpm run lighthouse:full` locally and at releases | Advisory on PRs, blocking on main |
 
 ## 2. The rules that keep budgets met
 

@@ -2,31 +2,24 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
+      /*
+       * The eight representative routes: one per page *renderer*, not one per
+       * page — a regression lives in a renderer, so covering each once
+       * catches everything. Both languages are here because they are
+       * different documents, natively written, and Spanish prose is reliably
+       * longer — where a layout shift shows first. CI samples two of these
+       * (`lighthouserc.cjs`); this is the full set, for local runs and
+       * release checks.
+       */
       url: [
-        // Base pages (same as lighthouserc.cjs) — pin home lang (see lighthouserc.cjs).
-        '/?lang=es',
-        '/about/',
-        '/blog/',
-        '/en/',
-        // Blog listing EN (i18n parity)
-        '/en/blog/',
-        // Series pages
-        '/blog/series/',
-        // Blog tag listing
-        '/blog/tag/donations/',
-        // A blog post — the heaviest page type, with a responsive hero
-        '/blog/how-to-tell-if-a-foundation-is-trustworthy/',
-        // Form page
-        '/contact/',
-        // The institutional pages: one renderer, so one is representative,
-        // but /emergencies carries the callout and /developers the code blocks.
-        '/how-it-works/',
-        '/transparency/',
-        '/emergencies/',
-        '/developers/',
-        // Directory pages
-        '/contributors/',
-        '/channels/',
+        '/',
+        '/es/',
+        '/developers/quickstart/',
+        '/developers/spec/0.1/3-the-feed/',
+        '/developers/schemas/0.1/place-feed/',
+        '/developers/validator/',
+        '/registry/',
+        '/registry/corag/',
       ],
       numberOfRuns: 3,
       settings: {

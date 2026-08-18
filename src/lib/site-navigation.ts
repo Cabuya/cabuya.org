@@ -228,7 +228,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     label: { en: 'Developers', es: 'Desarrolladores' },
     entries: [
       {
-        label: { en: 'Start', es: 'Empezar' },
+        label: { en: 'Get started', es: 'Primeros pasos' },
         path: '/start',
         status: 'live',
       },
