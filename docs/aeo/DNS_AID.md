@@ -64,19 +64,36 @@ allows it.
 
 ## Option B — Cloudflare dashboard
 
-**cabuya.org** zone → DNS → Records → **Add record**, once per row in the table
-above. Record type **HTTPS**.
+The zone is on Cloudflare (`johnny.ns.cloudflare.com`, `selah.ns.cloudflare.com`),
+so this is the same place the script writes to.
+
+**cabuya.org** zone → DNS → Records → **Add record**:
+
+| Field | Value |
+|---|---|
+| Type | `HTTPS` |
+| Name | `_index._agents` |
+| Priority | `1` |
+| Target | `cabuya.org` |
+| Value / SvcParams | `alpn="h2,h3" port=443` |
+| TTL | Auto (or 3600) |
+| Proxy | **DNS only** — a proxied record is not what a resolver sees |
+
+Priority `1` is what makes it a **ServiceMode** record; priority `0` is AliasMode
+and the scanner does not count it.
 
 ## DNSSEC
 
 The zone is **not signed today** — `cabuya.org` has no DS record, and validating
 resolvers return `AD: false`.
 
-1. Cloudflare → DNS → Settings → enable **DNSSEC**.
-2. `.app` is a Google Registry TLD. If the registrar is outside Cloudflare, copy
-   the DS values Cloudflare shows into the registrar; if the domain is
-   registered through Cloudflare, the DS is published automatically.
-3. Allow time for the DS to propagate at the registry.
+1. Cloudflare → DNS → Settings → enable **DNSSEC**. Cloudflare signs the zone
+   and shows a DS record.
+2. If the registrar is outside Cloudflare, copy that DS into the registrar's
+   DNSSEC panel; if `cabuya.org` is registered through Cloudflare, the DS is
+   published for you.
+3. Allow time for the DS to appear at the `.org` registry — minutes to a few
+   hours. `dig +short DS cabuya.org` returning nothing means it has not landed.
 
 Without DNSSEC the scanner can still see the records, but `dnssecValidated`
 stays false and the discovery data is unauthenticated.
@@ -84,18 +101,17 @@ stays false and the discovery data is unauthenticated.
 ## Verify
 
 ```bash
-# The records resolve (expect a ServiceMode answer, not NXDOMAIN)
+# The record resolves (expect a ServiceMode answer, not an empty Answer)
 dig +short HTTPS _index._agents.cabuya.org
-dig +short HTTPS _mcp._agents.cabuya.org
 
 curl -s 'https://cloudflare-dns.com/dns-query?name=_index._agents.cabuya.org&type=HTTPS' \
-  -H 'accept: application/dns-json' | jq .
+  -H 'accept: application/dns-json' | jq '.Status, .Answer'
 
 # DNSSEC is signing the zone (expect an Answer with a DS record, and AD: true)
-curl -s 'https://dns.google/resolve?name=cabuya.org&type=DS' | jq '.Status, .Answer'
+curl -s 'https://dns.google/resolve?name=cabuya.org&type=DS' | jq '.Status, .AD, .Answer'
 
-# The MCP target actually serves MCP before you advertise it
-curl -s -X POST https://ayuda.cabuya.org/mcp \
+# Before advertising an MCP host, prove it answers MCP
+curl -s -X POST https://<mcp-host>/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | head -c 200
