@@ -10,7 +10,7 @@ import { allPublishers } from '@/lib/registry-loader';
  * agent skill's doctor and its offline snapshot regeneration point here, so
  * this URL is part of the protocol's public contract, not a convenience.
  *
- * It carries exactly what the reviewed entries in `registry/` carry —
+ * It carries exactly what the reviewed publisher entries carry —
  * org-level identity, entity domains, review status — and **never** measured
  * badge state: measurement lives in KV and is served per publisher, because a
  * static file that claimed to know a live measurement would be stale the hour

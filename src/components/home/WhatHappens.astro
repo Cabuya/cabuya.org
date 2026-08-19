@@ -74,8 +74,16 @@ const t = getTranslations(lang);
       <h3 class="text-lg font-semibold text-cabuya-text">
         {t.home.whatHappens.artifactsTitle}
       </h3>
+      {/*
+        The block can scroll horizontally on narrow screens, and a scrollable
+        region a keyboard cannot reach fails WCAG (axe: scrollable-region-
+        focusable) — hence tabindex and an accessible name.
+      */}
       <div
         class="mt-4 overflow-x-auto rounded-lg border border-cabuya-border bg-cabuya-bg p-5 font-mono text-sm"
+        tabindex="0"
+        role="region"
+        aria-label={t.home.whatHappens.artifactsTitle}
       >
         <p>
           <span class="text-cabuya-primary">{EXAMPLE_MANIFEST_URL}</span>
