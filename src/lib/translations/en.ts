@@ -337,7 +337,7 @@ export const en: SiteTranslations = {
     ],
     startTitle: 'Where to start',
     startBody:
-      'The specification and the validator are in the repository today. The quickstart, the rendered specification and the live validator are being written now — until they ship, the repository is the complete source.',
+      'The quickstart, the rendered specification and the live validator are all here. If you would rather read the source, the repository carries the same spec, schemas and examples this site renders.',
   },
 
   quickstart: {

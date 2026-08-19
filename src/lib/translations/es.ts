@@ -327,7 +327,7 @@ export const es: SiteTranslations = {
     ],
     startTitle: 'Por dónde empezar',
     startBody:
-      'La especificación y el validador ya están en el repositorio. La guía rápida, la especificación renderizada y el validador en vivo se están escribiendo ahora — hasta que se publiquen, el repositorio es la fuente completa.',
+      'La guía rápida, la especificación renderizada y el validador en vivo ya están aquí. Si prefieres leer la fuente, el repositorio lleva la misma especificación, esquemas y ejemplos que este sitio renderiza.',
   },
 
   quickstart: {

@@ -55,15 +55,17 @@ there, including when the consumer is an AI system.
 - [Governance](https://cabuya.org/governance) — Who decides, and how · https://cabuya.org/governance.md
 - [Trademark & badge](https://cabuya.org/trademark) — What you may call your implementation · https://cabuya.org/trademark.md
 - [Join](https://cabuya.org/join) · https://cabuya.org/join.md
+- [How it works](https://cabuya.org/developers/how-it-works) — The network end to end: the premises, the copy that travels, and the buttons that lead home. · https://cabuya.org/developers/how-it-works.md
 - [Quickstart](https://cabuya.org/developers/quickstart) — Publish your first feed. One afternoon for a small application. · https://cabuya.org/developers/quickstart.md
-- [Profiles](https://cabuya.org/developers/profiles) · https://cabuya.org/developers/profiles.md
+- [Profiles](https://cabuya.org/developers/profiles) — Core and Extended: which optional fields mean what. · https://cabuya.org/developers/profiles.md
+- [Data model guide](https://cabuya.org/developers/data-model) — Organize a new app so publishing is nearly free. Guidance, not a requirement. · https://cabuya.org/developers/data-model.md
 - [Validator](https://cabuya.org/developers/validator) — Run it against a URL and read what it found. · https://cabuya.org/developers/validator.md
-- [Checks](https://cabuya.org/developers/validator/checks) · https://cabuya.org/developers/validator/checks.md
-- [Our probe](https://cabuya.org/developers/validator/probe) · https://cabuya.org/developers/validator/probe.md
+- [Checks](https://cabuya.org/developers/validator/checks) — The full catalogue: every check, its severity, and its fix. · https://cabuya.org/developers/validator/checks.md
+- [Our probe](https://cabuya.org/developers/validator/probe) — How and when our cron re-measures registered feeds. · https://cabuya.org/developers/validator/probe.md
 - [Agent skill](https://cabuya.org/developers/skill) — Install the protocol into an agent; it works offline. · https://cabuya.org/developers/skill.md
 - [Consumption rules](https://cabuya.org/developers/consume) — Six rules for reading someone else’s feed without harming them. · https://cabuya.org/developers/consume.md
-- [MCP server](https://cabuya.org/developers/mcp) · https://cabuya.org/developers/mcp.md
-- [FAQ](https://cabuya.org/developers/faq) · https://cabuya.org/developers/faq.md
+- [MCP server](https://cabuya.org/developers/mcp) — Validate feeds and read pages as Markdown, from an agent. · https://cabuya.org/developers/mcp.md
+- [FAQ](https://cabuya.org/developers/faq) — Licence, personal data, identifiers, shutdown — the adoption blockers. · https://cabuya.org/developers/faq.md
 - [Get started](https://cabuya.org/start) · https://cabuya.org/start.md
 - [llms.txt](https://cabuya.org/llms.txt) · https://cabuya.org/llms.txt.md
 
@@ -107,6 +109,7 @@ permanent and every error message links to its anchor.
 ## RFCs
 
 - [RFC-0001 Founding agreement · Acuerdo fundacional](https://cabuya.org/rfcs/0001) — draft
+- [RFC-0002 v0.2 entities and coverage · Entidades y cobertura v0.2](https://cabuya.org/rfcs/0002) — draft
 
 ## Español
 
