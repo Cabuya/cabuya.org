@@ -88,6 +88,32 @@ En concreto, quien adopta termina con:
 - El ciclo: ejecuta el [validador](/es/developers/validator) contra tus URLs,
   lee lo que midió, corrige, repite.
 
+Así se ven los dos documentos, recortados (la
+[guía rápida](/es/developers/quickstart) lleva ambos completos):
+
+```json
+// tu-app.org/.well-known/cabuya.json — el manifiesto
+{
+  "publisher_id": "example-app",
+  "license": "CC-BY-4.0",
+  "feeds": [
+    { "name": "places", "entity": "place",
+      "url": "https://example.org/cabuya/places.json" }
+  ]
+}
+```
+
+```json
+// un registro del feed
+{
+  "name": "Coliseo Municipal",
+  "place_kind": "shelter",
+  "municipality_text": "Pereira",
+  "lifecycle_status": "active",
+  "public_url": "https://example.org/places/coliseo"
+}
+```
+
 Nunca migra tu modelo de datos interno. Si tu app todavía está en el tablero
 de dibujo, la [guía del modelo de datos](/es/developers/data-model) es la
 forma desde la cual empezar.

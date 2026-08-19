@@ -86,6 +86,32 @@ with:
 - The loop: run the [validator](/developers/validator) against your URLs,
   read what it measured, fix, repeat.
 
+This is what the two documents look like, trimmed (the
+[quickstart](/developers/quickstart) carries both in full):
+
+```json
+// your-app.org/.well-known/cabuya.json — the manifest
+{
+  "publisher_id": "example-app",
+  "license": "CC-BY-4.0",
+  "feeds": [
+    { "name": "places", "entity": "place",
+      "url": "https://example.org/cabuya/places.json" }
+  ]
+}
+```
+
+```json
+// one record from the feed
+{
+  "name": "Coliseo Municipal",
+  "place_kind": "shelter",
+  "municipality_text": "Pereira",
+  "lifecycle_status": "active",
+  "public_url": "https://example.org/places/coliseo"
+}
+```
+
 It never migrates your internal data model. If your app is still on the
 drawing board, the [data model guide](/developers/data-model) is the shape to
 start from.
