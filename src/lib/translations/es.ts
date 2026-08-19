@@ -75,12 +75,40 @@ export const es: SiteTranslations = {
       ],
     },
 
-    ladder: {
-      kicker: 'Conformidad',
-      title: 'Una escalera, no una puerta',
-      lead: 'Cada nivel es una clase de membresía. Ya estás en la red en L0, y cada peldaño hace que más de ella te sirva — pero quedarse es una posición, no un fracaso.',
-      respectNote:
-        'Dos clases nunca pasan de L1: las apps cuyos registros son irreduciblemente personales, y las que simplemente eligen no publicar. Ambas están listadas y ambas son miembros respetados.',
+    whatHappens: {
+      kicker: 'Qué significa unirse',
+      title: 'Tus datos siguen siendo tuyos. Viaja una copia.',
+      lead: 'El protocolo parte de dos hechos, y todo lo demás se desprende de ellos.',
+      premises: [
+        {
+          title: 'Van a existir muchas apps — y está bien',
+          body: 'En cada emergencia los equipos crean sus propios tableros, mapas y directorios, muchas veces para la misma ciudad. El protocolo no reemplaza a ninguna: las conecta, y cada una conserva su producto, sus usuarios y su base de datos.',
+        },
+        {
+          title: 'Los datos son delicados',
+          body: 'Por eso la capa compartida lleva lugares y hechos, nunca personas: sin nombres, sin teléfonos, sin contacto personal. Eso queda excluido por diseño, no por buenas intenciones.',
+        },
+      ],
+      beats: [
+        {
+          title: 'Publicas una copia',
+          body: 'Tu app conserva su base de datos tal como está. Lo que agregas es una copia pública de tus registros en el formato compartido, en una dirección web que tú eliges — un archivo simple o un endpoint: ambos cuentan como el mismo feed.',
+        },
+        {
+          title: 'Otras apps muestran tus registros',
+          body: 'Cualquier app puede leer esa dirección y mostrar lo que publicaste, diciendo siempre de qué app viene y dónde está — cada registro viaja con su municipio y su barrio.',
+        },
+        {
+          title: 'Cada botón lleva de vuelta a ti',
+          body: 'Cuando alguien quiere actuar sobre un registro, el botón lo lleva a la app que lo publicó. Los datos de contacto nunca viajan en el feed, así que la ayuda se resuelve en el origen.',
+        },
+      ],
+      artifactsTitle: 'Qué terminas publicando',
+      manifestLabel: 'el manifiesto — quién eres y dónde vive tu feed',
+      feedLabel: 'el feed — tus registros, en el formato compartido',
+      recordLabel: 'Un registro, recortado:',
+      closingNote:
+        'Un validador público mide si lo que publicas cumple el formato, y el registro muestra el resultado. Nada de esto necesita una cuenta ni nuestro permiso.',
     },
 
     network: {

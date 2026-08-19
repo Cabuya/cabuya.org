@@ -11,6 +11,11 @@
  * diagram argues, so it is exactly the right stand-in for a reader who cannot
  * see it. A twin that silently dropped four diagrams would drop four beats.
  */
+import {
+  EXAMPLE_FEED_URL,
+  EXAMPLE_MANIFEST_URL,
+  EXAMPLE_RECORD,
+} from '@/lib/home-example';
 import type { Language } from '@/lib/i18n';
 import { diagramLines } from '@/lib/markdown-for-agents';
 import { displayHost, publishersForDisplay } from '@/lib/registry-loader';
@@ -55,12 +60,30 @@ export function homeSections(lang: Language): TwinSection[] {
       ],
     },
     {
-      heading: t.home.ladder.title,
+      heading: t.home.whatHappens.title,
       lines: [
-        t.home.ladder.lead,
-        ...diagramLines('conformanceLadder', lang),
+        t.home.whatHappens.lead,
         '',
-        t.home.ladder.respectNote,
+        ...t.home.whatHappens.premises.map(
+          (premise) => `- **${premise.title}** — ${premise.body}`
+        ),
+        '',
+        ...t.home.whatHappens.beats.map(
+          (beat, index) => `${index + 1}. **${beat.title}** — ${beat.body}`
+        ),
+        '',
+        `**${t.home.whatHappens.artifactsTitle}**`,
+        '',
+        `- \`${EXAMPLE_MANIFEST_URL}\` — ${t.home.whatHappens.manifestLabel}`,
+        `- \`${EXAMPLE_FEED_URL}\` — ${t.home.whatHappens.feedLabel}`,
+        '',
+        t.home.whatHappens.recordLabel,
+        '',
+        '```json',
+        EXAMPLE_RECORD,
+        '```',
+        '',
+        t.home.whatHappens.closingNote,
       ],
     },
     {

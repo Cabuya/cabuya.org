@@ -63,11 +63,17 @@ export interface SiteTranslations {
       steps: Array<{ title: string; body: string }>;
     };
 
-    ladder: {
+    whatHappens: {
       kicker: string;
       title: string;
       lead: string;
-      respectNote: string;
+      premises: Array<{ title: string; body: string }>;
+      beats: Array<{ title: string; body: string }>;
+      artifactsTitle: string;
+      manifestLabel: string;
+      feedLabel: string;
+      recordLabel: string;
+      closingNote: string;
     };
 
     network: {

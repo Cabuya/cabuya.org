@@ -84,12 +84,40 @@ export const en: SiteTranslations = {
       ],
     },
 
-    ladder: {
-      kicker: 'Conformance',
-      title: 'A ladder, not a gate',
-      lead: 'Every level is a membership class. You are in the network at L0, and each rung up makes more of it useful to you — but stopping is a position, not a failure.',
-      respectNote:
-        'Two classes never climb past L1: apps whose records are irreducibly personal, and apps that simply choose not to publish. Both are listed, and both are respected members.',
+    whatHappens: {
+      kicker: 'What joining means',
+      title: 'Your data stays yours. A copy travels.',
+      lead: 'The protocol rests on two facts, and everything else follows from them.',
+      premises: [
+        {
+          title: 'Many apps will exist — and that is fine',
+          body: 'In every emergency, teams build their own boards, maps and directories, often for the same city. The protocol does not replace any of them; it connects them, and each keeps its own product, its own users and its own database.',
+        },
+        {
+          title: 'The data is sensitive',
+          body: 'So the shared layer carries places and facts, never people: no names, no phone numbers, no personal contact. That is excluded by design, not by good intentions.',
+        },
+      ],
+      beats: [
+        {
+          title: 'You publish a copy',
+          body: 'Your app keeps its own database exactly as it is. What you add is a public copy of your records in the shared format, at a web address you choose — a plain file or an endpoint, both count as the same feed.',
+        },
+        {
+          title: 'Other apps show your records',
+          body: 'Any app can read that address and display what you published, always saying which app it came from and where it is — each record travels with its own town and neighborhood.',
+        },
+        {
+          title: 'Every button leads back to you',
+          body: 'When someone wants to act on a record, the button takes them to the app that published it. Contact details never travel in the feed, so the origin is where help gets resolved.',
+        },
+      ],
+      artifactsTitle: 'What you end up publishing',
+      manifestLabel: 'the manifest — who you are and where your feed lives',
+      feedLabel: 'the feed — your records, in the shared format',
+      recordLabel: 'One record, trimmed:',
+      closingNote:
+        'A public validator measures whether what you publish conforms, and the registry shows the result. None of it needs an account or our permission.',
     },
 
     network: {

@@ -41,7 +41,11 @@ describe.each(LANGUAGE_CODES)('landing copy (%s)', (lang) => {
       'Crecemos juntos'
     );
     expect(t.home.howItWorks.steps).toHaveLength(4);
-    expect(t.home.ladder.respectNote.length).toBeGreaterThan(40);
+    // The what-joining-means section: two premises, three beats, and a
+    // closing note that keeps measured-never-declared on the page.
+    expect(t.home.whatHappens.premises).toHaveLength(2);
+    expect(t.home.whatHappens.beats).toHaveLength(3);
+    expect(t.home.whatHappens.closingNote.length).toBeGreaterThan(40);
     expect(t.home.network.proposedExplainer.length).toBeGreaterThan(40);
     expect(t.home.horizon.stages).toHaveLength(3);
     expect(t.home.finalCta.title.length).toBeGreaterThan(10);
@@ -66,6 +70,21 @@ describe.each(LANGUAGE_CODES)('landing copy (%s)', (lang) => {
     ]) {
       expect(copy.toLowerCase()).not.toContain(word);
     }
+  });
+
+  it('shows what an adopter ends up publishing, on real example URLs', () => {
+    /*
+     * The user-facing promise: a first-time visitor sees the concrete
+     * artifacts — the manifest URL, the feed URL, one trimmed record — not
+     * just prose about them. The twin must carry the same example the page
+     * renders, and it must be example.org, never a real publisher.
+     */
+    const twin = homeSections(lang)
+      .flatMap((section) => section.lines)
+      .join('\n');
+    expect(twin).toContain('example.org/.well-known/cabuya.json');
+    expect(twin).toContain('example.org/cabuya/places.json');
+    expect(twin).toContain('"place_kind": "shelter"');
   });
 
   it('labels the horizon as ambition rather than as a plan', () => {
