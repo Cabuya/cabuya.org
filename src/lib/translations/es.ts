@@ -9,6 +9,103 @@ export const es: SiteTranslations = {
   siteDescriptionShort:
     'Un formato abierto para que las apps de ayuda publiquen y lean los mismos datos. La conformidad se mide, no se declara.',
 
+  faq: {
+    metaTitle: 'Preguntas frecuentes — Cabuya',
+    metaDescription:
+      'Qué es Cabuya, cómo funciona el protocolo, qué produce instalar la skill, qué tipos de ayuda conecta y por qué ningún dato personal viaja.',
+    title: 'Preguntas frecuentes',
+    lead: 'Respuestas llanas, para cualquiera. Las preguntas de desarrollador — licencias, identificadores, cierre — tienen su propia página en el portal.',
+    items: [
+      {
+        q: '¿Qué es Cabuya?',
+        a: 'Un protocolo abierto — un formato de datos compartido más unas pocas reglas — para que las aplicaciones de ayuda en emergencias puedan leerse los registros entre sí. Es un documento y un validador público, no una plataforma: no hay cuenta, no hay centro y no hay que inscribirse en nada.',
+      },
+      {
+        q: '¿Cómo funciona?',
+        a: 'Cada app publica un manifiesto pequeño en una dirección web conocida y un feed con sus registros en el formato compartido. Otras apps leen ese feed y muestran los registros — diciendo siempre qué app publicó cada uno y dónde está. Cada botón de acción lleva de vuelta a la app dueña del registro.',
+        more: {
+          label: 'Cómo funciona, de punta a punta',
+          path: '/developers/how-it-works',
+        },
+      },
+      {
+        q: '¿Tengo que cambiar la base de datos de mi app?',
+        a: 'No. Tu modelo interno queda exactamente como está — un serializador pequeño publica una copia traducida de tus registros, y tus llaves primarias siguen siendo tuyas. Si estás construyendo desde cero, hay una forma recomendada que vuelve esa copia casi gratis.',
+        more: {
+          label: 'La guía del modelo de datos',
+          path: '/developers/data-model',
+        },
+      },
+      {
+        q: '¿El feed es un archivo o una API?',
+        a: 'Cualquiera de los dos. La especificación hace equivalentes byte a byte un archivo estático y una API de lectura — en tu manifiesto declaras la URL que sirvas. Un archivo JSON simple en una dirección estable basta para cumplir.',
+      },
+      {
+        q: '¿Qué obtengo al instalar la skill para agentes?',
+        a: 'En concreto: un manifiesto en tu-app.org/.well-known/cabuya.json; un feed en la URL que elijas, por ejemplo tu-app.org/cabuya/places.json — archivo o endpoint; el código del cruce de campos y del serializador, propuesto archivo por archivo y aprobado por ti; más una nota de integración y una bitácora de avance, los únicos dos archivos que escribe sin pedir permiso, ambos borrables. Después ejecutas el validador contra tus URLs y lees lo que midió.',
+        more: { label: 'La skill para agentes', path: '/developers/skill' },
+      },
+      {
+        q: '¿Cuál es el formato estándar que obtengo?',
+        a: 'El esquema place: una sola forma JSON para albergues, centros de acopio, hospitales, puntos de agua y comida y otros puntos de servicio — con ubicación, estado, fechas reales de confirmación, atribución y una URL de página pública por registro. Cada campo está documentado en la referencia de esquemas.',
+        more: {
+          label: 'El esquema, campo por campo',
+          path: '/developers/schemas',
+        },
+      },
+      {
+        q: '¿Qué tipos de ayuda conecta hoy — y qué pasa con pedidos y donaciones?',
+        a: 'Hoy: lugares, la capa que toda app de ayuda duplica primero. Los pedidos y ofertas con cantidades, y los reportes de daños, están propuestos para la v0.2 en una RFC abierta — un borrador que cualquiera puede leer, no algo que ya puedas publicar. El dinero nunca viaja por el protocolo: las donaciones enlazan a las páginas de cada app, bajo su propia responsabilidad.',
+        more: { label: 'La RFC 0002, la propuesta v0.2', path: '/rfcs/0002' },
+      },
+      {
+        q: '¿Quién puede leer mis datos cuando publico?',
+        a: 'Cualquiera — de eso se trata. Tu feed lleva una licencia y unos permisos de uso que dicen qué puede hacer quien lo lea, y las reglas de consumo lo obligan a atribuirte cada registro.',
+      },
+      {
+        q: '¿Por qué no veo teléfonos ni nombres de personas?',
+        a: 'Porque los datos de nivel persona nunca viajan en los feeds — están excluidos por diseño, no filtrados por costumbre. Cada registro lleva la página pública de su publicador, y allí es donde ocurre el contacto, bajo las reglas de la app origen.',
+      },
+      {
+        q: '¿Cómo muestran mis registros las otras apps?',
+        a: 'Con atribución y ubicación: el nombre del registro, luego «por tu app» y su municipio y barrio. Un registro de Pereira mostrado en Cali sigue diciendo que es de Pereira, y sus botones llevan a tu página.',
+      },
+      {
+        q: '¿Estar listada significa que una app tiene un respaldo?',
+        a: 'No. El registro lista; no respalda. La conformidad la mide un validador público y nunca se autodeclara — el registro muestra lo que el validador encontró, y nada más.',
+      },
+      {
+        q: '¿Qué significan los niveles de conformidad?',
+        a: 'Clases de membresía, no calificaciones: listada, enlazada, publicando un feed, sirviendo y consumiendo, federando. Dos clases nunca publican — las apps de registros irreduciblemente personales y las que eligen no hacerlo — y ambas son miembros respetados. Quedarse en un nivel es una posición, no un fracaso.',
+        more: {
+          label: 'Los niveles, en lenguaje llano',
+          path: '/developers/how-it-works',
+        },
+      },
+      {
+        q: '¿Qué pasa si una app cierra?',
+        a: 'El protocolo tiene un procedimiento de cierre ordenado: congelar el feed con una última fecha de actualización, anunciar el cierre en el manifiesto, y entregar la custodia de los registros a un publicador nombrado o declararlos archivados. El registro marca la app como archivada y su identificador nunca se reasigna.',
+      },
+      {
+        q: '¿Por qué el nombre Cabuya?',
+        a: 'La cabuya es la fibra con la que se amarra. Un hilo solo no aguanta nada; torcidos juntos, cargan lo que ninguno soportaría por separado — que es lo que pasa cuando dos aplicaciones pueden leerse los datos.',
+        more: { label: 'De dónde viene el nombre', path: '/about' },
+      },
+      {
+        q: '¿Cómo debería organizar los datos dentro de mi app?',
+        a: 'Como quieras — la especificación solo obliga lo que publicas. Pero hay un modelo de referencia recomendado: el contacto personal apartado estructuralmente, entidades con la forma de las del protocolo, campos de honestidad desde el primer día, y la geografía guardada como código, texto, coordenadas y precisión. Síguelo y publicar sale casi gratis.',
+        more: {
+          label: 'La guía del modelo de datos',
+          path: '/developers/data-model',
+        },
+      },
+    ],
+    devFaqTitle: '¿Algo más técnico?',
+    devFaqBody:
+      'Las licencias, los datos personales guardados internamente, los formatos de identificadores y los detalles del cierre tienen su propio FAQ de desarrolladores.',
+    devFaqLink: 'El FAQ de desarrolladores',
+  },
+
   nav: {
     home: 'Inicio',
     foundingRecord: 'Registro fundacional',

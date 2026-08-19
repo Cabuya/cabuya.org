@@ -17,6 +17,26 @@ export interface SiteTranslations {
   /** One line for the footer column — shorter than the meta description. */
   siteDescriptionShort: string;
 
+  faq: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    lead: string;
+    /**
+     * Every `q` ends in a question mark and every `a` exceeds 40 characters —
+     * the FAQPage JSON-LD contract (`src/lib/faq-jsonld.ts`) drops entries
+     * that don't, and a dropped entry is a silent SEO regression.
+     */
+    items: Array<{
+      q: string;
+      a: string;
+      more?: { label: string; path: string };
+    }>;
+    devFaqTitle: string;
+    devFaqBody: string;
+    devFaqLink: string;
+  };
+
   nav: {
     home: string;
     foundingRecord: string;

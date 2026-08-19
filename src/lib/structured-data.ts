@@ -176,6 +176,11 @@ export const JSONLD_MATRIX: Array<{
     required: ['FAQPage', 'BreadcrumbList'],
   },
   {
+    kind: 'general FAQ',
+    pattern: /^\/faq$/,
+    required: ['FAQPage', 'BreadcrumbList'],
+  },
+  {
     kind: 'registry index',
     pattern: /^\/registry$/,
     required: ['Dataset'],

@@ -9,6 +9,97 @@ export const en: SiteTranslations = {
   siteDescriptionShort:
     'An open format so aid apps publish and read the same data. Conformance is measured, never declared.',
 
+  faq: {
+    metaTitle: 'Frequently asked questions — Cabuya',
+    metaDescription:
+      'What Cabuya is, how the protocol works, what installing the skill produces, which kinds of help it connects, and why no personal data travels.',
+    title: 'Frequently asked questions',
+    lead: 'Plain answers, for anyone. The developer-grade questions — licences, identifiers, wind-down — have their own page in the portal.',
+    items: [
+      {
+        q: 'What is Cabuya?',
+        a: 'An open protocol — a shared data format plus a few rules — so emergency-aid applications can read each other’s records. It is a document and a public validator, not a platform: there is no account, no centre, and nothing to sign up for.',
+      },
+      {
+        q: 'How does it work?',
+        a: 'Each app publishes a small manifest at a known web address and a feed of its records in the shared format. Other apps read that feed and show the records — always saying which app published each one and where it is. Every action button leads back to the app that owns the record.',
+        more: {
+          label: 'How it works, end to end',
+          path: '/developers/how-it-works',
+        },
+      },
+      {
+        q: 'Do I have to change my app’s database?',
+        a: 'No. Your internal model stays exactly as it is — a small serializer publishes a translated copy of your records, and your primary keys stay yours. If you are building from scratch, there is a recommended shape that makes the copy nearly free.',
+        more: { label: 'The data model guide', path: '/developers/data-model' },
+      },
+      {
+        q: 'Is the feed a file or an API?',
+        a: 'Either. The specification makes a static file and a read API byte-equivalent — you declare whichever URL you serve in your manifest. A plain JSON file at a stable address is enough to conform.',
+      },
+      {
+        q: 'What do I get when I install the agent skill?',
+        a: 'Concretely: a manifest at your-app.org/.well-known/cabuya.json; a feed at a URL you choose, such as your-app.org/cabuya/places.json — a file or an endpoint; the mapping and serializer code, proposed file by file and approved by you; plus a short integration note and a progress ledger, the only two files it writes unasked, both deletable. Then you run the validator against your URLs and read what it measured.',
+        more: { label: 'The agent skill', path: '/developers/skill' },
+      },
+      {
+        q: 'What is the standard format I get?',
+        a: 'The place schema: one JSON shape for shelters, collection centres, hospitals, water and food points and other service points — with location, status, real confirmation dates, attribution, and a public page URL per record. Every field is documented in the schema reference.',
+        more: {
+          label: 'The schema, field by field',
+          path: '/developers/schemas',
+        },
+      },
+      {
+        q: 'What kinds of help does it connect today — and what about requests and donations?',
+        a: 'Today: places, the layer every aid app duplicates first. Help requests and offers with quantities, and damage reports, are proposed for v0.2 in an open RFC — a draft anyone can read, not something you can publish yet. Money never travels through the protocol: donations link out to each app’s own pages, under its own accountability.',
+        more: { label: 'RFC 0002, the v0.2 proposal', path: '/rfcs/0002' },
+      },
+      {
+        q: 'Who can read my data once I publish?',
+        a: 'Anyone — that is the point. Your feed carries a licence and permitted-use flags that state what readers may do with it, and the consumption rules require them to attribute every record to you.',
+      },
+      {
+        q: 'Why don’t I see phone numbers or personal names?',
+        a: 'Because person-level data never travels in feeds — it is excluded by design, not filtered by habit. Each record carries the publisher’s own public page, and that page is where contact happens, under the origin app’s rules.',
+      },
+      {
+        q: 'How do other apps show my records?',
+        a: 'With attribution and location: the record’s name, then “by your app” and its municipality and neighborhood. A record from Pereira shown in Cali still says it is from Pereira, and its buttons lead to your page.',
+      },
+      {
+        q: 'Does being listed mean an app is endorsed?',
+        a: 'No. The registry lists; it does not endorse. Conformance is measured by a public validator and never self-declared — the registry shows what the validator found, and nothing more.',
+      },
+      {
+        q: 'What do the conformance levels mean?',
+        a: 'Membership classes, not grades: listed, linked, publishing a feed, serving and consuming, federating. Two classes never publish — apps whose records are irreducibly personal, and apps that choose not to — and both are respected members. Staying at a level is a position, not a failure.',
+        more: {
+          label: 'The levels, in plain language',
+          path: '/developers/how-it-works',
+        },
+      },
+      {
+        q: 'What happens if an app shuts down?',
+        a: 'The protocol has a wind-down procedure: freeze the feed with a final update date, announce the sunset in the manifest, and either hand custody of the records to a named publisher or declare them archived. The registry marks the app archived and its identifier is never reassigned.',
+      },
+      {
+        q: 'Why the name Cabuya?',
+        a: 'Cabuya is the fibre you tie things with. A single thread holds nothing; twisted together, they carry what none could alone — which is what happens when two applications can read each other’s data.',
+        more: { label: 'Where the name comes from', path: '/about' },
+      },
+      {
+        q: 'How should I organize the data inside my app?',
+        a: 'However you want — the specification binds only what you publish. But there is a recommended reference model: personal contact kept structurally apart, entities shaped like the protocol’s, honesty fields from day one, and geography stored as code, text, coordinates and precision. Follow it and publishing is nearly free.',
+        more: { label: 'The data model guide', path: '/developers/data-model' },
+      },
+    ],
+    devFaqTitle: 'Anything more technical?',
+    devFaqBody:
+      'Licences, personal data held internally, identifier formats and wind-down details have their own developer FAQ.',
+    devFaqLink: 'The developer FAQ',
+  },
+
   nav: {
     home: 'Home',
     foundingRecord: 'Founding record',
