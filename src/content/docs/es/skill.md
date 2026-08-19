@@ -77,10 +77,14 @@ Revisable, fijada y sin conexión. El paquete se vuelve un directorio de tu repo
 que tus compañeros pueden leer en un pull request.
 
 ```bash
-git clone --depth 1 https://github.com/Cabuya/cabuya-skill \
-  .agents/skills/cabuya && rm -rf .agents/skills/cabuya/.git
-ln -s .agents .claude   # solo si tu repo todavía no lo tiene
+git clone --depth 1 https://github.com/Cabuya/cabuya-skill vendor/cabuya-skill
+bash vendor/cabuya-skill/setup.sh   # enlaza skills/cabuya en cada agente que detecta
 ```
+
+El paquete vive en `skills/cabuya` dentro de su repositorio — el mismo formato
+que sus paquetes hermanos — así que el clon es la *fuente* y `setup.sh` es lo
+que lo convierte en skill: lo enlaza (nunca lo copia) en cada agente que
+encuentra.
 
 ### 2. Script instalador — detecta qué agentes tienes
 

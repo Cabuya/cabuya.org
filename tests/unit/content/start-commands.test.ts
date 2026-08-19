@@ -16,8 +16,12 @@ import { START_COMMANDS } from '@/lib/start-commands';
 describe('the /start commands are the proven ones', () => {
   it('pins the three commands to the release proof', () => {
     expect(START_COMMANDS.install).toBe('npx skills add Cabuya/cabuya-skill');
+    /* Re-pinned 2026-08-18 when the pack moved to skills/cabuya (the
+       family layout): a bare clone into .agents/skills/ stopped being a
+       skill, and clone + setup.sh is the path proven on a clean machine
+       after the restructure. */
     expect(START_COMMANDS.installVendored).toBe(
-      'git clone --depth 1 https://github.com/Cabuya/cabuya-skill .agents/skills/cabuya'
+      'git clone --depth 1 https://github.com/Cabuya/cabuya-skill vendor/cabuya-skill && bash vendor/cabuya-skill/setup.sh'
     );
     expect(START_COMMANDS.invoke).toBe('/cabuya');
   });

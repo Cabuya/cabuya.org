@@ -13,8 +13,14 @@ import { SKILL_REPO_URL } from '@/lib/site-navigation';
 export const START_COMMANDS = {
   /** The skills-CLI path: snapshot into `.agents/skills/`, agents symlinked. */
   install: 'npx skills add Cabuya/cabuya-skill',
-  /** The vendored path: reviewable in a pull request, pinned, offline. */
-  installVendored: `git clone --depth 1 ${SKILL_REPO_URL} .agents/skills/cabuya`,
+  /**
+   * The vendored path: reviewable in a pull request, pinned, offline. The
+   * pack lives at skills/cabuya inside its repo (the family layout), so a
+   * bare clone into an agent's skills directory is no longer itself a
+   * skill — setup.sh links the pack into every agent it detects, and was
+   * proven doing so on a clean machine after the restructure.
+   */
+  installVendored: `git clone --depth 1 ${SKILL_REPO_URL} vendor/cabuya-skill && bash vendor/cabuya-skill/setup.sh`,
   /** The sentence. The pack routes it to its adopt sub-skill. */
   invoke: '/cabuya',
 } as const;

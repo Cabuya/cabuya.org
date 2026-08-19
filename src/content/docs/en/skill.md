@@ -73,10 +73,13 @@ Reviewable, pinned, and offline. The pack becomes a directory in your repo that
 your teammates can read in a pull request.
 
 ```bash
-git clone --depth 1 https://github.com/Cabuya/cabuya-skill \
-  .agents/skills/cabuya && rm -rf .agents/skills/cabuya/.git
-ln -s .agents .claude   # only if your repo does not have this already
+git clone --depth 1 https://github.com/Cabuya/cabuya-skill vendor/cabuya-skill
+bash vendor/cabuya-skill/setup.sh   # links skills/cabuya into every agent it detects
 ```
+
+The pack lives at `skills/cabuya` inside its repository — the same layout as
+its sibling packs — so the clone is the *source* and `setup.sh` is what makes
+it a skill, linking it (never copying) into each agent it finds.
 
 ### 2. Installer script — detects which agents you have
 

@@ -79,8 +79,8 @@ function segments(note: string): Array<{ code: boolean; text: string }> {
 
 /** The install lines the skill's own README will carry (Task 38). */
 const SKILL_INSTALL = `npx skills add Cabuya/cabuya-skill
-# or, without the installer:
-git clone ${SKILL_REPO_URL} .agents/skills/cabuya`;
+# or, vendored (the pack lives at skills/cabuya; setup.sh links it):
+git clone --depth 1 ${SKILL_REPO_URL} vendor/cabuya-skill && bash vendor/cabuya-skill/setup.sh`;
 
 /**
  * `DV-02` — one thread drawn from a bundle, above the five steps.
