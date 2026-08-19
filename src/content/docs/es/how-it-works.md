@@ -39,7 +39,7 @@ Una app entra a la red publicando dos cosas:
 Nada interno cambia. Tus tablas, tus llaves primarias y tu producto quedan
 exactamente como están — el feed es una copia traducida, producida por un
 serializador pequeño, y la [guía del modelo de datos](/es/developers/data-model)
-muestra cómo organizar una app nueva para que esa traducción salga casi
+muestra cómo organizar las apps nuevas para que esa traducción salga casi
 gratis.
 
 ## Cómo viaja un registro
@@ -53,7 +53,7 @@ una persona ve en pantalla:
   `municipality_text`, `neighborhood_text`, coordenadas y su precisión. Por
   eso la forma canónica en que un consumidor muestra un registro ajeno es:
 
-  > **{nombre}** — por {app que lo publicó} · {municipio}, {barrio}
+  > **{nombre}** — por {publicador} · {municipio}, {barrio}
 
   Quien mira desde Cali ve un registro de Pereira *y ve que es de Pereira y
   que lo publicó otra app* — la atribución y la ubicación sobreviven cada
@@ -114,9 +114,9 @@ Así se ven los dos documentos, recortados (la
 }
 ```
 
-Nunca migra tu modelo de datos interno. Si tu app todavía está en el tablero
-de dibujo, la [guía del modelo de datos](/es/developers/data-model) es la
-forma desde la cual empezar.
+Nunca migra tu modelo de datos interno. Si tu app todavía no existe, la
+[guía del modelo de datos](/es/developers/data-model) es la forma desde la
+cual empezar.
 
 ## Los niveles, en lenguaje llano
 

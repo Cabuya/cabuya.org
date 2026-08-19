@@ -14,7 +14,8 @@ esquema compartido, y nadie migra tus llaves primarias.
 Pero muchas apps de ayuda se construyen en días, durante la emergencia, con
 equipos eligiendo la forma de sus tablas a las dos de la mañana. Si estás
 construyendo ahora — o todavía puedes ajustar — esta es la forma que vuelve
-la publicación casi gratis, porque es la forma publicada, sostenida adentro.
+la publicación casi gratis, porque es la forma publicada, la misma que usas
+puertas adentro.
 Cinco recomendaciones, en el orden en que ahorran dolor.
 
 ## 1. Separa lo que viaja de lo que nunca viaja
@@ -46,7 +47,7 @@ forma del esbozo de la RFC (`quantity_required`, `quantity_covered`, `unit`,
 anclados a un lugar o a una organización) significa publicar el día que
 llegue.
 
-## 3. Lleva los campos de honestidad de nacimiento
+## 3. Lleva los campos de honestidad desde el primer día
 
 La regla del protocolo más difícil de instalar después: `last_confirmed_at`
 debe ser un evento real de confirmación — alguien verificó — o `null`.
