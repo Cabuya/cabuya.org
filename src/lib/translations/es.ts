@@ -28,14 +28,14 @@ export const es: SiteTranslations = {
   home: {
     metaTitle: 'Cabuya — el protocolo abierto de interoperabilidad de ayuda',
     metaDescription:
-      'Un formato abierto para que las apps de ayuda publiquen y lean los mismos datos. Un esquema, cuatro transportes; conformidad medida por un validador público.',
+      'Una forma común de coordinar la ayuda, para que fluya entre sistemas: las apps publican y leen los mismos datos, medidos por un validador público.',
 
     hero: {
       eyebrow: 'Un protocolo abierto de interoperabilidad',
-      title: 'Apps de ayuda que por fin se leen entre sí.',
+      title: 'Una forma común de coordinar la ayuda.',
       pitch:
-        'Un formato abierto para los mismos datos: puntos de acopio, necesidades, capacidades y entregas. Un validador público mide la conformidad; el registro muestra lo que encontró.',
-      pitchSecond: 'La conformidad se mide, nunca se declara.',
+        'Un formato abierto para los lugares por donde pasa la ayuda —albergues, centros de acopio y puntos de servicio— publicado en una URL pública que cualquier app puede leer. La conformidad la mide un validador público, nunca se declara; el registro muestra lo que encontró.',
+      pitchSecond: 'Para que la ayuda fluya entre sistemas.',
       ctaPrimary: 'Empieza en minutos',
       ctaSecondary: 'Cómo funciona',
     },
@@ -189,7 +189,7 @@ export const es: SiteTranslations = {
   start: {
     metaTitle: 'Empezar',
     metaDescription:
-      'Instala la skill de Cabuya, di una frase, y tu agente de código planifica y ejecuta la adopción — con tu propia metodología, con DeepWorkPlan o con su propio modo plan.',
+      'Instala la skill de Cabuya, di una frase, y tu agente planifica y ejecuta la adopción — con tu metodología, con DeepWorkPlan o con su modo plan.',
     title: 'Dos líneas, y tu agente conoce el protocolo',
     lead: 'El paquete le enseña el Protocolo Cabuya a cualquier agente de código — esquema, niveles, exclusiones, validador — y funciona sin red, porque la especificación viaja dentro. Lo instalas una vez y dices una frase.',
     installTitle: '1. Instala el paquete',
@@ -218,7 +218,7 @@ export const es: SiteTranslations = {
       'El paquete responde «qué es Cabuya», «por qué un protocolo» y «qué implicaría en nuestra app» desde la especificación que lleva consigo, con citas — y te muestra el trabajo sin escribir un archivo.',
     refusesTitle: 'Lo que no va a hacer',
     refuses: [
-      'Declarar un nivel de conformidad que el validador no midió — y nunca usa la palabra «certificado».',
+      'Declarar un nivel de conformidad que el validador no midió — ni usar la palabra que el protocolo prohíbe para eso.',
       'Publicar un dato de contacto, en ningún lugar, en ninguna codificación. El contacto llega por la página pública de cada registro.',
       'Abrir un pull request, o escribir un archivo, sin preguntar primero.',
       'Enviar tus datos a ninguna parte. No tiene telemetría y no llama a casa.',
@@ -226,7 +226,7 @@ export const es: SiteTranslations = {
     linksTitle: '¿Prefieres leer primero?',
     linkQuickstart: 'La guía rápida, paso a paso',
     linkSkill: 'Qué instala la skill, exactamente',
-    linkValidator: 'Corre el validador tú mismo',
+    linkValidator: 'Ejecuta el validador tú mismo',
   },
 
   notFoundPage: {

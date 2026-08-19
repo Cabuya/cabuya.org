@@ -28,14 +28,14 @@ export const en: SiteTranslations = {
   home: {
     metaTitle: 'Cabuya — the open aid interoperability protocol',
     metaDescription:
-      'An open format so aid apps publish and read the same data. One schema, four transports; conformance measured by a public validator, never declared.',
+      'A common way to coordinate help, so aid can flow across systems: aid apps publish and read the same data, measured by a public validator.',
 
     hero: {
       eyebrow: 'An open interoperability protocol',
-      title: 'Aid apps that can finally read each other.',
+      title: 'A common way to coordinate help.',
       pitch:
-        'An open format for the same data: collection points, needs, capacities and deliveries. A public validator measures conformance; the registry shows what it found.',
-      pitchSecond: 'Conformance is measured, never declared.',
+        'An open format for the places aid runs on — shelters, collection centres and service points — published at a public URL any app can read. Conformance is measured by a public validator, never declared; the registry shows what it found.',
+      pitchSecond: 'So aid can flow across systems.',
       ctaPrimary: 'Start in minutes',
       ctaSecondary: 'How it works',
     },
