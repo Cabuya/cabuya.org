@@ -123,20 +123,37 @@ import {Name}Page from '@/components/pages/{Name}Page.astro';
 - The `lang` prop is passed as a **string literal** (`"en"`, `"es"`), not a variable
 - If the page introduces new UI text, add entries to `src/lib/translations/en.ts` and `src/lib/translations/es.ts`
 
-### Step 4: Create Agent-Friendly Markdown (MANDATORY)
+### Step 4: Create the `.md` twin (MANDATORY)
 
-Create Markdown source files for the new page's `.md` endpoint (Markdown for Agents):
+Every page serves a complete Markdown twin. There is no `src/content/pages/`
+directory — the twin is a **build-time endpoint**, and the pattern depends on
+the page type:
 
-1. Create `src/content/pages/en/{name}.md` with frontmatter (`title`, `description`, `lastUpdated`) and full page content as clean Markdown
-2. Create `src/content/pages/es/{name}.md` with translated frontmatter and content (proper diacritical marks)
+**Portal page (`/developers/{slug}`)** — nothing to do here: the existing
+`src/pages/developers/[page].md.ts` machinery serves the twin from the same
+two content files created in Step 2 (`src/content/docs/{en,es}/{slug}.md`),
+plus a `live` entry in `PORTAL_SECTIONS` (`src/lib/portal-nav.ts`).
 
-**Content requirements:**
-- Include ALL semantic sections from the `*Page.astro` component (same information, not a summary)
-- Include internal links to other site pages (for agent navigation/discovery)
-- Strip presentation chrome (nav, footer, scripts) but keep all text, headings, lists, and links
-- EN pages use root-relative links (`/about`), ES pages use `/es/` prefix (`/es/about`)
+**Top-level page (`/{name}`)** — four pieces, all required:
 
-These files are automatically served as `/{name}.md` and `/es/{name}.md` endpoints — no endpoint code changes needed. Agents can also request them via `Accept: text/markdown` header.
+1. A section builder `src/lib/{name}-markdown.ts` exporting
+   `{name}Sections(lang): TwinSection[]`, built from the SAME translation keys
+   the page renders (see `src/lib/about-markdown.ts` for the pattern).
+2. Two endpoints: `src/pages/{name}.md.ts` and
+   `src/pages/[lang]/{name}.md.ts`, each passing the builder to
+   `serializeGenericToMarkdown` (`src/lib/markdown-for-agents.ts`).
+3. A `KNOWN_PATHS` entry in `src/middleware.ts` — **same commit** (unknown
+   top-level paths 404 in production).
+4. If the page needs structured data, a `JSONLD_MATRIX` row in
+   `src/lib/structured-data.ts` (enforced by `seo:check:strict`).
+
+Then regenerate the committed route map: `pnpm run llms:generate`
+(`llms:check` fails CI on drift).
+
+**Coverage contract:** the twin must carry ≥ 0.85 of the HTML's content words
+(`scripts/check-md-parity.mjs`) — build the twin from the same translations,
+not from a summary. Runtime `Accept: text/markdown` negotiation is already
+handled by `functions/_middleware.ts`.
 
 ### Step 5: Validate
 
@@ -144,6 +161,8 @@ These files are automatically served as `/{name}.md` and `/es/{name}.md` endpoin
 pnpm run astro:check
 pnpm run biome:check
 pnpm run build
+pnpm run md:check:strict && pnpm run lang:check:strict && pnpm run parity:check:strict
+pnpm run seo:check:strict && pnpm run llms:check
 ```
 
 ## Output Format

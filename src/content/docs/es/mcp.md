@@ -1,6 +1,6 @@
 ---
 title: Servidor MCP
-description: cabuya.org corre un servidor MCP con sus dos herramientas — validar un feed y leer páginas como Markdown. El servidor de federación sigue sin desplegar.
+description: cabuya.org ejecuta un servidor MCP con sus dos herramientas — validar un feed y leer páginas como Markdown. El servidor de federación sigue sin desplegar.
 section: consuming
 order: 1
 updated: 2026-08-18
@@ -8,7 +8,7 @@ updated: 2026-08-18
 
 > **Estado del servidor de red: especificado, no desplegado.** Sale cuando
 > existan al menos dos feeds conformes en vivo sobre los cuales federar, y no
-> antes. Lo que sí corre hoy es más pequeño y distinto: el servidor propio de
+> antes. Lo que hoy sí se ejecuta es más pequeño y distinto: el servidor propio de
 > cabuya.org, descrito primero, que sirve las dos herramientas públicas del
 > sitio y nada de la red.
 
@@ -29,7 +29,7 @@ el navegador vía WebMCP:
 
 | Herramienta | Qué hace |
 |---|---|
-| `validate_cabuya_feed` | Corre el validador público contra la URL de un manifiesto o feed — el mismo endpoint, los mismos límites, la misma retención cero |
+| `validate_cabuya_feed` | Ejecuta el validador público contra la URL de un manifiesto o feed — el mismo endpoint, los mismos límites, la misma retención cero |
 | `read_cabuya_page_as_markdown` | Devuelve cualquier página de este sitio como su gemelo Markdown completo |
 
 Su tarjeta está en `/.well-known/mcp/server-card.json`. Esa

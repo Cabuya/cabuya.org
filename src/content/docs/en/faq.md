@@ -113,3 +113,7 @@ pace. You can [start at the top](/developers/spec).
 If a question about adoption is not answered anywhere, that is a bug in the
 documentation and worth an issue. If it is not answered because we have not
 decided, the answer will say so rather than sound confident.
+
+Looking for the non-technical questions — what Cabuya is, what installing the
+skill produces, why no phone numbers appear? Those live in the
+[general FAQ](/faq).

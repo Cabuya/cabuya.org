@@ -51,6 +51,7 @@ const KNOWN_PATHS = new Set([
   'about',
   'start',
   'developers',
+  'faq',
   'registry',
   'governance',
   'trademark',

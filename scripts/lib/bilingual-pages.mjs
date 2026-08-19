@@ -15,6 +15,9 @@
  *   rfcs/0001   is bilingual by design — it is a document people sign, and
  *               both halves have to be signable, so each language's page
  *               necessarily carries the other's half.
+ *   rfcs/0002   follows 0001's convention: one normative proposal, both
+ *               languages in one reviewable document, so each language's page
+ *               carries the other's half.
  *
  * Listed one page at a time rather than by route family, so adding a third is
  * a decision somebody makes here with a reason, instead of a new page quietly
@@ -30,6 +33,8 @@ export const INHERENTLY_BILINGUAL = new Set([
   'es/changelog',
   'rfcs/0001',
   'es/rfcs/0001',
+  'rfcs/0002',
+  'es/rfcs/0002',
 ]);
 
 /** Is this page one of them? */

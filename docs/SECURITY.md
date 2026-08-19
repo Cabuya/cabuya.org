@@ -186,6 +186,17 @@ The PII gate always stops for a human; crawl policy honored even if a human
 asks; degraded mode never claims conformance; grep-contract tests keep those
 sentences from being edited away. (Enforced in `Cabuya/cabuya-skill` CI.)
 
+### The hosted installer (`/skill/install.sh`, 2026-08-19)
+
+The site distributes one executable artifact: the skill installer. Its
+controls: the documented flow is **download → read → verify → run**, never
+`curl | bash` (the page prints the two-step form and says why); a SHA-256
+sidecar sits next to it and must be regenerated in the same commit as any
+edit; the script itself is `set -euo pipefail`, shellcheck-gated, clones only
+the public pack repo, and runs the pack's **own** checksum verifier before
+`setup.sh` — a tampered pack refuses to link. It writes only inside the target
+directory and the agents' skills directories, and sends nothing anywhere.
+
 ## `/api/validate` — as built
 
 The endpoint exists because two of the most common real defects cannot be

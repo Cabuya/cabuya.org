@@ -39,6 +39,11 @@ export const JSONLD_MATRIX = [
     required: ['FAQPage', 'BreadcrumbList'],
   },
   {
+    kind: 'general FAQ',
+    pattern: /^faq$/,
+    required: ['FAQPage', 'BreadcrumbList'],
+  },
+  {
     kind: 'registry index',
     pattern: /^registry$/,
     required: ['Dataset'],

@@ -117,3 +117,7 @@ lectura técnica. Puedes [empezar por arriba](/es/developers/spec).
 Si una pregunta sobre adopción no está respondida en ninguna parte, eso es un
 error de la documentación y vale un issue. Si no está respondida porque no lo
 hemos decidido, la respuesta lo va a decir en vez de sonar segura.
+
+¿Buscas las preguntas no técnicas — qué es Cabuya, qué produce instalar la
+skill, por qué no aparecen teléfonos? Están en las
+[preguntas frecuentes generales](/es/faq).

@@ -42,6 +42,19 @@ Changes here have a different blast radius than site changes.
 7. If schemas changed, note in the PR that the skill repo needs a
    `sync-spec.sh` run (checksums will catch it regardless).
 
+## Authoring a new RFC (learned drafting RFC 0002)
+
+- Mirror RFC 0001's structure: frontmatter (`number`, bilingual `title`,
+  `status`, `tier`, `opened`), a bilingual TL;DR blockquote (ES then EN), then
+  full `# ESPAÑOL` and `# ENGLISH` bodies carrying the template's complete
+  section set each. One document, both languages.
+- Add the row to `spec/rfcs/INDEX.md` in the same change.
+- **Register the pages** in `scripts/lib/bilingual-pages.mjs` (`rfcs/NNNN` +
+  `es/rfcs/NNNN`, with a written reason) — `lang:check` and `md:check` fail
+  the build otherwise, because each language's page carries the other's half.
+- Routes render zero-padded: `/rfcs/0002`, not `/rfcs/2`.
+- The loader picks the file up automatically; no route or nav change needed.
+
 ## Never
 
 Rename/renumber a check id or an anchor · edit a superseded version ·

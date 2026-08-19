@@ -111,6 +111,18 @@ const ACCEPTED = [
     why: 'The same label, in Spanish.',
   },
   {
+    match: 'the source file spec rfcs 0002 v02 entities and coverage md',
+    why: 'The same path label, on RFC 0002 — same class as the 0001 entries: the twin serves the file in full.',
+  },
+  {
+    match: 'el archivo fuente spec rfcs 0002 v02 entities and coverage md',
+    why: 'The same label for 0002, in Spanish.',
+  },
+  {
+    match: 'adopt cabuya adopta el protocolo get us started',
+    why: "The routing table's adopt row on the skill page — same class as the implement/consume rows below: the twin carries every phrase, one per line, so the row never matches as one run.",
+  },
+  {
     match: 'implement cabuya publica un feed get us to l2',
     why: 'A routing table row pairing what a user might say, in either language, with the sub-skill it reaches. The twin carries every phrase, one per line, so no row matches contiguously.',
   },

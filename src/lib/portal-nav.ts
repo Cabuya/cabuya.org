@@ -47,6 +47,15 @@ export const PORTAL_SECTIONS: PortalSection[] = [
         },
       },
       {
+        label: { en: 'How it works', es: 'Cómo funciona' },
+        path: '/developers/how-it-works',
+        status: 'live',
+        blurb: {
+          en: 'The network end to end: the premises, the copy that travels, and the buttons that lead home.',
+          es: 'La red de punta a punta: las premisas, la copia que viaja y los botones que llevan al origen.',
+        },
+      },
+      {
         label: { en: 'Quickstart', es: 'Guía rápida' },
         path: '/developers/quickstart',
         status: 'live',
@@ -83,6 +92,19 @@ export const PORTAL_SECTIONS: PortalSection[] = [
         label: { en: 'Profiles', es: 'Perfiles' },
         path: '/developers/profiles',
         status: 'live',
+        blurb: {
+          en: 'Core and Extended: which optional fields mean what.',
+          es: 'Core y Extendido: qué significa cada campo opcional.',
+        },
+      },
+      {
+        label: { en: 'Data model guide', es: 'Guía del modelo de datos' },
+        path: '/developers/data-model',
+        status: 'live',
+        blurb: {
+          en: 'Organize a new app so publishing is nearly free. Guidance, not a requirement.',
+          es: 'Organiza una app nueva para que publicar salga casi gratis. Guía, no requisito.',
+        },
       },
     ],
   },
@@ -103,11 +125,19 @@ export const PORTAL_SECTIONS: PortalSection[] = [
         label: { en: 'Checks', es: 'Verificaciones' },
         path: '/developers/validator/checks',
         status: 'live',
+        blurb: {
+          en: 'The full catalogue: every check, its severity, and its fix.',
+          es: 'El catálogo completo: cada verificación, su severidad y su corrección.',
+        },
       },
       {
         label: { en: 'Our probe', es: 'Nuestro sondeo' },
         path: '/developers/validator/probe',
         status: 'live',
+        blurb: {
+          en: 'How and when our cron re-measures registered feeds.',
+          es: 'Cómo y cuándo nuestro cron vuelve a medir los feeds registrados.',
+        },
       },
       {
         label: { en: 'Agent skill', es: 'Skill para agentes' },
@@ -137,11 +167,19 @@ export const PORTAL_SECTIONS: PortalSection[] = [
         label: { en: 'MCP server', es: 'Servidor MCP' },
         path: '/developers/mcp',
         status: 'live',
+        blurb: {
+          en: 'Validate feeds and read pages as Markdown, from an agent.',
+          es: 'Valida feeds y lee páginas como Markdown, desde un agente.',
+        },
       },
       {
         label: { en: 'FAQ', es: 'Preguntas frecuentes' },
         path: '/developers/faq',
         status: 'live',
+        blurb: {
+          en: 'Licence, personal data, identifiers, shutdown — the adoption blockers.',
+          es: 'Licencia, datos personales, identificadores, cierre — lo que frena una adopción.',
+        },
       },
     ],
   },

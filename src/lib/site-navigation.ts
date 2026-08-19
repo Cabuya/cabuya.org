@@ -221,6 +221,11 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
         path: '/changelog',
         status: 'live',
       },
+      {
+        label: { en: 'FAQ', es: 'Preguntas frecuentes' },
+        path: '/faq',
+        status: 'live',
+      },
     ],
   },
   {

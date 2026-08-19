@@ -1,0 +1,112 @@
+---
+/**
+ * What joining means — the section that replaced the conformance ladder here.
+ *
+ * The ladder asked a first-time visitor to hold five membership classes and
+ * two exceptions before knowing what the protocol does; it now lives where its
+ * audience is, in the developers portal. This section answers the question the
+ * landing actually gets asked — "so what does it DO?" — in three moves: the
+ * two premises the design rests on, the three things that happen when an app
+ * joins, and the concrete artifacts an adopter ends up publishing.
+ *
+ * Rule-0 constraints: the premises are stated as design facts, not outcomes;
+ * the worked example is `example.org` and the quickstart fixture's fictional
+ * shelter — no real publisher is named; and the copy claims only what 0.1
+ * ships. The artifacts block is static markup on purpose: the landing carries
+ * a JS budget and a code sample does not need a copy button to make its point.
+ */
+import Kicker from '@/components/editorial/Kicker.astro';
+import Lead from '@/components/editorial/Lead.astro';
+import {
+  EXAMPLE_FEED_URL,
+  EXAMPLE_MANIFEST_URL,
+  EXAMPLE_RECORD,
+} from '@/lib/home-example';
+import type { Language } from '@/lib/i18n';
+import { getTranslations } from '@/lib/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<section class="border-y border-cabuya-border bg-cabuya-bg-brand/40 dark:bg-cabuya-bg-elevated">
+  <div class="main-container py-16 sm:py-24">
+    <Kicker>{t.home.whatHappens.kicker}</Kicker>
+    <h2 class="mt-3 text-title">{t.home.whatHappens.title}</h2>
+    <Lead class="mt-4">{t.home.whatHappens.lead}</Lead>
+
+    <div class="mt-10 grid max-w-5xl gap-8 md:grid-cols-2 md:gap-12">
+      {
+        t.home.whatHappens.premises.map((premise) => (
+          <div>
+            <h3 class="text-lg font-semibold text-cabuya-text">
+              {premise.title}
+            </h3>
+            <p class="mt-2 leading-relaxed text-cabuya-text-secondary">
+              {premise.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+
+    {/* The ordinals are the list's own — the copy carries no numerals. */}
+    <ol class="mt-12 grid max-w-5xl gap-8 md:grid-cols-3 md:gap-10 [counter-reset:beat]">
+      {
+        t.home.whatHappens.beats.map((beat) => (
+          <li class="[counter-increment:beat]">
+            <h3 class="text-lg font-semibold text-cabuya-text before:mr-2 before:font-mono before:text-cabuya-accent-strong before:content-[counter(beat)]">
+              {beat.title}
+            </h3>
+            <p class="mt-2 leading-relaxed text-cabuya-text-secondary">
+              {beat.body}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-14 max-w-3xl">
+      <h3 class="text-lg font-semibold text-cabuya-text">
+        {t.home.whatHappens.artifactsTitle}
+      </h3>
+      {/*
+        The block can scroll horizontally on narrow screens, and a scrollable
+        region a keyboard cannot reach fails WCAG (axe: scrollable-region-
+        focusable) — hence tabindex and an accessible name.
+      */}
+      <div
+        class="mt-4 overflow-x-auto rounded-lg border border-cabuya-border bg-cabuya-bg p-5 font-mono text-sm"
+        tabindex="0"
+        role="region"
+        aria-label={t.home.whatHappens.artifactsTitle}
+      >
+        <p>
+          <span class="text-cabuya-primary">{EXAMPLE_MANIFEST_URL}</span>
+          <span class="text-cabuya-text-muted">
+            {'  ← '}{t.home.whatHappens.manifestLabel}
+          </span>
+        </p>
+        <p class="mt-2">
+          <span class="text-cabuya-primary">{EXAMPLE_FEED_URL}</span>
+          <span class="text-cabuya-text-muted">
+            {'  ← '}{t.home.whatHappens.feedLabel}
+          </span>
+        </p>
+        <p class="mt-4 text-cabuya-text-muted">
+          {t.home.whatHappens.recordLabel}
+        </p>
+        <pre
+          class="mt-2 whitespace-pre text-cabuya-text-secondary"><code>{EXAMPLE_RECORD}</code></pre>
+      </div>
+    </div>
+
+    <p class="measure mt-8 text-sm text-cabuya-text-secondary">
+      {t.home.whatHappens.closingNote}
+    </p>
+  </div>
+</section>
