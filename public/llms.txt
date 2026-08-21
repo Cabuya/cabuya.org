@@ -100,7 +100,7 @@ cron and served live:
 
 ## Validator
 
-62 checks catalogued, 42 implemented. Every check id is
+62 checks catalogued, 43 implemented. Every check id is
 permanent and every error message links to its anchor.
 
 - [The catalogue](https://cabuya.org/developers/validator/checks) · https://cabuya.org/developers/validator/checks.md

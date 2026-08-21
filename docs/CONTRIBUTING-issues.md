@@ -10,9 +10,9 @@ check that is not yet implemented, which means its id, severity, level, rule
 and fix text are already decided: the contributor writes one function and two
 tests, and designs nothing.
 
-**20 issues**, all labelled `good-first-issue:check`, across
+**19 issues**, all labelled `good-first-issue:check`, across
 4 families. 62 checks are catalogued in total;
-42 are already implemented.
+43 are already implemented.
 
 ## How to open one
 
@@ -114,7 +114,7 @@ before they can implement it.
 - **Arreglo (ES):** Haz que todos los fragmentos declarados sean alcanzables y consistentes con el sobre que los declara.
 - **Specification:** https://cabuya.org/developers/spec/0.1/3-the-feed#3-1
 
-## discovery (7)
+## discovery (6)
 
 ### `DSC001` — Manifest reachable over HTTPS as JSON
 
@@ -159,17 +159,6 @@ before they can implement it.
 - **Regla (ES):** El manifiesto de un publicador registrado MUST coincidir con su entrada del registro en la URL canónica.
 - **Arreglo (ES):** Haz que la URL canónica del manifiesto coincida con la de tu entrada en el registro, o abre un pull request para cambiar la entrada.
 - **Specification:** https://cabuya.org/developers/spec/0.1/2-discovery#2-4
-
-### `DSC007` — Every feeds[].url is absolute HTTPS and reachable
-
-- **Severity:** error
-- **Level:** L1
-- **Planned in:** Task 15
-- **Rule:** Declared feeds MUST resolve.
-- **Fix:** Give every feed an absolute https URL that resolves from outside your network.
-- **Regla (ES):** Los feeds declarados MUST resolver.
-- **Arreglo (ES):** Dale a cada feed una URL https absoluta que resuelva desde fuera de tu red.
-- **Specification:** https://cabuya.org/developers/spec/0.1/2-discovery#2-3
 
 ### `DSC008` — crawl_policy_url resolves
 

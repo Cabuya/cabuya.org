@@ -143,8 +143,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     rule: 'Declared feeds MUST resolve.',
     fix: 'Give every feed an absolute https URL that resolves from outside your network.',
     specAnchor: `${SPEC}/2-discovery#2-3`,
-    implemented: false,
-    plannedIn: 'Task 15',
+    implemented: true,
   },
   {
     id: 'DSC008',

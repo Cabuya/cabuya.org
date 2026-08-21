@@ -15,7 +15,7 @@
       "type": "skill",
       "description": "Publish emergency-aid data as a conforming Cabuya feed and measure it with the public validator. No account, no key: the specification, the schemas and the validator are all public.",
       "url": "https://cabuya.org/.well-known/agent-skills/publish-a-feed/SKILL.md",
-      "sha256": "8314d4938a0ea20878880e35b60bd3b487c3585112697aaaceaa0b8199d67015",
+      "sha256": "7777afc5fcf6c2f2d9e2fce8e3d87d5af7632a9c49bece3ae0cf54895f91ac84",
       "license": "CC0-1.0"
     }
   ]

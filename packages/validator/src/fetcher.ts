@@ -28,6 +28,15 @@ export interface FetchResult {
   redirectChain?: string[];
   /** Set when the transport itself failed (DNS, TLS, timeout, cap). */
   transportError?: string;
+  /**
+   * The politeness budget stopped this request before it was made.
+   *
+   * Separated from `transportError` because the two mean opposite things to
+   * a check: a transport error is something wrong at the target, while this
+   * is our own ceiling. A check that reported "unreachable" here would be
+   * accusing a publisher of our rate limit.
+   */
+  budgetExhausted?: true;
 }
 
 export interface Fetcher {
@@ -94,6 +103,7 @@ export class HttpFetcher implements Fetcher {
         bytes: 0,
         elapsedMs: 0,
         transportError: `politeness budget exhausted for ${host} (${ceiling} requests per run)`,
+        budgetExhausted: true,
       };
     }
     this.perHost.set(host, used + 1);

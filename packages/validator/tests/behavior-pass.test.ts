@@ -100,6 +100,54 @@ describe('trap 1 — the SPA catch-all (DSC002)', () => {
   });
 });
 
+describe('trap 1b — a manifest declaring a feed nobody can read (DSC007)', () => {
+  const dsc007 = (report: Report) =>
+    report.findings.filter((f) => f.id === 'DSC007');
+
+  it('fires when a declared feed 404s, and points at the feed that failed', async () => {
+    const report = await probe('/manifest/dead-feed.json');
+    const [finding, ...rest] = dsc007(report);
+    expect(finding).toBeDefined();
+    expect(rest).toEqual([]);
+    expect(finding?.pointer).toBe('/feeds/0/url');
+    expect(finding?.message).toContain('HTTP 404');
+    // An error, so it stops the ladder: this is the check that keeps a
+    // manifest from measuring a level nothing read the feed for.
+    expect(finding?.severity).toBe('error');
+    expect(finding?.level).toBe('L1');
+    expect(report.measured_level).toBe('L0');
+  });
+
+  it('does NOT fire when the declared feed is really there', async () => {
+    const report = await probe('/.well-known/cabuya.json');
+    expect(dsc007(report)).toEqual([]);
+  });
+
+  it('rejects a relative URL without spending a request on it', async () => {
+    const report = await probe('/manifest/relative-feed.json');
+    expect(dsc007(report)[0]?.message).toContain('not absolute');
+    // Only the manifest itself was fetched — a malformed URL costs the
+    // publisher's server nothing.
+    expect(report.probes.requests).toBe(1);
+  });
+
+  it('rejects http on a public host, also without a request', async () => {
+    const report = await probe('/manifest/insecure-feed.json');
+    expect(dsc007(report)[0]?.message).toContain('http, not https');
+    expect(report.probes.requests).toBe(1);
+  });
+
+  it('goes quiet when our own politeness budget runs out', async () => {
+    // Eight dead feeds, a six-request ceiling. The probe must report what it
+    // actually saw and stop — reporting the rest as unreachable would be
+    // accusing a publisher of our rate limit, and this check is an error.
+    const report = await probe('/manifest/many-dead-feeds.json');
+    const found = dsc007(report);
+    expect(found.length).toBeGreaterThan(0);
+    expect(found.length).toBeLessThan(8);
+  });
+});
+
 describe('trap 2 — always-now (BEH002)', () => {
   it('fires on a feed whose timestamp tracks the probe clock', async () => {
     const report = await probe('/always-now.json', 3);
