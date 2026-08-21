@@ -106,7 +106,7 @@ export const CHECKS: readonly CheckDefinition[] = [
     level: 'L1',
     title: 'Manifest at the RECOMMENDED path, or a <link rel> advertisement',
     rule: 'The manifest SHOULD live at /.well-known/cabuya.json, or be advertised with <link rel="cabuya">.',
-    fix: 'Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya-manifest">.',
+    fix: 'Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya">.',
     specAnchor: `${SPEC}/2-discovery#2-2`,
     implemented: false,
     plannedIn: 'Task 15',

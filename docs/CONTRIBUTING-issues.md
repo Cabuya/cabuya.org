@@ -144,9 +144,9 @@ before they can implement it.
 - **Level:** L1
 - **Planned in:** Task 15
 - **Rule:** The manifest SHOULD live at /.well-known/cabuya.json, or be advertised with <link rel="cabuya">.
-- **Fix:** Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya-manifest">.
+- **Fix:** Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya">.
 - **Regla (ES):** El manifiesto SHOULD vivir en /.well-known/cabuya.json, o anunciarse con <link rel="cabuya">.
-- **Arreglo (ES):** Mueve el manifiesto a /.well-known/cabuya.json, o anuncia su ubicación con un <link rel="cabuya-manifest">.
+- **Arreglo (ES):** Mueve el manifiesto a /.well-known/cabuya.json, o anuncia su ubicación con un <link rel="cabuya">.
 - **Specification:** https://cabuya.org/developers/spec/0.1/2-discovery#2-2
 
 ### `DSC006` — publisher.canonical_url matches the registry entry
