@@ -770,7 +770,7 @@ break the fix loop of every agent that cached the old id.
 ## DSC007 — Every feeds[].url is absolute HTTPS and reachable
 
 - Severity: error · Level: L1
-- Status: catalogued, not implemented (Task 15)
+- Status: implemented
 - Rule: Declared feeds MUST resolve.
 - Fix: Give every feed an absolute https URL that resolves from outside your network.
 - Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-3

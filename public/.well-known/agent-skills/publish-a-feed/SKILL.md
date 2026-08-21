@@ -117,7 +117,7 @@ curl -X POST https://cabuya.org/api/validate \
   -d '{"url":"https://example.org/.well-known/cabuya.json"}'
 ```
 
-Findings come back with stable check ids — 42 of 62 catalogued checks are
+Findings come back with stable check ids — 43 of 62 catalogued checks are
 implemented — each with a rule, a remedy and a link to the specification clause it
 comes from. The catalogue: https://cabuya.org/developers/validator/checks.md
 
