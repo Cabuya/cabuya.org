@@ -17,7 +17,11 @@
  *                      probes, so always-now must NOT fire
  *   /no-cors.json      a conforming feed served without the CORS header
  *   /healthy.json      a fully conforming feed (the negative control)
- *   /.well-known/cabuya.json   a conforming manifest
+ *   /.well-known/cabuya.json   a conforming manifest, feed really there
+ *   /manifest/dead-feed.json   a manifest declaring a feed that 404s
+ *   /manifest/relative-feed.json     a manifest declaring a relative URL
+ *   /manifest/insecure-feed.json     a manifest declaring http on a public host
+ *   /manifest/many-dead-feeds.json   more dead feeds than the budget allows
  *   /redirect/n        an n-hop redirect chain
  *   /oversized.json    a body past the size cap
  *   /flaky.json        alternates its content-type on every request
@@ -77,23 +81,31 @@ function conformingFeed(lastUpdated: string, extra: object = {}): string {
   });
 }
 
-const MANIFEST = JSON.stringify({
-  protocol: { name: 'cabuya', spec_version: '0.1.0' },
-  publisher: {
-    publisher_id: 'example-app',
-    canonical_url: 'https://example-app.org',
-  },
-  conformance_target: 'L2',
-  license: 'CC-BY-4.0',
-  feeds: [
-    {
-      name: 'places',
-      url: 'https://example-app.org/feeds/places.json',
+/**
+ * A manifest declaring the feeds it is given.
+ *
+ * Built per request from the server's own origin rather than frozen at
+ * module scope: DSC007 fetches what a manifest declares, and a fixture
+ * pointing at a real domain would put the test suite on the internet — the
+ * one thing the injected fetcher exists to prevent.
+ */
+function manifestDeclaring(urls: string[]): string {
+  return JSON.stringify({
+    protocol: { name: 'cabuya', spec_version: '0.1.0' },
+    publisher: {
+      publisher_id: 'example-app',
+      canonical_url: 'https://example-app.org',
+    },
+    conformance_target: 'L2',
+    license: 'CC-BY-4.0',
+    feeds: urls.map((url, index) => ({
+      name: index === 0 ? 'places' : `places-${index}`,
+      url,
       entity: 'place',
       profile: 'core',
-    },
-  ],
-});
+    })),
+  });
+}
 
 export async function startFixtureServer(): Promise<FixtureServer> {
   const hits = new Map<string, number>();
@@ -107,6 +119,8 @@ export async function startFixtureServer(): Promise<FixtureServer> {
   const server: Server = createServer((request, response) => {
     const path = (request.url ?? '/').split('?')[0] ?? '/';
     hits.set(path, (hits.get(path) ?? 0) + 1);
+    /** This server's own origin, so fixtures can declare same-origin URLs. */
+    const origin = `http://${request.headers.host ?? '127.0.0.1'}`;
 
     const send = (
       status: number,
@@ -219,8 +233,40 @@ export async function startFixtureServer(): Promise<FixtureServer> {
       return json(conformingFeed('2026-08-16T04:00:00Z'));
     }
 
+    // A conforming manifest whose single declared feed is really there.
+    // Also the DSC007 near-miss: the check must stay silent on this one.
     if (path === '/.well-known/cabuya.json') {
-      return json(MANIFEST);
+      return json(manifestDeclaring([`${origin}/healthy.json`]));
+    }
+
+    // DSC007: a manifest declaring a feed that is not there. The failure
+    // that lets a manifest be taken at its word — everything validates and
+    // nothing has read the feed.
+    if (path === '/manifest/dead-feed.json') {
+      return json(manifestDeclaring([`${origin}/does-not-exist.json`]));
+    }
+
+    // DSC007: a relative URL. A consumer reading the manifest from the
+    // registry has no base to resolve it against.
+    if (path === '/manifest/relative-feed.json') {
+      return json(manifestDeclaring(['/feeds/places.json']));
+    }
+
+    // DSC007: http on a public host. Decidable without a request, and the
+    // test asserts none is made.
+    if (path === '/manifest/insecure-feed.json') {
+      return json(manifestDeclaring(['http://example-app.org/feeds.json']));
+    }
+
+    // DSC007: more declared feeds than the politeness budget allows. The
+    // probe must run out of budget and go quiet, never report our own
+    // ceiling as somebody else's outage.
+    if (path === '/manifest/many-dead-feeds.json') {
+      return json(
+        manifestDeclaring(
+          Array.from({ length: 8 }, () => `${origin}/does-not-exist.json`)
+        )
+      );
     }
 
     if (path === '/robots.txt') {

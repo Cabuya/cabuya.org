@@ -172,13 +172,164 @@ function headerFinding(
   return make(id, ptr, message, fix);
 }
 
-/** Extract the feed URLs a manifest declares. */
-export function declaredFeedUrls(manifest: unknown): string[] {
+/** One declared feed, with the array position its JSON Pointer needs. */
+export interface DeclaredFeed {
+  index: number;
+  url: string;
+}
+
+/**
+ * Extract the feed URLs a manifest declares, keeping each one's position.
+ *
+ * The index travels because the pointer does: a manifest declaring six
+ * municipality shards needs `/feeds/4/url`, not "one of your feeds".
+ * Entries whose `url` is missing or not a string are left out — the schema
+ * pass already owns that failure, and reporting it twice under two ids is
+ * how a report stops being trusted.
+ */
+export function declaredFeedUrls(manifest: unknown): DeclaredFeed[] {
   if (!isObject(manifest) || !Array.isArray(manifest.feeds)) return [];
   return manifest.feeds
-    .filter(isObject)
-    .map((feed) => feed.url)
-    .filter((url): url is string => typeof url === 'string');
+    .map((feed, index) => ({ index, feed }))
+    .filter((entry): entry is { index: number; feed: Json } =>
+      isObject(entry.feed)
+    )
+    .map(({ index, feed }) => ({ index, url: feed.url }))
+    .filter((entry): entry is DeclaredFeed => typeof entry.url === 'string');
+}
+
+/**
+ * Loopback is exempt from the HTTPS requirement.
+ *
+ * A publisher checks their work against `http://localhost:3000` before they
+ * ship, and a validator that calls their dev server non-conforming is a
+ * validator they stop running at exactly the moment it was useful. Nothing
+ * outside the machine can reach these hosts, so the requirement HTTPS exists
+ * for — a transport somebody else can read — does not apply.
+ */
+function isLoopback(host: string): boolean {
+  return (
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host === '[::1]' ||
+    host === '::1' ||
+    host.endsWith('.localhost')
+  );
+}
+
+/** Why a declared feed does not resolve, or `ok` when it does. */
+type FeedVerdict =
+  | { kind: 'ok' }
+  | { kind: 'not_absolute' }
+  | { kind: 'bad_scheme'; scheme: string }
+  | { kind: 'insecure' }
+  | { kind: 'unreachable'; detail: string };
+
+/**
+ * The static half of DSC007: everything decidable from the string alone.
+ *
+ * Runs before any fetch, so a malformed URL costs the publisher's server
+ * nothing and can never be mistaken for their server being down.
+ */
+export function feedUrlShape(raw: string): FeedVerdict {
+  let parsed: URL;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    // Relative URLs are the common case here, and they are a real failure:
+    // a consumer resolving the manifest from the registry has no base to
+    // resolve them against.
+    return { kind: 'not_absolute' };
+  }
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    return { kind: 'bad_scheme', scheme: parsed.protocol.replace(':', '') };
+  }
+  if (parsed.protocol === 'http:' && !isLoopback(parsed.hostname)) {
+    return { kind: 'insecure' };
+  }
+  return { kind: 'ok' };
+}
+
+const FEED_MESSAGES: Record<
+  Exclude<FeedVerdict['kind'], 'ok'>,
+  (detail: string) => { message: string; fix: string }
+> = {
+  not_absolute: () => ({
+    message: 'the declared feed URL is not absolute',
+    fix: 'Declare the feed with a full https URL. A consumer reads this manifest from the registry and has nothing to resolve a relative path against.',
+  }),
+  bad_scheme: (scheme) => ({
+    message: `the declared feed URL uses the "${scheme}" scheme`,
+    fix: 'Declare the feed over https. The protocol moves public-interest data over one transport consumers can verify.',
+  }),
+  insecure: () => ({
+    message: 'the declared feed URL is http, not https',
+    fix: 'Serve the feed over https. Browser consumers on an https page cannot read it otherwise, whatever the CORS header says.',
+  }),
+  unreachable: (detail) => ({
+    message: `the declared feed did not resolve (${detail})`,
+    fix: 'Give every feed a URL that resolves from outside your network — a manifest pointing at a feed that is not there is worse than a manifest with no feeds, because a consumer trusts it.',
+  }),
+};
+
+/**
+ * DSC007 — every declared feed resolves.
+ *
+ * The check that stops a manifest from being taken at its word. Without it a
+ * publisher can declare a feed that has never existed and nothing downstream
+ * notices: the manifest validates, the ladder finds no error to stop at, and
+ * "measured" starts meaning "declared" — which is the one thing §8.3 says
+ * this validator exists to prevent.
+ *
+ * Deliberately conservative about what counts as resolving, because the
+ * severity is `error` and a wrong one here accuses a volunteer team:
+ *
+ *   - A redirect counts. It resolves for a consumer, and following the chain
+ *     spends the politeness budget on a hop we did not declare. (The
+ *     fetcher's `redirectChain` is where the stricter version will live.)
+ *   - Our own budget never counts. When it runs out the remaining feeds are
+ *     left unprobed rather than reported — see `budgetExhausted`.
+ */
+export async function probeDeclaredFeeds(
+  manifest: unknown,
+  fetcher: Fetcher
+): Promise<Finding[]> {
+  const findings: Finding[] = [];
+  let budgetGone = false;
+
+  for (const { index, url } of declaredFeedUrls(manifest)) {
+    const pointer = `/feeds/${index}/url`;
+    const shape = feedUrlShape(url);
+    if (shape.kind !== 'ok') {
+      const detail = shape.kind === 'bad_scheme' ? shape.scheme : '';
+      const { message, fix } = FEED_MESSAGES[shape.kind](detail);
+      findings.push(make('DSC007', pointer, message, fix));
+      continue;
+    }
+
+    // One feed already exhausted the budget: stop probing rather than
+    // reporting every remaining feed as unreachable on our own account.
+    if (budgetGone) continue;
+
+    const result = await fetcher.fetch(url);
+    if (result.budgetExhausted) {
+      budgetGone = true;
+      continue;
+    }
+    if (result.transportError) {
+      const { message, fix } = FEED_MESSAGES.unreachable(result.transportError);
+      findings.push(make('DSC007', pointer, message, fix));
+      continue;
+    }
+    if (result.status >= 400) {
+      const { message, fix } = FEED_MESSAGES.unreachable(
+        `HTTP ${result.status}`
+      );
+      findings.push(make('DSC007', pointer, message, fix));
+    }
+  }
+
+  return findings;
 }
 
 export function makeBehaviorPass(options: ProbeOptions = {}): Pass {
@@ -251,6 +402,14 @@ export function makeBehaviorPass(options: ProbeOptions = {}): Pass {
             )
           );
         }
+      }
+
+      // ── DSC007 — every feed the manifest declares resolves ──
+      //
+      // Manifest only: a feed document declares no feeds, and running this
+      // against one would fetch nothing while looking like it had.
+      if (isObject(firstDoc) && 'protocol' in firstDoc) {
+        findings.push(...(await probeDeclaredFeeds(firstDoc, fetcher)));
       }
 
       // ── ENV007 — CORS on the real GET ────────────────────
@@ -380,6 +539,7 @@ export const BEHAVIOR_CHECK_IDS = [
   'BEH002',
   'BEH003',
   'DSC002',
+  'DSC007',
   'ENV007',
   'ENV010',
 ].filter((id) => getCheck(id) !== undefined);
