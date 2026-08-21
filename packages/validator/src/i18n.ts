@@ -274,7 +274,7 @@ export const ES: Record<string, CheckTranslation> = {
   DSC004: {
     title: 'Manifiesto en la ruta RECOMMENDED, o anunciado con <link rel>',
     rule: 'El manifiesto SHOULD vivir en /.well-known/cabuya.json, o anunciarse con <link rel="cabuya">.',
-    fix: 'Mueve el manifiesto a /.well-known/cabuya.json, o anuncia su ubicación con un <link rel="cabuya-manifest">.',
+    fix: 'Mueve el manifiesto a /.well-known/cabuya.json, o anuncia su ubicación con un <link rel="cabuya">.',
   },
   DSC006: {
     title: 'publisher.canonical_url coincide con la entrada del registro',
