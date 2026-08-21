@@ -748,7 +748,7 @@ break the fix loop of every agent that cached the old id.
 - Severity: warning · Level: L1
 - Status: catalogued, not implemented (Task 15)
 - Rule: The manifest SHOULD live at /.well-known/cabuya.json, or be advertised with <link rel="cabuya">.
-- Fix: Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya-manifest">.
+- Fix: Move the manifest to /.well-known/cabuya.json, or advertise its location with a <link rel="cabuya">.
 - Specification: https://cabuya.org/developers/spec/0.1/2-discovery#2-2
 
 ## DSC005 — Manifest validates against manifest.schema.json
