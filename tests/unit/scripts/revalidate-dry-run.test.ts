@@ -66,7 +66,7 @@ describe('a dry run', () => {
     const lines = output
       .split('\n')
       .filter((line) => /^ {2}\S/.test(line) && !line.startsWith('  ---'));
-    expect(lines).toHaveLength(4);
+    expect(lines).toHaveLength(5);
   });
 
   it('turns a clean run into conforming', () => {

@@ -8,6 +8,7 @@
 
 export const REGISTRY_IDS: ReadonlySet<string> = new Set([
   'corag',
+  'emergencia-colombia',
   'pereira-ayuda',
   'pereira-responde',
   'reporte-co',

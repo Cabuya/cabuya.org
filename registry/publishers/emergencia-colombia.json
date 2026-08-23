@@ -1,0 +1,19 @@
+{
+  "publisher_id": "emergencia-colombia",
+  "canonical_url": "https://emergenciacolombia.org",
+  "manifest_url": "https://emergenciacolombia.org/.well-known/cabuya.json",
+  "entity_domains": [
+    "place"
+  ],
+  "declared_target": "L1",
+  "crawl_policy_url": "https://emergenciacolombia.org/terminos",
+  "events": [
+    "sismo-eje-cafetero-2026"
+  ],
+  "status": "active",
+  "added": "2026-08-22",
+  "notes": {
+    "en": "A read-only federation layer over the aid sites that appeared after the earthquake: one question box, and every result names its source with a timestamp and a link back. It originates no records of its own. The place feed is live and currently empty — none of its five sources has granted redistribution yet, which is why the declared target is L1.",
+    "es": "Capa de federación de solo lectura sobre los sitios de ayuda que aparecieron tras el sismo: una sola caja de preguntas, y cada resultado nombra su fuente con la hora y el enlace de vuelta. No origina registros propios. El feed de lugares ya está publicado y hoy va vacío: ninguna de sus cinco fuentes ha autorizado redistribución todavía, y por eso el objetivo declarado es L1."
+  }
+}

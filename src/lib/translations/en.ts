@@ -222,7 +222,7 @@ export const en: SiteTranslations = {
       },
       proposedLabel: 'Proposed',
       proposedExplainer:
-        'These entries were opened on each team’s behalf from the public analysis, and are waiting for that team to confirm them. Nobody here has claimed conformance, and none of these are endorsements.',
+        'Most of these entries were opened on each team’s behalf from the public analysis, and are waiting for that team to confirm them; the rest were filed by the teams themselves. Nobody here has claimed conformance, and none of these are endorsements.',
       measuredNote:
         'Measured conformance states appear here when the validator starts running against live feeds on a schedule.',
     },

@@ -219,7 +219,7 @@ export const es: SiteTranslations = {
       },
       proposedLabel: 'Propuesta',
       proposedExplainer:
-        'Estas entradas se abrieron en nombre de cada equipo a partir del análisis público, y esperan a que ese equipo las confirme. Nadie aquí ha reclamado conformidad, y ninguna de estas es un aval.',
+        'La mayoría de estas entradas se abrieron en nombre de cada equipo a partir del análisis público, y esperan a que ese equipo las confirme; las demás las presentó el equipo mismo. Nadie aquí ha reclamado conformidad, y ninguna de estas es un aval.',
       measuredNote:
         'Los estados de conformidad medidos aparecen aquí cuando el validador empiece a ejecutarse contra los feeds en vivo de forma programada.',
     },
