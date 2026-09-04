@@ -20,10 +20,30 @@ import { describe, expect, it } from 'vitest';
 const ROOT = process.cwd();
 const FIXTURES = 'tests/fixtures/revalidate';
 
+/**
+ * The clock every fixture is read against.
+ *
+ * A day after the newest `feed.last_updated` in the directory, so a fixture
+ * captured as fresh stays fresh and one captured as old stays old. Without it
+ * the suite is a time bomb: `corag.json` says 2026-08-17 and turned `stale` on
+ * its own on 2026-08-24, seven days later, breaking a test that nobody had
+ * touched. A fixture describes a situation, not a date — pinning the clock is
+ * what makes that true.
+ */
+const NOW = '2026-08-18T00:00:00Z';
+
 const dryRun = (extra: string[] = []): string =>
   execFileSync(
     process.execPath,
-    ['scripts/revalidate.mjs', '--dry-run', '--fixtures', FIXTURES, ...extra],
+    [
+      'scripts/revalidate.mjs',
+      '--dry-run',
+      '--fixtures',
+      FIXTURES,
+      '--now',
+      NOW,
+      ...extra,
+    ],
     { cwd: ROOT, encoding: 'utf-8' }
   );
 
