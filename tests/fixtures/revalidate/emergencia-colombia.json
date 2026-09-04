@@ -1,0 +1,33 @@
+{
+  "code": 0,
+  "report": {
+    "validator_version": "0.1.0",
+    "spec_version": "0.1.0",
+    "target": "https://emergenciacolombia.org/cabuya/lugares.json",
+    "checked_at": "2026-08-23T15:18:17.841Z",
+    "measured_level": "L2",
+    "requested_level": null,
+    "profile": "core",
+    "degraded": false,
+    "not_measured_in_this_version": [
+      "L3",
+      "L4"
+    ],
+    "summary": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0
+    },
+    "blockers_for_next_level": [],
+    "findings": [],
+    "probes": {
+      "bytes": 376,
+      "elapsed_ms": 195,
+      "soft_404": "pass",
+      "cors": "present",
+      "always_now": "pass",
+      "content_hash": "sha256:afeaf99da272257d78ef9891b41750975dd02d62fa76c836f249d11745d3ee59",
+      "requests": 2
+    }
+  }
+}

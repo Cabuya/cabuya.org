@@ -31,7 +31,9 @@
  * Prints every transition it would make and writes nothing. With
  * `--fixtures <dir>` it reads run outcomes from a directory of JSON files
  * instead of the network, which is how the state machine is exercised end to
- * end in the test suite without touching anybody's server.
+ * end in the test suite without touching anybody's server. `--now <iso>` pins
+ * the instant those outcomes are judged against, which is the other half of
+ * the same idea — see AT.
  */
 import { spawn } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -56,6 +58,25 @@ const value = (name) => {
 const DRY_RUN = flag('dry-run');
 const FIXTURES = value('fixtures');
 const ONLY = value('only');
+
+/**
+ * The instant a run is judged against, for a fixture run that must not rot.
+ *
+ * `--fixtures` exists so the state machine can be exercised without the
+ * network. Time is the other input that makes such a run non-deterministic:
+ * a fixture carrying an absolute `feed.last_updated` says one thing the day
+ * it is captured and a different thing once it drifts past
+ * STALE_AFTER_HOURS, so a suite that asserts the first meaning starts failing
+ * on a date nobody chose. Pinning the clock keeps a fixture saying in a year
+ * what it said the day it was written.
+ *
+ * Never set by the cron: the real run is judged against the real now.
+ */
+const AT = value('now');
+if (AT !== null && !Number.isFinite(Date.parse(AT))) {
+  console.error(`--now expects an ISO timestamp, got ${JSON.stringify(AT)}`);
+  process.exit(2);
+}
 
 /** Budgets. Deliberately conservative — see the header. */
 const LIMITS = {
@@ -240,7 +261,7 @@ async function mapLimited(items, limit, worker) {
 
 async function main() {
   const entries = activePublishers();
-  const at = new Date().toISOString();
+  const at = AT ?? new Date().toISOString();
   const nowMs = Date.parse(at);
 
   console.log(

@@ -180,15 +180,20 @@ describe('the network section', () => {
     expect(source).not.toContain('publisherCount');
   });
 
-  it('every registry entry it would render is still `proposed`', () => {
+  it('renders the mix its copy describes: some proposed, some filed by the team', () => {
     /*
-     * The section's copy says every entry is awaiting its team's confirmation.
-     * The day one is confirmed, that sentence becomes false — this test fails
-     * then, on purpose, so the copy is updated in the same change.
+     * The copy says most entries are awaiting their team's confirmation and
+     * the rest were filed by the teams themselves. That is true only while
+     * both groups exist, so this fails when either one empties — and the copy
+     * gets updated in the same change, which is what the previous version of
+     * this test was for. That one asserted every entry was still `proposed`;
+     * it fired, as designed, on the first team to file their own.
      */
     const entries = allPublishers();
-    expect(entries.length).toBeGreaterThan(0);
-    expect(entries.filter((entry) => entry.status !== 'proposed')).toEqual([]);
+    const proposed = entries.filter((entry) => entry.status === 'proposed');
+    const confirmed = entries.filter((entry) => entry.status !== 'proposed');
+    expect(proposed.length).toBeGreaterThan(0);
+    expect(confirmed.length).toBeGreaterThan(0);
   });
 
   it('links out to each publisher by host, not by a name we invented', () => {

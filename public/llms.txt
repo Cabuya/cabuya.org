@@ -90,7 +90,7 @@ there, including when the consumer is an AI system.
 
 ## Registry
 
-4 publisher entries, 2 official sources.
+5 publisher entries, 2 official sources.
 Measured state is not in the repository — it is written by the validation
 cron and served live:
 

@@ -33,8 +33,15 @@ describe('publisher entries', () => {
       expect(entry).not.toHaveProperty('level');
       expect(entry).not.toHaveProperty('conformance');
       expect(entry).not.toHaveProperty('state');
-      // `status` is a review state, and only ever one of the two.
-      expect(['proposed', 'reviewed']).toContain(entry.status);
+      /*
+       * `status` is a review state, and the whole vocabulary is the one
+       * publisher-entry.schema.json defines. The earlier version of this line
+       * allowed `reviewed`, which the schema has never had, and disallowed
+       * `active` and `archived`, which it has always had — so it would have
+       * rejected the first publisher to confirm their own entry, and every
+       * wind-down after that.
+       */
+      expect(['proposed', 'active', 'archived']).toContain(entry.status);
     }
   });
 
